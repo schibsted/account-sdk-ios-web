@@ -1,6 +1,6 @@
 import Foundation
 
-struct DefaultStorage {
+internal struct DefaultStorage {
     static var storage: Storage = UserDefaultsStorage(UserDefaults.standard)
     
     static func setValue<T : Codable> (_ value: T?, forKey key: String) -> Bool {

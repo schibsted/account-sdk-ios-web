@@ -1,6 +1,6 @@
 import Foundation
 
-struct UserDefaultsStorage: Storage {
+internal struct UserDefaultsStorage: Storage {
     static let keyPrefix = "com.schibsted.account"
     private let storage: UserDefaults
     
