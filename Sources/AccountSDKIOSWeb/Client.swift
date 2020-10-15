@@ -8,8 +8,8 @@ public struct ClientConfiguration {
     public let redirectURI: URL
     
     public enum Environment: String {
-        case pro_com = "https://login.schibsted.com"
-        case pro_no = "https://payment.schibsted.no"
+        case proCom = "https://login.schibsted.com"
+        case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
     }
     
