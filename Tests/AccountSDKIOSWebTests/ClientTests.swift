@@ -2,7 +2,8 @@ import XCTest
 @testable import AccountSDKIOSWeb
 
 final class AccountSDKIOSWebTests: XCTestCase {
-    private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL(string: "com.example.client1://login")!)
+    private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+
     func testLoginURL() {
         let client = Client(configuration: config)
         let loginURL = client.loginURL(shouldPersistUser: false)
