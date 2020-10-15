@@ -48,7 +48,7 @@ public class Client {
         let codeVerifier = randomString(length: 60)
         let webFlowData = WebFlowData(state:state, codeVerifier: codeVerifier, shouldPersistUser: shouldPersistUser)
 
-        if !Settings.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
+        if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state
             return nil;
         }
