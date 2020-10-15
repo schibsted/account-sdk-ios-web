@@ -28,25 +28,29 @@ public struct ClientConfiguration {
     }
 }
 
-private struct WebFlowData: Codable {
+internal struct WebFlowData: Codable {
     let state: String
     let codeVerifier: String
     let shouldPersistUser: Bool
 }
 
 public class Client {
-    private static let webFlowLoginStateKey = "WebFlowLoginState"
+    internal static let webFlowLoginStateKey = "WebFlowLoginState"
     
     private let configuration: ClientConfiguration
+    private let httpClient: HTTPClient
+    private let tokenHandler: TokenHandler
     
-    public init(configuration: ClientConfiguration) {
+    public init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.configuration = configuration
+        self.httpClient = httpClient
+        self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient)
     }
     
     public func loginURL(shouldPersistUser: Bool, scopes: [String]? = nil) -> URL? {
         let state = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let webFlowData = WebFlowData(state:state, codeVerifier: codeVerifier, shouldPersistUser: shouldPersistUser)
+        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier, shouldPersistUser: shouldPersistUser)
 
         if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state
@@ -67,6 +71,47 @@ public class Client {
             forPath: "/oauth/authorize",
             queryItems: authRequestParams
         )
+    }
+    
+    public func handleAuthenticationResponse(url: URL, completion: @escaping (Result<User, LoginError>) -> Void) {
+        // Check if coming back after triggered web flow login
+        guard let storedData: WebFlowData = DefaultStorage.value(forKey: type(of: self).webFlowLoginStateKey),
+           let receivedState = url.valueOf(queryParameter: "state"),
+           storedData.state == receivedState else {
+                completion(.failure(.unsolicitedResponse))
+                return
+        }
+
+        if let error = url.valueOf(queryParameter: "error") {
+            completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
+            return
+        }
+        
+        guard let authCode = url.valueOf(queryParameter: "code") else {
+            completion(.failure(.unexpectedError(message: "Missing authorization code from authentication response")))
+            return
+        }
+
+        tokenHandler.makeTokenRequest(authCode: authCode) { (result: Result<TokenResponse, HTTPError>) -> Void in
+            switch result {
+            case .success(let tokenResponse):
+                print(tokenResponse) // TODO
+                // TODO store tokens in secure storage
+                completion(.success(User()))
+            case .failure(.errorResponse(_, let body)):
+                if let errorJSON = body,
+                   let oauthError = OAuthError.fromJSON(errorJSON) {
+                    completion(.failure(.tokenErrorResponse(error: oauthError)))
+                    return
+                }
+                
+                // TODO log error
+                completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+            case .failure(_):
+                // TODO log error
+                completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+            }
+        }
     }
 
     private func randomString(length: Int) -> String {
@@ -94,19 +139,19 @@ public class Client {
     }
     
     private func makeURLWithQuery(forPath path: String, queryItems: [URLQueryItem]) -> URL {
-        guard var urlComponents = URLComponents(url: configuration.serverURL, resolvingAgainstBaseURL: true) else {
-            preconditionFailure("Failed to create URLComponents from \(configuration.serverURL)")
+        let url = configuration.serverURL.appendingPathComponent(path)
+        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            preconditionFailure("Failed to create URLComponents from \(url)")
         }
-        urlComponents.path = path
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: configuration.clientID),
             URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
         ]
         urlComponents.queryItems?.append(contentsOf: queryItems)
-        guard let url = urlComponents.url else {
+        guard let finalUrl = urlComponents.url else {
             preconditionFailure("Failed to create URL from \(urlComponents)")
         }
 
-        return url
+        return finalUrl
     }
 }

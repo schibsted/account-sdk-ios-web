@@ -3,7 +3,17 @@ import XCTest
 
 final class AccountSDKIOSWebTests: XCTestCase {
     private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+    
+    private let userDefaults: UserDefaults! = UserDefaults(suiteName: #file)!
 
+    override func setUp() {
+        DefaultStorage.storage = UserDefaultsStorage(userDefaults)
+    }
+    
+    override func tearDown() {
+        userDefaults.removePersistentDomain(forName: #file)
+    }
+    
     func testLoginURL() {
         let client = Client(configuration: config)
         let loginURL = client.loginURL(shouldPersistUser: false)
@@ -25,5 +35,83 @@ final class AccountSDKIOSWebTests: XCTestCase {
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])
         XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
+    }
+    
+    func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
+        let client = Client(configuration: config)
+        
+        let callbackExpectation = expectation(description: "Returns error to callback closure")
+        
+        client.handleAuthenticationResponse(url: URL("com.example://login?state=no-exist&code=123456")) { result in
+            XCTAssertEqual(result, .failure(.unsolicitedResponse))
+            callbackExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
+    }
+    
+    func testHandleAuthenticationResponseHandlesErrorResponse() {
+        let client = Client(configuration: config)
+   
+        let callbackExpectation = expectation(description: "Returns error to callback closure")
+        
+        let state = "testState"
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+
+        client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
+            XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
+            callbackExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
+    }
+    
+    func testHandleAuthenticationResponseHandlesMissingAuthCode() {
+        let client = Client(configuration: config)
+   
+        let callbackExpectation = expectation(description: "Returns error to callback closure")
+        
+        let state = "testState"
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+
+        client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
+            XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
+            callbackExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
+    }
+
+    func testHandleAuthenticationResponseHandlesSuccessResponse() {
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: "idToken", scope: "openid", expires_in: 3600)
+        let client = Client(configuration: config, httpClient: MockHTTPClient(withResult: tokenResponse))
+        
+        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
+
+        let state = "testState"
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+
+        client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
+            XCTAssertEqual(result, .success(User()))
+            callbackExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
     }
 }
