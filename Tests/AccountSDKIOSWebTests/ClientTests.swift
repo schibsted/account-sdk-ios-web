@@ -37,6 +37,7 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(queryParams!["client_id"], config.clientID)
         XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
+        XCTAssertEqual(queryParams!["prompt"], "select_account")
         XCTAssertEqual(queryParams!["scope"], "openid")
         XCTAssertNotNil(queryParams!["state"])
         XCTAssertNotNil(queryParams!["nonce"])

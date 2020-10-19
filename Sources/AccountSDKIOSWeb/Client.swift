@@ -66,6 +66,7 @@ public class Client {
         let scopeString = scopes.map { $0.joined(separator: " ") } ?? "openid"
         let authRequestParams = [
             URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "prompt", value: "select_account"),
             URLQueryItem(name: "scope", value: scopeString),
             URLQueryItem(name: "state", value: state),
             URLQueryItem(name: "nonce", value: randomString(length: 10)),
