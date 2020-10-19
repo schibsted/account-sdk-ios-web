@@ -9,6 +9,7 @@ public enum HTTPError: Error {
 }
 
 public protocol HTTPClient {
+    func get<T: Codable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void)
     func post<T: Codable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void)
 }
 
@@ -17,6 +18,10 @@ public class HTTPClientWithURLSession: HTTPClient {
 
     public init(session: URLSession = URLSession.shared) {
         self.session = session
+    }
+    
+    public func get<T: Codable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void) {
+        execute(request: URLRequest(url: url), completion: completion)
     }
 
     public func post<T: Codable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void) {
@@ -27,6 +32,10 @@ public class HTTPClientWithURLSession: HTTPClient {
         
         authorization.map { request.setValue($0, forHTTPHeaderField: "Authorization") }
 
+        execute(request: request, completion: completion)
+    }
+    
+    private func execute<T: Codable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let requestError = error {
                 completion(.failure(.unexpectedError(underlying: requestError)))

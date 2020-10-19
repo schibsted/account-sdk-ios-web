@@ -41,10 +41,16 @@ public class Client {
     private let httpClient: HTTPClient
     private let tokenHandler: TokenHandler
     
-    public init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        self.init(configuration: configuration,
+                  httpClient: httpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+    }
+    
+    internal init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.httpClient = httpClient
-        self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient)
+        self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
     }
     
     public func loginURL(shouldPersistUser: Bool, scopes: [String]? = nil) -> URL? {
@@ -92,13 +98,13 @@ public class Client {
             return
         }
 
-        tokenHandler.makeTokenRequest(authCode: authCode) { (result: Result<TokenResponse, HTTPError>) -> Void in
+        tokenHandler.makeTokenRequest(authCode: authCode) { (result: Result<TokenResult, TokenError>) -> Void in
             switch result {
-            case .success(let tokenResponse):
-                print(tokenResponse) // TODO
+            case .success(let tokenResult):
+                print(tokenResult) // TODO
                 // TODO store tokens in secure storage
-                completion(.success(User()))
-            case .failure(.errorResponse(_, let body)):
+                completion(.success(User(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)))
+            case .failure(.tokenRequestError(.errorResponse(_, let body))):
                 if let errorJSON = body,
                    let oauthError = OAuthError.fromJSON(errorJSON) {
                     completion(.failure(.tokenErrorResponse(error: oauthError)))

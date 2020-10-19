@@ -1,11 +1,18 @@
 import XCTest
+import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class ClientTests: XCTestCase {
     private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
-    
     private let userDefaults: UserDefaults! = UserDefaults(suiteName: #file)!
 
+    private static let keyId = "test key"
+    private static var jwsUtil: JWSUtil!
+    
+    override class func setUp() {
+        jwsUtil = JWSUtil()
+    }
+    
     override func setUp() {
         DefaultStorage.storage = UserDefaultsStorage(userDefaults)
     }
@@ -95,8 +102,29 @@ final class ClientTests: XCTestCase {
     }
 
     func testHandleAuthenticationResponseHandlesSuccessResponse() {
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: "idToken", scope: "openid", expires_in: 3600)
-        let client = Client(configuration: config, httpClient: MockHTTPClient(withResult: tokenResponse))
+        let uuid = "test_user_uuid"
+        let idToken = createIdToken(uuid: uuid)
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+        
+        stub(mockHTTPClient) { mock in
+            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
+                           body: any(),
+                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
+                           authorization: HTTPUtil.basicAuth(username: config.clientID, password: config.clientSecret),
+                           completion: anyClosure()))
+                .then { _, _, _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+            
+            let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
+            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+                .then { _, completion in
+                    completion(.success(jwksResponse))
+                }
+        }
+        
+        let client = Client(configuration: config, httpClient: mockHTTPClient)
         
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
@@ -104,7 +132,7 @@ final class ClientTests: XCTestCase {
         DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-            XCTAssertEqual(result, .success(User()))
+            XCTAssertEqual(result, .success(User(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: IdTokenClaims(sub: uuid))))
             callbackExpectation.fulfill()
         }
         
@@ -113,5 +141,10 @@ final class ClientTests: XCTestCase {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
         }
+    }
+    
+    private func createIdToken(uuid: String) -> String {
+        let data = try! JSONEncoder().encode(IdTokenClaims(sub: uuid))
+        return ClientTests.jwsUtil.createJWS(payload: data, keyId: ClientTests.keyId)
     }
 }
