@@ -14,14 +14,6 @@ internal struct JWKSResponse: Codable {
     let keys: [AccountSDKIOSWeb.RSAJWK]
 }
 
-private class JWKCacheWrapper {
-    let jwk: JWK
-    
-    init(jwk: JWK) {
-        self.jwk = jwk
-    }
-}
-
 internal protocol JWKS {
     func getKey(withId: String, completion: @escaping (JWK?) -> Void)
 }
@@ -29,16 +21,21 @@ internal protocol JWKS {
 internal class RemoteJWKS: JWKS {
     private let jwksURI: URL
     private let httpClient: HTTPClient
-    private let cache = NSCache<NSString, JWKCacheWrapper>()
+    private let cache: Cache<JWK>
 
-    init(jwksURI: URL, httpClient: HTTPClient) {
+    convenience init(jwksURI: URL, httpClient: HTTPClient) {
+        self.init(jwksURI: jwksURI, httpClient: httpClient, cache: Cache())
+    }
+
+    internal init(jwksURI: URL, httpClient: HTTPClient, cache: Cache<JWK>) {
         self.jwksURI = jwksURI
         self.httpClient = httpClient
+        self.cache = cache
     }
 
     func getKey(withId keyId: String, completion: @escaping (JWK?) -> Void) {
-        if let cachedKey = cache.object(forKey: keyId as NSString) {
-            completion(cachedKey.jwk)
+        if let cachedKey = cache.object(forKey: keyId) {
+            completion(cachedKey)
             return
         }
         
@@ -51,10 +48,10 @@ internal class RemoteJWKS: JWKS {
             case .success(let jwks):
                 for keyData in jwks.keys {
                     let jwk = RSAPublicKey(modulus: keyData.n, exponent: keyData.e)
-                    self.cache.setObject(JWKCacheWrapper(jwk: jwk), forKey: keyData.kid as NSString)
+                    self.cache.setObject(jwk, forKey: keyData.kid)
                 }
                 
-                completion(self.cache.object(forKey: keyId as NSString)?.jwk)
+                completion(self.cache.object(forKey: keyId))
             case .failure:
                 // TODO log error
                 completion(nil)
