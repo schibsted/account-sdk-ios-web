@@ -31,7 +31,6 @@ public struct ClientConfiguration {
 internal struct WebFlowData: Codable {
     let state: String
     let codeVerifier: String
-    let shouldPersistUser: Bool
 }
 
 public class Client {
@@ -53,10 +52,10 @@ public class Client {
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
     }
     
-    public func loginURL(shouldPersistUser: Bool, scopes: [String]? = nil) -> URL? {
+    public func loginURL(scopes: [String]? = nil) -> URL? {
         let state = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier, shouldPersistUser: shouldPersistUser)
+        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier)
 
         if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state

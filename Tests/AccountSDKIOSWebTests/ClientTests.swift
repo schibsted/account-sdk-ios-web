@@ -23,7 +23,7 @@ final class ClientTests: XCTestCase {
     
     func testLoginURL() {
         let client = Client(configuration: config)
-        let loginURL = client.loginURL(shouldPersistUser: false)
+        let loginURL = client.loginURL()
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "identity-pre.schibsted.com")
@@ -68,7 +68,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
             XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
@@ -88,7 +88,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
@@ -130,7 +130,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", shouldPersistUser: true), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .success(User(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: IdTokenClaims(sub: uuid))))
