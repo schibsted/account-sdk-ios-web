@@ -1,7 +1,7 @@
 import XCTest
 @testable import AccountSDKIOSWeb
 
-final class AccountSDKIOSWebTests: XCTestCase {
+final class ClientTests: XCTestCase {
     private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
     
     private let userDefaults: UserDefaults! = UserDefaults(suiteName: #file)!
