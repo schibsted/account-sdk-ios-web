@@ -3,7 +3,7 @@ import Foundation
 
 public struct ClientConfiguration {
     public let serverURL: URL
-    public let clientID: String
+    public let clientId: String
     internal let clientSecret: String
     public let redirectURI: URL
     
@@ -13,16 +13,16 @@ public struct ClientConfiguration {
         case pre = "https://identity-pre.schibsted.com"
     }
     
-    public init(environment: Environment, clientID: String, clientSecret: String, redirectURI: URL) {
+    public init(environment: Environment, clientId: String, clientSecret: String, redirectURI: URL) {
         self.init(serverURL: URL(string: environment.rawValue)!, // TODO handle without forceful unwrap?
-                  clientID: clientID,
+                  clientId: clientId,
                   clientSecret: clientSecret,
                   redirectURI: redirectURI)
     }
     
-    public init(serverURL: URL, clientID: String, clientSecret: String, redirectURI: URL) {
+    public init(serverURL: URL, clientId: String, clientSecret: String, redirectURI: URL) {
         self.serverURL = serverURL
-        self.clientID = clientID
+        self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectURI = redirectURI
     }
@@ -34,9 +34,10 @@ internal struct WebFlowData: Codable {
 }
 
 public class Client {
+    public let configuration: ClientConfiguration
+    
     internal static let webFlowLoginStateKey = "WebFlowLoginState"
     
-    private let configuration: ClientConfiguration
     private let httpClient: HTTPClient
     private let tokenHandler: TokenHandler
     
@@ -150,7 +151,7 @@ public class Client {
             preconditionFailure("Failed to create URLComponents from \(url)")
         }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: configuration.clientID),
+            URLQueryItem(name: "client_id", value: configuration.clientId),
             URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
         ]
         urlComponents.queryItems?.append(contentsOf: queryItems)

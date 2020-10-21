@@ -3,7 +3,7 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class ClientTests: XCTestCase {
-    private let config = ClientConfiguration(environment: .pre, clientID: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+    private let config = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
     private let userDefaults: UserDefaults! = UserDefaults(suiteName: #file)!
 
     private static let keyId = "test key"
@@ -34,7 +34,7 @@ final class ClientTests: XCTestCase {
             result[item.name] = item.value
         }
         
-        XCTAssertEqual(queryParams!["client_id"], config.clientID)
+        XCTAssertEqual(queryParams!["client_id"], config.clientId)
         XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
         XCTAssertEqual(queryParams!["prompt"], "select_account")
@@ -112,7 +112,7 @@ final class ClientTests: XCTestCase {
             when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
                            body: any(),
                            contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: config.clientID, password: config.clientSecret),
+                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
                            completion: anyClosure()))
                 .then { _, _, _, _, completion in
                     completion(.success(tokenResponse))

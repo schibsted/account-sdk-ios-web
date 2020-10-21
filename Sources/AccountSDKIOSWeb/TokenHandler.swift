@@ -92,7 +92,7 @@ internal class TokenHandler {
             preconditionFailure("Failed to create token request")
         }
         
-        httpClient.post(url: url, body: request, contentType: HTTPUtil.xWWWFormURLEncodedContentType, authorization: HTTPUtil.basicAuth(username: configuration.clientID, password: configuration.clientSecret)) { (result: Result<TokenResponse, HTTPError>) -> Void in
+        httpClient.post(url: url, body: request, contentType: HTTPUtil.xWWWFormURLEncodedContentType, authorization: HTTPUtil.basicAuth(username: configuration.clientId, password: configuration.clientSecret)) { (result: Result<TokenResponse, HTTPError>) -> Void in
             switch result {
             case .success(let tokenResponse):
                 guard let idToken = tokenResponse.id_token else {
