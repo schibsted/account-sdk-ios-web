@@ -17,6 +17,11 @@ public class User: Equatable {
         self.uuid = idTokenClaims.sub
     }
     
+    func persist(forClientId: String) {
+        let toStore = StoredUserTokens(clientId: forClientId, accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims)
+        TokenStorage.store(toStore)
+    }
+    
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.accessToken == rhs.accessToken
             && lhs.refreshToken == rhs.refreshToken

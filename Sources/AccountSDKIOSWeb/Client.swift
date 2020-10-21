@@ -103,8 +103,9 @@ public class Client {
             switch result {
             case .success(let tokenResult):
                 print(tokenResult) // TODO
-                // TODO store tokens in secure storage
-                completion(.success(User(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)))
+                let user = User(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
+                user.persist(forClientId: self.configuration.clientId)
+                completion(.success(user))
             case .failure(.tokenRequestError(.errorResponse(_, let body))):
                 if let errorJSON = body,
                    let oauthError = OAuthError.fromJSON(errorJSON) {
