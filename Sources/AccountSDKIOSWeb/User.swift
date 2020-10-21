@@ -22,6 +22,10 @@ public class User: Equatable {
         TokenStorage.store(toStore)
     }
     
+    public func logout() {
+        TokenStorage.remove()
+    }
+    
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.accessToken == rhs.accessToken
             && lhs.refreshToken == rhs.refreshToken

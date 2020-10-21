@@ -52,6 +52,15 @@ public class Client {
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
     }
+
+    public func resumeLastLoggedInUser() -> User? {
+        let stored = TokenStorage.get()
+        guard let tokens = stored, tokens.clientId == configuration.clientId else {
+            return nil
+        }
+        
+        return User(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, idToken: tokens.idToken, idTokenClaims: tokens.idTokenClaims)
+    }
     
     public func loginURL(scopes: [String]? = nil) -> URL? {
         let state = randomString(length: 10)
