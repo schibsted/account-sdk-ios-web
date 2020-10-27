@@ -40,6 +40,7 @@ public class Client {
     
     private let httpClient: HTTPClient
     private let tokenHandler: TokenHandler
+    private let schibstedAccountAPI: SchibstedAccountAPI
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -51,6 +52,7 @@ public class Client {
         self.configuration = configuration
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
     }
 
     public func resumeLastLoggedInUser() -> User? {
@@ -64,6 +66,38 @@ public class Client {
                     refreshToken: session.userTokens.refreshToken,
                     idToken: session.userTokens.idToken,
                     idTokenClaims: session.userTokens.idTokenClaims)
+    }
+    
+    public func simplifiedLoginData() -> SimplifiedLoginData? {
+        let allSessions = DefaultSessionStorage.getAll()
+        if allSessions.count < 1 {
+            return nil
+        }
+
+        let mostRecentSession = allSessions[0]
+        return SimplifiedLoginData(uuid: mostRecentSession.userTokens.idTokenClaims.sub, clients: allSessions.map { $0.clientId })
+    }
+    
+    public func performSimplifiedLogin(completion: @escaping (Result<User, LoginError>) -> Void) {
+        let allSessions = DefaultSessionStorage.getAll()
+        guard allSessions.count > 0 else {
+            preconditionFailure("No logged-in user found")
+        }
+        
+        let mostRecentSession = allSessions[0]
+        
+        // TODO verify client id is not already in session, should be logged as warn/error as then session should have been resumable
+
+        // TODO this only works for clients belonging to the same merchant
+        schibstedAccountAPI.oauthExchange(userAccessToken: mostRecentSession.userTokens.accessToken, clientId: configuration.clientId) { result in
+            switch result {
+            case .success(let result):
+                self.tokenHandler.makeTokenRequest(authCode: result.code) { self.handleTokenRequestResult($0, completion: completion)}
+            case .failure(_):
+                // TODO log error
+                completion(.failure(.unexpectedError(message: "Failed to obtain exchange code")))
+            }
+        }
     }
     
     public func loginURL(scopes: [String]? = nil) -> URL? {
@@ -112,26 +146,28 @@ public class Client {
             return
         }
 
-        tokenHandler.makeTokenRequest(authCode: authCode) { (result: Result<TokenResult, TokenError>) -> Void in
-            switch result {
-            case .success(let tokenResult):
-                print(tokenResult) // TODO
-                let user = User(clientId: self.configuration.clientId, accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
-                user.persist()
-                completion(.success(user))
-            case .failure(.tokenRequestError(.errorResponse(_, let body))):
-                if let errorJSON = body,
-                   let oauthError = OAuthError.fromJSON(errorJSON) {
-                    completion(.failure(.tokenErrorResponse(error: oauthError)))
-                    return
-                }
-                
-                // TODO log error
-                completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
-            case .failure(_):
-                // TODO log error
-                completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+        tokenHandler.makeTokenRequest(authCode: authCode) { self.handleTokenRequestResult($0, completion: completion)}
+    }
+
+    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: (Result<User, LoginError>) -> Void) {
+        switch result {
+        case .success(let tokenResult):
+            print(tokenResult) // TODO
+            let user = User(clientId: self.configuration.clientId, accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
+            user.persist()
+            completion(.success(user))
+        case .failure(.tokenRequestError(.errorResponse(_, let body))):
+            if let errorJSON = body,
+               let oauthError = OAuthError.fromJSON(errorJSON) {
+                completion(.failure(.tokenErrorResponse(error: oauthError)))
+                return
             }
+            
+            // TODO log error
+            completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+        case .failure(_):
+            // TODO log error
+            completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         }
     }
 
