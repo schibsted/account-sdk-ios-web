@@ -12,7 +12,7 @@ internal enum TokenError: Error {
     case idTokenError(IdTokenValidationError)
 }
 
-public struct IdTokenClaims: Codable {
+public struct IdTokenClaims: Codable, Equatable {
     let sub: String
     // TODO add other claims
 }

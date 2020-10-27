@@ -27,8 +27,10 @@ public class User: Equatable {
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {
-        return lhs.accessToken == rhs.accessToken
+        return lhs.uuid == rhs.uuid
+            && lhs.accessToken == rhs.accessToken
             && lhs.refreshToken == rhs.refreshToken
             && lhs.idToken == rhs.idToken
+            && lhs.idTokenClaims == rhs.idTokenClaims
     }
 }
