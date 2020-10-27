@@ -16,14 +16,14 @@ public class User: Equatable {
         self.idTokenClaims = idTokenClaims
         self.uuid = idTokenClaims.sub
     }
-    
+
     func persist(forClientId: String) {
         let toStore = StoredUserTokens(clientId: forClientId, accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims)
-        TokenStorage.store(toStore)
+        DefaultTokenStorage.store(toStore)
     }
     
     public func logout() {
-        TokenStorage.remove()
+        DefaultTokenStorage.remove()
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {

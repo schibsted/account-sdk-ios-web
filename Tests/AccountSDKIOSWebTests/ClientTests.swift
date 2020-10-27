@@ -15,6 +15,11 @@ final class ClientTests: XCTestCase {
     
     override func setUp() {
         DefaultStorage.storage = UserDefaultsStorage(userDefaults)
+        let mockTokenStorage = MockTokenStorage()
+        stub(mockTokenStorage) { mock in
+            when(mock.store(any())).thenDoNothing()
+        }
+        DefaultTokenStorage.storage = mockTokenStorage
     }
     
     override func tearDown() {
@@ -142,6 +147,42 @@ final class ClientTests: XCTestCase {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
         }
+    }
+    
+    func testResumeLastLoggedInUserWithExistingTokens() {
+        let storedTokens = StoredUserTokens(clientId: config.clientId, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
+        let mockTokenStorage = MockTokenStorage()
+        stub(mockTokenStorage) { mock in
+            when(mock.get()).thenReturn(storedTokens)
+        }
+        
+        DefaultTokenStorage.storage = mockTokenStorage
+        let client = Client(configuration: config)
+        let user = client.resumeLastLoggedInUser()
+        XCTAssertEqual(user, User(accessToken: storedTokens.accessToken, refreshToken: storedTokens.refreshToken, idToken: storedTokens.idToken, idTokenClaims: storedTokens.idTokenClaims))
+    }
+    
+    func testResumeLastLoggedInUserWithExistingTokensForAnotherClient() {
+        let storedTokens = StoredUserTokens(clientId: "otherClientId", accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
+        let mockTokenStorage = MockTokenStorage()
+        stub(mockTokenStorage) { mock in
+            when(mock.get()).thenReturn(storedTokens)
+        }
+        
+        DefaultTokenStorage.storage = mockTokenStorage
+        let client = Client(configuration: config)
+        XCTAssertNil(client.resumeLastLoggedInUser())
+    }
+    
+    func testResumeLastLoggedInUserWithoutTokens() {
+        let mockTokenStorage = MockTokenStorage()
+        stub(mockTokenStorage) { mock in
+            when(mock.get()).thenReturn(nil)
+        }
+        
+        DefaultTokenStorage.storage = mockTokenStorage
+        let client = Client(configuration: config)
+        XCTAssertNil(client.resumeLastLoggedInUser())
     }
     
     private func createIdToken(uuid: String) -> String {

@@ -54,7 +54,7 @@ public class Client {
     }
 
     public func resumeLastLoggedInUser() -> User? {
-        let stored = TokenStorage.get()
+        let stored = DefaultTokenStorage.get()
         guard let tokens = stored, tokens.clientId == configuration.clientId else {
             return nil
         }
