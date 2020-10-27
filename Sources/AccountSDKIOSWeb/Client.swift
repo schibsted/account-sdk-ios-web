@@ -54,12 +54,12 @@ public class Client {
     }
 
     public func resumeLastLoggedInUser() -> User? {
-        let stored = DefaultTokenStorage.get()
-        guard let tokens = stored, tokens.clientId == configuration.clientId else {
+        let stored = DefaultTokenStorage.get(forClientId: configuration.clientId)
+        guard let tokens = stored else {
             return nil
         }
         
-        return User(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, idToken: tokens.idToken, idTokenClaims: tokens.idTokenClaims)
+        return User(clientId: tokens.clientId, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, idToken: tokens.idToken, idTokenClaims: tokens.idTokenClaims)
     }
     
     public func loginURL(scopes: [String]? = nil) -> URL? {
@@ -112,8 +112,8 @@ public class Client {
             switch result {
             case .success(let tokenResult):
                 print(tokenResult) // TODO
-                let user = User(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
-                user.persist(forClientId: self.configuration.clientId)
+                let user = User(clientId: self.configuration.clientId, accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
+                user.persist()
                 completion(.success(user))
             case .failure(.tokenRequestError(.errorResponse(_, let body))):
                 if let errorJSON = body,

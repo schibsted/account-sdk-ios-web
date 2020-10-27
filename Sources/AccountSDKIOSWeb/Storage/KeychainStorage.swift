@@ -7,12 +7,13 @@ class KeychainStorage {
     init(forService: String) {
         self.service = forService
     }
-    func addValue(_ value: Data) {
+    func addValue(_ value: Data, forAccount: String?) {
         // TODO delete possibly existing value first or create separate update function?
 
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecAttrService as String: service,
                                     kSecValueData as String: value]
+        forAccount.map { query[kSecAttrAccount as String] = $0 }
         let status = SecItemAdd(query as CFDictionary, nil)
         
         guard status == errSecDuplicateItem || status == errSecSuccess else {
@@ -20,12 +21,13 @@ class KeychainStorage {
         }
     }
 
-    func getValue() -> Data? {
-        let query: [String: Any] = [
+    func getValue(forAccount: String?) -> Data? {
+        var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecReturnData as String: true
         ]
+        forAccount.map { query[kSecAttrAccount as String] = $0 }
 
         var extractedData: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &extractedData)
@@ -41,11 +43,12 @@ class KeychainStorage {
         return extractedData as? Data
     }
 
-    func removeValue() {
-        let query: [String: Any] = [
+    func removeValue(forAccount: String?) {
+        var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
+            kSecAttrService as String: service
         ]
+        forAccount.map { query[kSecAttrAccount as String] = $0 }
         
         let result = SecItemDelete(query as CFDictionary)
         guard result == errSecSuccess || result == errSecItemNotFound else {

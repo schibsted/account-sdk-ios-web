@@ -7,12 +7,12 @@ internal struct DefaultTokenStorage {
         storage.store(value)
     }
     
-    static func get() -> StoredUserTokens? {
-        return storage.get()
+    static func get(forClientId: String) -> StoredUserTokens? {
+        return storage.get(forClientId: forClientId)
     }
     
-    static func remove() {
-        storage.remove()
+    static func remove(forClientId: String) {
+        storage.remove(forClientId: forClientId)
     }
 }
 
@@ -28,18 +28,18 @@ internal class KeychainTokenStorage: TokenStorage {
              fatalError("Failed to JSON encode user tokens for storage")
         }
         
-        keychain.addValue(tokenData)
+        keychain.addValue(tokenData, forAccount: value.clientId)
     }
 
-    func get() -> StoredUserTokens? {
-        guard let data = keychain.getValue(),
+    func get(forClientId: String) -> StoredUserTokens? {
+        guard let data = keychain.getValue(forAccount: forClientId),
               let tokenData = try? JSONDecoder().decode(StoredUserTokens.self, from: data) else {
             return nil
         }
         return tokenData
     }
 
-    func remove() {
-        keychain.removeValue()
+    func remove(forClientId: String) {
+        keychain.removeValue(forAccount: forClientId)
     }
 }

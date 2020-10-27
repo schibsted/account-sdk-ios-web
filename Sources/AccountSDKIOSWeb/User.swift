@@ -1,6 +1,7 @@
 import Foundation
 
 public class User: Equatable {
+    private let clientId: String
     private let accessToken: String
     private let refreshToken: String?
     private let idToken: String
@@ -8,7 +9,8 @@ public class User: Equatable {
     
     public let uuid: String
     
-    init(accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+    init(clientId: String, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+        self.clientId = clientId
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.idToken = idToken
@@ -17,17 +19,18 @@ public class User: Equatable {
         self.uuid = idTokenClaims.sub
     }
 
-    func persist(forClientId: String) {
-        let toStore = StoredUserTokens(clientId: forClientId, accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims)
+    func persist() {
+        let toStore = StoredUserTokens(clientId: clientId, accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims)
         DefaultTokenStorage.store(toStore)
     }
     
     public func logout() {
-        DefaultTokenStorage.remove()
+        DefaultTokenStorage.remove(forClientId: clientId)
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
+            && lhs.clientId == rhs.clientId
             && lhs.accessToken == rhs.accessToken
             && lhs.refreshToken == rhs.refreshToken
             && lhs.idToken == rhs.idToken

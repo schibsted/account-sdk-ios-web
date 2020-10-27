@@ -11,6 +11,6 @@ internal struct StoredUserTokens: Codable {
 
 internal protocol TokenStorage {
     func store(_ value: StoredUserTokens)
-    func get() -> StoredUserTokens?
-    func remove()
+    func get(forClientId: String) -> StoredUserTokens?
+    func remove(forClientId: String)
 }
