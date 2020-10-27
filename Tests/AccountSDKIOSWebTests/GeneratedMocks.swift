@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: ../../../AccountSDKIOSWeb/Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-19 15:21:24 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 05:58:24 +0000
 
 
 import Cuckoo
