@@ -7,6 +7,7 @@ class KeychainStorage {
     init(forService: String) {
         self.service = forService
     }
+
     func addValue(_ value: Data, forAccount: String?) {
         // TODO delete possibly existing value first or create separate update function?
 
@@ -29,6 +30,22 @@ class KeychainStorage {
         ]
         forAccount.map { query[kSecAttrAccount as String] = $0 }
 
+        return get(query: query) as? Data
+    }
+    
+    func getAll() -> [Data] {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitAll,
+        ]
+
+        let result = get(query: query) as! [Data?]
+        return result.compactMap { $0 }
+    }
+
+    private func get(query: [String: Any]) -> AnyObject? {
         var extractedData: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &extractedData)
         
@@ -37,10 +54,10 @@ class KeychainStorage {
         }
 
         guard status == errSecSuccess else {
-            fatalError("Unable to retrieve the secret")
+            fatalError("Unable to fulfill the keychain query")
         }
 
-        return extractedData as? Data
+        return extractedData
     }
 
     func removeValue(forAccount: String?) {

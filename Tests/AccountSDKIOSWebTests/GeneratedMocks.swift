@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 10:16:41 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 10:20:30 +0000
 
 
 import Cuckoo
@@ -248,7 +248,7 @@ public class HTTPClientWithURLSessionStub: HTTPClientWithURLSession {
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-10-27 10:16:41 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-10-27 10:20:30 +0000
 
 
 import Cuckoo
@@ -313,6 +313,21 @@ import Security
     
     
     
+     func getAll() -> [UserSession] {
+        
+    return cuckoo_manager.call("getAll() -> [UserSession]",
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                Cuckoo.MockManager.crashOnProtocolSuperclassCall()
+                ,
+            defaultCall: __defaultImplStub!.getAll())
+        
+    }
+    
+    
+    
      func remove(forClientId: String)  {
         
     return cuckoo_manager.call("remove(forClientId: String)",
@@ -343,6 +358,11 @@ import Security
 	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubFunction<(String), UserSession?> where M1.MatchedType == String {
 	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
 	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
+	    }
+	    
+	    func getAll() -> Cuckoo.ProtocolStubFunction<(), [UserSession]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "getAll() -> [UserSession]", parameterMatchers: matchers))
 	    }
 	    
 	    func remove<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(String)> where M1.MatchedType == String {
@@ -379,6 +399,12 @@ import Security
 	    }
 	    
 	    @discardableResult
+	    func getAll() -> Cuckoo.__DoNotUse<(), [UserSession]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return cuckoo_manager.verify("getAll() -> [UserSession]", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
 	    func remove<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), Void> where M1.MatchedType == String {
 	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
 	        return cuckoo_manager.verify("remove(forClientId: String)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
@@ -399,6 +425,10 @@ import Security
     
      func get(forClientId: String) -> UserSession?  {
         return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
+    }
+    
+     func getAll() -> [UserSession]  {
+        return DefaultValueRegistry.defaultValue(for: ([UserSession]).self)
     }
     
      func remove(forClientId: String)   {

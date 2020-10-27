@@ -11,6 +11,12 @@ internal struct DefaultSessionStorage {
         return storage.get(forClientId: forClientId)
     }
     
+    /** Returns all user sessions, sorted with most recent session first.
+     */
+    static func getAll() -> [UserSession] {
+        return storage.getAll().sorted { $0.updatedAt > $1.updatedAt }
+    }
+    
     static func remove(forClientId: String) {
         storage.remove(forClientId: forClientId)
     }
@@ -37,6 +43,11 @@ internal class KeychainSessionStorage: SessionStorage {
             return nil
         }
         return tokenData
+    }
+    
+    func getAll() -> [UserSession] {
+        let data = keychain.getAll()
+        return data.compactMap { try? JSONDecoder().decode(UserSession.self, from: $0) }
     }
 
     func remove(forClientId: String) {
