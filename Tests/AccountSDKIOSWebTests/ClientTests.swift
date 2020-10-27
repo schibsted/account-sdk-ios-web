@@ -15,11 +15,11 @@ final class ClientTests: XCTestCase {
     
     override func setUp() {
         DefaultStorage.storage = UserDefaultsStorage(userDefaults)
-        let mockTokenStorage = MockTokenStorage()
-        stub(mockTokenStorage) { mock in
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
             when(mock.store(any())).thenDoNothing()
         }
-        DefaultTokenStorage.storage = mockTokenStorage
+        DefaultSessionStorage.storage = mockSessionStorage
     }
     
     override func tearDown() {
@@ -150,25 +150,26 @@ final class ClientTests: XCTestCase {
     }
     
     func testResumeLastLoggedInUserWithExistingTokens() {
-        let storedTokens = StoredUserTokens(clientId: config.clientId, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
-        let mockTokenStorage = MockTokenStorage()
-        stub(mockTokenStorage) { mock in
-            when(mock.get(forClientId: config.clientId)).thenReturn(storedTokens)
+        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
+        let session = UserSession(clientId: config.clientId, userTokens: userTokens, updatedAt: Date())
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.get(forClientId: config.clientId)).thenReturn(session)
         }
         
-        DefaultTokenStorage.storage = mockTokenStorage
+        DefaultSessionStorage.storage = mockSessionStorage
         let client = Client(configuration: config)
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(clientId: config.clientId, accessToken: storedTokens.accessToken, refreshToken: storedTokens.refreshToken, idToken: storedTokens.idToken, idTokenClaims: storedTokens.idTokenClaims))
+        XCTAssertEqual(user, User(clientId: config.clientId, accessToken: userTokens.accessToken, refreshToken: userTokens.refreshToken, idToken: userTokens.idToken, idTokenClaims: userTokens.idTokenClaims))
     }
     
     func testResumeLastLoggedInUserWithoutTokens() {
-        let mockTokenStorage = MockTokenStorage()
-        stub(mockTokenStorage) { mock in
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
             when(mock.get(forClientId: config.clientId)).thenReturn(nil)
         }
         
-        DefaultTokenStorage.storage = mockTokenStorage
+        DefaultSessionStorage.storage = mockSessionStorage
         let client = Client(configuration: config)
         XCTAssertNil(client.resumeLastLoggedInUser())
     }

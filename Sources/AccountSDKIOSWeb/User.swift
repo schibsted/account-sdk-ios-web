@@ -20,12 +20,14 @@ public class User: Equatable {
     }
 
     func persist() {
-        let toStore = StoredUserTokens(clientId: clientId, accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims)
-        DefaultTokenStorage.store(toStore)
+        let session = UserSession(clientId: clientId,
+                                  userTokens: UserTokens(accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims),
+                                  updatedAt: Date())
+        DefaultSessionStorage.store(session)
     }
     
     public func logout() {
-        DefaultTokenStorage.remove(forClientId: clientId)
+        DefaultSessionStorage.remove(forClientId: clientId)
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {

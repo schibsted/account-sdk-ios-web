@@ -54,12 +54,16 @@ public class Client {
     }
 
     public func resumeLastLoggedInUser() -> User? {
-        let stored = DefaultTokenStorage.get(forClientId: configuration.clientId)
-        guard let tokens = stored else {
+        let stored = DefaultSessionStorage.get(forClientId: configuration.clientId)
+        guard let session = stored else {
             return nil
         }
         
-        return User(clientId: tokens.clientId, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, idToken: tokens.idToken, idTokenClaims: tokens.idTokenClaims)
+        return User(clientId: session.clientId,
+                    accessToken: session.userTokens.accessToken,
+                    refreshToken: session.userTokens.refreshToken,
+                    idToken: session.userTokens.idToken,
+                    idTokenClaims: session.userTokens.idTokenClaims)
     }
     
     public func loginURL(scopes: [String]? = nil) -> URL? {

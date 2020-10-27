@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 07:52:38 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 10:16:41 +0000
 
 
 import Cuckoo
@@ -248,7 +248,7 @@ public class HTTPClientWithURLSessionStub: HTTPClientWithURLSession {
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/TokenStorage.swift at 2020-10-27 07:52:38 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-10-27 10:16:41 +0000
 
 
 import Cuckoo
@@ -258,19 +258,19 @@ import Foundation
 import Security
 
 
- class MockTokenStorage: TokenStorage, Cuckoo.ProtocolMock {
+ class MockSessionStorage: SessionStorage, Cuckoo.ProtocolMock {
     
-     typealias MocksType = TokenStorage
+     typealias MocksType = SessionStorage
     
-     typealias Stubbing = __StubbingProxy_TokenStorage
-     typealias Verification = __VerificationProxy_TokenStorage
+     typealias Stubbing = __StubbingProxy_SessionStorage
+     typealias Verification = __VerificationProxy_SessionStorage
 
      let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: false)
 
     
-    private var __defaultImplStub: TokenStorage?
+    private var __defaultImplStub: SessionStorage?
 
-     func enableDefaultImplementation(_ stub: TokenStorage) {
+     func enableDefaultImplementation(_ stub: SessionStorage) {
         __defaultImplStub = stub
         cuckoo_manager.enableDefaultStubImplementation()
     }
@@ -283,9 +283,9 @@ import Security
     
     
     
-     func store(_ value: StoredUserTokens)  {
+     func store(_ value: UserSession)  {
         
-    return cuckoo_manager.call("store(_: StoredUserTokens)",
+    return cuckoo_manager.call("store(_: UserSession)",
             parameters: (value),
             escapingParameters: (value),
             superclassCall:
@@ -298,9 +298,9 @@ import Security
     
     
     
-     func get(forClientId: String) -> StoredUserTokens? {
+     func get(forClientId: String) -> UserSession? {
         
-    return cuckoo_manager.call("get(forClientId: String) -> StoredUserTokens?",
+    return cuckoo_manager.call("get(forClientId: String) -> UserSession?",
             parameters: (forClientId),
             escapingParameters: (forClientId),
             superclassCall:
@@ -327,7 +327,7 @@ import Security
     }
     
 
-	 struct __StubbingProxy_TokenStorage: Cuckoo.StubbingProxy {
+	 struct __StubbingProxy_SessionStorage: Cuckoo.StubbingProxy {
 	    private let cuckoo_manager: Cuckoo.MockManager
 	
 	     init(manager: Cuckoo.MockManager) {
@@ -335,24 +335,24 @@ import Security
 	    }
 	    
 	    
-	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(StoredUserTokens)> where M1.MatchedType == StoredUserTokens {
-	        let matchers: [Cuckoo.ParameterMatcher<(StoredUserTokens)>] = [wrap(matchable: value) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockTokenStorage.self, method: "store(_: StoredUserTokens)", parameterMatchers: matchers))
+	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(UserSession)> where M1.MatchedType == UserSession {
+	        let matchers: [Cuckoo.ParameterMatcher<(UserSession)>] = [wrap(matchable: value) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "store(_: UserSession)", parameterMatchers: matchers))
 	    }
 	    
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubFunction<(String), StoredUserTokens?> where M1.MatchedType == String {
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubFunction<(String), UserSession?> where M1.MatchedType == String {
 	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockTokenStorage.self, method: "get(forClientId: String) -> StoredUserTokens?", parameterMatchers: matchers))
+	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
 	    }
 	    
 	    func remove<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(String)> where M1.MatchedType == String {
 	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockTokenStorage.self, method: "remove(forClientId: String)", parameterMatchers: matchers))
+	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "remove(forClientId: String)", parameterMatchers: matchers))
 	    }
 	    
 	}
 
-	 struct __VerificationProxy_TokenStorage: Cuckoo.VerificationProxy {
+	 struct __VerificationProxy_SessionStorage: Cuckoo.VerificationProxy {
 	    private let cuckoo_manager: Cuckoo.MockManager
 	    private let callMatcher: Cuckoo.CallMatcher
 	    private let sourceLocation: Cuckoo.SourceLocation
@@ -367,15 +367,15 @@ import Security
 	
 	    
 	    @discardableResult
-	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.__DoNotUse<(StoredUserTokens), Void> where M1.MatchedType == StoredUserTokens {
-	        let matchers: [Cuckoo.ParameterMatcher<(StoredUserTokens)>] = [wrap(matchable: value) { $0 }]
-	        return cuckoo_manager.verify("store(_: StoredUserTokens)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.__DoNotUse<(UserSession), Void> where M1.MatchedType == UserSession {
+	        let matchers: [Cuckoo.ParameterMatcher<(UserSession)>] = [wrap(matchable: value) { $0 }]
+	        return cuckoo_manager.verify("store(_: UserSession)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	    @discardableResult
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), StoredUserTokens?> where M1.MatchedType == String {
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), UserSession?> where M1.MatchedType == String {
 	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return cuckoo_manager.verify("get(forClientId: String) -> StoredUserTokens?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	        return cuckoo_manager.verify("get(forClientId: String) -> UserSession?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	    @discardableResult
@@ -387,18 +387,18 @@ import Security
 	}
 }
 
- class TokenStorageStub: TokenStorage {
+ class SessionStorageStub: SessionStorage {
     
 
     
 
     
-     func store(_ value: StoredUserTokens)   {
+     func store(_ value: UserSession)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
-     func get(forClientId: String) -> StoredUserTokens?  {
-        return DefaultValueRegistry.defaultValue(for: (StoredUserTokens?).self)
+     func get(forClientId: String) -> UserSession?  {
+        return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
     }
     
      func remove(forClientId: String)   {
