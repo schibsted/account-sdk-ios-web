@@ -1,7 +1,11 @@
 import Foundation
 
-internal struct DefaultSessionStorage {
+public struct DefaultSessionStorage {
     static var storage: SessionStorage = KeychainSessionStorage(service: "com.schibsted.account")
+    
+    public static func useAccessGroup(_ accessGroup: String) {
+        storage = KeychainSessionStorage(service: "com.schibsted.account", accessGroup: accessGroup)
+    }
     
     static func store(_ value: UserSession) {
         storage.store(value)
@@ -25,8 +29,8 @@ internal struct DefaultSessionStorage {
 internal class KeychainSessionStorage: SessionStorage {
     private let keychain: KeychainStorage
     
-    init(service: String) {
-        self.keychain = KeychainStorage(forService: service)
+    init(service: String, accessGroup: String? = nil) {
+        self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
     
     func store(_ value: UserSession) {

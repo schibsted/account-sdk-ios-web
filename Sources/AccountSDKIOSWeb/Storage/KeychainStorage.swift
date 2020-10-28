@@ -3,9 +3,11 @@ import Security
 
 class KeychainStorage {
     private let service: String
+    private let accessGroup: String?
 
-    init(forService: String) {
+    init(forService: String, accessGroup: String? = nil) {
         self.service = forService
+        self.accessGroup = accessGroup
     }
 
     func addValue(_ value: Data, forAccount: String?) {
@@ -14,6 +16,7 @@ class KeychainStorage {
         var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecAttrService as String: service,
                                     kSecValueData as String: value]
+        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
         forAccount.map { query[kSecAttrAccount as String] = $0 }
         let status = SecItemAdd(query as CFDictionary, nil)
         
@@ -28,18 +31,20 @@ class KeychainStorage {
             kSecAttrService as String: service,
             kSecReturnData as String: true
         ]
+        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
         forAccount.map { query[kSecAttrAccount as String] = $0 }
 
         return get(query: query) as? Data
     }
     
     func getAll() -> [Data] {
-        let query: [String: Any] = [
+        var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitAll,
         ]
+        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
 
         let result = get(query: query) as! [Data?]
         return result.compactMap { $0 }
@@ -65,6 +70,7 @@ class KeychainStorage {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service
         ]
+        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
         forAccount.map { query[kSecAttrAccount as String] = $0 }
         
         let result = SecItemDelete(query as CFDictionary)
