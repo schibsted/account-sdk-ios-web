@@ -46,7 +46,11 @@ class KeychainStorage {
         ]
         accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
 
-        let result = get(query: query) as! [Data?]
+        guard let items = get(query: query) else {
+            return []
+        }
+
+        let result = items as! [Data?]
         return result.compactMap { $0 }
     }
 
