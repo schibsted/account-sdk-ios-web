@@ -149,7 +149,7 @@ final class ClientTests: XCTestCase {
         }
     }
     
-    func testResumeLastLoggedInUserWithExistingTokens() {
+    func testResumeLastLoggedInUserWithExistingSession() {
         let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
         let session = UserSession(clientId: config.clientId, userTokens: userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
@@ -163,7 +163,7 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(user, User(clientId: config.clientId, accessToken: userTokens.accessToken, refreshToken: userTokens.refreshToken, idToken: userTokens.idToken, idTokenClaims: userTokens.idTokenClaims))
     }
     
-    func testResumeLastLoggedInUserWithoutTokens() {
+    func testResumeLastLoggedInUserWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.get(forClientId: config.clientId)).thenReturn(nil)
