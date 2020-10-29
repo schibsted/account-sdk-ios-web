@@ -18,6 +18,14 @@ public class User: Equatable {
         self.idTokenClaims = idTokenClaims
         self.uuid = idTokenClaims.sub
     }
+    
+    convenience init(session: UserSession) {
+        self.init(clientId: session.clientId,
+                  accessToken: session.userTokens.accessToken,
+                  refreshToken: session.userTokens.refreshToken,
+                  idToken: session.userTokens.idToken,
+                  idTokenClaims: session.userTokens.idTokenClaims)
+    }
 
     func persist() {
         let session = UserSession(clientId: clientId,

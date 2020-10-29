@@ -52,7 +52,7 @@ public class Client {
         self.configuration = configuration
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, httpClient: httpClient)
     }
 
     public func resumeLastLoggedInUser() -> User? {
@@ -61,11 +61,7 @@ public class Client {
             return nil
         }
         
-        return User(clientId: session.clientId,
-                    accessToken: session.userTokens.accessToken,
-                    refreshToken: session.userTokens.refreshToken,
-                    idToken: session.userTokens.idToken,
-                    idTokenClaims: session.userTokens.idTokenClaims)
+        return User(session: session)
     }
     
     public func simplifiedLoginData() -> SimplifiedLoginData? {
@@ -81,7 +77,9 @@ public class Client {
     public func performSimplifiedLogin(completion: @escaping (Result<User, LoginError>) -> Void) {
         let allSessions = DefaultSessionStorage.getAll()
         guard allSessions.count > 0 else {
-            preconditionFailure("No logged-in user found")
+            // TODO add log message
+            completion(.failure(.unexpectedError(message: "No user sessions found")))
+            return
         }
         
         let mostRecentSession = allSessions[0]

@@ -160,7 +160,7 @@ final class ClientTests: XCTestCase {
         DefaultSessionStorage.storage = mockSessionStorage
         let client = Client(configuration: config)
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(clientId: config.clientId, accessToken: userTokens.accessToken, refreshToken: userTokens.refreshToken, idToken: userTokens.idToken, idTokenClaims: userTokens.idTokenClaims))
+        XCTAssertEqual(user, User(session: session))
     }
     
     func testResumeLastLoggedInUserWithoutSession() {
@@ -198,6 +198,76 @@ final class ClientTests: XCTestCase {
         
         DefaultSessionStorage.storage = mockSessionStorage
         XCTAssertNil(Client(configuration: config).simplifiedLoginData())
+    }
+    
+    func testPerformSimplifiedLogin() {
+        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
+        let session = UserSession(clientId: "anyClientId", userTokens: userTokens, updatedAt: Date())
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.getAll()).thenReturn([session])
+            when(mock.store(any())).thenDoNothing()
+        }
+        DefaultSessionStorage.storage = mockSessionStorage
+
+        let idToken = createIdToken(uuid: userTokens.idTokenClaims.sub)
+        let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) { mock in
+            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/api/2/oauth/exchange")),
+                           body: any(),
+                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
+                           authorization: "Bearer \(userTokens.accessToken)",
+                           completion: anyClosure()))
+                .then { _, _, _, _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: OAuthCodeExchangeResponse(code: "authCode"))))
+                }
+
+            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
+                           body: any(),
+                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
+                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
+                           completion: anyClosure()))
+                .then { _, _, _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+            let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
+            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+                .then { _, completion in
+                    completion(.success(jwksResponse))
+                }
+        }
+        
+        let callbackExpectation = expectation(description: "Returns logged-in user to callback closure")
+        
+        let client = Client(configuration: config, httpClient: mockHTTPClient)
+        client.performSimplifiedLogin { result in
+            let user = User(clientId: self.config.clientId,
+                            accessToken: tokenResponse.access_token,
+                            refreshToken: tokenResponse.refresh_token,
+                            idToken: idToken,
+                            idTokenClaims: userTokens.idTokenClaims)
+            XCTAssertEqual(result, .success(user))
+            callbackExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
+    }
+    
+    func testPerformSimplifiedLoginWithoutSession() {
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.getAll()).thenReturn([])
+        }
+        DefaultSessionStorage.storage = mockSessionStorage
+        let client = Client(configuration: config)
+        client.performSimplifiedLogin { result in
+            XCTAssertEqual(result, .failure(.unexpectedError(message: "No user sessions found")))
+        }
     }
 
     private func createIdToken(uuid: String) -> String {

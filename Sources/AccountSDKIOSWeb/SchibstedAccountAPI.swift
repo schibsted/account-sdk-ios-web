@@ -1,6 +1,6 @@
 import Foundation
 
-private struct SchibstedAccountAPIResponse<T: Codable>: Codable {
+internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
     let data: T
 }
 
