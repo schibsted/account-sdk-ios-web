@@ -174,6 +174,32 @@ final class ClientTests: XCTestCase {
         XCTAssertNil(client.resumeLastLoggedInUser())
     }
     
+    func testSimplifiedLoginDataWithExistingSession() {
+        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
+        let now = Date()
+        let newestSession = UserSession(clientId: config.clientId, userTokens: userTokens, updatedAt: now)
+        let earlierSession = UserSession(clientId: "other client", userTokens: userTokens, updatedAt: now.addingTimeInterval(-1000))
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.getAll()).thenReturn([newestSession, earlierSession])
+        }
+        
+        DefaultSessionStorage.storage = mockSessionStorage
+        let client = Client(configuration: config)
+        let result = client.simplifiedLoginData()
+        XCTAssertEqual(result, SimplifiedLoginData(uuid: newestSession.userTokens.idTokenClaims.sub, clients: [newestSession.clientId, earlierSession.clientId]))
+    }
+    
+    func testSimplifiedLoginDataWithoutSession() {
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.getAll()).thenReturn([])
+        }
+        
+        DefaultSessionStorage.storage = mockSessionStorage
+        XCTAssertNil(Client(configuration: config).simplifiedLoginData())
+    }
+
     private func createIdToken(uuid: String) -> String {
         let data = try! JSONEncoder().encode(IdTokenClaims(sub: uuid))
         return ClientTests.jwsUtil.createJWS(payload: data, keyId: ClientTests.keyId)
