@@ -4,10 +4,9 @@ import Cuckoo
 
 final class DefaultSessionStorageTests: XCTestCase {
     func testGetAllReturnsResultSortedByUpdatedAt() {
-        let tokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
         let now = Date()
-        let newestSession = UserSession(clientId: "client1", userTokens: tokens, updatedAt: now)
-        let olderSession = UserSession(clientId: "client1", userTokens: tokens, updatedAt: now.addingTimeInterval(TimeInterval(-1000)))
+        let newestSession = UserSession(clientId: "client1", userTokens: Fixtures.userTokens, updatedAt: now)
+        let olderSession = UserSession(clientId: "client1", userTokens: Fixtures.userTokens, updatedAt: now.addingTimeInterval(TimeInterval(-1000)))
 
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in

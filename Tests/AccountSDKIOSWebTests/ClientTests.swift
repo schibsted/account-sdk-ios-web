@@ -133,8 +133,7 @@ final class ClientTests: XCTestCase {
     }
 
     func testHandleAuthenticationResponseHandlesSuccessResponse() {
-        let uuid = "test_user_uuid"
-        let idToken = createIdToken(uuid: uuid)
+        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         
@@ -163,7 +162,7 @@ final class ClientTests: XCTestCase {
         DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-            XCTAssertEqual(result, .success(User(clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: IdTokenClaims(sub: uuid))))
+            XCTAssertEqual(result, .success(User(clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
             callbackExpectation.fulfill()
         }
         
@@ -175,8 +174,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testResumeLastLoggedInUserWithExistingSession() {
-        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
-        let session = UserSession(clientId: config.clientId, userTokens: userTokens, updatedAt: Date())
+        let session = UserSession(clientId: config.clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.get(forClientId: config.clientId)).thenReturn(session)
@@ -200,10 +198,9 @@ final class ClientTests: XCTestCase {
     }
     
     func testSimplifiedLoginDataWithExistingSession() {
-        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
         let now = Date()
-        let newestSession = UserSession(clientId: config.clientId, userTokens: userTokens, updatedAt: now)
-        let earlierSession = UserSession(clientId: "other client", userTokens: userTokens, updatedAt: now.addingTimeInterval(-1000))
+        let newestSession = UserSession(clientId: config.clientId, userTokens: Fixtures.userTokens, updatedAt: now)
+        let earlierSession = UserSession(clientId: "other client", userTokens: Fixtures.userTokens, updatedAt: now.addingTimeInterval(-1000))
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([newestSession, earlierSession])
@@ -226,8 +223,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testPerformSimplifiedLogin() {
-        let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: IdTokenClaims(sub: "userUuid"))
-        let session = UserSession(clientId: "anyClientId", userTokens: userTokens, updatedAt: Date())
+        let session = UserSession(clientId: "anyClientId", userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([session])
@@ -235,14 +231,14 @@ final class ClientTests: XCTestCase {
         }
         DefaultSessionStorage.storage = mockSessionStorage
 
-        let idToken = createIdToken(uuid: userTokens.idTokenClaims.sub)
+        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/api/2/oauth/exchange")),
                            body: any(),
                            contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: "Bearer \(userTokens.accessToken)",
+                           authorization: "Bearer \(Fixtures.userTokens.accessToken)",
                            completion: anyClosure()))
                 .then { _, _, _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: OAuthCodeExchangeResponse(code: "authCode"))))
@@ -271,7 +267,7 @@ final class ClientTests: XCTestCase {
                             accessToken: tokenResponse.access_token,
                             refreshToken: tokenResponse.refresh_token,
                             idToken: idToken,
-                            idTokenClaims: userTokens.idTokenClaims)
+                            idTokenClaims: Fixtures.userTokens.idTokenClaims)
             XCTAssertEqual(result, .success(user))
             callbackExpectation.fulfill()
         }
@@ -295,8 +291,8 @@ final class ClientTests: XCTestCase {
         }
     }
 
-    private func createIdToken(uuid: String) -> String {
-        let data = try! JSONEncoder().encode(IdTokenClaims(sub: uuid))
+    private func createIdToken(claims: IdTokenClaims) -> String {
+        let data = try! JSONEncoder().encode(claims)
         return ClientTests.jwsUtil.createJWS(payload: data, keyId: ClientTests.keyId)
     }
 }
