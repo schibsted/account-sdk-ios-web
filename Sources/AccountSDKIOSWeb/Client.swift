@@ -98,7 +98,7 @@ public class Client {
         }
     }
     
-    public func loginURL(scopes: [String]? = nil) -> URL? {
+    public func loginURL(extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
         let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier)
@@ -107,8 +107,10 @@ public class Client {
             // TODO log error to store state
             return nil;
         }
-        
-        let scopeString = scopes.map { $0.joined(separator: " ") } ?? "openid"
+
+        var scopes = Set(extraScopeValues)
+        scopes.insert("openid")
+        let scopeString = scopes.joined(separator: " ")
         let authRequestParams = [
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "prompt", value: "select_account"),

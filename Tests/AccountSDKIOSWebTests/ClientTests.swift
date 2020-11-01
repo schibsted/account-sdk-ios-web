@@ -50,6 +50,31 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
     }
     
+    func testLoginURLWithExtraScopes() {
+        let client = Client(configuration: config)
+        let loginURL = client.loginURL(extraScopeValues: ["scope1", "scope2"])
+        
+        XCTAssertEqual(loginURL?.scheme, "https")
+        XCTAssertEqual(loginURL?.host, "identity-pre.schibsted.com")
+        XCTAssertEqual(loginURL?.path, "/oauth/authorize")
+        
+        let components = URLComponents(url: loginURL!, resolvingAgainstBaseURL: true)
+        let queryParams = components?.queryItems?.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
+        }
+
+        let scope = Set(queryParams!["scope"]!.components(separatedBy: " "))
+        XCTAssertEqual(queryParams!["client_id"], config.clientId)
+        XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
+        XCTAssertEqual(queryParams!["response_type"], "code")
+        XCTAssertEqual(queryParams!["prompt"], "select_account")
+        XCTAssertEqual(scope, Set(["openid", "scope1", "scope2"]))
+        XCTAssertNotNil(queryParams!["state"])
+        XCTAssertNotNil(queryParams!["nonce"])
+        XCTAssertNotNil(queryParams!["code_challenge"])
+        XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
+    }
+
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
         let client = Client(configuration: config)
         
