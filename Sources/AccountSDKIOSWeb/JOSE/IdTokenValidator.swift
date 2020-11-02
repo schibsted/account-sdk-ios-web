@@ -2,12 +2,14 @@ import Foundation
 
 internal struct IdTokenValidationContext {
     let jwks: JWKS
+    let expectedAMR: String?
 }
 
-public enum IdTokenValidationError: Error {
+public enum IdTokenValidationError: Error, Equatable {
     case signatureValidationError(SignatureValidationError)
     case failedToDecodePayload
     case missingIdToken
+    case missingExpectedAMRValue
 }
 
 internal struct IdTokenValidator {
@@ -22,10 +24,28 @@ internal struct IdTokenValidator {
                 /* TODO implement full ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation:
                     iss, aud, exp, nonce
                  */
+                
+                guard IdTokenValidator.contains(claims.amr, value: context.expectedAMR) else {
+                    completion(.failure(.missingExpectedAMRValue))
+                    return
+                }
+
                 completion(.success(claims))
             case .failure(let error):
                 completion(.failure(.signatureValidationError(error)))
             }
         }
+    }
+    
+    private static func contains(_ values: [String]?, value: String?) -> Bool {
+        guard let value = value else {
+            return true
+        }
+
+        if let values = values {
+            return values.contains(value)
+        }
+        
+        return false
     }
 }

@@ -8,6 +8,7 @@ internal enum TokenError: Error {
 
 public struct IdTokenClaims: Codable, Equatable {
     let sub: String
+    let amr: [String]?
     // TODO add other claims
 }
 
@@ -95,7 +96,7 @@ internal class TokenHandler {
                     return
                 }
 
-                IdTokenValidator.validate(idToken: idToken, context: IdTokenValidationContext(jwks: self.jwks)) { result in
+                IdTokenValidator.validate(idToken: idToken, context: IdTokenValidationContext(jwks: self.jwks, expectedAMR: nil)) { result in
                     switch result {
                     case .success(let claims):
                         let tokenResult = TokenResult(accessToken: tokenResponse.access_token,

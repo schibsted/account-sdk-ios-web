@@ -1,5 +1,6 @@
 import Foundation
 import JOSESwift
+@testable import AccountSDKIOSWeb
 
 internal class JWSUtil {
     let publicKey: SecKey!
@@ -29,5 +30,26 @@ internal class JWSUtil {
         
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         return jws.compactSerializedString
+    }
+
+    func createIdToken(claims: IdTokenClaims, keyId: String) -> String {
+        let data = try! JSONEncoder().encode(claims)
+        return createJWS(payload: data, keyId: keyId)
+    }
+}
+
+internal class StaticJWKS: JWKS {
+    private let keys: [String: JWK]
+        
+    init(keyId: String, rsaPublicKey: SecKey) {
+        self.keys = [keyId: try! RSAPublicKey(publicKey: rsaPublicKey)]
+    }
+    
+    init(keyId: String, jwk: JWK) {
+        self.keys = [keyId: jwk]
+    }
+    
+    func getKey(withId keyId: String, completion: @escaping (JWK?) -> Void) {
+        completion(keys[keyId])
     }
 }

@@ -2,22 +2,6 @@ import XCTest
 import JOSESwift
 @testable import AccountSDKIOSWeb
 
-private class StaticJWKS: JWKS {
-    private let keys: [String: JWK]
-        
-    init(keyId: String, rsaPublicKey: SecKey) {
-        self.keys = [keyId: try! RSAPublicKey(publicKey: rsaPublicKey)]
-    }
-    
-    init(keyId: String, jwk: JWK) {
-        self.keys = [keyId: jwk]
-    }
-    
-    func getKey(withId keyId: String, completion: @escaping (JWK?) -> Void) {
-        completion(keys[keyId])
-    }
-}
-
 final class JOSEUtilTests: XCTestCase {
     private static let keyId = "test key"
     private static var jwsUtil: JWSUtil!
