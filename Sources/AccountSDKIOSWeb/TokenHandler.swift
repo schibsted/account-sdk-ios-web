@@ -1,12 +1,6 @@
 import Foundation
 import JOSESwift
 
-internal enum IdTokenValidationError: Error {
-    case signatureValidationError(SignatureValidationError)
-    case failedToDecodePayload
-    case missingIdToken
-}
-
 internal enum TokenError: Error {
     case tokenRequestError(HTTPError)
     case idTokenError(IdTokenValidationError)
@@ -80,6 +74,7 @@ internal class TokenHandler {
         self.httpClient = httpClient
         self.jwks = jwks
     }
+
     func makeTokenRequest(authCode: String, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         let url = configuration.serverURL.appendingPathComponent("/oauth/token")
         let parameters = [
@@ -100,7 +95,7 @@ internal class TokenHandler {
                     return
                 }
 
-                self.validateIdToken(idToken: idToken) { result in
+                IdTokenValidator.validate(idToken: idToken, context: IdTokenValidationContext(jwks: self.jwks)) { result in
                     switch result {
                     case .success(let claims):
                         let tokenResult = TokenResult(accessToken: tokenResponse.access_token,
@@ -120,24 +115,6 @@ internal class TokenHandler {
                 return
             }
             
-        }
-    }
-    
-    private func validateIdToken(idToken: String, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
-        JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
-            switch result {
-            case .success(let payload):
-                guard let claims = try? JSONDecoder().decode(IdTokenClaims.self, from: payload) else {
-                    completion(.failure(.failedToDecodePayload))
-                    return
-                }
-                /* TODO implement full ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation:
-                    iss, aud, exp, nonce
-                 */
-                completion(.success(claims))
-            case .failure(let error):
-                completion(.failure(.signatureValidationError(error)))
-            }
         }
     }
 }
