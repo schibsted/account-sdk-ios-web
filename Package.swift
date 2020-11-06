@@ -22,5 +22,8 @@ let package = Package(
         .testTarget(
             name: "AccountSDKIOSWebTests",
             dependencies: ["AccountSDKIOSWeb", "Cuckoo"]),
+        .testTarget(
+            name: "AccountSDKIOSKeychainTests",
+            dependencies: ["AccountSDKIOSWeb"]),
     ]
 )
