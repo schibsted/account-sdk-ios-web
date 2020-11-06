@@ -74,6 +74,32 @@ final class ClientTests: XCTestCase {
         XCTAssertNotNil(queryParams!["code_challenge"])
         XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
     }
+    
+    func testLoginURLWithMFAIncludesACRValues() {
+        let client = Client(configuration: config)
+        let loginURL = client.loginURL(withMFA: .otp)
+        
+        XCTAssertEqual(loginURL?.scheme, "https")
+        XCTAssertEqual(loginURL?.host, "identity-pre.schibsted.com")
+        XCTAssertEqual(loginURL?.path, "/oauth/authorize")
+        
+        let components = URLComponents(url: loginURL!, resolvingAgainstBaseURL: true)
+        let queryParams = components?.queryItems?.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
+        }
+
+        XCTAssertEqual(queryParams!["acr_values"], "otp")
+        XCTAssertNil(queryParams!["prompt"])
+
+        XCTAssertEqual(queryParams!["client_id"], config.clientId)
+        XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
+        XCTAssertEqual(queryParams!["response_type"], "code")
+        XCTAssertEqual(queryParams!["scope"], "openid")
+        XCTAssertNotNil(queryParams!["state"])
+        XCTAssertNotNil(queryParams!["nonce"])
+        XCTAssertNotNil(queryParams!["code_challenge"])
+        XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
+    }
 
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
         let client = Client(configuration: config)
@@ -98,7 +124,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
             XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
@@ -118,7 +144,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
@@ -159,10 +185,52 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier"), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .success(User(clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
+            callbackExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+        }
+    }
+    
+    func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
+        let idTokenClaims = IdTokenClaims(sub: "userUuid", amr: nil) // no AMR in ID Token
+        let idToken = createIdToken(claims: idTokenClaims)
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+        
+        stub(mockHTTPClient) { mock in
+            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
+                           body: any(),
+                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
+                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
+                           completion: anyClosure()))
+                .then { _, _, _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+            
+            let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
+            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+                .then { _, completion in
+                    completion(.success(jwksResponse))
+                }
+        }
+        
+        let client = Client(configuration: config, httpClient: mockHTTPClient)
+        
+        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
+
+        let state = "testState"
+        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: MFAType.otp), forKey: Client.webFlowLoginStateKey)
+
+        client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
+            XCTAssertEqual(result, .failure(.missingExpectedMFA))
             callbackExpectation.fulfill()
         }
         

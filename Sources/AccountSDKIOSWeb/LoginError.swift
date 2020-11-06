@@ -19,5 +19,6 @@ public enum LoginError: Error, Equatable {
     case unsolicitedResponse
     case authenticationErrorResponse(error: OAuthError)
     case tokenErrorResponse(error: OAuthError)
+    case missingExpectedMFA
     case unexpectedError(message: String)
 }

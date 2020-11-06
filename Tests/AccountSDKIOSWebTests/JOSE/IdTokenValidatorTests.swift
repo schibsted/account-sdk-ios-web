@@ -12,13 +12,13 @@ final class IdTokenValidatorTests: XCTestCase {
 
     func testRejectMissingExpectedAMRInIdTokenWithoutAMR() {
         let jwks = StaticJWKS(keyId: IdTokenValidatorTests.keyId, rsaPublicKey: IdTokenValidatorTests.jwsUtil.publicKey)
-        let context = IdTokenValidationContext(jwks: jwks, expectedAMR: "someValue")
+        let context = IdTokenValidationContext(expectedAMR: "someValue")
         
         for amr in [nil, [], ["value1", "value2"]] {
             let callbackExpectation = expectation(description: "Returns error to callback closure")
 
             let claims = IdTokenClaims(sub: "userUuid", amr: amr)
-            IdTokenValidator.validate(idToken: IdTokenValidatorTests.jwsUtil.createIdToken(claims: claims, keyId: IdTokenValidatorTests.keyId), context: context) { result in
+            IdTokenValidator.validate(idToken: IdTokenValidatorTests.jwsUtil.createIdToken(claims: claims, keyId: IdTokenValidatorTests.keyId), jwks: jwks, context: context) { result in
                 XCTAssertEqual(result, .failure(.missingExpectedAMRValue))
                 callbackExpectation.fulfill()
             }

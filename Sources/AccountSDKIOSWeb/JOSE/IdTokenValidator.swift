@@ -1,8 +1,7 @@
 import Foundation
 
 internal struct IdTokenValidationContext {
-    let jwks: JWKS
-    let expectedAMR: String?
+    var expectedAMR: String? = nil
 }
 
 public enum IdTokenValidationError: Error, Equatable {
@@ -13,8 +12,8 @@ public enum IdTokenValidationError: Error, Equatable {
 }
 
 internal struct IdTokenValidator {
-    static func validate(idToken: String, context: IdTokenValidationContext, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
-        JOSEUtil.verifySignature(of: idToken, withKeys: context.jwks) { result in
+    static func validate(idToken: String, jwks: JWKS, context: IdTokenValidationContext, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
+        JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
             switch result {
             case .success(let payload):
                 guard let claims = try? JSONDecoder().decode(IdTokenClaims.self, from: payload) else {

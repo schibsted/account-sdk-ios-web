@@ -31,6 +31,13 @@ public struct ClientConfiguration {
 internal struct WebFlowData: Codable {
     let state: String
     let codeVerifier: String
+    let mfa: MFAType?
+}
+
+public enum MFAType: String, Codable {
+    case password = "password"
+    case otp = "otp"
+    case sms = "sms"
 }
 
 public class Client {
@@ -90,7 +97,7 @@ public class Client {
         schibstedAccountAPI.oauthExchange(userAccessToken: mostRecentSession.userTokens.accessToken, clientId: configuration.clientId) { result in
             switch result {
             case .success(let result):
-                self.tokenHandler.makeTokenRequest(authCode: result.code) { self.handleTokenRequestResult($0, completion: completion)}
+                self.tokenHandler.makeTokenRequest(authCode: result.code, idTokenValidationContext: IdTokenValidationContext()) { self.handleTokenRequestResult($0, completion: completion)}
             case .failure(_):
                 // TODO log error
                 completion(.failure(.unexpectedError(message: "Failed to obtain exchange code")))
@@ -98,10 +105,10 @@ public class Client {
         }
     }
     
-    public func loginURL(extraScopeValues: Set<String> = []) -> URL? {
+    public func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier)
+        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier, mfa: withMFA)
 
         if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state
@@ -111,15 +118,21 @@ public class Client {
         var scopes = Set(extraScopeValues)
         scopes.insert("openid")
         let scopeString = scopes.joined(separator: " ")
-        let authRequestParams = [
+
+        var authRequestParams = [
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "prompt", value: "select_account"),
             URLQueryItem(name: "scope", value: scopeString),
             URLQueryItem(name: "state", value: state),
             URLQueryItem(name: "nonce", value: randomString(length: 10)),
             URLQueryItem(name: "code_challenge", value: codeChallenge(from: codeVerifier)),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
+        if let mfa = withMFA {
+            authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
+        } else {
+            // Only add this if no MFA is specified to avoid prompting user unnecessarily
+            authRequestParams.append(URLQueryItem(name: "prompt", value: "select_account"))
+        }
 
         return makeURLWithQuery(
             forPath: "/oauth/authorize",
@@ -146,7 +159,8 @@ public class Client {
             return
         }
 
-        tokenHandler.makeTokenRequest(authCode: authCode) { self.handleTokenRequestResult($0, completion: completion)}
+        let idTokenValidationContext = IdTokenValidationContext(expectedAMR: storedData.mfa?.rawValue)
+        tokenHandler.makeTokenRequest(authCode: authCode, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
     }
 
     private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: (Result<User, LoginError>) -> Void) {
@@ -165,6 +179,9 @@ public class Client {
             
             // TODO log error
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+        case .failure(.idTokenError(.missingExpectedAMRValue)):
+            // TODO log error
+            completion(.failure(.missingExpectedMFA))
         case .failure(_):
             // TODO log error
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))

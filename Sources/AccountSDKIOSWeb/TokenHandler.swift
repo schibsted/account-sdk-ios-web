@@ -68,7 +68,7 @@ func removeSignature(fromToken token: String?) -> String {
 internal class TokenHandler {
     private let configuration: ClientConfiguration
     private let httpClient: HTTPClient
-    private let jwks: JWKS
+    let jwks: JWKS
     
     init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
@@ -76,7 +76,7 @@ internal class TokenHandler {
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(authCode: String, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         let url = configuration.serverURL.appendingPathComponent("/oauth/token")
         let parameters = [
             "grant_type": "authorization_code",
@@ -96,7 +96,7 @@ internal class TokenHandler {
                     return
                 }
 
-                IdTokenValidator.validate(idToken: idToken, context: IdTokenValidationContext(jwks: self.jwks, expectedAMR: nil)) { result in
+                IdTokenValidator.validate(idToken: idToken, jwks: self.jwks, context: idTokenValidationContext) { result in
                     switch result {
                     case .success(let claims):
                         let tokenResult = TokenResult(accessToken: tokenResponse.access_token,
