@@ -30,6 +30,7 @@ public struct ClientConfiguration {
 
 internal struct WebFlowData: Codable {
     let state: String
+    let nonce: String
     let codeVerifier: String
     let mfa: MFAType?
 }
@@ -107,8 +108,9 @@ public class Client {
     
     public func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
+        let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let webFlowData = WebFlowData(state: state, codeVerifier: codeVerifier, mfa: withMFA)
+        let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
 
         if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state
@@ -123,7 +125,7 @@ public class Client {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: scopeString),
             URLQueryItem(name: "state", value: state),
-            URLQueryItem(name: "nonce", value: randomString(length: 10)),
+            URLQueryItem(name: "nonce", value: nonce),
             URLQueryItem(name: "code_challenge", value: codeChallenge(from: codeVerifier)),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
@@ -159,7 +161,7 @@ public class Client {
             return
         }
 
-        let idTokenValidationContext = IdTokenValidationContext(expectedAMR: storedData.mfa?.rawValue)
+        let idTokenValidationContext = IdTokenValidationContext(nonce: storedData.nonce, expectedAMR: storedData.mfa?.rawValue)
         tokenHandler.makeTokenRequest(authCode: authCode, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
     }
 

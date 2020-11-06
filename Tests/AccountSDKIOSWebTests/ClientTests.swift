@@ -124,7 +124,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
             XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
@@ -144,7 +144,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
@@ -185,7 +185,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .success(User(clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
@@ -200,7 +200,8 @@ final class ClientTests: XCTestCase {
     }
     
     func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
-        let idTokenClaims = IdTokenClaims(sub: "userUuid", amr: nil) // no AMR in ID Token
+        let nonce = "testNonce"
+        let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nonce, amr: nil) // no AMR in ID Token
         let idToken = createIdToken(claims: idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
@@ -227,7 +228,7 @@ final class ClientTests: XCTestCase {
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, codeVerifier: "codeVerifier", mfa: MFAType.otp), forKey: Client.webFlowLoginStateKey)
+        DefaultStorage.setValue(WebFlowData(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.missingExpectedMFA))
@@ -299,7 +300,8 @@ final class ClientTests: XCTestCase {
         }
         DefaultSessionStorage.storage = mockSessionStorage
 
-        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
+        let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nil, amr: nil)
+        let idToken = createIdToken(claims: idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
@@ -335,7 +337,7 @@ final class ClientTests: XCTestCase {
                             accessToken: tokenResponse.access_token,
                             refreshToken: tokenResponse.refresh_token,
                             idToken: idToken,
-                            idTokenClaims: Fixtures.userTokens.idTokenClaims)
+                            idTokenClaims: idTokenClaims)
             XCTAssertEqual(result, .success(user))
             callbackExpectation.fulfill()
         }

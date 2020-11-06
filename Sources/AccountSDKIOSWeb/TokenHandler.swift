@@ -8,6 +8,7 @@ internal enum TokenError: Error {
 
 public struct IdTokenClaims: Codable, Equatable {
     let sub: String
+    let nonce: String?
     let amr: [String]?
     // TODO add other claims
 }

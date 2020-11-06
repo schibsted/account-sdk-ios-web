@@ -1,6 +1,7 @@
 import Foundation
 
 internal struct IdTokenValidationContext {
+    var nonce: String? = nil
     var expectedAMR: String? = nil
 }
 
@@ -8,6 +9,7 @@ public enum IdTokenValidationError: Error, Equatable {
     case signatureValidationError(SignatureValidationError)
     case failedToDecodePayload
     case missingIdToken
+    case invalidNonce
     case missingExpectedAMRValue
 }
 
@@ -23,6 +25,10 @@ internal struct IdTokenValidator {
                 /* TODO implement full ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation:
                     iss, aud, exp, nonce
                  */
+                guard claims.nonce == context.nonce else {
+                    completion(.failure(.invalidNonce))
+                    return
+                }
                 
                 guard IdTokenValidator.contains(claims.amr, value: context.expectedAMR) else {
                     completion(.failure(.missingExpectedAMRValue))
