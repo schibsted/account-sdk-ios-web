@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-11-07 13:08:55 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-11-07 19:54:20 +0000
 
 
 import Cuckoo
@@ -248,7 +248,137 @@ public class HTTPClientWithURLSessionStub: HTTPClientWithURLSession {
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Compat/LegacyKeychainTokenStorage.swift at 2020-11-07 13:08:55 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2020-11-07 19:54:20 +0000
+
+
+import Cuckoo
+@testable import AccountSDKIOSWeb
+
+import Foundation
+import JOSESwift
+
+
+ class MockLegacyKeychainSessionStorage: LegacyKeychainSessionStorage, Cuckoo.ClassMock {
+    
+     typealias MocksType = LegacyKeychainSessionStorage
+    
+     typealias Stubbing = __StubbingProxy_LegacyKeychainSessionStorage
+     typealias Verification = __VerificationProxy_LegacyKeychainSessionStorage
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: true)
+
+    
+    private var __defaultImplStub: LegacyKeychainSessionStorage?
+
+     func enableDefaultImplementation(_ stub: LegacyKeychainSessionStorage) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     override func get(forClientId: String) -> UserSession? {
+        
+    return cuckoo_manager.call("get(forClientId: String) -> UserSession?",
+            parameters: (forClientId),
+            escapingParameters: (forClientId),
+            superclassCall:
+                
+                super.get(forClientId: forClientId)
+                ,
+            defaultCall: __defaultImplStub!.get(forClientId: forClientId))
+        
+    }
+    
+    
+    
+     override func remove()  {
+        
+    return cuckoo_manager.call("remove()",
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.remove()
+                ,
+            defaultCall: __defaultImplStub!.remove())
+        
+    }
+    
+
+	 struct __StubbingProxy_LegacyKeychainSessionStorage: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ClassStubFunction<(String), UserSession?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockLegacyKeychainSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
+	    }
+	    
+	    func remove() -> Cuckoo.ClassStubNoReturnFunction<()> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return .init(stub: cuckoo_manager.createStub(for: MockLegacyKeychainSessionStorage.self, method: "remove()", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_LegacyKeychainSessionStorage: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), UserSession?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return cuckoo_manager.verify("get(forClientId: String) -> UserSession?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func remove() -> Cuckoo.__DoNotUse<(), Void> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return cuckoo_manager.verify("remove()", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class LegacyKeychainSessionStorageStub: LegacyKeychainSessionStorage {
+    
+
+    
+
+    
+     override func get(forClientId: String) -> UserSession?  {
+        return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
+    }
+    
+     override func remove()   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2020-11-07 19:54:20 +0000
 
 
 import Cuckoo
@@ -377,7 +507,196 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-11-07 13:08:55 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/KeychainSessionStorage.swift at 2020-11-07 19:54:20 +0000
+
+
+import Cuckoo
+@testable import AccountSDKIOSWeb
+
+import Foundation
+
+
+ class MockKeychainSessionStorage: KeychainSessionStorage, Cuckoo.ClassMock {
+    
+     typealias MocksType = KeychainSessionStorage
+    
+     typealias Stubbing = __StubbingProxy_KeychainSessionStorage
+     typealias Verification = __VerificationProxy_KeychainSessionStorage
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: true)
+
+    
+    private var __defaultImplStub: KeychainSessionStorage?
+
+     func enableDefaultImplementation(_ stub: KeychainSessionStorage) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     override func store(_ value: UserSession)  {
+        
+    return cuckoo_manager.call("store(_: UserSession)",
+            parameters: (value),
+            escapingParameters: (value),
+            superclassCall:
+                
+                super.store(value)
+                ,
+            defaultCall: __defaultImplStub!.store(value))
+        
+    }
+    
+    
+    
+     override func get(forClientId: String) -> UserSession? {
+        
+    return cuckoo_manager.call("get(forClientId: String) -> UserSession?",
+            parameters: (forClientId),
+            escapingParameters: (forClientId),
+            superclassCall:
+                
+                super.get(forClientId: forClientId)
+                ,
+            defaultCall: __defaultImplStub!.get(forClientId: forClientId))
+        
+    }
+    
+    
+    
+     override func getAll() -> [UserSession] {
+        
+    return cuckoo_manager.call("getAll() -> [UserSession]",
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.getAll()
+                ,
+            defaultCall: __defaultImplStub!.getAll())
+        
+    }
+    
+    
+    
+     override func remove(forClientId: String)  {
+        
+    return cuckoo_manager.call("remove(forClientId: String)",
+            parameters: (forClientId),
+            escapingParameters: (forClientId),
+            superclassCall:
+                
+                super.remove(forClientId: forClientId)
+                ,
+            defaultCall: __defaultImplStub!.remove(forClientId: forClientId))
+        
+    }
+    
+
+	 struct __StubbingProxy_KeychainSessionStorage: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.ClassStubNoReturnFunction<(UserSession)> where M1.MatchedType == UserSession {
+	        let matchers: [Cuckoo.ParameterMatcher<(UserSession)>] = [wrap(matchable: value) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "store(_: UserSession)", parameterMatchers: matchers))
+	    }
+	    
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ClassStubFunction<(String), UserSession?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
+	    }
+	    
+	    func getAll() -> Cuckoo.ClassStubFunction<(), [UserSession]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "getAll() -> [UserSession]", parameterMatchers: matchers))
+	    }
+	    
+	    func remove<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ClassStubNoReturnFunction<(String)> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "remove(forClientId: String)", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_KeychainSessionStorage: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func store<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.__DoNotUse<(UserSession), Void> where M1.MatchedType == UserSession {
+	        let matchers: [Cuckoo.ParameterMatcher<(UserSession)>] = [wrap(matchable: value) { $0 }]
+	        return cuckoo_manager.verify("store(_: UserSession)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), UserSession?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return cuckoo_manager.verify("get(forClientId: String) -> UserSession?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func getAll() -> Cuckoo.__DoNotUse<(), [UserSession]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return cuckoo_manager.verify("getAll() -> [UserSession]", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func remove<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), Void> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
+	        return cuckoo_manager.verify("remove(forClientId: String)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class KeychainSessionStorageStub: KeychainSessionStorage {
+    
+
+    
+
+    
+     override func store(_ value: UserSession)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func get(forClientId: String) -> UserSession?  {
+        return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
+    }
+    
+     override func getAll() -> [UserSession]  {
+        return DefaultValueRegistry.defaultValue(for: ([UserSession]).self)
+    }
+    
+     override func remove(forClientId: String)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-11-07 19:54:20 +0000
 
 
 import Cuckoo
