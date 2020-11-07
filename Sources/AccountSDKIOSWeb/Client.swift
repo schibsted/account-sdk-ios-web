@@ -58,6 +58,8 @@ public class Client {
     private static let keychainServiceName = "com.schibsted.account"
     
     private let sessionStorage: SessionStorage
+    private let stateStorage: StateStorage
+    
     private let httpClient: HTTPClient
     private let tokenHandler: TokenHandler
     private let schibstedAccountAPI: SchibstedAccountAPI
@@ -65,6 +67,7 @@ public class Client {
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
                   sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
+                  stateStorage: StateStorage(),
                   httpClient: httpClient,
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
@@ -74,20 +77,23 @@ public class Client {
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
+                  stateStorage: StateStorage(),
                   httpClient: httpClient,
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
 
-    internal convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    internal convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
+                  stateStorage: stateStorage,
                   httpClient: httpClient,
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
-    internal init(configuration: ClientConfiguration, sessionStorage: SessionStorage, httpClient: HTTPClient, jwks: JWKS) {
+    internal init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
+        self.stateStorage = stateStorage
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, httpClient: httpClient)
@@ -143,7 +149,7 @@ public class Client {
         let codeVerifier = randomString(length: 60)
         let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
 
-        if !DefaultStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
+        if !stateStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
             // TODO log error to store state
             return nil;
         }
@@ -175,7 +181,7 @@ public class Client {
     
     public func handleAuthenticationResponse(url: URL, completion: @escaping (Result<User, LoginError>) -> Void) {
         // Check if coming back after triggered web flow login
-        guard let storedData: WebFlowData = DefaultStorage.value(forKey: type(of: self).webFlowLoginStateKey),
+        guard let storedData: WebFlowData = stateStorage.value(forKey: type(of: self).webFlowLoginStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
                 completion(.failure(.unsolicitedResponse))

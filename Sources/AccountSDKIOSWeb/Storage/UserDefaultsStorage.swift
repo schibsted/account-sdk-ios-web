@@ -8,12 +8,12 @@ internal struct UserDefaultsStorage: Storage {
         self.storage = storage
     }
 
-    func setValue(_ value: Any?, forKey key: String) {
+    func setValue(_ value: Data, forKey key: String) {
         storage.setValue(value, forKey: type(of: self).addPrefix(toKey: key))
     }
 
-    func value(forKey key: String) -> Any? {
-        return storage.value(forKey: type(of: self).addPrefix(toKey: key))
+    func value(forKey key: String) -> Data? {
+        return storage.value(forKey: type(of: self).addPrefix(toKey: key)) as? Data
     }
 
     func removeValue(forKey key: String) {

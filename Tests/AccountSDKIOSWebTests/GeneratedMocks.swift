@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-11-07 20:17:54 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-11-07 21:42:01 +0000
 
 
 import Cuckoo
@@ -248,7 +248,7 @@ public class HTTPClientWithURLSessionStub: HTTPClientWithURLSession {
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2020-11-07 20:17:54 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2020-11-07 21:42:01 +0000
 
 
 import Cuckoo
@@ -378,7 +378,7 @@ import JOSESwift
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2020-11-07 20:17:54 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2020-11-07 21:42:01 +0000
 
 
 import Cuckoo
@@ -507,7 +507,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/KeychainSessionStorage.swift at 2020-11-07 20:17:54 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/KeychainSessionStorage.swift at 2020-11-07 21:42:01 +0000
 
 
 import Cuckoo
@@ -696,7 +696,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-11-07 20:17:54 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-11-07 21:42:01 +0000
 
 
 import Cuckoo
@@ -880,6 +880,165 @@ import Security
     }
     
      func remove(forClientId: String)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Storage.swift at 2020-11-07 21:42:01 +0000
+
+
+import Cuckoo
+@testable import AccountSDKIOSWeb
+
+import Foundation
+
+
+ class MockStorage: Storage, Cuckoo.ProtocolMock {
+    
+     typealias MocksType = Storage
+    
+     typealias Stubbing = __StubbingProxy_Storage
+     typealias Verification = __VerificationProxy_Storage
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: false)
+
+    
+    private var __defaultImplStub: Storage?
+
+     func enableDefaultImplementation(_ stub: Storage) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     func setValue(_ value: Data, forKey key: String)  {
+        
+    return cuckoo_manager.call("setValue(_: Data, forKey: String)",
+            parameters: (value, key),
+            escapingParameters: (value, key),
+            superclassCall:
+                
+                Cuckoo.MockManager.crashOnProtocolSuperclassCall()
+                ,
+            defaultCall: __defaultImplStub!.setValue(value, forKey: key))
+        
+    }
+    
+    
+    
+     func value(forKey key: String) -> Data? {
+        
+    return cuckoo_manager.call("value(forKey: String) -> Data?",
+            parameters: (key),
+            escapingParameters: (key),
+            superclassCall:
+                
+                Cuckoo.MockManager.crashOnProtocolSuperclassCall()
+                ,
+            defaultCall: __defaultImplStub!.value(forKey: key))
+        
+    }
+    
+    
+    
+     func removeValue(forKey key: String)  {
+        
+    return cuckoo_manager.call("removeValue(forKey: String)",
+            parameters: (key),
+            escapingParameters: (key),
+            superclassCall:
+                
+                Cuckoo.MockManager.crashOnProtocolSuperclassCall()
+                ,
+            defaultCall: __defaultImplStub!.removeValue(forKey: key))
+        
+    }
+    
+
+	 struct __StubbingProxy_Storage: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func setValue<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(_ value: M1, forKey key: M2) -> Cuckoo.ProtocolStubNoReturnFunction<(Data, String)> where M1.MatchedType == Data, M2.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(Data, String)>] = [wrap(matchable: value) { $0.0 }, wrap(matchable: key) { $0.1 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockStorage.self, method: "setValue(_: Data, forKey: String)", parameterMatchers: matchers))
+	    }
+	    
+	    func value<M1: Cuckoo.Matchable>(forKey key: M1) -> Cuckoo.ProtocolStubFunction<(String), Data?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: key) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockStorage.self, method: "value(forKey: String) -> Data?", parameterMatchers: matchers))
+	    }
+	    
+	    func removeValue<M1: Cuckoo.Matchable>(forKey key: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(String)> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: key) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockStorage.self, method: "removeValue(forKey: String)", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_Storage: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func setValue<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(_ value: M1, forKey key: M2) -> Cuckoo.__DoNotUse<(Data, String), Void> where M1.MatchedType == Data, M2.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(Data, String)>] = [wrap(matchable: value) { $0.0 }, wrap(matchable: key) { $0.1 }]
+	        return cuckoo_manager.verify("setValue(_: Data, forKey: String)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func value<M1: Cuckoo.Matchable>(forKey key: M1) -> Cuckoo.__DoNotUse<(String), Data?> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: key) { $0 }]
+	        return cuckoo_manager.verify("value(forKey: String) -> Data?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func removeValue<M1: Cuckoo.Matchable>(forKey key: M1) -> Cuckoo.__DoNotUse<(String), Void> where M1.MatchedType == String {
+	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: key) { $0 }]
+	        return cuckoo_manager.verify("removeValue(forKey: String)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class StorageStub: Storage {
+    
+
+    
+
+    
+     func setValue(_ value: Data, forKey key: String)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     func value(forKey key: String) -> Data?  {
+        return DefaultValueRegistry.defaultValue(for: (Data?).self)
+    }
+    
+     func removeValue(forKey key: String)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

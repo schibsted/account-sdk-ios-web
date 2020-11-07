@@ -4,7 +4,6 @@ import Cuckoo
 
 final class ClientTests: XCTestCase {
     private let config = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
-    private let userDefaults: UserDefaults! = UserDefaults(suiteName: #file)!
 
     private static let keyId = "test key"
     private static var jwsUtil: JWSUtil!
@@ -12,17 +11,14 @@ final class ClientTests: XCTestCase {
     override class func setUp() {
         jwsUtil = JWSUtil()
     }
-    
-    override func setUp() {
-        DefaultStorage.storage = UserDefaultsStorage(userDefaults)
-    }
-    
-    override func tearDown() {
-        userDefaults.removePersistentDomain(forName: #file)
-    }
-    
+
     func testLoginURL() {
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+        }
+
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         let loginURL = client.loginURL()
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -46,7 +42,11 @@ final class ClientTests: XCTestCase {
     }
     
     func testLoginURLWithExtraScopes() {
-        let client = Client(configuration: config)
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+        }
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         let loginURL = client.loginURL(extraScopeValues: ["scope1", "scope2"])
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -71,7 +71,11 @@ final class ClientTests: XCTestCase {
     }
     
     func testLoginURLWithMFAIncludesACRValues() {
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+        }
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         let loginURL = client.loginURL(withMFA: .otp)
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -97,7 +101,11 @@ final class ClientTests: XCTestCase {
     }
 
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(nil)
+        }
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
@@ -114,13 +122,15 @@ final class ClientTests: XCTestCase {
     }
     
     func testHandleAuthenticationResponseHandlesErrorResponse() {
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
-   
-        let callbackExpectation = expectation(description: "Returns error to callback closure")
-        
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
-
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            let webFlowData = WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
+        }
+        
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
+        let callbackExpectation = expectation(description: "Returns error to callback closure")
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
             XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
             callbackExpectation.fulfill()
@@ -134,13 +144,15 @@ final class ClientTests: XCTestCase {
     }
     
     func testHandleAuthenticationResponseHandlesMissingAuthCode() {
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
-   
-        let callbackExpectation = expectation(description: "Returns error to callback closure")
-        
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            let webFlowData = WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
+        }
 
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
+        let callbackExpectation = expectation(description: "Returns error to callback closure")
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
             callbackExpectation.fulfill()
@@ -179,13 +191,15 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.store(any())).thenDoNothing()
         }
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage, httpClient: mockHTTPClient)
-        
-        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
-
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            let webFlowData = WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
+        }
 
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
+        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .success(User(sessionStorage: MockSessionStorage(),  clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
             callbackExpectation.fulfill()
@@ -221,14 +235,16 @@ final class ClientTests: XCTestCase {
                     completion(.success(jwksResponse))
                 }
         }
-        
-        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), httpClient: mockHTTPClient)
-        
-        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
         let state = "testState"
-        DefaultStorage.setValue(WebFlowData(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp), forKey: Client.webFlowLoginStateKey)
-
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp)
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
+        }
+        
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
+        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
             XCTAssertEqual(result, .failure(.missingExpectedMFA))
             callbackExpectation.fulfill()
@@ -248,7 +264,7 @@ final class ClientTests: XCTestCase {
             when(mock.get(forClientId: config.clientId)).thenReturn(session)
         }
 
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         let user = client.resumeLastLoggedInUser()
         XCTAssertEqual(user, User(session: session, sessionStorage: MockSessionStorage()))
     }
@@ -259,7 +275,7 @@ final class ClientTests: XCTestCase {
             when(mock.get(forClientId: config.clientId)).thenReturn(nil)
         }
 
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         XCTAssertNil(client.resumeLastLoggedInUser())
     }
     
@@ -272,7 +288,7 @@ final class ClientTests: XCTestCase {
             when(mock.getAll()).thenReturn([newestSession, earlierSession])
         }
 
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         let result = client.simplifiedLoginData()
         XCTAssertEqual(result, SimplifiedLoginData(uuid: newestSession.userTokens.idTokenClaims.sub, client: newestSession.clientId))
     }
@@ -283,7 +299,7 @@ final class ClientTests: XCTestCase {
             when(mock.getAll()).thenReturn([])
         }
         
-        XCTAssertNil(Client(configuration: config, sessionStorage: mockSessionStorage).simplifiedLoginData())
+        XCTAssertNil(Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage())).simplifiedLoginData())
     }
     
     func testPerformSimplifiedLogin() {
@@ -325,7 +341,7 @@ final class ClientTests: XCTestCase {
         
         let callbackExpectation = expectation(description: "Returns logged-in user to callback closure")
         
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage, httpClient: mockHTTPClient)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
         client.performSimplifiedLogin { result in
             let user = User(sessionStorage: MockSessionStorage(),
                             clientId: self.config.clientId,
@@ -350,7 +366,7 @@ final class ClientTests: XCTestCase {
             when(mock.getAll()).thenReturn([])
         }
 
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         client.performSimplifiedLogin { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "No user sessions found")))
         }
