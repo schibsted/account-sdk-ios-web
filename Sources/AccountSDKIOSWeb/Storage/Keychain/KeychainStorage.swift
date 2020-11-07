@@ -13,9 +13,11 @@ class KeychainStorage {
     func addValue(_ value: Data, forAccount: String?) {
         // TODO delete possibly existing value first or create separate update function?
 
-        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrService as String: service,
-                                    kSecValueData as String: value]
+        var query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecValueData as String: value
+        ]
         accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
         forAccount.map { query[kSecAttrAccount as String] = $0 }
         let status = SecItemAdd(query as CFDictionary, nil)
