@@ -6,7 +6,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
     func testStoreOnlyWritesToNewStorage() {
         let userSession = UserSession(clientId: "client1", userTokens: Fixtures.userTokens, updatedAt: Date())
         
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
             when(mock.store(equal(to: userSession))).thenDoNothing()
@@ -22,7 +22,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
     func testGetAllOnlyReadsNewStorage() {
         let userSession = UserSession(clientId: "client1", userTokens: Fixtures.userTokens, updatedAt: Date())
 
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
             when(mock.getAll()).thenReturn([userSession])
@@ -38,7 +38,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
     func testRemoveOnlyRemovesFromNewStorage() {
         let clientId = "client1"
 
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
             when(mock.remove(forClientId: equal(to: clientId))).thenDoNothing()
@@ -55,7 +55,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         let clientId = "client1"
         let userSession = UserSession(clientId: clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
 
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
             when(mock.get(forClientId: equal(to: clientId))).thenReturn(userSession)
@@ -72,7 +72,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         let clientId = "client1"
         let legacyUserSession = UserSession(clientId: clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
 
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         stub(legacyStorage) { mock in
             when(mock.get(forClientId: equal(to: clientId))).thenReturn(legacyUserSession)
             when(mock.remove()).thenDoNothing()
@@ -95,7 +95,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
     func testGetReturnsNilIfNoSessionExists() {
         let clientId = "client1"
 
-        let legacyStorage = MockLegacyKeychainSessionStorage(storage: MockLegacyKeychainTokenStorage())
+        let legacyStorage = MockLegacyKeychainSessionStorage()
         stub(legacyStorage) { mock in
             when(mock.get(forClientId: equal(to: clientId))).thenReturn(nil)
         }

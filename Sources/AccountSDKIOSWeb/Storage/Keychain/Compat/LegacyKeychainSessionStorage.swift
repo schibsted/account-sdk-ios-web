@@ -4,6 +4,10 @@ import JOSESwift
 class LegacyKeychainSessionStorage {
     private let storage: LegacyKeychainTokenStorage
     
+    convenience init(accessGroup: String? = nil) {
+        self.init(storage: LegacyKeychainTokenStorage(accessGroup: accessGroup))
+    }
+    
     init(storage: LegacyKeychainTokenStorage) {
         self.storage = storage
     }
