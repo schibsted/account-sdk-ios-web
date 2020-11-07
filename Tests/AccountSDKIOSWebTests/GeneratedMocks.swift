@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-10-27 10:20:30 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-11-07 13:08:55 +0000
 
 
 import Cuckoo
@@ -248,7 +248,136 @@ public class HTTPClientWithURLSessionStub: HTTPClientWithURLSession {
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-10-27 10:20:30 +0000
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Compat/LegacyKeychainTokenStorage.swift at 2020-11-07 13:08:55 +0000
+
+
+import Cuckoo
+@testable import AccountSDKIOSWeb
+
+import Foundation
+
+
+ class MockLegacyKeychainTokenStorage: LegacyKeychainTokenStorage, Cuckoo.ClassMock {
+    
+     typealias MocksType = LegacyKeychainTokenStorage
+    
+     typealias Stubbing = __StubbingProxy_LegacyKeychainTokenStorage
+     typealias Verification = __VerificationProxy_LegacyKeychainTokenStorage
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: true)
+
+    
+    private var __defaultImplStub: LegacyKeychainTokenStorage?
+
+     func enableDefaultImplementation(_ stub: LegacyKeychainTokenStorage) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     override func get() -> [LegacyTokenData] {
+        
+    return cuckoo_manager.call("get() -> [LegacyTokenData]",
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.get()
+                ,
+            defaultCall: __defaultImplStub!.get())
+        
+    }
+    
+    
+    
+     override func remove()  {
+        
+    return cuckoo_manager.call("remove()",
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.remove()
+                ,
+            defaultCall: __defaultImplStub!.remove())
+        
+    }
+    
+
+	 struct __StubbingProxy_LegacyKeychainTokenStorage: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func get() -> Cuckoo.ClassStubFunction<(), [LegacyTokenData]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return .init(stub: cuckoo_manager.createStub(for: MockLegacyKeychainTokenStorage.self, method: "get() -> [LegacyTokenData]", parameterMatchers: matchers))
+	    }
+	    
+	    func remove() -> Cuckoo.ClassStubNoReturnFunction<()> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return .init(stub: cuckoo_manager.createStub(for: MockLegacyKeychainTokenStorage.self, method: "remove()", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_LegacyKeychainTokenStorage: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func get() -> Cuckoo.__DoNotUse<(), [LegacyTokenData]> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return cuckoo_manager.verify("get() -> [LegacyTokenData]", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func remove() -> Cuckoo.__DoNotUse<(), Void> {
+	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+	        return cuckoo_manager.verify("remove()", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class LegacyKeychainTokenStorageStub: LegacyKeychainTokenStorage {
+    
+
+    
+
+    
+     override func get() -> [LegacyTokenData]  {
+        return DefaultValueRegistry.defaultValue(for: ([LegacyTokenData]).self)
+    }
+    
+     override func remove()   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-11-07 13:08:55 +0000
 
 
 import Cuckoo
