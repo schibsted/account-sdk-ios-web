@@ -44,6 +44,11 @@ public enum MFAType: String, Codable {
 public struct SessionStorageConfig {
     let accessGroup: String?
     let legacyAccessGroup: String?
+    
+    public init(accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
+        self.accessGroup = accessGroup
+        self.legacyAccessGroup = legacyAccessGroup
+    }
 }
 
 public class Client {
