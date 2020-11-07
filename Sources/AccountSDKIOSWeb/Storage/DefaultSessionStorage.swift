@@ -1,10 +1,16 @@
 import Foundation
 
 public struct DefaultSessionStorage {
-    static var storage: SessionStorage = KeychainSessionStorage(service: "com.schibsted.account")
+    private static let service = "com.schibsted.account"
+    static var storage: SessionStorage = KeychainSessionStorage(service: service)
     
     public static func useAccessGroup(_ accessGroup: String) {
-        storage = KeychainSessionStorage(service: "com.schibsted.account", accessGroup: accessGroup)
+        storage = KeychainSessionStorage(service: service, accessGroup: accessGroup)
+    }
+    
+    public static func withLegacyCompat(legacyAccessGroup: String? = nil, newAccessGroup: String? = nil) {
+        storage = MigratingKeychainCompatStorage(from: LegacyKeychainSessionStorage(storage: LegacyKeychainTokenStorage(accessGroup: legacyAccessGroup)),
+                                                 to: KeychainSessionStorage(service: service, accessGroup: newAccessGroup))
     }
     
     static func store(_ value: UserSession) {
