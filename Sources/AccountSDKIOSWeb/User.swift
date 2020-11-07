@@ -1,6 +1,8 @@
 import Foundation
 
 public class User: Equatable {
+    private let sessionStorage: SessionStorage
+    
     private let clientId: String
     private let accessToken: String
     private let refreshToken: String?
@@ -9,7 +11,8 @@ public class User: Equatable {
     
     public let uuid: String
     
-    init(clientId: String, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+    init(sessionStorage: SessionStorage, clientId: String, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+        self.sessionStorage = sessionStorage
         self.clientId = clientId
         self.accessToken = accessToken
         self.refreshToken = refreshToken
@@ -19,23 +22,17 @@ public class User: Equatable {
         self.uuid = idTokenClaims.sub
     }
     
-    convenience init(session: UserSession) {
-        self.init(clientId: session.clientId,
+    convenience init(session: UserSession, sessionStorage: SessionStorage) {
+        self.init(sessionStorage: sessionStorage,
+                  clientId: session.clientId,
                   accessToken: session.userTokens.accessToken,
                   refreshToken: session.userTokens.refreshToken,
                   idToken: session.userTokens.idToken,
                   idTokenClaims: session.userTokens.idTokenClaims)
     }
-
-    func persist() {
-        let session = UserSession(clientId: clientId,
-                                  userTokens: UserTokens(accessToken: accessToken, refreshToken: refreshToken, idToken: idToken, idTokenClaims: idTokenClaims),
-                                  updatedAt: Date())
-        DefaultSessionStorage.store(session)
-    }
     
     public func logout() {
-        DefaultSessionStorage.remove(forClientId: clientId)
+        sessionStorage.remove(forClientId: clientId)
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {

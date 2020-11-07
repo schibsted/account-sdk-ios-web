@@ -15,11 +15,6 @@ final class ClientTests: XCTestCase {
     
     override func setUp() {
         DefaultStorage.storage = UserDefaultsStorage(userDefaults)
-        let mockSessionStorage = MockSessionStorage()
-        stub(mockSessionStorage) { mock in
-            when(mock.store(any())).thenDoNothing()
-        }
-        DefaultSessionStorage.storage = mockSessionStorage
     }
     
     override func tearDown() {
@@ -27,7 +22,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testLoginURL() {
-        let client = Client(configuration: config)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
         let loginURL = client.loginURL()
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -76,7 +71,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testLoginURLWithMFAIncludesACRValues() {
-        let client = Client(configuration: config)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
         let loginURL = client.loginURL(withMFA: .otp)
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -102,7 +97,7 @@ final class ClientTests: XCTestCase {
     }
 
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
-        let client = Client(configuration: config)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
         
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
@@ -119,7 +114,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testHandleAuthenticationResponseHandlesErrorResponse() {
-        let client = Client(configuration: config)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
    
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
@@ -139,7 +134,7 @@ final class ClientTests: XCTestCase {
     }
     
     func testHandleAuthenticationResponseHandlesMissingAuthCode() {
-        let client = Client(configuration: config)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage())
    
         let callbackExpectation = expectation(description: "Returns error to callback closure")
         
@@ -180,7 +175,11 @@ final class ClientTests: XCTestCase {
                 }
         }
         
-        let client = Client(configuration: config, httpClient: mockHTTPClient)
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any())).thenDoNothing()
+        }
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, httpClient: mockHTTPClient)
         
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
@@ -188,7 +187,7 @@ final class ClientTests: XCTestCase {
         DefaultStorage.setValue(WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil), forKey: Client.webFlowLoginStateKey)
 
         client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-            XCTAssertEqual(result, .success(User(clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
+            XCTAssertEqual(result, .success(User(sessionStorage: MockSessionStorage(),  clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
             callbackExpectation.fulfill()
         }
         
@@ -223,7 +222,7 @@ final class ClientTests: XCTestCase {
                 }
         }
         
-        let client = Client(configuration: config, httpClient: mockHTTPClient)
+        let client = Client(configuration: config, sessionStorage: MockSessionStorage(), httpClient: mockHTTPClient)
         
         let callbackExpectation = expectation(description: "Exchanges code for user tokens")
 
@@ -248,11 +247,10 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.get(forClientId: config.clientId)).thenReturn(session)
         }
-        
-        DefaultSessionStorage.storage = mockSessionStorage
-        let client = Client(configuration: config)
+
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(session: session))
+        XCTAssertEqual(user, User(session: session, sessionStorage: MockSessionStorage()))
     }
     
     func testResumeLastLoggedInUserWithoutSession() {
@@ -260,9 +258,8 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.get(forClientId: config.clientId)).thenReturn(nil)
         }
-        
-        DefaultSessionStorage.storage = mockSessionStorage
-        let client = Client(configuration: config)
+
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
         XCTAssertNil(client.resumeLastLoggedInUser())
     }
     
@@ -274,11 +271,10 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([newestSession, earlierSession])
         }
-        
-        DefaultSessionStorage.storage = mockSessionStorage
-        let client = Client(configuration: config)
+
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
         let result = client.simplifiedLoginData()
-        XCTAssertEqual(result, SimplifiedLoginData(uuid: newestSession.userTokens.idTokenClaims.sub, clients: [newestSession.clientId, earlierSession.clientId]))
+        XCTAssertEqual(result, SimplifiedLoginData(uuid: newestSession.userTokens.idTokenClaims.sub, client: newestSession.clientId))
     }
     
     func testSimplifiedLoginDataWithoutSession() {
@@ -287,8 +283,7 @@ final class ClientTests: XCTestCase {
             when(mock.getAll()).thenReturn([])
         }
         
-        DefaultSessionStorage.storage = mockSessionStorage
-        XCTAssertNil(Client(configuration: config).simplifiedLoginData())
+        XCTAssertNil(Client(configuration: config, sessionStorage: mockSessionStorage).simplifiedLoginData())
     }
     
     func testPerformSimplifiedLogin() {
@@ -298,7 +293,6 @@ final class ClientTests: XCTestCase {
             when(mock.getAll()).thenReturn([session])
             when(mock.store(any())).thenDoNothing()
         }
-        DefaultSessionStorage.storage = mockSessionStorage
 
         let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nil, amr: nil)
         let idToken = createIdToken(claims: idTokenClaims)
@@ -331,9 +325,10 @@ final class ClientTests: XCTestCase {
         
         let callbackExpectation = expectation(description: "Returns logged-in user to callback closure")
         
-        let client = Client(configuration: config, httpClient: mockHTTPClient)
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, httpClient: mockHTTPClient)
         client.performSimplifiedLogin { result in
-            let user = User(clientId: self.config.clientId,
+            let user = User(sessionStorage: MockSessionStorage(),
+                            clientId: self.config.clientId,
                             accessToken: tokenResponse.access_token,
                             refreshToken: tokenResponse.refresh_token,
                             idToken: idToken,
@@ -354,8 +349,8 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([])
         }
-        DefaultSessionStorage.storage = mockSessionStorage
-        let client = Client(configuration: config)
+
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage)
         client.performSimplifiedLogin { result in
             XCTAssertEqual(result, .failure(.unexpectedError(message: "No user sessions found")))
         }

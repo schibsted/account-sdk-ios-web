@@ -41,57 +41,77 @@ public enum MFAType: String, Codable {
     case sms = "sms"
 }
 
+public struct SessionStorageConfig {
+    let accessGroup: String?
+    let legacyAccessGroup: String?
+}
+
 public class Client {
     public let configuration: ClientConfiguration
     
     internal static let webFlowLoginStateKey = "WebFlowLoginState"
+    private static let keychainServiceName = "com.schibsted.account"
     
+    private let sessionStorage: SessionStorage
     private let httpClient: HTTPClient
     private let tokenHandler: TokenHandler
     private let schibstedAccountAPI: SchibstedAccountAPI
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
+                  sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
                   httpClient: httpClient,
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
-    internal init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
+    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
+        let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
+        self.init(configuration: configuration,
+                  sessionStorage: sessionStorage,
+                  httpClient: httpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+    }
+
+    internal convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        self.init(configuration: configuration,
+                  sessionStorage: sessionStorage,
+                  httpClient: httpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+    }
+    
+    internal init(configuration: ClientConfiguration, sessionStorage: SessionStorage, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
+        self.sessionStorage = sessionStorage
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, httpClient: httpClient)
     }
 
     public func resumeLastLoggedInUser() -> User? {
-        let stored = DefaultSessionStorage.get(forClientId: configuration.clientId)
+        let stored = sessionStorage.get(forClientId: configuration.clientId)
         guard let session = stored else {
             return nil
         }
         
-        return User(session: session)
+        return User(session: session, sessionStorage: sessionStorage)
     }
     
     public func simplifiedLoginData() -> SimplifiedLoginData? {
-        let allSessions = DefaultSessionStorage.getAll()
-        if allSessions.count < 1 {
+        guard let mostRecentSession = getMostRecentSession() else {
             return nil
         }
 
-        let mostRecentSession = allSessions[0]
-        return SimplifiedLoginData(uuid: mostRecentSession.userTokens.idTokenClaims.sub, clients: allSessions.map { $0.clientId })
+        return SimplifiedLoginData(uuid: mostRecentSession.userTokens.idTokenClaims.sub, client: mostRecentSession.clientId)
     }
     
     public func performSimplifiedLogin(completion: @escaping (Result<User, LoginError>) -> Void) {
-        let allSessions = DefaultSessionStorage.getAll()
-        guard allSessions.count > 0 else {
+        guard let mostRecentSession = getMostRecentSession() else {
             // TODO add log message
             completion(.failure(.unexpectedError(message: "No user sessions found")))
             return
         }
-        
-        let mostRecentSession = allSessions[0]
-        
+
         // TODO verify client id is not already in session, should be logged as warn/error as then session should have been resumable
 
         // TODO this only works for clients belonging to the same merchant
@@ -104,6 +124,12 @@ public class Client {
                 completion(.failure(.unexpectedError(message: "Failed to obtain exchange code")))
             }
         }
+    }
+    
+    private func getMostRecentSession() -> UserSession? {
+        sessionStorage.getAll()
+            .sorted { $0.updatedAt > $1.updatedAt }
+            .first
     }
     
     public func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
@@ -169,8 +195,11 @@ public class Client {
         switch result {
         case .success(let tokenResult):
             print(tokenResult) // TODO
-            let user = User(clientId: self.configuration.clientId, accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims)
-            user.persist()
+            let userSession = UserSession(clientId: self.configuration.clientId,
+                                          userTokens: UserTokens(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims),
+                                          updatedAt: Date())
+            sessionStorage.store(userSession)
+            let user = User(session: userSession, sessionStorage: sessionStorage)
             completion(.success(user))
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
             if let errorJSON = body,
