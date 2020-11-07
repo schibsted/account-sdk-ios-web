@@ -187,6 +187,7 @@ public class Client {
                 completion(.failure(.unsolicitedResponse))
                 return
         }
+        stateStorage.removeValue(forKey: type(of: self).webFlowLoginStateKey)
 
         if let error = url.valueOf(queryParameter: "error") {
             completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
