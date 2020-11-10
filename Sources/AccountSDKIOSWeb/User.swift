@@ -1,30 +1,28 @@
 import Foundation
 
 public class User: Equatable {
-    private let sessionStorage: SessionStorage
-    
-    private let clientId: String
-    private let accessToken: String
-    private let refreshToken: String?
+    private let client: Client
+
+    private var accessToken: String
+    private var refreshToken: String?
     private let idToken: String
     private let idTokenClaims: IdTokenClaims
     
     public let uuid: String
     
-    init(sessionStorage: SessionStorage, clientId: String, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
-        self.sessionStorage = sessionStorage
-        self.clientId = clientId
+    init(client: Client, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+        self.client = client
+
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.idToken = idToken
-        
+
         self.idTokenClaims = idTokenClaims
         self.uuid = idTokenClaims.sub
     }
     
-    convenience init(session: UserSession, sessionStorage: SessionStorage) {
-        self.init(sessionStorage: sessionStorage,
-                  clientId: session.clientId,
+    convenience init(client: Client, session: UserSession) {
+        self.init(client: client,
                   accessToken: session.userTokens.accessToken,
                   refreshToken: session.userTokens.refreshToken,
                   idToken: session.userTokens.idToken,
@@ -32,15 +30,66 @@ public class User: Equatable {
     }
     
     public func logout() {
-        sessionStorage.remove(forClientId: clientId)
+        client.sessionStorage.remove(forClientId: client.configuration.clientId)
     }
     
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
-            && lhs.clientId == rhs.clientId
+            && lhs.client.configuration.clientId == rhs.client.configuration.clientId
             && lhs.accessToken == rhs.accessToken
             && lhs.refreshToken == rhs.refreshToken
             && lhs.idToken == rhs.idToken
             && lhs.idTokenClaims == rhs.idTokenClaims
+    }
+}
+
+extension User {
+    /** Perform a request with user access token as Bearer token in Authorization header.
+     *
+     *  If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
+     */
+    func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+        makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
+            switch requestResult {
+            case .failure(.errorResponse(let code, let body)):
+                // 401 might indicate expired access token
+                if code == 401 {
+                    guard let existingRefreshToken = self.refreshToken else {
+                        // TODO log info about no refresh token
+                        completion(requestResult)
+                        return
+                    }
+
+                    // try to exchange refresh token for new token
+                    self.client.tokenHandler.makeTokenRequest(refreshToken: existingRefreshToken) { tokenRefreshResult in
+                        switch tokenRefreshResult {
+                        case .success(let tokenResponse):
+                            // TODO log info about successful token refresh
+                            // TODO handle ID Token in refresh token response?
+                            self.accessToken = tokenResponse.access_token
+                            if let newRefreshToken = tokenResponse.refresh_token {
+                                self.refreshToken = newRefreshToken
+                            }
+                        
+                            // retry the request with fresh tokens
+                            self.makeRequest(request: request, completion: completion)
+                        default:
+                            // TODO log error about token refresh
+                            completion(requestResult)
+                        }
+                    }
+                } else {
+                    completion(.failure(.errorResponse(code: code, body: body)))
+                }
+            default:
+                completion(requestResult)
+            }
+        }
+    }
+    
+    private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+        var requestCopy = request
+        requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        client.httpClient.execute(request: requestCopy, completion: completion)
     }
 }

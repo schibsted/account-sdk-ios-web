@@ -188,7 +188,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                XCTAssertEqual(result, .success(User(sessionStorage: MockSessionStorage(),  clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
+                XCTAssertEqual(result, .success(User(client: client, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
                 done()
             }
         }
@@ -244,7 +244,7 @@ final class ClientTests: XCTestCase {
 
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(session: session, sessionStorage: MockSessionStorage()))
+        XCTAssertEqual(user, User(client: client, session: session))
     }
     
     func testResumeLastLoggedInUserWithoutSession() {
@@ -293,12 +293,8 @@ final class ClientTests: XCTestCase {
         let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/api/2/oauth/exchange")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: "Bearer \(Fixtures.userTokens.accessToken)",
-                           completion: anyClosure()))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: OAuthCodeExchangeResponse(code: "authCode"))))
                 }
 
@@ -320,8 +316,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
         Await.until { done in
             client.performSimplifiedLogin { result in
-                let user = User(sessionStorage: MockSessionStorage(),
-                                clientId: self.config.clientId,
+                let user = User(client: client,
                                 accessToken: tokenResponse.access_token,
                                 refreshToken: tokenResponse.refresh_token,
                                 idToken: idToken,

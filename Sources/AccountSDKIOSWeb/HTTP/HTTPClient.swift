@@ -9,8 +9,9 @@ public enum HTTPError: Error {
 }
 
 public protocol HTTPClient {
-    func get<T: Codable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void)
-    func post<T: Codable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void)
+    func get<T: Decodable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void)
+    func post<T: Decodable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void)
+    func execute<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void)
 }
 
 public class HTTPClientWithURLSession: HTTPClient {
@@ -20,11 +21,11 @@ public class HTTPClientWithURLSession: HTTPClient {
         self.session = session
     }
     
-    public func get<T: Codable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    public func get<T: Decodable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void) {
         execute(request: URLRequest(url: url), completion: completion)
     }
 
-    public func post<T: Codable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    public func post<T: Decodable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
@@ -35,7 +36,7 @@ public class HTTPClientWithURLSession: HTTPClient {
         execute(request: request, completion: completion)
     }
     
-    private func execute<T: Codable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    public func execute<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let requestError = error {
                 completion(.failure(.unexpectedError(underlying: requestError)))

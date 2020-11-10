@@ -78,18 +78,11 @@ internal class TokenHandler {
     }
 
     func makeTokenRequest(authCode: String, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
-        let url = configuration.serverURL.appendingPathComponent("/oauth/token")
-        let parameters = [
+        tokenRequest(parameters: [
             "grant_type": "authorization_code",
             "code": authCode,
             "redirect_uri": configuration.redirectURI.absoluteString
-        ]
-
-        guard let request = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create token request")
-        }
-        
-        httpClient.post(url: url, body: request, contentType: HTTPUtil.xWWWFormURLEncodedContentType, authorization: HTTPUtil.basicAuth(username: configuration.clientId, password: configuration.clientSecret)) { (result: Result<TokenResponse, HTTPError>) -> Void in
+        ]) { result in
             switch result {
             case .success(let tokenResponse):
                 guard let idToken = tokenResponse.id_token else {
@@ -118,5 +111,30 @@ internal class TokenHandler {
             }
             
         }
+    }
+    
+    func makeTokenRequest(refreshToken: String, scope: String? = nil, completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
+        var parameters = [
+            "grant_type": "refresh_token",
+            "refresh_token": refreshToken,
+        ]
+        scope.map { parameters["scope"] = $0 }
+
+        tokenRequest(parameters: parameters, completion: completion)
+    }
+    
+    internal func tokenRequest(parameters: [String: String], completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
+        let url = configuration.serverURL.appendingPathComponent("/oauth/token")
+
+        guard let request = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create token request")
+        }
+        
+        let credentials = HTTPUtil.basicAuth(username: configuration.clientId, password: configuration.clientSecret)
+        httpClient.post(url: url,
+                        body: request,
+                        contentType: HTTPUtil.xWWWFormURLEncodedContentType,
+                        authorization: credentials,
+                        completion: completion)
     }
 }

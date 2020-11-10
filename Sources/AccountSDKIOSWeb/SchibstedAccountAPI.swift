@@ -12,29 +12,27 @@ public class SchibstedAccountAPI {
     // TODO add custom User-Agent header identifying SDK version to all requests
     
     private let baseURL: URL
-    private let httpClient: HTTPClient
 
-
-    init(baseURL: URL, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    init(baseURL: URL) {
         self.baseURL = baseURL
-        self.httpClient = httpClient
     }
     
-    internal func oauthExchange(userAccessToken: String, clientId: String, completion: @escaping (Result<OAuthCodeExchangeResponse, HTTPError>) -> Void) {
+    internal func oauthExchange(for user: User, clientId: String, completion: @escaping (Result<OAuthCodeExchangeResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
             "type": "code",
             "clientId": clientId
         ]
-        
-        guard let request = HTTPUtil.formURLEncode(parameters: parameters) else {
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create OAuth token exchange request")
         }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
 
-        httpClient.post(url: url,
-                        body: request,
-                        contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                        authorization: "Bearer \(userAccessToken)") {
+        user.withAuthentication(request: request) {
             completion(self.unpackResponse($0))
         }
     }

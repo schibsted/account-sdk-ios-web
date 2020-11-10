@@ -57,11 +57,11 @@ public class Client {
     internal static let webFlowLoginStateKey = "WebFlowLoginState"
     private static let keychainServiceName = "com.schibsted.account"
     
-    private let sessionStorage: SessionStorage
-    private let stateStorage: StateStorage
+    internal let sessionStorage: SessionStorage
+    internal let httpClient: HTTPClient
+    internal let tokenHandler: TokenHandler
     
-    private let httpClient: HTTPClient
-    private let tokenHandler: TokenHandler
+    private let stateStorage: StateStorage
     private let schibstedAccountAPI: SchibstedAccountAPI
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
@@ -96,7 +96,7 @@ public class Client {
         self.stateStorage = stateStorage
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, httpClient: httpClient)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
     }
 
     public func resumeLastLoggedInUser() -> User? {
@@ -105,7 +105,7 @@ public class Client {
             return nil
         }
         
-        return User(session: session, sessionStorage: sessionStorage)
+        return User(client: self, session: session)
     }
     
     public func simplifiedLoginData() -> SimplifiedLoginData? {
@@ -126,7 +126,7 @@ public class Client {
         // TODO verify client id is not already in session, should be logged as warn/error as then session should have been resumable
 
         // TODO this only works for clients belonging to the same merchant
-        schibstedAccountAPI.oauthExchange(userAccessToken: mostRecentSession.userTokens.accessToken, clientId: configuration.clientId) { result in
+        schibstedAccountAPI.oauthExchange(for: User(client: self, session: mostRecentSession), clientId: configuration.clientId) { result in
             switch result {
             case .success(let result):
                 self.tokenHandler.makeTokenRequest(authCode: result.code, idTokenValidationContext: IdTokenValidationContext()) { self.handleTokenRequestResult($0, completion: completion)}
@@ -211,7 +211,7 @@ public class Client {
                                           userTokens: UserTokens(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims),
                                           updatedAt: Date())
             sessionStorage.store(userSession)
-            let user = User(session: userSession, sessionStorage: sessionStorage)
+            let user = User(client: self, session: userSession)
             completion(.success(user))
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
             if let errorJSON = body,
