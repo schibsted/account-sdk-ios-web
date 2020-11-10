@@ -107,16 +107,10 @@ final class ClientTests: XCTestCase {
         }
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         
-        let callbackExpectation = expectation(description: "Returns error to callback closure")
-        
-        client.handleAuthenticationResponse(url: URL("com.example://login?state=no-exist&code=123456")) { result in
-            XCTAssertEqual(result, .failure(.unsolicitedResponse))
-            callbackExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        Await.until { done in
+            client.handleAuthenticationResponse(url: URL("com.example://login?state=no-exist&code=123456")) { result in
+                XCTAssertEqual(result, .failure(.unsolicitedResponse))
+                done()
             }
         }
     }
@@ -131,15 +125,10 @@ final class ClientTests: XCTestCase {
         }
         
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        let callbackExpectation = expectation(description: "Returns error to callback closure")
-        client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
-            XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
-            callbackExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        Await.until { done in
+            client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
+                XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
+                done()
             }
         }
     }
@@ -154,15 +143,10 @@ final class ClientTests: XCTestCase {
         }
 
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        let callbackExpectation = expectation(description: "Returns error to callback closure")
-        client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
-            XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
-            callbackExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        Await.until { done in
+            client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
+                XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
+                done()
             }
         }
     }
@@ -202,15 +186,10 @@ final class ClientTests: XCTestCase {
         }
 
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
-        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
-        client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-            XCTAssertEqual(result, .success(User(sessionStorage: MockSessionStorage(),  clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
-            callbackExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        Await.until { done in
+            client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
+                XCTAssertEqual(result, .success(User(sessionStorage: MockSessionStorage(),  clientId: self.config.clientId, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
+                done()
             }
         }
     }
@@ -248,15 +227,10 @@ final class ClientTests: XCTestCase {
         }
         
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
-        let callbackExpectation = expectation(description: "Exchanges code for user tokens")
-        client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-            XCTAssertEqual(result, .failure(.missingExpectedMFA))
-            callbackExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        Await.until { done in
+            client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
+                XCTAssertEqual(result, .failure(.missingExpectedMFA))
+                done()
             }
         }
     }
@@ -342,24 +316,18 @@ final class ClientTests: XCTestCase {
                     completion(.success(jwksResponse))
                 }
         }
-        
-        let callbackExpectation = expectation(description: "Returns logged-in user to callback closure")
-        
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
-        client.performSimplifiedLogin { result in
-            let user = User(sessionStorage: MockSessionStorage(),
-                            clientId: self.config.clientId,
-                            accessToken: tokenResponse.access_token,
-                            refreshToken: tokenResponse.refresh_token,
-                            idToken: idToken,
-                            idTokenClaims: idTokenClaims)
-            XCTAssertEqual(result, .success(user))
-            callbackExpectation.fulfill()
-        }
 
-        waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
+        Await.until { done in
+            client.performSimplifiedLogin { result in
+                let user = User(sessionStorage: MockSessionStorage(),
+                                clientId: self.config.clientId,
+                                accessToken: tokenResponse.access_token,
+                                refreshToken: tokenResponse.refresh_token,
+                                idToken: idToken,
+                                idTokenClaims: idTokenClaims)
+                XCTAssertEqual(result, .success(user))
+                done()
             }
         }
     }
