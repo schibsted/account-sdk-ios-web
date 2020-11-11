@@ -93,12 +93,8 @@ final class UserTests: XCTestCase {
 
             // refresh token request
             let tokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-            when(mock.post(url: equal(to: clientConfig.serverURL.appendingPathComponent("/oauth/token")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: clientConfig.clientId, password: clientConfig.clientSecret),
-                           completion: anyClosure()))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
                     completion(.success(tokenResponse))
                 }
         }
@@ -164,12 +160,8 @@ final class UserTests: XCTestCase {
             
             // refresh token request
             let closureMatcher: ParameterMatcher<(Result<TokenResponse, HTTPError>) -> Void> = anyClosure()
-            when(mock.post(url: equal(to: clientConfig.serverURL.appendingPathComponent("/oauth/token")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: clientConfig.clientId, password: clientConfig.clientSecret),
-                           completion: closureMatcher))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: closureMatcher))
+                .then { _, completion in
                     completion(.failure(.errorResponse(code: 400, body: "{\"error\": \"invalid_grant\"}")))
                 }
         }

@@ -157,12 +157,8 @@ final class ClientTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
-            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
-                           completion: anyClosure()))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
                     completion(.success(tokenResponse))
                 }
             
@@ -202,12 +198,8 @@ final class ClientTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
-            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
-                           completion: anyClosure()))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
                     completion(.success(tokenResponse))
                 }
             
@@ -315,12 +307,8 @@ final class ClientTests: XCTestCase {
                     completion(.success(SchibstedAccountAPIResponse(data: OAuthCodeExchangeResponse(code: "authCode"))))
                 }
 
-            when(mock.post(url: equal(to: config.serverURL.appendingPathComponent("/oauth/token")),
-                           body: any(),
-                           contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                           authorization: HTTPUtil.basicAuth(username: config.clientId, password: config.clientSecret),
-                           completion: anyClosure()))
-                .then { _, _, _, _, completion in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
                     completion(.success(tokenResponse))
                 }
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])

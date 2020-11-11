@@ -69,11 +69,13 @@ func removeSignature(fromToken token: String?) -> String {
 internal class TokenHandler {
     private let configuration: ClientConfiguration
     private let httpClient: HTTPClient
+    private let schibstedAccountAPI: SchibstedAccountAPI
     let jwks: JWKS
     
     init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.httpClient = httpClient
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
         self.jwks = jwks
     }
 
@@ -124,17 +126,7 @@ internal class TokenHandler {
     }
     
     internal func tokenRequest(parameters: [String: String], completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
-        let url = configuration.serverURL.appendingPathComponent("/oauth/token")
-
-        guard let request = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create token request")
-        }
-        
         let credentials = HTTPUtil.basicAuth(username: configuration.clientId, password: configuration.clientSecret)
-        httpClient.post(url: url,
-                        body: request,
-                        contentType: HTTPUtil.xWWWFormURLEncodedContentType,
-                        authorization: credentials,
-                        completion: completion)
+        schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters, authorization: credentials, completion: completion)
     }
 }

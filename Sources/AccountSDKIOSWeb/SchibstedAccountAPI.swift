@@ -44,7 +44,21 @@ public class SchibstedAccountAPI {
             completion(self.unpackResponse($0))
         }
     }
+    
+    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], authorization: String, completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
+        let url = baseURL.appendingPathComponent("/oauth/token")
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create token request")
+        }
 
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization , forHTTPHeaderField: "Authorization")
+        request.httpBody = requestBody
+        
+        httpClient.execute(request: request, completion: completion)
+    }
 
     public func userProfile(for user: User, completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/user/\(user.uuid)")
