@@ -44,7 +44,7 @@ internal class RemoteJWKS: JWKS {
     
     private func fetchJWKS(keyId: String, completion: @escaping (JWK?) -> Void) {
         let request = URLRequest(url: jwksURI)
-        httpClient.execute(request: request) { (result: Result<JWKSResponse, HTTPError>) -> Void in
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) { (result: Result<JWKSResponse, HTTPError>) -> Void in
             switch result {
             case .success(let jwks):
                 for keyData in jwks.keys {

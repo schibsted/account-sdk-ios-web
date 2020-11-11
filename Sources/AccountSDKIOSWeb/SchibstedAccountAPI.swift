@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
     let data: T
@@ -16,15 +17,24 @@ public struct UserProfileResponse: Codable {
     public var phoneNumber: String? = nil
 }
 
-public class SchibstedAccountAPI {
-    // TODO add custom User-Agent header identifying SDK version to all requests
-    
+struct UserAgent {
+    private static let deviceInfo = UIDevice.current
+    static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
+}
+
+public class SchibstedAccountAPI {   
     private let baseURL: URL
 
     init(baseURL: URL) {
         self.baseURL = baseURL
     }
-    
+
+    internal static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
+        var requestWithHeaders = request
+        requestWithHeaders.addValue(UserAgent.value, forHTTPHeaderField: "User-Agent")
+        return requestWithHeaders
+    }
+
     internal func oauthExchange(for user: User, clientId: String, completion: @escaping (Result<OAuthCodeExchangeResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
@@ -40,7 +50,7 @@ public class SchibstedAccountAPI {
         request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
 
-        user.withAuthentication(request: request) {
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
         }
     }
@@ -57,13 +67,13 @@ public class SchibstedAccountAPI {
         request.setValue(authorization , forHTTPHeaderField: "Authorization")
         request.httpBody = requestBody
         
-        httpClient.execute(request: request, completion: completion)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request), completion: completion)
     }
 
     public func userProfile(for user: User, completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/user/\(user.uuid)")
         let request = URLRequest(url: url)
-        user.withAuthentication(request: request) {
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
         }
     }
