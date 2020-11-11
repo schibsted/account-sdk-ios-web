@@ -43,7 +43,8 @@ internal class RemoteJWKS: JWKS {
     }
     
     private func fetchJWKS(keyId: String, completion: @escaping (JWK?) -> Void) {
-        httpClient.get(url: jwksURI) { (result: Result<JWKSResponse, HTTPError>) -> Void in
+        let request = URLRequest(url: jwksURI)
+        httpClient.execute(request: request) { (result: Result<JWKSResponse, HTTPError>) -> Void in
             switch result {
             case .success(let jwks):
                 for keyData in jwks.keys {

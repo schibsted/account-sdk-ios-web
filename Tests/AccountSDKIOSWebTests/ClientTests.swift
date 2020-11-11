@@ -163,7 +163,7 @@ final class ClientTests: XCTestCase {
                 }
             
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+            when(mock.execute(request: any(), completion: anyClosure()))
                 .then { _, completion in
                     completion(.success(jwksResponse))
                 }
@@ -189,7 +189,7 @@ final class ClientTests: XCTestCase {
             }
         }
     }
-    
+
     func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
         let nonce = "testNonce"
         let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nonce, amr: nil) // no AMR in ID Token
@@ -204,7 +204,7 @@ final class ClientTests: XCTestCase {
                 }
             
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+            when(mock.execute(request: any(), completion: anyClosure()))
                 .then { _, completion in
                     completion(.success(jwksResponse))
                 }
@@ -226,7 +226,7 @@ final class ClientTests: XCTestCase {
             }
         }
     }
-    
+
     func testResumeLastLoggedInUserWithExistingSession() {
         let session = UserSession(clientId: config.clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
@@ -238,7 +238,7 @@ final class ClientTests: XCTestCase {
         let user = client.resumeLastLoggedInUser()
         XCTAssertEqual(user, User(client: client, session: session))
     }
-    
+
     func testResumeLastLoggedInUserWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
@@ -312,7 +312,7 @@ final class ClientTests: XCTestCase {
                     completion(.success(tokenResponse))
                 }
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.get(url: equal(to: config.serverURL.appendingPathComponent("/oauth/jwks")), completion: anyClosure()))
+            when(mock.execute(request: any(), completion: anyClosure()))
                 .then { _, completion in
                     completion(.success(jwksResponse))
                 }

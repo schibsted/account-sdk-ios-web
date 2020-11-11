@@ -9,8 +9,6 @@ public enum HTTPError: Error {
 }
 
 public protocol HTTPClient {
-    func get<T: Decodable>(url: URL, completion: @escaping (Result<T, HTTPError>) -> Void)
-    func post<T: Decodable>(url: URL, body: Data, contentType: String, authorization: String?, completion: @escaping (Result<T, HTTPError>) -> Void)
     func execute<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void)
 }
 
