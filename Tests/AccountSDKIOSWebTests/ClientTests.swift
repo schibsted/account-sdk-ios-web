@@ -189,6 +189,48 @@ final class ClientTests: XCTestCase {
             }
         }
     }
+    
+    func testHandleAuthenticationResponseHandlesTokenErrorResponse() {
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any())).thenDoNothing()
+        }
+        let state = "testState"
+        let mockStorage = MockStorage()
+        stub(mockStorage) { mock in
+            let webFlowData = WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
+            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+        }
+        
+        let testData = [
+            (
+                HTTPError.errorResponse(code: 400, body: "{\"error\": \"invalid_request\", \"error_description\": \"test error\"}"),
+                LoginError.tokenErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))
+            ),
+            (
+                HTTPError.unexpectedError(underlying: HTTPError.noData),
+                LoginError.unexpectedError(message: "Failed to obtain user tokens")
+            )
+        ]
+        for (returnedResponse, expectedResult) in testData {
+            let mockHTTPClient = MockHTTPClient()
+            stub(mockHTTPClient) { mock in
+                when(mock.execute(request: any(), completion: anyClosure()))
+                    .then { (_, completion: (Result<TokenResponse, HTTPError>) -> Void) in
+                        completion(.failure(returnedResponse))
+                    }
+            }
+            
+            let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
+            Await.until { done in
+                client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
+                    XCTAssertEqual(result, .failure(expectedResult))
+                    done()
+                }
+            }
+        }
+    }
 
     func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
         let nonce = "testNonce"
