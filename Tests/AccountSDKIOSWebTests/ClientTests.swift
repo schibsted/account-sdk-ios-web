@@ -265,19 +265,36 @@ final class ClientTests: XCTestCase {
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([newestSession, earlierSession])
         }
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) { mock in
+            when(mock).execute(request: any(), completion: anyClosure())
+                .then { _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: UserProfileResponse(email: "test123@example.com"))))
+                }
+        }
 
-        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        let result = client.simplifiedLoginData()
-        XCTAssertEqual(result, SimplifiedLoginData(uuid: newestSession.userTokens.idTokenClaims.sub, client: newestSession.clientId))
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
+        Await.until { done in
+            client.simplifiedLoginData { result in
+                XCTAssertEqual(result, SimplifiedLoginData(displayName: "test123", client: newestSession.clientId))
+                done()
+            }
+        }
     }
-    
+
     func testSimplifiedLoginDataWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.getAll()).thenReturn([])
         }
-        
-        XCTAssertNil(Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage())).simplifiedLoginData())
+
+        let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
+        Await.until { done in
+            client.simplifiedLoginData { result in
+                XCTAssertNil(result)
+                done()
+            }
+        }
     }
     
     func testPerformSimplifiedLogin() {

@@ -108,12 +108,26 @@ public class Client {
         return User(client: self, session: session)
     }
     
-    public func simplifiedLoginData() -> SimplifiedLoginData? {
+    public func simplifiedLoginData(presenter: @escaping (SimplifiedLoginData?) -> Void) {
         guard let mostRecentSession = getMostRecentSession() else {
-            return nil
+            presenter(nil)
+            return
         }
 
-        return SimplifiedLoginData(uuid: mostRecentSession.userTokens.idTokenClaims.sub, client: mostRecentSession.clientId)
+        let user = User(client: self, session: mostRecentSession)
+        schibstedAccountAPI.userProfile(for: user) { result in
+            switch result {
+            case .success(let userProfile):
+                if let email = userProfile.email,
+                   let range = email.range(of: "@", options: .backwards) {
+                    let displayName = String(email[...email.index(before: range.lowerBound)])
+                    presenter(SimplifiedLoginData(displayName: displayName, client: mostRecentSession.clientId))
+                }
+            default:
+                // TODO log error to fetch user profile data
+                presenter(nil)
+            }
+        }
     }
     
     public func performSimplifiedLogin(completion: @escaping (Result<User, LoginError>) -> Void) {
