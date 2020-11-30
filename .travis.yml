@@ -2,5 +2,7 @@ language: swift
 osx_image: xcode12.2
 
 xcode_project: AccountSDKIOSWeb.xcodeproj
-xcode_scheme: AccountSDKIOSWebTests
-xcode_destination: platform=iOS Simulator,OS=11.0,name=name=iPhone X
+xcode_destination: platform=iOS Simulator,OS=14.2,name=name=iPhone X
+xcode_scheme:
+  - AccountSDKIOSWebTests
+  - AccountSDKIOSWebKeychainTests

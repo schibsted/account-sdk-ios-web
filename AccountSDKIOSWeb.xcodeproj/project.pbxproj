@@ -1,0 +1,1934 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"AccountSDKIOSWeb::AccountSDKIOSWebPackageTests::ProductTarget" /* AccountSDKIOSWebPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_235 /* Build configuration list for PBXAggregateTarget "AccountSDKIOSWebPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_238 /* PBXTargetDependency */,
+				OBJ_240 /* PBXTargetDependency */,
+			);
+			name = AccountSDKIOSWebPackageTests;
+			productName = AccountSDKIOSWebPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		A9941FD8257523C400513EED /* TestHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD7257523C400513EED /* TestHostApp.swift */; };
+		A9941FDA257523C400513EED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD9257523C400513EED /* ContentView.swift */; };
+		A9941FDC257523C800513EED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDB257523C800513EED /* Assets.xcassets */; };
+		A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDE257523C800513EED /* Preview Assets.xcassets */; };
+		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
+		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
+		OBJ_193 /* JOSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JOSESwift::JOSESwift::Product" /* JOSESwift.framework */; };
+		OBJ_202 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Cache.swift */; };
+		OBJ_203 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Client.swift */; };
+		OBJ_204 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* HTTPClient.swift */; };
+		OBJ_205 /* HTTPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* HTTPUtil.swift */; };
+		OBJ_206 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* IdTokenValidator.swift */; };
+		OBJ_207 /* JOSEUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* JOSEUtil.swift */; };
+		OBJ_208 /* JWKS.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* JWKS.swift */; };
+		OBJ_209 /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* LoginError.swift */; };
+		OBJ_210 /* SchibstedAccountAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* SchibstedAccountAPI.swift */; };
+		OBJ_211 /* SimplifiedLoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* SimplifiedLoginData.swift */; };
+		OBJ_212 /* LegacyKeychainSessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* LegacyKeychainSessionStorage.swift */; };
+		OBJ_213 /* LegacyKeychainTokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* LegacyKeychainTokenStorage.swift */; };
+		OBJ_214 /* MigratingKeychainCompatStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* MigratingKeychainCompatStorage.swift */; };
+		OBJ_215 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Keychain.swift */; };
+		OBJ_216 /* KeychainSessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* KeychainSessionStorage.swift */; };
+		OBJ_217 /* SessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* SessionStorage.swift */; };
+		OBJ_218 /* StateStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* StateStorage.swift */; };
+		OBJ_219 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* Storage.swift */; };
+		OBJ_220 /* UserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* UserDefaultsStorage.swift */; };
+		OBJ_221 /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* TokenHandler.swift */; };
+		OBJ_222 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* URLExtensions.swift */; };
+		OBJ_223 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* User.swift */; };
+		OBJ_224 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* Version.swift */; };
+		OBJ_226 /* JOSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JOSESwift::JOSESwift::Product" /* JOSESwift.framework */; };
+		OBJ_233 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
+		OBJ_246 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ClientTests.swift */; };
+		OBJ_247 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* Fixtures.swift */; };
+		OBJ_248 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* GeneratedMocks.swift */; };
+		OBJ_249 /* HTTPUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* HTTPUtilTests.swift */; };
+		OBJ_250 /* IdTokenValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* IdTokenValidatorTests.swift */; };
+		OBJ_251 /* JOSEUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* JOSEUtilTests.swift */; };
+		OBJ_252 /* JWKSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* JWKSTests.swift */; };
+		OBJ_253 /* JOSEUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* JOSEUtil.swift */; };
+		OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* LegacyKeychainSessionStorageTests.swift */; };
+		OBJ_255 /* MigratingKeychainCompatStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* MigratingKeychainCompatStorageTests.swift */; };
+		OBJ_256 /* StateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* StateStorageTests.swift */; };
+		OBJ_257 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* UserTests.swift */; };
+		OBJ_259 /* Cuckoo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Cuckoo::Cuckoo::Product" /* Cuckoo.framework */; };
+		OBJ_260 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
+		OBJ_261 /* JOSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JOSESwift::JOSESwift::Product" /* JOSESwift.framework */; };
+		OBJ_270 /* CuckooFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CuckooFunctions.swift */; };
+		OBJ_271 /* DefaultValueRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* DefaultValueRegistry.swift */; };
+		OBJ_272 /* CreateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* CreateMock.swift */; };
+		OBJ_273 /* MockBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* MockBuilder.swift */; };
+		OBJ_274 /* MockManager+preconfigured.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* MockManager+preconfigured.swift */; };
+		OBJ_275 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* ThreadLocal.swift */; };
+		OBJ_276 /* Array+matchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* Array+matchers.swift */; };
+		OBJ_277 /* CallMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_71 /* CallMatcher.swift */; };
+		OBJ_278 /* CallMatcherFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_72 /* CallMatcherFunctions.swift */; };
+		OBJ_279 /* Dictionary+matchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_73 /* Dictionary+matchers.swift */; };
+		OBJ_280 /* Matchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_74 /* Matchable.swift */; };
+		OBJ_281 /* ParameterMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_75 /* ParameterMatcher.swift */; };
+		OBJ_282 /* ParameterMatcherFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_76 /* ParameterMatcherFunctions.swift */; };
+		OBJ_283 /* Set+matchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_77 /* Set+matchers.swift */; };
+		OBJ_284 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_79 /* Mock.swift */; };
+		OBJ_285 /* Mocked.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_80 /* Mocked.swift */; };
+		OBJ_286 /* StubbingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_81 /* StubbingProxy.swift */; };
+		OBJ_287 /* VerificationProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_82 /* VerificationProxy.swift */; };
+		OBJ_288 /* MockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_83 /* MockManager.swift */; };
+		OBJ_289 /* Stub.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_85 /* Stub.swift */; };
+		OBJ_290 /* StubAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_86 /* StubAction.swift */; };
+		OBJ_291 /* StubCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_87 /* StubCall.swift */; };
+		OBJ_292 /* StubFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_89 /* StubFunction.swift */; };
+		OBJ_293 /* StubNoReturnFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_90 /* StubNoReturnFunction.swift */; };
+		OBJ_294 /* StubNoReturnThrowingFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_91 /* StubNoReturnThrowingFunction.swift */; };
+		OBJ_295 /* StubThrowingFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_92 /* StubThrowingFunction.swift */; };
+		OBJ_296 /* BaseStubFunctionTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_94 /* BaseStubFunctionTrait.swift */; };
+		OBJ_297 /* StubFunctionThenCallRealImplementationTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_95 /* StubFunctionThenCallRealImplementationTrait.swift */; };
+		OBJ_298 /* StubFunctionThenDoNothingTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_96 /* StubFunctionThenDoNothingTrait.swift */; };
+		OBJ_299 /* StubFunctionThenReturnTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_97 /* StubFunctionThenReturnTrait.swift */; };
+		OBJ_300 /* StubFunctionThenThrowTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_98 /* StubFunctionThenThrowTrait.swift */; };
+		OBJ_301 /* StubFunctionThenThrowingTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_99 /* StubFunctionThenThrowingTrait.swift */; };
+		OBJ_302 /* StubFunctionThenTrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_100 /* StubFunctionThenTrait.swift */; };
+		OBJ_303 /* ToBeStubbedProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_102 /* ToBeStubbedProperty.swift */; };
+		OBJ_304 /* ToBeStubbedReadOnlyProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_103 /* ToBeStubbedReadOnlyProperty.swift */; };
+		OBJ_305 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_104 /* Utils.swift */; };
+		OBJ_306 /* ArgumentCaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_106 /* ArgumentCaptor.swift */; };
+		OBJ_307 /* VerifyProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_108 /* VerifyProperty.swift */; };
+		OBJ_308 /* VerifyReadOnlyProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_109 /* VerifyReadOnlyProperty.swift */; };
+		OBJ_309 /* __DoNotUse.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_110 /* __DoNotUse.swift */; };
+		OBJ_316 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* Package.swift */; };
+		OBJ_321 /* AESCBCEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_114 /* AESCBCEncryption.swift */; };
+		OBJ_322 /* AESKeyWrappingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_115 /* AESKeyWrappingMode.swift */; };
+		OBJ_323 /* ASN1DEREncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_116 /* ASN1DEREncoding.swift */; };
+		OBJ_324 /* ASN1DERParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_117 /* ASN1DERParsing.swift */; };
+		OBJ_325 /* AlgorithmExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_118 /* AlgorithmExtensions.swift */; };
+		OBJ_326 /* Algorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_119 /* Algorithms.swift */; };
+		OBJ_327 /* DeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_121 /* DeflateWrapper.swift */; };
+		OBJ_328 /* Compressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_122 /* Compressor.swift */; };
+		OBJ_329 /* ContentEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_123 /* ContentEncryption.swift */; };
+		OBJ_330 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_125 /* AES.swift */; };
+		OBJ_331 /* DataECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_126 /* DataECPrivateKey.swift */; };
+		OBJ_332 /* DataECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_127 /* DataECPublicKey.swift */; };
+		OBJ_333 /* DataRSAPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_128 /* DataRSAPublicKey.swift */; };
+		OBJ_334 /* DataSymmetricKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_129 /* DataSymmetricKey.swift */; };
+		OBJ_335 /* EC.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_130 /* EC.swift */; };
+		OBJ_336 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_131 /* HMAC.swift */; };
+		OBJ_337 /* RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_132 /* RSA.swift */; };
+		OBJ_338 /* SecKeyECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_133 /* SecKeyECPrivateKey.swift */; };
+		OBJ_339 /* SecKeyECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_134 /* SecKeyECPublicKey.swift */; };
+		OBJ_340 /* SecKeyRSAPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_135 /* SecKeyRSAPublicKey.swift */; };
+		OBJ_341 /* SecureRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_136 /* SecureRandom.swift */; };
+		OBJ_342 /* Thumbprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_137 /* Thumbprint.swift */; };
+		OBJ_343 /* DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_138 /* DataConvertible.swift */; };
+		OBJ_344 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_139 /* DataExtensions.swift */; };
+		OBJ_345 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_140 /* Decrypter.swift */; };
+		OBJ_346 /* Deserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_141 /* Deserializer.swift */; };
+		OBJ_347 /* DirectEncryptionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_142 /* DirectEncryptionMode.swift */; };
+		OBJ_348 /* ECKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_143 /* ECKeyCodable.swift */; };
+		OBJ_349 /* ECKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_144 /* ECKeys.swift */; };
+		OBJ_350 /* ECSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_145 /* ECSigner.swift */; };
+		OBJ_351 /* ECVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_146 /* ECVerifier.swift */; };
+		OBJ_352 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_147 /* Encrypter.swift */; };
+		OBJ_353 /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_148 /* JOSEHeader.swift */; };
+		OBJ_354 /* JOSESwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_149 /* JOSESwiftError.swift */; };
+		OBJ_355 /* JWE.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_150 /* JWE.swift */; };
+		OBJ_356 /* JWEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_151 /* JWEHeader.swift */; };
+		OBJ_357 /* JWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_152 /* JWK.swift */; };
+		OBJ_358 /* JWKExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_153 /* JWKExtensions.swift */; };
+		OBJ_359 /* JWKParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_154 /* JWKParameters.swift */; };
+		OBJ_360 /* JWKSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_155 /* JWKSet.swift */; };
+		OBJ_361 /* JWKSetCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_156 /* JWKSetCodable.swift */; };
+		OBJ_362 /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_157 /* JWS.swift */; };
+		OBJ_363 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_158 /* JWSHeader.swift */; };
+		OBJ_364 /* KeyManagementMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_159 /* KeyManagementMode.swift */; };
+		OBJ_365 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_160 /* Payload.swift */; };
+		OBJ_366 /* RSAKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_161 /* RSAKeyCodable.swift */; };
+		OBJ_367 /* RSAKeyEncryptionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_162 /* RSAKeyEncryptionMode.swift */; };
+		OBJ_368 /* RSAKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_163 /* RSAKeys.swift */; };
+		OBJ_369 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_164 /* RSASigner.swift */; };
+		OBJ_370 /* RSAVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_165 /* RSAVerifier.swift */; };
+		OBJ_371 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_166 /* Serializer.swift */; };
+		OBJ_372 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_167 /* Signer.swift */; };
+		OBJ_373 /* SymmetricKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_168 /* SymmetricKeyCodable.swift */; };
+		OBJ_374 /* SymmetricKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_169 /* SymmetricKeys.swift */; };
+		OBJ_375 /* Verifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_170 /* Verifier.swift */; };
+		OBJ_382 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_171 /* Package.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A9941F35257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "JOSESwift::JOSESwift";
+			remoteInfo = JOSESwift;
+		};
+		A9941F36257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Cuckoo::Cuckoo";
+			remoteInfo = Cuckoo;
+		};
+		A9941F37257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccountSDKIOSWeb::AccountSDKIOSWeb";
+			remoteInfo = AccountSDKIOSWeb;
+		};
+		A9941F38257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "JOSESwift::JOSESwift";
+			remoteInfo = JOSESwift;
+		};
+		A9941F39257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccountSDKIOSWeb::AccountSDKIOSWeb";
+			remoteInfo = AccountSDKIOSWeb;
+		};
+		A9941F3A257503F700513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "JOSESwift::JOSESwift";
+			remoteInfo = JOSESwift;
+		};
+		A9941F3E257503FA00513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccountSDKIOSWeb::AccountSDKIOSWebTests";
+			remoteInfo = AccountSDKIOSWebTests;
+		};
+		A9941F3F257503FA00513EED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccountSDKIOSWeb::AccountSDKIOSKeychainTests";
+			remoteInfo = AccountSDKIOSKeychainTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A9941FD5257523C400513EED /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9941FD7257523C400513EED /* TestHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostApp.swift; sourceTree = "<group>"; };
+		A9941FD9257523C400513EED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A9941FDB257523C800513EED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9941FDE257523C800513EED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A9941FE0257523C800513EED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Cuckoo::Cuckoo::Product" /* Cuckoo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cuckoo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"JOSESwift::JOSESwift::Product" /* JOSESwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JOSESwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_10 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		OBJ_100 /* StubFunctionThenTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenTrait.swift; sourceTree = "<group>"; };
+		OBJ_102 /* ToBeStubbedProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToBeStubbedProperty.swift; sourceTree = "<group>"; };
+		OBJ_103 /* ToBeStubbedReadOnlyProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToBeStubbedReadOnlyProperty.swift; sourceTree = "<group>"; };
+		OBJ_104 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		OBJ_106 /* ArgumentCaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArgumentCaptor.swift; sourceTree = "<group>"; };
+		OBJ_108 /* VerifyProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyProperty.swift; sourceTree = "<group>"; };
+		OBJ_109 /* VerifyReadOnlyProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyReadOnlyProperty.swift; sourceTree = "<group>"; };
+		OBJ_11 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		OBJ_110 /* __DoNotUse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __DoNotUse.swift; sourceTree = "<group>"; };
+		OBJ_114 /* AESCBCEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESCBCEncryption.swift; sourceTree = "<group>"; };
+		OBJ_115 /* AESKeyWrappingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESKeyWrappingMode.swift; sourceTree = "<group>"; };
+		OBJ_116 /* ASN1DEREncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DEREncoding.swift; sourceTree = "<group>"; };
+		OBJ_117 /* ASN1DERParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DERParsing.swift; sourceTree = "<group>"; };
+		OBJ_118 /* AlgorithmExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgorithmExtensions.swift; sourceTree = "<group>"; };
+		OBJ_119 /* Algorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algorithms.swift; sourceTree = "<group>"; };
+		OBJ_121 /* DeflateWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeflateWrapper.swift; sourceTree = "<group>"; };
+		OBJ_122 /* Compressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compressor.swift; sourceTree = "<group>"; };
+		OBJ_123 /* ContentEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentEncryption.swift; sourceTree = "<group>"; };
+		OBJ_125 /* AES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
+		OBJ_126 /* DataECPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataECPrivateKey.swift; sourceTree = "<group>"; };
+		OBJ_127 /* DataECPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataECPublicKey.swift; sourceTree = "<group>"; };
+		OBJ_128 /* DataRSAPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRSAPublicKey.swift; sourceTree = "<group>"; };
+		OBJ_129 /* DataSymmetricKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSymmetricKey.swift; sourceTree = "<group>"; };
+		OBJ_13 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		OBJ_130 /* EC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EC.swift; sourceTree = "<group>"; };
+		OBJ_131 /* HMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
+		OBJ_132 /* RSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSA.swift; sourceTree = "<group>"; };
+		OBJ_133 /* SecKeyECPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyECPrivateKey.swift; sourceTree = "<group>"; };
+		OBJ_134 /* SecKeyECPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyECPublicKey.swift; sourceTree = "<group>"; };
+		OBJ_135 /* SecKeyRSAPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyRSAPublicKey.swift; sourceTree = "<group>"; };
+		OBJ_136 /* SecureRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureRandom.swift; sourceTree = "<group>"; };
+		OBJ_137 /* Thumbprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thumbprint.swift; sourceTree = "<group>"; };
+		OBJ_138 /* DataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConvertible.swift; sourceTree = "<group>"; };
+		OBJ_139 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		OBJ_14 /* HTTPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPUtil.swift; sourceTree = "<group>"; };
+		OBJ_140 /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		OBJ_141 /* Deserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deserializer.swift; sourceTree = "<group>"; };
+		OBJ_142 /* DirectEncryptionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectEncryptionMode.swift; sourceTree = "<group>"; };
+		OBJ_143 /* ECKeyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECKeyCodable.swift; sourceTree = "<group>"; };
+		OBJ_144 /* ECKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECKeys.swift; sourceTree = "<group>"; };
+		OBJ_145 /* ECSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECSigner.swift; sourceTree = "<group>"; };
+		OBJ_146 /* ECVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECVerifier.swift; sourceTree = "<group>"; };
+		OBJ_147 /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
+		OBJ_148 /* JOSEHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
+		OBJ_149 /* JOSESwiftError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSESwiftError.swift; sourceTree = "<group>"; };
+		OBJ_150 /* JWE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWE.swift; sourceTree = "<group>"; };
+		OBJ_151 /* JWEHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeader.swift; sourceTree = "<group>"; };
+		OBJ_152 /* JWK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWK.swift; sourceTree = "<group>"; };
+		OBJ_153 /* JWKExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKExtensions.swift; sourceTree = "<group>"; };
+		OBJ_154 /* JWKParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKParameters.swift; sourceTree = "<group>"; };
+		OBJ_155 /* JWKSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKSet.swift; sourceTree = "<group>"; };
+		OBJ_156 /* JWKSetCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKSetCodable.swift; sourceTree = "<group>"; };
+		OBJ_157 /* JWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWS.swift; sourceTree = "<group>"; };
+		OBJ_158 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
+		OBJ_159 /* KeyManagementMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManagementMode.swift; sourceTree = "<group>"; };
+		OBJ_16 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
+		OBJ_160 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
+		OBJ_161 /* RSAKeyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeyCodable.swift; sourceTree = "<group>"; };
+		OBJ_162 /* RSAKeyEncryptionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeyEncryptionMode.swift; sourceTree = "<group>"; };
+		OBJ_163 /* RSAKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeys.swift; sourceTree = "<group>"; };
+		OBJ_164 /* RSASigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASigner.swift; sourceTree = "<group>"; };
+		OBJ_165 /* RSAVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAVerifier.swift; sourceTree = "<group>"; };
+		OBJ_166 /* Serializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
+		OBJ_167 /* Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
+		OBJ_168 /* SymmetricKeyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymmetricKeyCodable.swift; sourceTree = "<group>"; };
+		OBJ_169 /* SymmetricKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymmetricKeys.swift; sourceTree = "<group>"; };
+		OBJ_17 /* JOSEUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtil.swift; sourceTree = "<group>"; };
+		OBJ_170 /* Verifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verifier.swift; sourceTree = "<group>"; };
+		OBJ_171 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/samuel.gulliksson/dev/AccountSDKIOSWeb/.build/checkouts/JOSESwift/Package.swift; sourceTree = "<group>"; };
+		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
+		OBJ_18 /* JWKS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKS.swift; sourceTree = "<group>"; };
+		OBJ_180 /* workspace.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = workspace.xcworkspace; sourceTree = SOURCE_ROOT; };
+		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
+		OBJ_183 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		OBJ_19 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
+		OBJ_20 /* SchibstedAccountAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPI.swift; sourceTree = "<group>"; };
+		OBJ_21 /* SimplifiedLoginData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginData.swift; sourceTree = "<group>"; };
+		OBJ_25 /* LegacyKeychainSessionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainSessionStorage.swift; sourceTree = "<group>"; };
+		OBJ_26 /* LegacyKeychainTokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorage.swift; sourceTree = "<group>"; };
+		OBJ_27 /* MigratingKeychainCompatStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigratingKeychainCompatStorage.swift; sourceTree = "<group>"; };
+		OBJ_28 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		OBJ_29 /* KeychainSessionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSessionStorage.swift; sourceTree = "<group>"; };
+		OBJ_30 /* SessionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStorage.swift; sourceTree = "<group>"; };
+		OBJ_31 /* StateStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStorage.swift; sourceTree = "<group>"; };
+		OBJ_32 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		OBJ_33 /* UserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorage.swift; sourceTree = "<group>"; };
+		OBJ_34 /* TokenHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
+		OBJ_35 /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
+		OBJ_36 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		OBJ_37 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
+		OBJ_42 /* Await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Await.swift; sourceTree = "<group>"; };
+		OBJ_43 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
+		OBJ_44 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
+		OBJ_45 /* GeneratedMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
+		OBJ_47 /* HTTPUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPUtilTests.swift; sourceTree = "<group>"; };
+		OBJ_49 /* IdTokenValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidatorTests.swift; sourceTree = "<group>"; };
+		OBJ_50 /* JOSEUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtilTests.swift; sourceTree = "<group>"; };
+		OBJ_51 /* JWKSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKSTests.swift; sourceTree = "<group>"; };
+		OBJ_52 /* JOSEUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtil.swift; sourceTree = "<group>"; };
+		OBJ_55 /* LegacyKeychainSessionStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainSessionStorageTests.swift; sourceTree = "<group>"; };
+		OBJ_56 /* MigratingKeychainCompatStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigratingKeychainCompatStorageTests.swift; sourceTree = "<group>"; };
+		OBJ_57 /* StateStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStorageTests.swift; sourceTree = "<group>"; };
+		OBJ_58 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_61 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/samuel.gulliksson/dev/AccountSDKIOSWeb/.build/checkouts/Cuckoo/Package.swift; sourceTree = "<group>"; };
+		OBJ_62 /* CuckooFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuckooFunctions.swift; sourceTree = "<group>"; };
+		OBJ_63 /* DefaultValueRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultValueRegistry.swift; sourceTree = "<group>"; };
+		OBJ_65 /* CreateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMock.swift; sourceTree = "<group>"; };
+		OBJ_66 /* MockBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBuilder.swift; sourceTree = "<group>"; };
+		OBJ_67 /* MockManager+preconfigured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockManager+preconfigured.swift"; sourceTree = "<group>"; };
+		OBJ_68 /* ThreadLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
+		OBJ_70 /* Array+matchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+matchers.swift"; sourceTree = "<group>"; };
+		OBJ_71 /* CallMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallMatcher.swift; sourceTree = "<group>"; };
+		OBJ_72 /* CallMatcherFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallMatcherFunctions.swift; sourceTree = "<group>"; };
+		OBJ_73 /* Dictionary+matchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+matchers.swift"; sourceTree = "<group>"; };
+		OBJ_74 /* Matchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matchable.swift; sourceTree = "<group>"; };
+		OBJ_75 /* ParameterMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterMatcher.swift; sourceTree = "<group>"; };
+		OBJ_76 /* ParameterMatcherFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterMatcherFunctions.swift; sourceTree = "<group>"; };
+		OBJ_77 /* Set+matchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+matchers.swift"; sourceTree = "<group>"; };
+		OBJ_79 /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
+		OBJ_80 /* Mocked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocked.swift; sourceTree = "<group>"; };
+		OBJ_81 /* StubbingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubbingProxy.swift; sourceTree = "<group>"; };
+		OBJ_82 /* VerificationProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationProxy.swift; sourceTree = "<group>"; };
+		OBJ_83 /* MockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockManager.swift; sourceTree = "<group>"; };
+		OBJ_85 /* Stub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stub.swift; sourceTree = "<group>"; };
+		OBJ_86 /* StubAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubAction.swift; sourceTree = "<group>"; };
+		OBJ_87 /* StubCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubCall.swift; sourceTree = "<group>"; };
+		OBJ_89 /* StubFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunction.swift; sourceTree = "<group>"; };
+		OBJ_90 /* StubNoReturnFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubNoReturnFunction.swift; sourceTree = "<group>"; };
+		OBJ_91 /* StubNoReturnThrowingFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubNoReturnThrowingFunction.swift; sourceTree = "<group>"; };
+		OBJ_92 /* StubThrowingFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubThrowingFunction.swift; sourceTree = "<group>"; };
+		OBJ_94 /* BaseStubFunctionTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStubFunctionTrait.swift; sourceTree = "<group>"; };
+		OBJ_95 /* StubFunctionThenCallRealImplementationTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenCallRealImplementationTrait.swift; sourceTree = "<group>"; };
+		OBJ_96 /* StubFunctionThenDoNothingTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenDoNothingTrait.swift; sourceTree = "<group>"; };
+		OBJ_97 /* StubFunctionThenReturnTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenReturnTrait.swift; sourceTree = "<group>"; };
+		OBJ_98 /* StubFunctionThenThrowTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenThrowTrait.swift; sourceTree = "<group>"; };
+		OBJ_99 /* StubFunctionThenThrowingTrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubFunctionThenThrowingTrait.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A9941FD2257523C400513EED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_191 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */,
+				OBJ_193 /* JOSESwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_225 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_226 /* JOSESwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_258 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_259 /* Cuckoo.framework in Frameworks */,
+				OBJ_260 /* AccountSDKIOSWeb.framework in Frameworks */,
+				OBJ_261 /* JOSESwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_310 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_376 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A9941FD6257523C400513EED /* TestHost */ = {
+			isa = PBXGroup;
+			children = (
+				A9941FD7257523C400513EED /* TestHostApp.swift */,
+				A9941FD9257523C400513EED /* ContentView.swift */,
+				A9941FDB257523C800513EED /* Assets.xcassets */,
+				A9941FE0257523C800513EED /* Info.plist */,
+				A9941FDD257523C800513EED /* Preview Content */,
+			);
+			path = TestHost;
+			sourceTree = "<group>";
+		};
+		A9941FDD257523C800513EED /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A9941FDE257523C800513EED /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		OBJ_101 /* ToBeStubbedProperty */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_102 /* ToBeStubbedProperty.swift */,
+				OBJ_103 /* ToBeStubbedReadOnlyProperty.swift */,
+			);
+			path = ToBeStubbedProperty;
+			sourceTree = "<group>";
+		};
+		OBJ_105 /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_106 /* ArgumentCaptor.swift */,
+				OBJ_107 /* VerifyProperty */,
+				OBJ_110 /* __DoNotUse.swift */,
+			);
+			path = Verification;
+			sourceTree = "<group>";
+		};
+		OBJ_107 /* VerifyProperty */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_108 /* VerifyProperty.swift */,
+				OBJ_109 /* VerifyReadOnlyProperty.swift */,
+			);
+			path = VerifyProperty;
+			sourceTree = "<group>";
+		};
+		OBJ_111 /* JOSESwift 2.3.0 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_112 /* JOSESwift */,
+				OBJ_171 /* Package.swift */,
+			);
+			name = "JOSESwift 2.3.0";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_112 /* JOSESwift */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_113 /* Sources */,
+			);
+			name = JOSESwift;
+			path = .build/checkouts/JOSESwift/JOSESwift;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_113 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_114 /* AESCBCEncryption.swift */,
+				OBJ_115 /* AESKeyWrappingMode.swift */,
+				OBJ_116 /* ASN1DEREncoding.swift */,
+				OBJ_117 /* ASN1DERParsing.swift */,
+				OBJ_118 /* AlgorithmExtensions.swift */,
+				OBJ_119 /* Algorithms.swift */,
+				OBJ_120 /* CompressionImplementation */,
+				OBJ_122 /* Compressor.swift */,
+				OBJ_123 /* ContentEncryption.swift */,
+				OBJ_124 /* CryptoImplementation */,
+				OBJ_138 /* DataConvertible.swift */,
+				OBJ_139 /* DataExtensions.swift */,
+				OBJ_140 /* Decrypter.swift */,
+				OBJ_141 /* Deserializer.swift */,
+				OBJ_142 /* DirectEncryptionMode.swift */,
+				OBJ_143 /* ECKeyCodable.swift */,
+				OBJ_144 /* ECKeys.swift */,
+				OBJ_145 /* ECSigner.swift */,
+				OBJ_146 /* ECVerifier.swift */,
+				OBJ_147 /* Encrypter.swift */,
+				OBJ_148 /* JOSEHeader.swift */,
+				OBJ_149 /* JOSESwiftError.swift */,
+				OBJ_150 /* JWE.swift */,
+				OBJ_151 /* JWEHeader.swift */,
+				OBJ_152 /* JWK.swift */,
+				OBJ_153 /* JWKExtensions.swift */,
+				OBJ_154 /* JWKParameters.swift */,
+				OBJ_155 /* JWKSet.swift */,
+				OBJ_156 /* JWKSetCodable.swift */,
+				OBJ_157 /* JWS.swift */,
+				OBJ_158 /* JWSHeader.swift */,
+				OBJ_159 /* KeyManagementMode.swift */,
+				OBJ_160 /* Payload.swift */,
+				OBJ_161 /* RSAKeyCodable.swift */,
+				OBJ_162 /* RSAKeyEncryptionMode.swift */,
+				OBJ_163 /* RSAKeys.swift */,
+				OBJ_164 /* RSASigner.swift */,
+				OBJ_165 /* RSAVerifier.swift */,
+				OBJ_166 /* Serializer.swift */,
+				OBJ_167 /* Signer.swift */,
+				OBJ_168 /* SymmetricKeyCodable.swift */,
+				OBJ_169 /* SymmetricKeys.swift */,
+				OBJ_170 /* Verifier.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		OBJ_12 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_13 /* HTTPClient.swift */,
+				OBJ_14 /* HTTPUtil.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
+		OBJ_120 /* CompressionImplementation */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_121 /* DeflateWrapper.swift */,
+			);
+			path = CompressionImplementation;
+			sourceTree = "<group>";
+		};
+		OBJ_124 /* CryptoImplementation */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_125 /* AES.swift */,
+				OBJ_126 /* DataECPrivateKey.swift */,
+				OBJ_127 /* DataECPublicKey.swift */,
+				OBJ_128 /* DataRSAPublicKey.swift */,
+				OBJ_129 /* DataSymmetricKey.swift */,
+				OBJ_130 /* EC.swift */,
+				OBJ_131 /* HMAC.swift */,
+				OBJ_132 /* RSA.swift */,
+				OBJ_133 /* SecKeyECPrivateKey.swift */,
+				OBJ_134 /* SecKeyECPublicKey.swift */,
+				OBJ_135 /* SecKeyRSAPublicKey.swift */,
+				OBJ_136 /* SecureRandom.swift */,
+				OBJ_137 /* Thumbprint.swift */,
+			);
+			path = CryptoImplementation;
+			sourceTree = "<group>";
+		};
+		OBJ_15 /* JOSE */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_16 /* IdTokenValidator.swift */,
+				OBJ_17 /* JOSEUtil.swift */,
+				OBJ_18 /* JWKS.swift */,
+			);
+			path = JOSE;
+			sourceTree = "<group>";
+		};
+		OBJ_172 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"JOSESwift::JOSESwift::Product" /* JOSESwift.framework */,
+				"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */,
+				"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */,
+				"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */,
+				"Cuckoo::Cuckoo::Product" /* Cuckoo.framework */,
+				A9941FD5257523C400513EED /* TestHost.app */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_22 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_23 /* Keychain */,
+				OBJ_30 /* SessionStorage.swift */,
+				OBJ_31 /* StateStorage.swift */,
+				OBJ_32 /* Storage.swift */,
+				OBJ_33 /* UserDefaultsStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		OBJ_23 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_24 /* Compat */,
+				OBJ_28 /* Keychain.swift */,
+				OBJ_29 /* KeychainSessionStorage.swift */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
+		};
+		OBJ_24 /* Compat */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_25 /* LegacyKeychainSessionStorage.swift */,
+				OBJ_26 /* LegacyKeychainTokenStorage.swift */,
+				OBJ_27 /* MigratingKeychainCompatStorage.swift */,
+			);
+			path = Compat;
+			sourceTree = "<group>";
+		};
+		OBJ_38 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_39 /* AccountSDKIOWebKeychainTests */,
+				OBJ_41 /* AccountSDKIOSWebTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_39 /* AccountSDKIOWebKeychainTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_40 /* LegacyKeychainTokenStorageTests.swift */,
+			);
+			name = AccountSDKIOWebKeychainTests;
+			path = Tests/AccountSDKIOWebKeychainTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_41 /* AccountSDKIOSWebTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_42 /* Await.swift */,
+				OBJ_43 /* ClientTests.swift */,
+				OBJ_44 /* Fixtures.swift */,
+				OBJ_45 /* GeneratedMocks.swift */,
+				OBJ_46 /* HTTP */,
+				OBJ_48 /* JOSE */,
+				OBJ_52 /* JOSEUtil.swift */,
+				OBJ_53 /* Storage */,
+				OBJ_58 /* UserTests.swift */,
+			);
+			name = AccountSDKIOSWebTests;
+			path = Tests/AccountSDKIOSWebTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_46 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_47 /* HTTPUtilTests.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
+		OBJ_48 /* JOSE */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_49 /* IdTokenValidatorTests.swift */,
+				OBJ_50 /* JOSEUtilTests.swift */,
+				OBJ_51 /* JWKSTests.swift */,
+			);
+			path = JOSE;
+			sourceTree = "<group>";
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_38 /* Tests */,
+				OBJ_59 /* Dependencies */,
+				A9941FD6257523C400513EED /* TestHost */,
+				OBJ_172 /* Products */,
+				OBJ_178 /* cuckoo */,
+				OBJ_180 /* workspace.xcworkspace */,
+				OBJ_182 /* generate_mocks.sh */,
+				OBJ_183 /* README.md */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_53 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_54 /* Compat */,
+				OBJ_57 /* StateStorageTests.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		OBJ_54 /* Compat */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_55 /* LegacyKeychainSessionStorageTests.swift */,
+				OBJ_56 /* MigratingKeychainCompatStorageTests.swift */,
+			);
+			path = Compat;
+			sourceTree = "<group>";
+		};
+		OBJ_59 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_60 /* Cuckoo 1.4.1 */,
+				OBJ_111 /* JOSESwift 2.3.0 */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		OBJ_60 /* Cuckoo 1.4.1 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_61 /* Package.swift */,
+				OBJ_62 /* CuckooFunctions.swift */,
+				OBJ_63 /* DefaultValueRegistry.swift */,
+				OBJ_64 /* Initialization */,
+				OBJ_69 /* Matching */,
+				OBJ_78 /* Mock */,
+				OBJ_83 /* MockManager.swift */,
+				OBJ_84 /* Stubbing */,
+				OBJ_104 /* Utils.swift */,
+				OBJ_105 /* Verification */,
+			);
+			name = "Cuckoo 1.4.1";
+			path = .build/checkouts/Cuckoo/Source;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_64 /* Initialization */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_65 /* CreateMock.swift */,
+				OBJ_66 /* MockBuilder.swift */,
+				OBJ_67 /* MockManager+preconfigured.swift */,
+				OBJ_68 /* ThreadLocal.swift */,
+			);
+			path = Initialization;
+			sourceTree = "<group>";
+		};
+		OBJ_69 /* Matching */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_70 /* Array+matchers.swift */,
+				OBJ_71 /* CallMatcher.swift */,
+				OBJ_72 /* CallMatcherFunctions.swift */,
+				OBJ_73 /* Dictionary+matchers.swift */,
+				OBJ_74 /* Matchable.swift */,
+				OBJ_75 /* ParameterMatcher.swift */,
+				OBJ_76 /* ParameterMatcherFunctions.swift */,
+				OBJ_77 /* Set+matchers.swift */,
+			);
+			path = Matching;
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* AccountSDKIOSWeb */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_78 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_79 /* Mock.swift */,
+				OBJ_80 /* Mocked.swift */,
+				OBJ_81 /* StubbingProxy.swift */,
+				OBJ_82 /* VerificationProxy.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
+		OBJ_8 /* AccountSDKIOSWeb */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* Cache */,
+				OBJ_11 /* Client.swift */,
+				OBJ_12 /* HTTP */,
+				OBJ_15 /* JOSE */,
+				OBJ_19 /* LoginError.swift */,
+				OBJ_20 /* SchibstedAccountAPI.swift */,
+				OBJ_21 /* SimplifiedLoginData.swift */,
+				OBJ_22 /* Storage */,
+				OBJ_34 /* TokenHandler.swift */,
+				OBJ_35 /* URLExtensions.swift */,
+				OBJ_36 /* User.swift */,
+				OBJ_37 /* Version.swift */,
+			);
+			name = AccountSDKIOSWeb;
+			path = Sources/AccountSDKIOSWeb;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_84 /* Stubbing */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_85 /* Stub.swift */,
+				OBJ_86 /* StubAction.swift */,
+				OBJ_87 /* StubCall.swift */,
+				OBJ_88 /* StubFunction */,
+				OBJ_101 /* ToBeStubbedProperty */,
+			);
+			path = Stubbing;
+			sourceTree = "<group>";
+		};
+		OBJ_88 /* StubFunction */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_89 /* StubFunction.swift */,
+				OBJ_90 /* StubNoReturnFunction.swift */,
+				OBJ_91 /* StubNoReturnThrowingFunction.swift */,
+				OBJ_92 /* StubThrowingFunction.swift */,
+				OBJ_93 /* Trait */,
+			);
+			path = StubFunction;
+			sourceTree = "<group>";
+		};
+		OBJ_9 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* Cache.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		OBJ_93 /* Trait */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_94 /* BaseStubFunctionTrait.swift */,
+				OBJ_95 /* StubFunctionThenCallRealImplementationTrait.swift */,
+				OBJ_96 /* StubFunctionThenDoNothingTrait.swift */,
+				OBJ_97 /* StubFunctionThenReturnTrait.swift */,
+				OBJ_98 /* StubFunctionThenThrowTrait.swift */,
+				OBJ_99 /* StubFunctionThenThrowingTrait.swift */,
+				OBJ_100 /* StubFunctionThenTrait.swift */,
+			);
+			path = Trait;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A9941FD4257523C400513EED /* TestHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9941FE1257523C800513EED /* Build configuration list for PBXNativeTarget "TestHost" */;
+			buildPhases = (
+				A9941FD1257523C400513EED /* Sources */,
+				A9941FD2257523C400513EED /* Frameworks */,
+				A9941FD3257523C400513EED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestHost;
+			productName = TestHost;
+			productReference = A9941FD5257523C400513EED /* TestHost.app */;
+			productType = "com.apple.product-type.application";
+		};
+		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests" /* AccountSDKIOSWebKeychainTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_186 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebKeychainTests" */;
+			buildPhases = (
+				OBJ_189 /* Sources */,
+				OBJ_191 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_194 /* PBXTargetDependency */,
+				OBJ_196 /* PBXTargetDependency */,
+			);
+			name = AccountSDKIOSWebKeychainTests;
+			productName = AccountSDKIOSKeychainTests;
+			productReference = "AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"AccountSDKIOSWeb::AccountSDKIOSWeb" /* AccountSDKIOSWeb */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_198 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWeb" */;
+			buildPhases = (
+				OBJ_201 /* Sources */,
+				OBJ_225 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_227 /* PBXTargetDependency */,
+			);
+			name = AccountSDKIOSWeb;
+			productName = AccountSDKIOSWeb;
+			productReference = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"AccountSDKIOSWeb::AccountSDKIOSWebTests" /* AccountSDKIOSWebTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_241 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebTests" */;
+			buildPhases = (
+				OBJ_244 /* Sources */,
+				OBJ_258 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_262 /* PBXTargetDependency */,
+				OBJ_264 /* PBXTargetDependency */,
+				OBJ_265 /* PBXTargetDependency */,
+			);
+			name = AccountSDKIOSWebTests;
+			productName = AccountSDKIOSWebTests;
+			productReference = "AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"AccountSDKIOSWeb::SwiftPMPackageDescription" /* AccountSDKIOSWebPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_229 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebPackageDescription" */;
+			buildPhases = (
+				OBJ_232 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AccountSDKIOSWebPackageDescription;
+			productName = AccountSDKIOSWebPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"Cuckoo::Cuckoo" /* Cuckoo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_266 /* Build configuration list for PBXNativeTarget "Cuckoo" */;
+			buildPhases = (
+				OBJ_269 /* Sources */,
+				OBJ_310 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cuckoo;
+			productName = Cuckoo;
+			productReference = "Cuckoo::Cuckoo::Product" /* Cuckoo.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Cuckoo::SwiftPMPackageDescription" /* CuckooPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_312 /* Build configuration list for PBXNativeTarget "CuckooPackageDescription" */;
+			buildPhases = (
+				OBJ_315 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CuckooPackageDescription;
+			productName = CuckooPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"JOSESwift::JOSESwift" /* JOSESwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_317 /* Build configuration list for PBXNativeTarget "JOSESwift" */;
+			buildPhases = (
+				OBJ_320 /* Sources */,
+				OBJ_376 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JOSESwift;
+			productName = JOSESwift;
+			productReference = "JOSESwift::JOSESwift::Product" /* JOSESwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"JOSESwift::SwiftPMPackageDescription" /* JOSESwiftPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_378 /* Build configuration list for PBXNativeTarget "JOSESwiftPackageDescription" */;
+			buildPhases = (
+				OBJ_381 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JOSESwiftPackageDescription;
+			productName = JOSESwiftPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 9999;
+				LastSwiftUpdateCheck = 1220;
+				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					A9941FD4257523C400513EED = {
+						CreatedOnToolsVersion = 12.2;
+						ProvisioningStyle = Automatic;
+					};
+					"AccountSDKIOSWeb::AccountSDKIOSKeychainTests" = {
+						TestTargetID = A9941F76257505F400513EED;
+					};
+				};
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "AccountSDKIOSWeb" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_172 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"AccountSDKIOSWeb::AccountSDKIOSKeychainTests" /* AccountSDKIOSWebKeychainTests */,
+				"AccountSDKIOSWeb::AccountSDKIOSWeb" /* AccountSDKIOSWeb */,
+				"AccountSDKIOSWeb::SwiftPMPackageDescription" /* AccountSDKIOSWebPackageDescription */,
+				"AccountSDKIOSWeb::AccountSDKIOSWebPackageTests::ProductTarget" /* AccountSDKIOSWebPackageTests */,
+				"AccountSDKIOSWeb::AccountSDKIOSWebTests" /* AccountSDKIOSWebTests */,
+				"Cuckoo::Cuckoo" /* Cuckoo */,
+				"Cuckoo::SwiftPMPackageDescription" /* CuckooPackageDescription */,
+				"JOSESwift::JOSESwift" /* JOSESwift */,
+				"JOSESwift::SwiftPMPackageDescription" /* JOSESwiftPackageDescription */,
+				A9941FD4257523C400513EED /* TestHost */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A9941FD3257523C400513EED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */,
+				A9941FDC257523C800513EED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A9941FD1257523C400513EED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9941FDA257523C400513EED /* ContentView.swift in Sources */,
+				A9941FD8257523C400513EED /* TestHostApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_189 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_201 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_202 /* Cache.swift in Sources */,
+				OBJ_203 /* Client.swift in Sources */,
+				OBJ_204 /* HTTPClient.swift in Sources */,
+				OBJ_205 /* HTTPUtil.swift in Sources */,
+				OBJ_206 /* IdTokenValidator.swift in Sources */,
+				OBJ_207 /* JOSEUtil.swift in Sources */,
+				OBJ_208 /* JWKS.swift in Sources */,
+				OBJ_209 /* LoginError.swift in Sources */,
+				OBJ_210 /* SchibstedAccountAPI.swift in Sources */,
+				OBJ_211 /* SimplifiedLoginData.swift in Sources */,
+				OBJ_212 /* LegacyKeychainSessionStorage.swift in Sources */,
+				OBJ_213 /* LegacyKeychainTokenStorage.swift in Sources */,
+				OBJ_214 /* MigratingKeychainCompatStorage.swift in Sources */,
+				OBJ_215 /* Keychain.swift in Sources */,
+				OBJ_216 /* KeychainSessionStorage.swift in Sources */,
+				OBJ_217 /* SessionStorage.swift in Sources */,
+				OBJ_218 /* StateStorage.swift in Sources */,
+				OBJ_219 /* Storage.swift in Sources */,
+				OBJ_220 /* UserDefaultsStorage.swift in Sources */,
+				OBJ_221 /* TokenHandler.swift in Sources */,
+				OBJ_222 /* URLExtensions.swift in Sources */,
+				OBJ_223 /* User.swift in Sources */,
+				OBJ_224 /* Version.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_232 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_233 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_244 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_245 /* Await.swift in Sources */,
+				OBJ_246 /* ClientTests.swift in Sources */,
+				OBJ_247 /* Fixtures.swift in Sources */,
+				OBJ_248 /* GeneratedMocks.swift in Sources */,
+				OBJ_249 /* HTTPUtilTests.swift in Sources */,
+				OBJ_250 /* IdTokenValidatorTests.swift in Sources */,
+				OBJ_251 /* JOSEUtilTests.swift in Sources */,
+				OBJ_252 /* JWKSTests.swift in Sources */,
+				OBJ_253 /* JOSEUtil.swift in Sources */,
+				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
+				OBJ_255 /* MigratingKeychainCompatStorageTests.swift in Sources */,
+				OBJ_256 /* StateStorageTests.swift in Sources */,
+				OBJ_257 /* UserTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_269 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_270 /* CuckooFunctions.swift in Sources */,
+				OBJ_271 /* DefaultValueRegistry.swift in Sources */,
+				OBJ_272 /* CreateMock.swift in Sources */,
+				OBJ_273 /* MockBuilder.swift in Sources */,
+				OBJ_274 /* MockManager+preconfigured.swift in Sources */,
+				OBJ_275 /* ThreadLocal.swift in Sources */,
+				OBJ_276 /* Array+matchers.swift in Sources */,
+				OBJ_277 /* CallMatcher.swift in Sources */,
+				OBJ_278 /* CallMatcherFunctions.swift in Sources */,
+				OBJ_279 /* Dictionary+matchers.swift in Sources */,
+				OBJ_280 /* Matchable.swift in Sources */,
+				OBJ_281 /* ParameterMatcher.swift in Sources */,
+				OBJ_282 /* ParameterMatcherFunctions.swift in Sources */,
+				OBJ_283 /* Set+matchers.swift in Sources */,
+				OBJ_284 /* Mock.swift in Sources */,
+				OBJ_285 /* Mocked.swift in Sources */,
+				OBJ_286 /* StubbingProxy.swift in Sources */,
+				OBJ_287 /* VerificationProxy.swift in Sources */,
+				OBJ_288 /* MockManager.swift in Sources */,
+				OBJ_289 /* Stub.swift in Sources */,
+				OBJ_290 /* StubAction.swift in Sources */,
+				OBJ_291 /* StubCall.swift in Sources */,
+				OBJ_292 /* StubFunction.swift in Sources */,
+				OBJ_293 /* StubNoReturnFunction.swift in Sources */,
+				OBJ_294 /* StubNoReturnThrowingFunction.swift in Sources */,
+				OBJ_295 /* StubThrowingFunction.swift in Sources */,
+				OBJ_296 /* BaseStubFunctionTrait.swift in Sources */,
+				OBJ_297 /* StubFunctionThenCallRealImplementationTrait.swift in Sources */,
+				OBJ_298 /* StubFunctionThenDoNothingTrait.swift in Sources */,
+				OBJ_299 /* StubFunctionThenReturnTrait.swift in Sources */,
+				OBJ_300 /* StubFunctionThenThrowTrait.swift in Sources */,
+				OBJ_301 /* StubFunctionThenThrowingTrait.swift in Sources */,
+				OBJ_302 /* StubFunctionThenTrait.swift in Sources */,
+				OBJ_303 /* ToBeStubbedProperty.swift in Sources */,
+				OBJ_304 /* ToBeStubbedReadOnlyProperty.swift in Sources */,
+				OBJ_305 /* Utils.swift in Sources */,
+				OBJ_306 /* ArgumentCaptor.swift in Sources */,
+				OBJ_307 /* VerifyProperty.swift in Sources */,
+				OBJ_308 /* VerifyReadOnlyProperty.swift in Sources */,
+				OBJ_309 /* __DoNotUse.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_315 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_316 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_320 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_321 /* AESCBCEncryption.swift in Sources */,
+				OBJ_322 /* AESKeyWrappingMode.swift in Sources */,
+				OBJ_323 /* ASN1DEREncoding.swift in Sources */,
+				OBJ_324 /* ASN1DERParsing.swift in Sources */,
+				OBJ_325 /* AlgorithmExtensions.swift in Sources */,
+				OBJ_326 /* Algorithms.swift in Sources */,
+				OBJ_327 /* DeflateWrapper.swift in Sources */,
+				OBJ_328 /* Compressor.swift in Sources */,
+				OBJ_329 /* ContentEncryption.swift in Sources */,
+				OBJ_330 /* AES.swift in Sources */,
+				OBJ_331 /* DataECPrivateKey.swift in Sources */,
+				OBJ_332 /* DataECPublicKey.swift in Sources */,
+				OBJ_333 /* DataRSAPublicKey.swift in Sources */,
+				OBJ_334 /* DataSymmetricKey.swift in Sources */,
+				OBJ_335 /* EC.swift in Sources */,
+				OBJ_336 /* HMAC.swift in Sources */,
+				OBJ_337 /* RSA.swift in Sources */,
+				OBJ_338 /* SecKeyECPrivateKey.swift in Sources */,
+				OBJ_339 /* SecKeyECPublicKey.swift in Sources */,
+				OBJ_340 /* SecKeyRSAPublicKey.swift in Sources */,
+				OBJ_341 /* SecureRandom.swift in Sources */,
+				OBJ_342 /* Thumbprint.swift in Sources */,
+				OBJ_343 /* DataConvertible.swift in Sources */,
+				OBJ_344 /* DataExtensions.swift in Sources */,
+				OBJ_345 /* Decrypter.swift in Sources */,
+				OBJ_346 /* Deserializer.swift in Sources */,
+				OBJ_347 /* DirectEncryptionMode.swift in Sources */,
+				OBJ_348 /* ECKeyCodable.swift in Sources */,
+				OBJ_349 /* ECKeys.swift in Sources */,
+				OBJ_350 /* ECSigner.swift in Sources */,
+				OBJ_351 /* ECVerifier.swift in Sources */,
+				OBJ_352 /* Encrypter.swift in Sources */,
+				OBJ_353 /* JOSEHeader.swift in Sources */,
+				OBJ_354 /* JOSESwiftError.swift in Sources */,
+				OBJ_355 /* JWE.swift in Sources */,
+				OBJ_356 /* JWEHeader.swift in Sources */,
+				OBJ_357 /* JWK.swift in Sources */,
+				OBJ_358 /* JWKExtensions.swift in Sources */,
+				OBJ_359 /* JWKParameters.swift in Sources */,
+				OBJ_360 /* JWKSet.swift in Sources */,
+				OBJ_361 /* JWKSetCodable.swift in Sources */,
+				OBJ_362 /* JWS.swift in Sources */,
+				OBJ_363 /* JWSHeader.swift in Sources */,
+				OBJ_364 /* KeyManagementMode.swift in Sources */,
+				OBJ_365 /* Payload.swift in Sources */,
+				OBJ_366 /* RSAKeyCodable.swift in Sources */,
+				OBJ_367 /* RSAKeyEncryptionMode.swift in Sources */,
+				OBJ_368 /* RSAKeys.swift in Sources */,
+				OBJ_369 /* RSASigner.swift in Sources */,
+				OBJ_370 /* RSAVerifier.swift in Sources */,
+				OBJ_371 /* Serializer.swift in Sources */,
+				OBJ_372 /* Signer.swift in Sources */,
+				OBJ_373 /* SymmetricKeyCodable.swift in Sources */,
+				OBJ_374 /* SymmetricKeys.swift in Sources */,
+				OBJ_375 /* Verifier.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_381 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_382 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_194 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccountSDKIOSWeb::AccountSDKIOSWeb" /* AccountSDKIOSWeb */;
+			targetProxy = A9941F39257503F700513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_196 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "JOSESwift::JOSESwift" /* JOSESwift */;
+			targetProxy = A9941F3A257503F700513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_227 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "JOSESwift::JOSESwift" /* JOSESwift */;
+			targetProxy = A9941F35257503F700513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_238 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccountSDKIOSWeb::AccountSDKIOSWebTests" /* AccountSDKIOSWebTests */;
+			targetProxy = A9941F3E257503FA00513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_240 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccountSDKIOSWeb::AccountSDKIOSKeychainTests" /* AccountSDKIOSWebKeychainTests */;
+			targetProxy = A9941F3F257503FA00513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_262 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Cuckoo::Cuckoo" /* Cuckoo */;
+			targetProxy = A9941F36257503F700513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccountSDKIOSWeb::AccountSDKIOSWeb" /* AccountSDKIOSWeb */;
+			targetProxy = A9941F37257503F700513EED /* PBXContainerItemProxy */;
+		};
+		OBJ_265 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "JOSESwift::JOSESwift" /* JOSESwift */;
+			targetProxy = A9941F38257503F700513EED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A9941FE2257523C800513EED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"TestHost/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TestHost/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.schibsted.account.TestHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9941FE3257523C800513EED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_ASSET_PATHS = "\"TestHost/Preview Content\"";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TestHost/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.schibsted.account.TestHost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		OBJ_187 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSKeychainTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSKeychainTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_188 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSKeychainTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSKeychainTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSWeb_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = AccountSDKIOSWeb;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSWeb;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_200 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSWeb_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = AccountSDKIOSWeb;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSWeb;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_230 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_231 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_236 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_237 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_242 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSWebTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSWebTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_243 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/AccountSDKIOSWebTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = AccountSDKIOSWebTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_267 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/Cuckoo_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Cuckoo;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = Cuckoo;
+			};
+			name = Debug;
+		};
+		OBJ_268 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/Cuckoo_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Cuckoo;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = Cuckoo;
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+					"DEBUG=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_313 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 4.0.0";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		OBJ_314 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 4.0.0";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_318 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/JOSESwift_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = JOSESwift;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = JOSESwift;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_319 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccountSDKIOSWeb.xcodeproj/JOSESwift_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = JOSESwift;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = JOSESwift;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_379 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 5.2.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_380 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk -package-description-version 5.2.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A9941FE1257523C800513EED /* Build configuration list for PBXNativeTarget "TestHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9941FE2257523C800513EED /* Debug */,
+				A9941FE3257523C800513EED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_186 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebKeychainTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_187 /* Debug */,
+				OBJ_188 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_198 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWeb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_199 /* Debug */,
+				OBJ_200 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_2 /* Build configuration list for PBXProject "AccountSDKIOSWeb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_229 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_230 /* Debug */,
+				OBJ_231 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_235 /* Build configuration list for PBXAggregateTarget "AccountSDKIOSWebPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_236 /* Debug */,
+				OBJ_237 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_241 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_242 /* Debug */,
+				OBJ_243 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_266 /* Build configuration list for PBXNativeTarget "Cuckoo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_267 /* Debug */,
+				OBJ_268 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_312 /* Build configuration list for PBXNativeTarget "CuckooPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_313 /* Debug */,
+				OBJ_314 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_317 /* Build configuration list for PBXNativeTarget "JOSESwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_318 /* Debug */,
+				OBJ_319 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_378 /* Build configuration list for PBXNativeTarget "JOSESwiftPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_379 /* Debug */,
+				OBJ_380 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}
