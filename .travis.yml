@@ -3,4 +3,6 @@ osx_image: xcode12.2
 
 xcode_project: AccountSDKIOSWeb.xcodeproj
 xcode_destination: platform=iOS Simulator,OS=14.2,name=name=iPhone X
-xcode_scheme: AccountSDKIOSWebTests
+xcode_scheme:
+  - AccountSDKIOSWebTests
+  - AccountSDKIOSWebKeychainTests
