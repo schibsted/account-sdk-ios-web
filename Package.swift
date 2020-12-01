@@ -12,7 +12,7 @@ let package = Package(
             targets: ["AccountSDKIOSWeb"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.2.1"),
+        .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3.0"),
         .package(url: "https://github.com/Brightify/Cuckoo.git", from: "1.4.0"),
     ],
     targets: [
@@ -23,7 +23,7 @@ let package = Package(
             name: "AccountSDKIOSWebTests",
             dependencies: ["AccountSDKIOSWeb", "Cuckoo"]),
         .testTarget(
-            name: "AccountSDKIOSKeychainTests",
+            name: "AccountSDKIOSWebKeychainTests",
             dependencies: ["AccountSDKIOSWeb"]),
     ]
 )

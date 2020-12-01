@@ -1,0 +1,8 @@
+language: objective-c
+osx_image: xcode12.2
+
+xcode_project: AccountSDKIOSWeb.xcodeproj
+xcode_destination: platform=iOS Simulator,OS=14.2,name=iPhone 12
+xcode_scheme: AccountSDKIOSWebTests
+
+before_script: xcodebuild -resolvePackageDependencies -project AccountSDKIOSWeb.xcodeproj build
