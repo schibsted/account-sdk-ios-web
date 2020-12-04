@@ -174,7 +174,11 @@ public class Client {
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
                 // TODO log error
-                completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(error)")))
+                if case ASWebAuthenticationSessionError.canceledLogin? = error {
+                    completion(.failure(.canceled))
+                } else {
+                    completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(error)")))
+                }
                 return
             }
 
