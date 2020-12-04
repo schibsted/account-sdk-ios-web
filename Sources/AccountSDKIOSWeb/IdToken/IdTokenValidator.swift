@@ -1,6 +1,8 @@
 import Foundation
 
 internal struct IdTokenValidationContext {
+    let issuer: String
+    let clientId: String
     var nonce: String? = nil
     var expectedAMR: String? = nil
 }
@@ -11,6 +13,9 @@ public enum IdTokenValidationError: Error, Equatable {
     case missingIdToken
     case invalidNonce
     case missingExpectedAMRValue
+    case invalidIssuer
+    case invalidAudience
+    case expired
 }
 
 internal struct IdTokenValidator {
@@ -22,9 +27,25 @@ internal struct IdTokenValidator {
                     completion(.failure(.failedToDecodePayload))
                     return
                 }
-                /* TODO implement full ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation:
-                    iss, aud, exp, nonce
-                 */
+
+                // ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation
+
+                guard removeTrailingSlash(from: claims.iss) == removeTrailingSlash(from: context.issuer) else {
+                    completion(.failure(.invalidIssuer))
+                    return
+                }
+                
+                guard claims.aud.contains(context.clientId) else {
+                    completion(.failure(.invalidAudience))
+                    return
+                }
+
+                let now = Date().timeIntervalSince1970
+                guard claims.exp > now else {
+                    completion(.failure(.expired))
+                    return
+                }
+
                 guard claims.nonce == context.nonce else {
                     completion(.failure(.invalidNonce))
                     return
@@ -52,5 +73,13 @@ internal struct IdTokenValidator {
         }
         
         return false
+    }
+    
+    private static func removeTrailingSlash(from: String) -> String {
+        if (from.last == "/") {
+            return String(from.dropLast())
+        }
+        
+        return from
     }
 }

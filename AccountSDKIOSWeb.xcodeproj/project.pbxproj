@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A98A3A2A25768F36008ED111 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A3A2925768F36008ED111 /* IdTokenClaims.swift */; };
+		A98A3A3725768FD8008ED111 /* IdTokenClaimsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */; };
 		A9941FD8257523C400513EED /* TestHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD7257523C400513EED /* TestHostApp.swift */; };
 		A9941FDA257523C400513EED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD9257523C400513EED /* ContentView.swift */; };
 		A9941FDC257523C800513EED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDB257523C800513EED /* Assets.xcassets */; };
@@ -73,6 +75,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A98A3A2925768F36008ED111 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
+		A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
 		A9941FD5257523C400513EED /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9941FD7257523C400513EED /* TestHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostApp.swift; sourceTree = "<group>"; };
 		A9941FD9257523C400513EED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -162,6 +166,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A98A3A2225768C8E008ED111 /* IdToken */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_16 /* IdTokenValidator.swift */,
+				A98A3A2925768F36008ED111 /* IdTokenClaims.swift */,
+			);
+			path = IdToken;
+			sourceTree = "<group>";
+		};
+		A98A3A2325768CCF008ED111 /* IdToken */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_49 /* IdTokenValidatorTests.swift */,
+				A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */,
+			);
+			path = IdToken;
+			sourceTree = "<group>";
+		};
 		A9941FD6257523C400513EED /* TestHost */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,7 +216,6 @@
 		OBJ_15 /* JOSE */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_16 /* IdTokenValidator.swift */,
 				OBJ_17 /* JOSEUtil.swift */,
 				OBJ_18 /* JWKS.swift */,
 			);
@@ -270,6 +291,7 @@
 				OBJ_44 /* Fixtures.swift */,
 				OBJ_45 /* GeneratedMocks.swift */,
 				OBJ_46 /* HTTP */,
+				A98A3A2325768CCF008ED111 /* IdToken */,
 				OBJ_48 /* JOSE */,
 				OBJ_52 /* JOSEUtil.swift */,
 				OBJ_53 /* Storage */,
@@ -290,7 +312,6 @@
 		OBJ_48 /* JOSE */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_49 /* IdTokenValidatorTests.swift */,
 				OBJ_50 /* JOSEUtilTests.swift */,
 				OBJ_51 /* JWKSTests.swift */,
 			);
@@ -344,6 +365,7 @@
 				OBJ_9 /* Cache */,
 				OBJ_11 /* Client.swift */,
 				OBJ_12 /* HTTP */,
+				A98A3A2225768C8E008ED111 /* IdToken */,
 				OBJ_15 /* JOSE */,
 				OBJ_19 /* LoginError.swift */,
 				OBJ_20 /* SchibstedAccountAPI.swift */,
@@ -555,6 +577,7 @@
 				OBJ_220 /* UserDefaultsStorage.swift in Sources */,
 				OBJ_221 /* TokenHandler.swift in Sources */,
 				OBJ_222 /* URLExtensions.swift in Sources */,
+				A98A3A2A25768F36008ED111 /* IdTokenClaims.swift in Sources */,
 				OBJ_223 /* User.swift in Sources */,
 				OBJ_224 /* Version.swift in Sources */,
 			);
@@ -581,6 +604,7 @@
 				OBJ_251 /* JOSEUtilTests.swift in Sources */,
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
+				A98A3A3725768FD8008ED111 /* IdTokenClaimsTests.swift in Sources */,
 				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
 				OBJ_255 /* MigratingKeychainCompatStorageTests.swift in Sources */,
 				OBJ_256 /* StateStorageTests.swift in Sources */,

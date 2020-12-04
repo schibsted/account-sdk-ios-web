@@ -4,6 +4,7 @@ import Cuckoo
 
 final class ClientTests: XCTestCase {
     private let config = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+    private let idTokenClaims = Fixtures.idTokenClaims.copy(iss: "https://identity-pre.schibsted.com")
 
     private static let keyId = "test key"
     private static var jwsUtil: JWSUtil!
@@ -152,7 +153,7 @@ final class ClientTests: XCTestCase {
     }
 
     func testHandleAuthenticationResponseHandlesSuccessResponse() {
-        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
+        let idToken = createIdToken(claims: idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         
@@ -176,7 +177,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            let webFlowData = WebFlowData(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
             when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
             when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
         }
@@ -184,7 +185,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                XCTAssertEqual(result, .success(User(client: client, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: Fixtures.idTokenClaims)))
+                XCTAssertEqual(result, .success(User(client: client, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: self.idTokenClaims)))
                 done()
             }
         }
@@ -198,7 +199,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            let webFlowData = WebFlowData(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
             when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
             when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
         }
@@ -234,8 +235,8 @@ final class ClientTests: XCTestCase {
 
     func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
         let nonce = "testNonce"
-        let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nonce, amr: nil) // no AMR in ID Token
-        let idToken = createIdToken(claims: idTokenClaims)
+        let claims = idTokenClaims.copy(amr: OptionalValue(nil)) // no AMR in ID Token
+        let idToken = createIdToken(claims: claims)
         let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         
@@ -339,8 +340,8 @@ final class ClientTests: XCTestCase {
             when(mock.store(any())).thenDoNothing()
         }
 
-        let idTokenClaims = IdTokenClaims(sub: "userUuid", nonce: nil, amr: nil)
-        let idToken = createIdToken(claims: idTokenClaims)
+        let claims = idTokenClaims.copy(nonce: OptionalValue(nil), amr: OptionalValue(nil))
+        let idToken = createIdToken(claims: claims)
         let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
@@ -367,7 +368,7 @@ final class ClientTests: XCTestCase {
                                 accessToken: tokenResponse.access_token,
                                 refreshToken: tokenResponse.refresh_token,
                                 idToken: idToken,
-                                idTokenClaims: idTokenClaims)
+                                idTokenClaims: claims)
                 XCTAssertEqual(result, .success(user))
                 done()
             }

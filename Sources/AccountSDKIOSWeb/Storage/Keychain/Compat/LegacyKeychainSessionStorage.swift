@@ -31,22 +31,28 @@ class LegacyKeychainSessionStorage {
             return nil
         }
 
-        guard let idTokenClaims = unverifiedClaims(from: legacyTokenData.idToken),
-              let sub = idTokenClaims["sub"] as? String else {
+        guard let unverifiedIdTokenClaims = unverifiedClaims(from: legacyTokenData.idToken),
+              let sub = unverifiedIdTokenClaims["sub"] as? String else {
             return nil
         }
 
         let updatedAt: Date
-        if let issuedAt = idTokenClaims["iat"] as? Double {
+        if let issuedAt = unverifiedIdTokenClaims["iat"] as? Double {
             updatedAt = Date(timeIntervalSince1970: issuedAt)
         } else {
             updatedAt = Date()
         }
 
+        let idTokenClaims = IdTokenClaims(iss: unverifiedIdTokenClaims["iss"] as! String,
+                                          sub: sub,
+                                          aud: [],
+                                          exp: unverifiedIdTokenClaims["exp"] as! Double,
+                                          nonce: unverifiedIdTokenClaims["nonce"] as? String,
+                                          amr: nil)
         let userTokens = UserTokens(accessToken: legacyTokenData.accessToken,
                                     refreshToken: legacyTokenData.refreshToken,
                                     idToken: legacyTokenData.idToken,
-                                    idTokenClaims: IdTokenClaims(sub: sub, nonce: idTokenClaims["nonce"] as? String, amr: nil))
+                                    idTokenClaims: idTokenClaims)
         return UserSession(clientId: clientId, userTokens: userTokens, updatedAt: updatedAt)
     }
     

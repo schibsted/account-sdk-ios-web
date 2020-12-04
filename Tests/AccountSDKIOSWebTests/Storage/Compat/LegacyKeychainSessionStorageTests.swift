@@ -19,11 +19,13 @@ final class LegacyKeychainSessionStorageTests: XCTestCase {
     }
     
     func testGetLegacyTokenDataMappedToUserSession() throws {
+        let issuer = "https://issuer.example.com"
         let clientId = "client1"
         let sub = "userUuid"
+        let exp: Double = 123345
         let iat: Double = 1000
         let nonce = "testNonce"
-        let legacyTokenData = try createLegacyTokenData(clientId: clientId, sub: sub, iat: iat, nonce: nonce)
+        let legacyTokenData = try createLegacyTokenData(issuer: issuer, clientId: clientId, sub: sub, exp: exp, iat: iat, nonce: nonce)
 
         let mockTokenStorage = MockLegacyKeychainTokenStorage()
         stub(mockTokenStorage) { mock in
@@ -36,13 +38,15 @@ final class LegacyKeychainSessionStorageTests: XCTestCase {
         XCTAssertEqual(result?.userTokens.accessToken, legacyTokenData.accessToken)
         XCTAssertEqual(result?.userTokens.idToken, legacyTokenData.idToken)
         XCTAssertEqual(result?.userTokens.refreshToken, legacyTokenData.refreshToken)
-        XCTAssertEqual(result?.userTokens.idTokenClaims, IdTokenClaims(sub: sub, nonce: nonce, amr: nil))
+        XCTAssertEqual(result?.userTokens.idTokenClaims, IdTokenClaims(iss: issuer, sub: sub, aud: [], exp: exp, nonce: nonce, amr: nil))
     }
     
     func testGetReturnsNewestTokens() throws {
+        let issuer = "https://issuer.example.com"
         let clientId = "client1"
-        let oldestTokenData = try createLegacyTokenData(clientId: clientId, sub: "user1", iat: 1, nonce: "nonce1")
-        let newestTokenData = try createLegacyTokenData(clientId: clientId, sub: "user1", iat: 10, nonce: "nonce2")
+        let exp: Double = 12345
+        let oldestTokenData = try createLegacyTokenData(issuer: issuer, clientId: clientId, sub: "user1", exp: exp, iat: 1, nonce: "nonce1")
+        let newestTokenData = try createLegacyTokenData(issuer: issuer, clientId: clientId, sub: "user1", exp: exp, iat: 10, nonce: "nonce2")
 
         let mockTokenStorage = MockLegacyKeychainTokenStorage()
         stub(mockTokenStorage) { mock in
@@ -55,11 +59,11 @@ final class LegacyKeychainSessionStorageTests: XCTestCase {
         XCTAssertEqual(result?.userTokens.accessToken, newestTokenData.accessToken)
         XCTAssertEqual(result?.userTokens.idToken, newestTokenData.idToken)
         XCTAssertEqual(result?.userTokens.refreshToken, newestTokenData.refreshToken)
-        XCTAssertEqual(result?.userTokens.idTokenClaims, IdTokenClaims(sub: "user1", nonce: "nonce2", amr: nil))
+        XCTAssertEqual(result?.userTokens.idTokenClaims, IdTokenClaims(iss: issuer, sub: "user1", aud: [], exp: exp, nonce: "nonce2", amr: nil))
     }
     
     func testGetDiscardsTokenForOtherClient() throws {
-        let legacyTokenData = try createLegacyTokenData(clientId: "client1", sub: "userUuid", iat: 10, nonce: "testNonce")
+        let legacyTokenData = try createLegacyTokenData(issuer: "https://issuer.example.com", clientId: "client1", sub: "userUuid", exp: 12345, iat: 10, nonce: "testNonce")
         let mockTokenStorage = MockLegacyKeychainTokenStorage()
         stub(mockTokenStorage) { mock in
             when(mock.get()).thenReturn([legacyTokenData])
@@ -68,11 +72,11 @@ final class LegacyKeychainSessionStorageTests: XCTestCase {
         XCTAssertNil(LegacyKeychainSessionStorage(storage: mockTokenStorage).get(forClientId: "otherClient"))
     }
     
-    private func createLegacyTokenData(clientId: String, sub: String, iat: Double, nonce: String) throws -> LegacyTokenData {
+    private func createLegacyTokenData(issuer: String, clientId: String, sub: String, exp: Double, iat: Double, nonce: String) throws -> LegacyTokenData {
         let accessTokenData = try JSONSerialization.data(withJSONObject: ["client_id": clientId])
         let accessToken = LegacyKeychainSessionStorageTests.jwsUtil.createJWS(payload: accessTokenData, keyId: "testKeyId")
 
-        let idTokenData = try JSONSerialization.data(withJSONObject: ["sub": sub, "iat": iat, "nonce": nonce])
+        let idTokenData = try JSONSerialization.data(withJSONObject: ["iss": issuer, "sub": sub, "exp": exp, "iat": iat, "nonce": nonce])
         let idToken = LegacyKeychainSessionStorageTests.jwsUtil.createJWS(payload: idTokenData, keyId: "testKeyId")
 
         return LegacyTokenData(accessToken: accessToken, refreshToken: "refreshToken1", idToken: idToken)

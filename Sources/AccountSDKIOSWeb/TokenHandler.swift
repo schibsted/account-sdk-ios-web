@@ -6,13 +6,6 @@ internal enum TokenError: Error {
     case idTokenError(IdTokenValidationError)
 }
 
-public struct IdTokenClaims: Codable, Equatable {
-    let sub: String
-    let nonce: String?
-    let amr: [String]?
-    // TODO add other claims
-}
-
 internal struct TokenResult: CustomStringConvertible {
     let accessToken: String
     let refreshToken: String?

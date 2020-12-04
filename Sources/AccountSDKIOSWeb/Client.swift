@@ -3,6 +3,7 @@ import CommonCrypto
 import Foundation
 
 public struct ClientConfiguration {
+    public let issuer: String
     public let serverURL: URL
     public let clientId: String
     internal let clientSecret: String
@@ -23,6 +24,7 @@ public struct ClientConfiguration {
     
     public init(serverURL: URL, clientId: String, clientSecret: String, redirectURI: URL) {
         self.serverURL = serverURL
+        self.issuer = serverURL.absoluteString
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectURI = redirectURI
@@ -151,7 +153,8 @@ public class Client {
         schibstedAccountAPI.oauthExchange(for: User(client: self, session: mostRecentSession), clientId: configuration.clientId) { result in
             switch result {
             case .success(let result):
-                self.tokenHandler.makeTokenRequest(authCode: result.code, idTokenValidationContext: IdTokenValidationContext()) { self.handleTokenRequestResult($0, completion: completion)}
+                let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer, clientId: self.configuration.clientId)
+                self.tokenHandler.makeTokenRequest(authCode: result.code, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
             case .failure(_):
                 // TODO log error
                 completion(.failure(.unexpectedError(message: "Failed to obtain exchange code")))
@@ -258,7 +261,10 @@ public class Client {
             return
         }
 
-        let idTokenValidationContext = IdTokenValidationContext(nonce: storedData.nonce, expectedAMR: storedData.mfa?.rawValue)
+        let idTokenValidationContext = IdTokenValidationContext(issuer: configuration.issuer,
+                                                                clientId: configuration.clientId,
+                                                                nonce: storedData.nonce,
+                                                                expectedAMR: storedData.mfa?.rawValue)
         tokenHandler.makeTokenRequest(authCode: authCode, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
     }
 
