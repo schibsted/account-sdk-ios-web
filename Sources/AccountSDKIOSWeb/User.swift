@@ -61,7 +61,7 @@ extension User {
      *
      *  If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
      */
-    func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping (Result<T, HTTPError>) -> Void) {
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):

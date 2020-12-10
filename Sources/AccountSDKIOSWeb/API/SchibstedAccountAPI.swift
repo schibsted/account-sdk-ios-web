@@ -6,8 +6,32 @@ struct UserAgent {
     static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
 }
 
+private class APIRetryPolicy: RetryPolicy {
+    func shouldRetry(for error: HTTPError) -> Bool {
+        switch error {
+        case .errorResponse(code: let code, body: _):
+            // retry in case of intermittent service failure
+            if code >= 500 && code < 600 {
+                return true
+            }
+        case .unexpectedError(underlying: _):
+            // retry in case of intermittent connection problem
+            return true
+        case .noData:
+            return false
+        }
+
+        return false
+    }
+    
+    func numRetries(for: URLRequest) -> Int {
+        return 1
+    }
+}
+
 public class SchibstedAccountAPI {   
     private let baseURL: URL
+    private let retryPolicy = APIRetryPolicy()
 
     init(baseURL: URL) {
         self.baseURL = baseURL
@@ -34,7 +58,8 @@ public class SchibstedAccountAPI {
         request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
         request.httpBody = requestBody
 
-        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
+                                withRetryPolicy: retryPolicy) {
             completion(self.unpackResponse($0))
         }
     }
@@ -72,13 +97,16 @@ public class SchibstedAccountAPI {
         request.setValue(authorization , forHTTPHeaderField: "Authorization")
         request.httpBody = requestBody
         
-        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request), completion: completion)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
+                           withRetryPolicy: retryPolicy,
+                           completion: completion)
     }
 
     public func userProfile(for user: User, completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/user/\(user.uuid)")
         let request = URLRequest(url: url)
-        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
+                                withRetryPolicy: retryPolicy) {
             completion(self.unpackResponse($0))
         }
     }

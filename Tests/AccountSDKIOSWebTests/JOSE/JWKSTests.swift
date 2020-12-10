@@ -33,7 +33,7 @@ final class RemoteJWKSTests: XCTestCase {
                 XCTAssertEqual(cachedJwk!.parameters, self.testJWK.parameters)
                 
                 let closureMatcher: ParameterMatcher<(Result<JWKSResponse, HTTPError>) -> Void> = anyClosure()
-                verify(mockHTTPClient, times(0)).execute(request: any(), completion: closureMatcher)
+                verify(mockHTTPClient, times(0)).execute(request: any(), withRetryPolicy: any(), completion: closureMatcher)
                 
                 done()
             }
@@ -46,8 +46,8 @@ final class RemoteJWKSTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: keyId, kty: "RSA", e: testJWK.exponent, n: testJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
         }
@@ -65,8 +65,8 @@ final class RemoteJWKSTests: XCTestCase {
     func testGetKeyHandlesMissingKeyId() {       
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(JWKSResponse(keys: [])))
                 }
         }

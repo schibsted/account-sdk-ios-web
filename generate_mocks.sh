@@ -1,6 +1,7 @@
 ./cuckoo/run generate --testable AccountSDKIOSWeb \
   --output Tests/AccountSDKIOSWebTests/GeneratedMocks.swift \
   Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift \
+  Sources/AccountSDKIOSWeb/HTTP/URLSessionProtocol.swift \
   Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift \
   Sources/AccountSDKIOSWeb/Storage/Storage.swift \
   Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift \

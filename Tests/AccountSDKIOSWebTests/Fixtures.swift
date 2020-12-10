@@ -26,3 +26,7 @@ struct OptionalValue<T> {
         self.value = value
     }   
 }
+
+struct TestResponse: Codable, Equatable {
+    let data: String
+}

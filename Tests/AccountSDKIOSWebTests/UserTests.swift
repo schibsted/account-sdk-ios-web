@@ -2,10 +2,6 @@ import XCTest
 import Cuckoo
 @testable import AccountSDKIOSWeb
 
-private struct TestResponse: Decodable, Equatable {
-    let data: String
-}
-
 final class UserTests: XCTestCase {
     private let clientConfig = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
@@ -20,7 +16,7 @@ final class UserTests: XCTestCase {
     
     private func verifyAuthenticatedRequest(for mockHTTPClient: MockHTTPClient, withToken token: String) {
         let argumentCaptor = ArgumentCaptor<URLRequest>()
-        verify(mockHTTPClient).execute(request: argumentCaptor.capture(), completion: self.closureMatcher)
+        verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
         XCTAssertEqual(argumentCaptor.value!.value(forHTTPHeaderField: "Authorization"), "Bearer \(token)")
     }
 
@@ -28,8 +24,8 @@ final class UserTests: XCTestCase {
         let response = TestResponse(data: "test")
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(response))
                 }
         }
@@ -54,8 +50,8 @@ final class UserTests: XCTestCase {
     func testWithAuthenticationForwardsErrorResponse() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { (_, completion: (Result<TestResponse, HTTPError>) -> Void) in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
                     completion(.failure(.errorResponse(code: 400, body: "Bad request")))
                 }
         }
@@ -83,18 +79,18 @@ final class UserTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { (_, completion: (Result<TestResponse, HTTPError>) -> Void) in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
-                .then { _, completion in
+                .then { _, _, completion in
                     completion(.success(successResponse))
                 }
 
             // refresh token request
             let tokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
         }
@@ -108,7 +104,7 @@ final class UserTests: XCTestCase {
                     XCTAssertEqual(receivedResponse, successResponse)
                     
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
-                    verify(mockHTTPClient, times(2)).execute(request: argumentCaptor.capture(), completion: self.closureMatcher)
+                    verify(mockHTTPClient, times(2)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
                     let calls = argumentCaptor.allValues
                     // original token used in first request
                     XCTAssertEqual(calls[0].value(forHTTPHeaderField: "Authorization"), "Bearer accessToken")
@@ -126,8 +122,8 @@ final class UserTests: XCTestCase {
     func testWithAuthenticationForwards401ResponseWhenNoRefreshToken() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { (_, completion: (Result<TestResponse, HTTPError>) -> Void) in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
         }
@@ -153,15 +149,15 @@ final class UserTests: XCTestCase {
     func testWithAuthenticationForwardsOriginalResponseWhenTokenRefreshFails() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { (_, completion: (Result<TestResponse, HTTPError>) -> Void) in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
             
             // refresh token request
             let closureMatcher: ParameterMatcher<(Result<TokenResponse, HTTPError>) -> Void> = anyClosure()
-            when(mock.execute(request: any(), completion: closureMatcher))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
+                .then { _, _, completion in
                     completion(.failure(.errorResponse(code: 400, body: "{\"error\": \"invalid_grant\"}")))
                 }
         }
@@ -188,8 +184,8 @@ final class UserTests: XCTestCase {
         let sessionCode = "testSessionCode"
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: SessionExchangeResponse(code: sessionCode))))
                 }
         }

@@ -158,14 +158,14 @@ final class ClientTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
             
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
         }
@@ -217,8 +217,8 @@ final class ClientTests: XCTestCase {
         for (returnedResponse, expectedResult) in testData {
             let mockHTTPClient = MockHTTPClient()
             stub(mockHTTPClient) { mock in
-                when(mock.execute(request: any(), completion: anyClosure()))
-                    .then { (_, completion: (Result<TokenResponse, HTTPError>) -> Void) in
+                when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                    .then { (_, _, completion: (Result<TokenResponse, HTTPError>) -> Void) in
                         completion(.failure(returnedResponse))
                     }
             }
@@ -241,14 +241,14 @@ final class ClientTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
             
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
         }
@@ -302,8 +302,8 @@ final class ClientTests: XCTestCase {
         }
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock).execute(request: any(), completion: anyClosure())
-                .then { _, completion in
+            when(mock).execute(request: any(), withRetryPolicy: any(), completion: anyClosure())
+                .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: UserProfileResponse(email: "test123@example.com"))))
                 }
         }
@@ -345,18 +345,18 @@ final class ClientTests: XCTestCase {
         let tokenResponse = TokenResponse(access_token: "otherAccessToken", refresh_token: "otherRefreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: CodeExchangeResponse(code: "authCode"))))
                 }
 
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), completion: anyClosure()))
-                .then { _, completion in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
         }
