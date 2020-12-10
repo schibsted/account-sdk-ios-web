@@ -233,6 +233,8 @@ public class Client {
         let scopeString = scopes.joined(separator: " ")
 
         var authRequestParams = [
+            URLQueryItem(name: "client_id", value: configuration.clientId),
+            URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: scopeString),
             URLQueryItem(name: "state", value: state),
@@ -337,15 +339,11 @@ public class Client {
         guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             preconditionFailure("Failed to create URLComponents from \(url)")
         }
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: configuration.clientId),
-            URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
-        ]
-        urlComponents.queryItems?.append(contentsOf: queryItems)
+        urlComponents.queryItems = queryItems
+
         guard let finalUrl = urlComponents.url else {
             preconditionFailure("Failed to create URL from \(urlComponents)")
         }
-
         return finalUrl
     }
 }
