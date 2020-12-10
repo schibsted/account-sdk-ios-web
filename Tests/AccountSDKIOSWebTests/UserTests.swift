@@ -182,5 +182,31 @@ final class UserTests: XCTestCase {
                 done()
             }
         }
-    }   
+    }
+    
+    func testSessionExchangeReturnsCorrectURL() {
+        let sessionCode = "testSessionCode"
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), completion: anyClosure()))
+                .then { _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: SessionExchangeResponse(code: sessionCode))))
+                }
+        }
+
+        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        Await.until { done in
+            user.webSessionURL(clientId: "webClientId", redirectURI: "https://example.com/protected") { result in
+                switch result {
+                case .success(let url):
+                    XCTAssertEqual(url.absoluteString, "\(self.clientConfig.serverURL.absoluteString)/session/\(sessionCode)")
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+
+                done()
+            }
+        }
+    }
 }

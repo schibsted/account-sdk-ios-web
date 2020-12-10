@@ -347,7 +347,7 @@ final class ClientTests: XCTestCase {
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), completion: anyClosure()))
                 .then { _, completion in
-                    completion(.success(SchibstedAccountAPIResponse(data: OAuthCodeExchangeResponse(code: "authCode"))))
+                    completion(.success(SchibstedAccountAPIResponse(data: CodeExchangeResponse(code: "authCode"))))
                 }
 
             when(mock.execute(request: any(), completion: anyClosure()))

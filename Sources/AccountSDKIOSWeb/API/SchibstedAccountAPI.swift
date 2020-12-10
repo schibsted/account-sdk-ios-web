@@ -1,22 +1,6 @@
 import Foundation
 import UIKit
 
-internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
-    let data: T
-}
-
-struct OAuthCodeExchangeResponse: Codable {
-    let code: String
-}
-
-public struct UserProfileResponse: Codable {
-    public var givenName: String? = nil
-    public var familyName: String? = nil
-    public var displayName: String? = nil
-    public var email: String? = nil
-    public var phoneNumber: String? = nil
-}
-
 struct UserAgent {
     private static let deviceInfo = UIDevice.current
     static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
@@ -35,7 +19,7 @@ public class SchibstedAccountAPI {
         return requestWithHeaders
     }
 
-    internal func oauthExchange(for user: User, clientId: String, completion: @escaping (Result<OAuthCodeExchangeResponse, HTTPError>) -> Void) {
+    internal func codeExchange(for user: User, clientId: String, completion: @escaping (Result<CodeExchangeResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
             "type": "code",
@@ -55,6 +39,27 @@ public class SchibstedAccountAPI {
         }
     }
     
+    internal func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping (Result<SessionExchangeResponse, HTTPError>) -> Void) {
+        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
+        let parameters = [
+            "type": "session",
+            "clientId": clientId,
+            "redirectUri": redirectURI
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create OAuth token exchange request")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+            completion(self.unpackResponse($0))
+        }
+    }
+
     internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], authorization: String, completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {

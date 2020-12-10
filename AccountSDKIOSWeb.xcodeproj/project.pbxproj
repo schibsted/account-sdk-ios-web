@@ -15,6 +15,7 @@
 		A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDE257523C800513EED /* Preview Assets.xcassets */; };
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
+		A9C5A18A2577ECB300815DC8 /* SchibstedAccountAPIResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5A1892577ECB300815DC8 /* SchibstedAccountAPIResponses.swift */; };
 		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_202 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Cache.swift */; };
@@ -83,6 +84,7 @@
 		A9941FDB257523C800513EED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9941FDE257523C800513EED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A9941FE0257523C800513EED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9C5A1892577ECB300815DC8 /* SchibstedAccountAPIResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponses.swift; sourceTree = "<group>"; };
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,6 +204,15 @@
 				A9941FDE257523C800513EED /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A9C5A1882577EC8700815DC8 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_20 /* SchibstedAccountAPI.swift */,
+				A9C5A1892577ECB300815DC8 /* SchibstedAccountAPIResponses.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 		OBJ_12 /* HTTP */ = {
@@ -362,13 +373,13 @@
 		OBJ_8 /* AccountSDKIOSWeb */ = {
 			isa = PBXGroup;
 			children = (
+				A9C5A1882577EC8700815DC8 /* API */,
 				OBJ_9 /* Cache */,
 				OBJ_11 /* Client.swift */,
 				OBJ_12 /* HTTP */,
 				A98A3A2225768C8E008ED111 /* IdToken */,
 				OBJ_15 /* JOSE */,
 				OBJ_19 /* LoginError.swift */,
-				OBJ_20 /* SchibstedAccountAPI.swift */,
 				OBJ_21 /* SimplifiedLoginData.swift */,
 				OBJ_22 /* Storage */,
 				OBJ_34 /* TokenHandler.swift */,
@@ -559,6 +570,7 @@
 				OBJ_202 /* Cache.swift in Sources */,
 				OBJ_203 /* Client.swift in Sources */,
 				OBJ_204 /* HTTPClient.swift in Sources */,
+				A9C5A18A2577ECB300815DC8 /* SchibstedAccountAPIResponses.swift in Sources */,
 				OBJ_205 /* HTTPUtil.swift in Sources */,
 				OBJ_206 /* IdTokenValidator.swift in Sources */,
 				OBJ_207 /* JOSEUtil.swift in Sources */,

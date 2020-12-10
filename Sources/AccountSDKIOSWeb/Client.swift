@@ -150,7 +150,7 @@ public class Client {
         // TODO verify client id is not already in session, should be logged as warn/error as then session should have been resumable
 
         // TODO this only works for clients belonging to the same merchant
-        schibstedAccountAPI.oauthExchange(for: User(client: self, session: mostRecentSession), clientId: configuration.clientId) { result in
+        schibstedAccountAPI.codeExchange(for: User(client: self, session: mostRecentSession), clientId: configuration.clientId) { result in
             switch result {
             case .success(let result):
                 let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer, clientId: self.configuration.clientId)

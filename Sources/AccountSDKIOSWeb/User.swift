@@ -33,6 +33,19 @@ public class User: Equatable {
         client.sessionStorage.remove(forClientId: client.configuration.clientId)
     }
     
+    public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping (Result<URL, HTTPError>) -> Void) {
+        let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
+        api.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
+            switch result {
+            case .success(let response):
+                let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
+                completion(.success(url))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
             && lhs.client.configuration.clientId == rhs.client.configuration.clientId
