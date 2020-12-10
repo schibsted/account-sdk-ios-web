@@ -55,8 +55,8 @@ public struct SessionStorageConfig {
 }
 
 @available(iOS 12.0, *)
-private class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return ASPresentationAnchor()
     }
 }
@@ -192,17 +192,29 @@ public class Client {
     
     @available(iOS 12.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping (Result<User, LoginError>) -> Void) {
-        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+        let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         session.start()
     }
     
     @available(iOS 13.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping (Result<User, LoginError>) -> Void) {
-        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         let contextProvider = ASWebAuthSessionContextProvider()
+        let session = getLoginSession(contextProvider: contextProvider, withMFA: withMFA, extraScopeValues: extraScopeValues, withSSO: withSSO, completion: completion)
+        session.start()
+    }
+    
+    @available(iOS 12.0, *)
+    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping (Result<User, LoginError>) -> Void) -> ASWebAuthenticationSession {
+        return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+    }
+    
+    @available(iOS 13.0, *)
+    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping (Result<User, LoginError>) -> Void) -> ASWebAuthenticationSession {
+        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
-        session.start()
+        
+        return session
     }
     
     public func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
