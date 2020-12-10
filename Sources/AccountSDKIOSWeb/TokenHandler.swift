@@ -19,7 +19,7 @@ internal struct TokenResult: CustomStringConvertible {
             + "accessToken: \(removeSignature(fromToken: accessToken)),\n"
             + "refreshToken: \(removeSignature(fromToken: refreshToken)),\n"
             + "idToken: \(removeSignature(fromToken: idToken)),\n"
-            + "idToken: \(idTokenClaims),\n"
+            + "idTokenClaims: \(idTokenClaims),\n"
             + "scope: \(scope ?? ""),\n"
             + "expiresIn: \(expiresIn))"
         
@@ -72,12 +72,17 @@ internal class TokenHandler {
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
-        tokenRequest(parameters: [
+    func makeTokenRequest(authCode: String, codeVerifier: String? = nil, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+        var parameters = [
             "grant_type": "authorization_code",
             "code": authCode,
-            "redirect_uri": configuration.redirectURI.absoluteString
-        ]) { result in
+            "redirect_uri": configuration.redirectURI.absoluteString,
+        ]
+        if let codeVerifier = codeVerifier {
+            parameters["code_verifier"] = codeVerifier
+        }
+        
+        tokenRequest(parameters: parameters) { result in
             switch result {
             case .success(let tokenResponse):
                 guard let idToken = tokenResponse.id_token else {

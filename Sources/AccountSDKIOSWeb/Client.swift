@@ -66,6 +66,7 @@ public class Client {
     
     internal static let webFlowLoginStateKey = "WebFlowLoginState"
     private static let keychainServiceName = "com.schibsted.account"
+    private static let defaultScopeValues = ["openid", "offline_access"]
     
     internal let sessionStorage: SessionStorage
     internal let httpClient: HTTPClient
@@ -228,9 +229,9 @@ public class Client {
             return nil;
         }
 
-        var scopes = Set(extraScopeValues)
-        scopes.insert("openid")
+        let scopes = extraScopeValues.union(Client.defaultScopeValues)
         let scopeString = scopes.joined(separator: " ")
+        let codeChallenge = computeCodeChallenge(from: codeVerifier)
 
         var authRequestParams = [
             URLQueryItem(name: "client_id", value: configuration.clientId),
@@ -239,7 +240,7 @@ public class Client {
             URLQueryItem(name: "scope", value: scopeString),
             URLQueryItem(name: "state", value: state),
             URLQueryItem(name: "nonce", value: nonce),
-            URLQueryItem(name: "code_challenge", value: codeChallenge(from: codeVerifier)),
+            URLQueryItem(name: "code_challenge", value: codeChallenge),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
         if let mfa = withMFA {
@@ -279,7 +280,11 @@ public class Client {
                                                                 clientId: configuration.clientId,
                                                                 nonce: storedData.nonce,
                                                                 expectedAMR: storedData.mfa?.rawValue)
-        tokenHandler.makeTokenRequest(authCode: authCode, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
+        tokenHandler.makeTokenRequest(authCode: authCode,
+                                      codeVerifier: storedData.codeVerifier,
+                                      idTokenValidationContext: idTokenValidationContext) {
+            self.handleTokenRequestResult($0, completion: completion)
+        }
     }
 
     private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: (Result<User, LoginError>) -> Void) {
@@ -315,7 +320,7 @@ public class Client {
         return String((0..<length).map { _ in letters.randomElement()! })
     }
     
-    private func codeChallenge(from codeVerifier: String) -> String {
+    private func computeCodeChallenge(from codeVerifier: String) -> String {
         func base64url(data: Data) -> String {
             let base64url = data.base64EncodedString()
                 .replacingOccurrences(of: "/", with: "_")
@@ -326,8 +331,9 @@ public class Client {
 
         func sha256(data: Data) -> Data {
             var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-            var mutableData = data
-            _ = CC_SHA256(&mutableData, CC_LONG(mutableData.count), &hash)
+            data.withUnsafeBytes {
+                _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
+            }
             return Data(hash)
         }
 

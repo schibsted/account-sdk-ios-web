@@ -12,6 +12,11 @@ final class ClientTests: XCTestCase {
     override class func setUp() {
         jwsUtil = JWSUtil()
     }
+    
+    private func compareScope(_ receivedScope: String, _ expectedScope: Set<String>) {
+        let scope = Set(receivedScope.components(separatedBy: " "))
+        XCTAssertEqual(scope, expectedScope)
+    }
 
     func testLoginURL() {
         let mockStorage = MockStorage()
@@ -35,7 +40,7 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
         XCTAssertEqual(queryParams!["prompt"], "select_account")
-        XCTAssertEqual(queryParams!["scope"], "openid")
+        compareScope(queryParams!["scope"]!, Set(["openid", "offline_access"]))
         XCTAssertNotNil(queryParams!["state"])
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])
@@ -59,12 +64,11 @@ final class ClientTests: XCTestCase {
             result[item.name] = item.value
         }
 
-        let scope = Set(queryParams!["scope"]!.components(separatedBy: " "))
         XCTAssertEqual(queryParams!["client_id"], config.clientId)
         XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
         XCTAssertEqual(queryParams!["prompt"], "select_account")
-        XCTAssertEqual(scope, Set(["openid", "scope1", "scope2"]))
+        compareScope(queryParams!["scope"]!, Set(["openid", "offline_access", "scope1", "scope2"]))
         XCTAssertNotNil(queryParams!["state"])
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])
@@ -94,7 +98,7 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(queryParams!["client_id"], config.clientId)
         XCTAssertEqual(queryParams!["redirect_uri"], config.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
-        XCTAssertEqual(queryParams!["scope"], "openid")
+        compareScope(queryParams!["scope"]!, Set(["openid", "offline_access"]))
         XCTAssertNotNil(queryParams!["state"])
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])

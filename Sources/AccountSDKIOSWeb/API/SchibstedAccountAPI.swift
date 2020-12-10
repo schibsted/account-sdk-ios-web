@@ -95,6 +95,7 @@ public class SchibstedAccountAPI {
         request.httpMethod = "POST"
         request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
         request.setValue(authorization , forHTTPHeaderField: "Authorization")
+        request.setValue("v1", forHTTPHeaderField: "X-OIDC")
         request.httpBody = requestBody
         
         httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
