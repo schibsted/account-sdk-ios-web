@@ -3,7 +3,7 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class ClientTests: XCTestCase {
-    private let config = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+    private let config = ClientConfiguration(environment: .pre, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     private let idTokenClaims = Fixtures.idTokenClaims.copy(iss: "https://identity-pre.schibsted.com")
 
     private static let keyId = "test key"

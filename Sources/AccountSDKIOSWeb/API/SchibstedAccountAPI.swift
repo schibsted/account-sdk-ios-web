@@ -85,7 +85,7 @@ public class SchibstedAccountAPI {
         }
     }
 
-    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], authorization: String, completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
+    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create token request")
@@ -94,7 +94,6 @@ public class SchibstedAccountAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
-        request.setValue(authorization , forHTTPHeaderField: "Authorization")
         request.setValue("v1", forHTTPHeaderField: "X-OIDC")
         request.httpBody = requestBody
         

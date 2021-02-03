@@ -74,6 +74,7 @@ internal class TokenHandler {
 
     func makeTokenRequest(authCode: String, codeVerifier: String? = nil, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         var parameters = [
+            "client_id": configuration.clientId,
             "grant_type": "authorization_code",
             "code": authCode,
             "redirect_uri": configuration.redirectURI.absoluteString,
@@ -82,7 +83,7 @@ internal class TokenHandler {
             parameters["code_verifier"] = codeVerifier
         }
         
-        tokenRequest(parameters: parameters) { result in
+        schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters) { result in
             switch result {
             case .success(let tokenResponse):
                 guard let idToken = tokenResponse.id_token else {
@@ -115,16 +116,12 @@ internal class TokenHandler {
     
     func makeTokenRequest(refreshToken: String, scope: String? = nil, completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
         var parameters = [
+            "client_id": configuration.clientId,
             "grant_type": "refresh_token",
             "refresh_token": refreshToken,
         ]
         scope.map { parameters["scope"] = $0 }
 
-        tokenRequest(parameters: parameters, completion: completion)
-    }
-    
-    internal func tokenRequest(parameters: [String: String], completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
-        let credentials = HTTPUtil.basicAuth(username: configuration.clientId, password: configuration.clientSecret)
-        schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters, authorization: credentials, completion: completion)
+        schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters, completion: completion)
     }
 }

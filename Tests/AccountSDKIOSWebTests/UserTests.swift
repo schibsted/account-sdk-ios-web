@@ -3,7 +3,7 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class UserTests: XCTestCase {
-    private let clientConfig = ClientConfiguration(environment: .pre, clientId: "client1", clientSecret: "clientSecret", redirectURI: URL("com.example.client1://login"))
+    private let clientConfig = ClientConfiguration(environment: .pre, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
     private let closureMatcher: ParameterMatcher<(Result<TestResponse, HTTPError>) -> Void> = anyClosure()
     

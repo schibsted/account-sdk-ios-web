@@ -6,7 +6,6 @@ public struct ClientConfiguration {
     public let issuer: String
     public let serverURL: URL
     public let clientId: String
-    internal let clientSecret: String
     public let redirectURI: URL
     
     public enum Environment: String {
@@ -15,18 +14,16 @@ public struct ClientConfiguration {
         case pre = "https://identity-pre.schibsted.com"
     }
     
-    public init(environment: Environment, clientId: String, clientSecret: String, redirectURI: URL) {
+    public init(environment: Environment, clientId: String, redirectURI: URL) {
         self.init(serverURL: URL(string: environment.rawValue)!, // TODO handle without forceful unwrap?
                   clientId: clientId,
-                  clientSecret: clientSecret,
                   redirectURI: redirectURI)
     }
     
-    public init(serverURL: URL, clientId: String, clientSecret: String, redirectURI: URL) {
+    public init(serverURL: URL, clientId: String, redirectURI: URL) {
         self.serverURL = serverURL
         self.issuer = serverURL.absoluteString
         self.clientId = clientId
-        self.clientSecret = clientSecret
         self.redirectURI = redirectURI
     }
 }
