@@ -46,6 +46,10 @@ public class User: Equatable {
         }
     }
     
+    public func fetchProfileData(completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
+        client.schibstedAccountAPI.userProfile(for: self, completion: completion)
+    }
+        
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
             && lhs.client.configuration.clientId == rhs.client.configuration.clientId

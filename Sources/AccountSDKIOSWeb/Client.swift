@@ -68,9 +68,9 @@ public class Client {
     internal let sessionStorage: SessionStorage
     internal let httpClient: HTTPClient
     internal let tokenHandler: TokenHandler
+    internal let schibstedAccountAPI: SchibstedAccountAPI
     
     private let stateStorage: StateStorage
-    private let schibstedAccountAPI: SchibstedAccountAPI
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
