@@ -9,8 +9,4 @@ final class HTTPUtilTests: XCTestCase {
         XCTAssertTrue(result.contains("test1=test+value"))
         XCTAssertTrue(result.contains("url=https%3A%2F%2Fexample.com%2Ftest%3Fkey1%3Dvalue1%26key2%3Dvalue2"))
     }
-    
-    func testbasicAuth() {
-        XCTAssertEqual(HTTPUtil.basicAuth(username: "foo", password: "bar"), "Basic Zm9vOmJhcg")
-    }
 }

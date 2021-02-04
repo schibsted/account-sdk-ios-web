@@ -222,7 +222,7 @@ final class ClientTests: XCTestCase {
             let mockHTTPClient = MockHTTPClient()
             stub(mockHTTPClient) { mock in
                 when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                    .then { (_, _, completion: (Result<TokenResponse, HTTPError>) -> Void) in
+                    .then { (_, _, completion: HTTPResultHandler<TokenResponse>) in
                         completion(.failure(returnedResponse))
                     }
             }

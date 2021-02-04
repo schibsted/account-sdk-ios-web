@@ -33,7 +33,7 @@ public class User: Equatable {
         client.sessionStorage.remove(forClientId: client.configuration.clientId)
     }
     
-    public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping (Result<URL, HTTPError>) -> Void) {
+    public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>) {
         let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
         api.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
             switch result {
@@ -46,7 +46,7 @@ public class User: Equatable {
         }
     }
     
-    public func fetchProfileData(completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
+    public func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         client.schibstedAccountAPI.userProfile(for: self, completion: completion)
     }
         
@@ -65,7 +65,7 @@ extension User {
      *
      *  If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
      */
-    func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):
@@ -82,7 +82,6 @@ extension User {
                         switch tokenRefreshResult {
                         case .success(let tokenResponse):
                             // TODO log info about successful token refresh
-                            // TODO handle ID Token in refresh token response?
                             self.accessToken = tokenResponse.access_token
                             if let newRefreshToken = tokenResponse.refresh_token {
                                 self.refreshToken = newRefreshToken
@@ -104,7 +103,7 @@ extension User {
         }
     }
     
-    private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         var requestCopy = request
         requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         client.httpClient.execute(request: requestCopy, completion: completion)

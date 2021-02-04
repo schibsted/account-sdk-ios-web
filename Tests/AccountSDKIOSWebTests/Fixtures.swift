@@ -30,3 +30,13 @@ struct OptionalValue<T> {
 struct TestResponse: Codable, Equatable {
     let data: String
 }
+
+extension URL {
+    init(_ string: StaticString) {
+        guard let url = URL(string: "\(string)") else {
+            preconditionFailure("Invalid static URL string: \(string)")
+        }
+
+        self = url
+    }
+}

@@ -5,7 +5,7 @@ import Cuckoo
 final class UserTests: XCTestCase {
     private let clientConfig = ClientConfiguration(environment: .pre, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
-    private let closureMatcher: ParameterMatcher<(Result<TestResponse, HTTPError>) -> Void> = anyClosure()
+    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
     
     private static let keyId = "test key"
     private static var jwsUtil: JWSUtil!
@@ -51,7 +51,7 @@ final class UserTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
+                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 400, body: "Bad request")))
                 }
         }
@@ -80,7 +80,7 @@ final class UserTests: XCTestCase {
 
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
+                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
                 .then { _, _, completion in
@@ -123,7 +123,7 @@ final class UserTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
+                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
         }
@@ -150,12 +150,12 @@ final class UserTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                .then { (_, _, completion: (Result<TestResponse, HTTPError>) -> Void) in
+                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
             
             // refresh token request
-            let closureMatcher: ParameterMatcher<(Result<TokenResponse, HTTPError>) -> Void> = anyClosure()
+            let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
                 .then { _, _, completion in
                     completion(.failure(.errorResponse(code: 400, body: "{\"error\": \"invalid_grant\"}")))

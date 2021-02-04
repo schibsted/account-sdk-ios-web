@@ -18,7 +18,7 @@ public enum IdTokenValidationError: Error, Equatable {
     case expired
 }
 
-internal struct IdTokenValidator {
+internal enum IdTokenValidator {
     static func validate(idToken: String, jwks: JWKS, context: IdTokenValidationContext, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
         JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
             switch result {

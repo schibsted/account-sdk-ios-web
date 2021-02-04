@@ -32,7 +32,7 @@ final class RemoteJWKSTests: XCTestCase {
                 XCTAssertEqual(cachedJwk!.keyType, self.testJWK.keyType)
                 XCTAssertEqual(cachedJwk!.parameters, self.testJWK.parameters)
                 
-                let closureMatcher: ParameterMatcher<(Result<JWKSResponse, HTTPError>) -> Void> = anyClosure()
+                let closureMatcher: ParameterMatcher<HTTPResultHandler<JWKSResponse>> = anyClosure()
                 verify(mockHTTPClient, times(0)).execute(request: any(), withRetryPolicy: any(), completion: closureMatcher)
                 
                 done()

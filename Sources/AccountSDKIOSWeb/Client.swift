@@ -2,6 +2,8 @@ import AuthenticationServices
 import CommonCrypto
 import Foundation
 
+public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
+
 public struct ClientConfiguration {
     public let issuer: String
     public let serverURL: URL
@@ -15,7 +17,7 @@ public struct ClientConfiguration {
     }
     
     public init(environment: Environment, clientId: String, redirectURI: URL) {
-        self.init(serverURL: URL(string: environment.rawValue)!, // TODO handle without forceful unwrap?
+        self.init(serverURL: URL(string: environment.rawValue)!,
                   clientId: clientId,
                   redirectURI: redirectURI)
     }
@@ -138,7 +140,7 @@ public class Client {
         }
     }
     
-    public func performSimplifiedLogin(completion: @escaping (Result<User, LoginError>) -> Void) {
+    public func performSimplifiedLogin(completion: @escaping LoginResultHandler) {
         guard let mostRecentSession = getMostRecentSession() else {
             // TODO add log message
             completion(.failure(.unexpectedError(message: "No user sessions found")))
@@ -167,7 +169,7 @@ public class Client {
     }
     
     @available(iOS 12.0, *)
-    private func createWebAuthenticationSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping (Result<User, LoginError>) -> Void) -> ASWebAuthenticationSession {
+    private func createWebAuthenticationSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let clientScheme = configuration.redirectURI.scheme
         guard let url = loginURL(withMFA: withMFA, extraScopeValues: extraScopeValues) else {
             preconditionFailure("Couldn't create loginURL")
@@ -189,25 +191,25 @@ public class Client {
     }
     
     @available(iOS 12.0, *)
-    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping (Result<User, LoginError>) -> Void) {
+    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) {
         let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         session.start()
     }
     
     @available(iOS 13.0, *)
-    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping (Result<User, LoginError>) -> Void) {
+    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) {
         let contextProvider = ASWebAuthSessionContextProvider()
         let session = getLoginSession(contextProvider: contextProvider, withMFA: withMFA, extraScopeValues: extraScopeValues, withSSO: withSSO, completion: completion)
         session.start()
     }
     
     @available(iOS 12.0, *)
-    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping (Result<User, LoginError>) -> Void) -> ASWebAuthenticationSession {
+    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
     }
     
     @available(iOS 13.0, *)
-    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping (Result<User, LoginError>) -> Void) -> ASWebAuthenticationSession {
+    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
@@ -215,7 +217,7 @@ public class Client {
         return session
     }
     
-    public func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
+    internal func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
@@ -253,7 +255,7 @@ public class Client {
         )
     }
     
-    public func handleAuthenticationResponse(url: URL, completion: @escaping (Result<User, LoginError>) -> Void) {
+    public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
         // Check if coming back after triggered web flow login
         guard let storedData: WebFlowData = stateStorage.value(forKey: type(of: self).webFlowLoginStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
@@ -284,10 +286,9 @@ public class Client {
         }
     }
 
-    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: (Result<User, LoginError>) -> Void) {
+    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: LoginResultHandler) {
         switch result {
         case .success(let tokenResult):
-            print(tokenResult) // TODO
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: UserTokens(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims),
                                           updatedAt: Date())

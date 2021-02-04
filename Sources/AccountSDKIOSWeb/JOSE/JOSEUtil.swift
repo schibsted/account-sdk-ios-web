@@ -24,7 +24,7 @@ internal extension JWK {
     }
 }
 
-internal class JOSEUtil {
+internal enum JOSEUtil {
     internal static func verifySignature(of serialisedJWS: String, withKeys jwks: JWKS, completion: @escaping (Result<Data, SignatureValidationError>) -> Void) {
         guard let jws = try? JWS(compactSerialization: serialisedJWS) else {
             completion(.failure(.invalidJWS))

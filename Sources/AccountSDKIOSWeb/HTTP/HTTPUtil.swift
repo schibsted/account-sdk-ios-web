@@ -1,6 +1,6 @@
 import Foundation
 
-struct HTTPUtil {
+internal enum HTTPUtil {
     static let xWWWFormURLEncodedContentType = "application/x-www-form-urlencoded"
     
     private static let formEncodeAllowedCharacters: CharacterSet = {
@@ -20,26 +20,9 @@ struct HTTPUtil {
         
         return encoded
     }
-    
-    public static func basicAuth(username: String, password: String) -> String {
-        let encoded = base64URLEncode("\(username):\(password)")
-        return "Basic \(encoded)"
-    }
-      
+          
     private static func formURLEncodeValue(_ value: String) -> String {
         let encoded = value.addingPercentEncoding(withAllowedCharacters: HTTPUtil.formEncodeAllowedCharacters) ?? ""
         return encoded.replacingOccurrences(of: " ", with: "+")
-    }
-    
-    private static func base64URLEncode(_ value: String) -> String {
-        guard let data = value.data(using: .utf8) else {
-            preconditionFailure("Failed to encode data for base64")
-        }
-
-        let result = data.base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
-        return result
     }
 }

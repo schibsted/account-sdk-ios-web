@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-struct UserAgent {
+internal enum UserAgent {
     private static let deviceInfo = UIDevice.current
     static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
 }
@@ -43,7 +43,7 @@ public class SchibstedAccountAPI {
         return requestWithHeaders
     }
 
-    internal func codeExchange(for user: User, clientId: String, completion: @escaping (Result<CodeExchangeResponse, HTTPError>) -> Void) {
+    internal func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
             "type": "code",
@@ -64,7 +64,7 @@ public class SchibstedAccountAPI {
         }
     }
     
-    internal func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping (Result<SessionExchangeResponse, HTTPError>) -> Void) {
+    internal func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
             "type": "session",
@@ -85,7 +85,7 @@ public class SchibstedAccountAPI {
         }
     }
 
-    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping (Result<TokenResponse, HTTPError>) -> Void) {
+    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create token request")
@@ -102,7 +102,7 @@ public class SchibstedAccountAPI {
                            completion: completion)
     }
 
-    public func userProfile(for user: User, completion: @escaping (Result<UserProfileResponse, HTTPError>) -> Void) {
+    public func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/user/\(user.uuid)")
         let request = URLRequest(url: url)
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),

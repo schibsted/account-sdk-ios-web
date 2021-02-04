@@ -7,7 +7,7 @@ public class HTTPClientWithURLSession: HTTPClient {
         self.session = session
     }
     
-    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>) {
         func retry(_ attempts: Int) {
             execute(request: request) { (result: Result<T, HTTPError>) in
                 switch result {
@@ -27,7 +27,7 @@ public class HTTPClientWithURLSession: HTTPClient {
         retry(withRetryPolicy.numRetries(for: request))
     }
 
-    private func execute<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, HTTPError>) -> Void) {
+    private func execute<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let requestError = error {
                 completion(.failure(.unexpectedError(underlying: requestError)))
@@ -35,7 +35,7 @@ public class HTTPClientWithURLSession: HTTPClient {
             }
             
             if let httpResponse = response as? HTTPURLResponse,
-                  !(200...399).contains(httpResponse.statusCode) { // TODO handle any other non-200 statuses?
+                  !(200...399).contains(httpResponse.statusCode) {
                 let errorBody = data.map { String(decoding: $0, as: UTF8.self) }
                 completion(.failure(.errorResponse(code: httpResponse.statusCode, body: errorBody)))
                 return
