@@ -12,7 +12,7 @@ internal class KeychainSessionStorage: SessionStorage {
              fatalError("Failed to JSON encode user tokens for storage")
         }
         
-        keychain.addValue(tokenData, forAccount: value.clientId)
+        keychain.setValue(tokenData, forAccount: value.clientId)
     }
 
     func get(forClientId: String) -> UserSession? {

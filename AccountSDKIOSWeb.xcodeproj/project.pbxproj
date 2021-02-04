@@ -22,6 +22,7 @@
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
 		A9C5A18A2577ECB300815DC8 /* SchibstedAccountAPIResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5A1892577ECB300815DC8 /* SchibstedAccountAPIResponses.swift */; };
+		A9C7881C25CC0D7500B7E027 /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
 		A9DD2D16257E33EB00AD3601 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DD2D15257E33EB00AD3601 /* URLSessionProtocol.swift */; };
 		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
@@ -96,6 +97,7 @@
 		A9941FDE257523C800513EED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A9941FE0257523C800513EED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9C5A1892577ECB300815DC8 /* SchibstedAccountAPIResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponses.swift; sourceTree = "<group>"; };
+		A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainTests.swift; sourceTree = "<group>"; };
 		A9DD2D0E257E321F00AD3601 /* HTTPClientWithURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientWithURLSessionTests.swift; sourceTree = "<group>"; };
 		A9DD2D15257E33EB00AD3601 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -312,6 +314,7 @@
 		OBJ_39 /* AccountSDKIOSWebKeychainTests */ = {
 			isa = PBXGroup;
 			children = (
+				A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */,
 				OBJ_40 /* LegacyKeychainTokenStorageTests.swift */,
 			);
 			name = AccountSDKIOSWebKeychainTests;
@@ -586,6 +589,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */,
+				A9C7881C25CC0D7500B7E027 /* KeychainTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

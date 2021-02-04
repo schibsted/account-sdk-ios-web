@@ -10,43 +10,31 @@ class KeychainStorage {
         self.accessGroup = accessGroup
     }
 
-    func addValue(_ value: Data, forAccount: String?) {
-        // TODO delete possibly existing value first or create separate update function?
-
-        var query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecValueData as String: value
-        ]
-        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
-        forAccount.map { query[kSecAttrAccount as String] = $0 }
-        let status = SecItemAdd(query as CFDictionary, nil)
+    func setValue(_ value: Data, forAccount: String?) {
+        let status: OSStatus
         
-        guard status == errSecDuplicateItem || status == errSecSuccess else {
+        if getValue(forAccount: forAccount) == nil {
+            var query = itemQuery(forAccount: forAccount)
+            query[kSecValueData as String] = value
+            status = SecItemAdd(query as CFDictionary, nil)
+        } else {
+            let searchQuery = itemQuery(forAccount: forAccount, returnData: false)
+            let updateQuery: [String: Any] = [kSecValueData as String: value]
+            status = SecItemUpdate(searchQuery as CFDictionary, updateQuery as CFDictionary)
+        }
+        
+        guard status == errSecSuccess else {
             fatalError("Unable to store the secret")
         }
     }
 
     func getValue(forAccount: String?) -> Data? {
-        var query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecReturnData as String: true
-        ]
-        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
-        forAccount.map { query[kSecAttrAccount as String] = $0 }
-
-        return get(query: query) as? Data
+        return get(query: itemQuery(forAccount: forAccount)) as? Data
     }
     
     func getAll() -> [Data] {
-        var query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitAll,
-        ]
-        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
+        var query: [String: Any] = itemQuery(forAccount: nil)
+        query[kSecMatchLimit as String] = kSecMatchLimitAll
 
         guard let items = get(query: query) else {
             return []
@@ -54,6 +42,21 @@ class KeychainStorage {
 
         let result = items as! [Data?]
         return result.compactMap { $0 }
+    }
+
+    private func itemQuery(forAccount: String?, returnData: Bool = true) -> [String: Any] {
+        var query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+        ]
+        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
+        forAccount.map { query[kSecAttrAccount as String] = $0 }
+        
+        if returnData {
+            query[kSecReturnData as String] = true
+        }
+        
+        return query
     }
 
     private func get(query: [String: Any]) -> AnyObject? {
@@ -71,15 +74,8 @@ class KeychainStorage {
         return extractedData
     }
 
-    func removeValue(forAccount: String?) {
-        var query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service
-        ]
-        accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
-        forAccount.map { query[kSecAttrAccount as String] = $0 }
-        
-        let result = SecItemDelete(query as CFDictionary)
+    func removeValue(forAccount: String?) {       
+        let result = SecItemDelete(itemQuery(forAccount: forAccount, returnData: false) as CFDictionary)
         guard result == errSecSuccess || result == errSecItemNotFound else {
             fatalError("Unable to delete the secret")
         }
