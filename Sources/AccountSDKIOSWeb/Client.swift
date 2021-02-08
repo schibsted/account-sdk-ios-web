@@ -12,6 +12,7 @@ public struct ClientConfiguration {
     
     public enum Environment: String {
         case proCom = "https://login.schibsted.com"
+        case proFi = "https://login.schibsted.fi"
         case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
     }
