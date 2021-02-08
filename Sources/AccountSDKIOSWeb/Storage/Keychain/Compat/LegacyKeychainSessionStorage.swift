@@ -43,8 +43,10 @@ class LegacyKeychainSessionStorage {
             updatedAt = Date()
         }
 
+        let legacyUserId = unverifiedIdTokenClaims["legacy_user_id"] as? String
         let idTokenClaims = IdTokenClaims(iss: unverifiedIdTokenClaims["iss"] as! String,
                                           sub: sub,
+                                          userId: legacyUserId ?? "",
                                           aud: [],
                                           exp: unverifiedIdTokenClaims["exp"] as! Double,
                                           nonce: unverifiedIdTokenClaims["nonce"] as? String,

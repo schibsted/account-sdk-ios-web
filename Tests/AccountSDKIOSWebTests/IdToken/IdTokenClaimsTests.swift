@@ -2,18 +2,31 @@ import XCTest
 import JOSESwift
 @testable import AccountSDKIOSWeb
 
+enum TestJSONEncoder {
+    static let instance = jsonEncoder()
+    
+    private static func jsonEncoder() -> JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        return encoder
+    }
+}
+
 final class IdTokenClaimsTests: XCTestCase {
     private let fixtureJson = Data("""
     {
       "iss": "https://issuer.example.com",
       "sub": "userUuid",
+      "legacy_user_id": "12345",
       "aud": ["client1"],
       "exp": 12345,
       "nonce": "testNonce",
       "amr": ["amr1", "amr2"]
     }
     """.utf8)
-    private let fixture = IdTokenClaims(iss: "https://issuer.example.com", sub: "userUuid", aud: ["client1"], exp: 12345, nonce: "testNonce", amr: ["amr1", "amr2"])
+    private let fixture = IdTokenClaims(iss: "https://issuer.example.com", sub: "userUuid", userId: "12345", aud: ["client1"], exp: 12345, nonce: "testNonce", amr: ["amr1", "amr2"])
+    
+    
 
     func testDecodingAllFields() throws {
         let result = try JSONDecoder().decode(IdTokenClaims.self, from: fixtureJson)
@@ -21,7 +34,9 @@ final class IdTokenClaimsTests: XCTestCase {
     }
     
     func testEncodingAllFields() throws {
-        let result = try String(decoding: JSONEncoder().encode(fixture), as: UTF8.self)
+        let result = try String(decoding: TestJSONEncoder.instance.encode(fixture), as: UTF8.self)
+        print(result)
+        print(String(decoding: try fixtureJson.jsonEncode(), as: UTF8.self))
         XCTAssertEqual(result, String(decoding: try fixtureJson.jsonEncode(), as: UTF8.self))
     }
     
@@ -57,8 +72,9 @@ final class IdTokenClaimsTests: XCTestCase {
 extension Data {
     func jsonEncode() throws -> Data {
         let decoded = try JSONSerialization.jsonObject(with: self)
-        return try JSONSerialization.data(withJSONObject: decoded)
+        return try JSONSerialization.data(withJSONObject: decoded, options: .sortedKeys)
     }
+
     func jsonDelete(key: String) throws -> Data {
         let decoded = try JSONSerialization.jsonObject(with: self, options: .mutableContainers) as AnyObject
         decoded.setValue(nil, forKey: key)

@@ -3,6 +3,7 @@ import Foundation
 public struct IdTokenClaims: Codable, Equatable {
     let iss: String
     let sub: String
+    let userId: String
     let aud: [String]
     let exp: Double
     let nonce: String?
@@ -11,6 +12,7 @@ public struct IdTokenClaims: Codable, Equatable {
    enum CodingKeys: String, CodingKey {
         case iss
         case sub
+        case legacy_user_id
         case aud
         case exp
         case nonce
@@ -24,6 +26,7 @@ extension IdTokenClaims {
 
         self.iss = try values.decode(String.self, forKey: .iss)
         self.sub = try values.decode(String.self, forKey: .sub)
+        self.userId = try values.decode(String.self, forKey: .legacy_user_id)
         self.aud = try IdTokenClaims.extractAudience(from: values)
         self.exp = try values.decode(Double.self, forKey: .exp)
         self.nonce = try values.decodeIfPresent(String.self, forKey: .nonce)
@@ -47,6 +50,7 @@ extension IdTokenClaims {
 
         try container.encode(iss, forKey: .iss)
         try container.encode(sub, forKey: .sub)
+        try container.encode(userId, forKey: .legacy_user_id)
         try container.encode(aud, forKey: .aud)
         try container.encode(exp, forKey: .exp)
         try container.encode(nonce, forKey: .nonce)

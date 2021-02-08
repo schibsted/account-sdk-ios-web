@@ -9,6 +9,7 @@ public class User: Equatable {
     private let idTokenClaims: IdTokenClaims
     
     public let uuid: String
+    public let userId: String
     
     init(client: Client, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
         self.client = client
@@ -19,6 +20,7 @@ public class User: Equatable {
 
         self.idTokenClaims = idTokenClaims
         self.uuid = idTokenClaims.sub
+        self.userId = idTokenClaims.userId
     }
     
     convenience init(client: Client, session: UserSession) {
