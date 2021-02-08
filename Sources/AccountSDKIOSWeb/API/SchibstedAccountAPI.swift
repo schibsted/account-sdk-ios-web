@@ -42,27 +42,6 @@ public class SchibstedAccountAPI {
         requestWithHeaders.addValue(UserAgent.value, forHTTPHeaderField: "User-Agent")
         return requestWithHeaders
     }
-
-    internal func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
-        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
-        let parameters = [
-            "type": "code",
-            "clientId": clientId
-        ]
-        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create OAuth token exchange request")
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = requestBody
-
-        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
-                                withRetryPolicy: retryPolicy) {
-            completion(self.unpackResponse($0))
-        }
-    }
     
     internal func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")

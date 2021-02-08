@@ -33,7 +33,6 @@
 		OBJ_207 /* JOSEUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* JOSEUtil.swift */; };
 		OBJ_208 /* JWKS.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* JWKS.swift */; };
 		OBJ_209 /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* LoginError.swift */; };
-		OBJ_211 /* SimplifiedLoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* SimplifiedLoginData.swift */; };
 		OBJ_212 /* LegacyKeychainSessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* LegacyKeychainSessionStorage.swift */; };
 		OBJ_213 /* LegacyKeychainTokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* LegacyKeychainTokenStorage.swift */; };
 		OBJ_214 /* MigratingKeychainCompatStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* MigratingKeychainCompatStorage.swift */; };
@@ -114,7 +113,6 @@
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_183 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_19 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
-		OBJ_21 /* SimplifiedLoginData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginData.swift; sourceTree = "<group>"; };
 		OBJ_25 /* LegacyKeychainSessionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainSessionStorage.swift; sourceTree = "<group>"; };
 		OBJ_26 /* LegacyKeychainTokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorage.swift; sourceTree = "<group>"; };
 		OBJ_27 /* MigratingKeychainCompatStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigratingKeychainCompatStorage.swift; sourceTree = "<group>"; };
@@ -409,7 +407,6 @@
 				A98A3A2225768C8E008ED111 /* IdToken */,
 				OBJ_15 /* JOSE */,
 				OBJ_19 /* LoginError.swift */,
-				OBJ_21 /* SimplifiedLoginData.swift */,
 				OBJ_22 /* Storage */,
 				OBJ_34 /* TokenHandler.swift */,
 				OBJ_35 /* URLExtensions.swift */,
@@ -608,7 +605,6 @@
 				OBJ_208 /* JWKS.swift in Sources */,
 				A9DD2D16257E33EB00AD3601 /* URLSessionProtocol.swift in Sources */,
 				OBJ_209 /* LoginError.swift in Sources */,
-				OBJ_211 /* SimplifiedLoginData.swift in Sources */,
 				OBJ_212 /* LegacyKeychainSessionStorage.swift in Sources */,
 				OBJ_213 /* LegacyKeychainTokenStorage.swift in Sources */,
 				OBJ_214 /* MigratingKeychainCompatStorage.swift in Sources */,

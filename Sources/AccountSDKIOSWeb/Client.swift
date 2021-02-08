@@ -119,50 +119,6 @@ public class Client {
         return User(client: self, session: session)
     }
     
-    public func simplifiedLoginData(presenter: @escaping (SimplifiedLoginData?) -> Void) {
-        guard let mostRecentSession = getMostRecentSession() else {
-            presenter(nil)
-            return
-        }
-
-        let user = User(client: self, session: mostRecentSession)
-        schibstedAccountAPI.userProfile(for: user) { result in
-            switch result {
-            case .success(let userProfile):
-                if let email = userProfile.email,
-                   let range = email.range(of: "@", options: .backwards) {
-                    let displayName = String(email[...email.index(before: range.lowerBound)])
-                    presenter(SimplifiedLoginData(displayName: displayName, client: mostRecentSession.clientId))
-                }
-            default:
-                // TODO log error to fetch user profile data
-                presenter(nil)
-            }
-        }
-    }
-    
-    public func performSimplifiedLogin(completion: @escaping LoginResultHandler) {
-        guard let mostRecentSession = getMostRecentSession() else {
-            // TODO add log message
-            completion(.failure(.unexpectedError(message: "No user sessions found")))
-            return
-        }
-
-        // TODO verify client id is not already in session, should be logged as warn/error as then session should have been resumable
-
-        // TODO this only works for clients belonging to the same merchant
-        schibstedAccountAPI.codeExchange(for: User(client: self, session: mostRecentSession), clientId: configuration.clientId) { result in
-            switch result {
-            case .success(let result):
-                let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer, clientId: self.configuration.clientId)
-                self.tokenHandler.makeTokenRequest(authCode: result.code, idTokenValidationContext: idTokenValidationContext) { self.handleTokenRequestResult($0, completion: completion)}
-            case .failure(_):
-                // TODO log error
-                completion(.failure(.unexpectedError(message: "Failed to obtain exchange code")))
-            }
-        }
-    }
-    
     private func getMostRecentSession() -> UserSession? {
         sessionStorage.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }

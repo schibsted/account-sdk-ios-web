@@ -4,10 +4,6 @@ internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
     let data: T
 }
 
-struct CodeExchangeResponse: Codable {
-    let code: String
-}
-
 struct SessionExchangeResponse: Codable {
     let code: String
 }
