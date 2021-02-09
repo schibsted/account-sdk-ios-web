@@ -35,8 +35,6 @@ final class IdTokenClaimsTests: XCTestCase {
     
     func testEncodingAllFields() throws {
         let result = try String(decoding: TestJSONEncoder.instance.encode(fixture), as: UTF8.self)
-        print(result)
-        print(String(decoding: try fixtureJson.jsonEncode(), as: UTF8.self))
         XCTAssertEqual(result, String(decoding: try fixtureJson.jsonEncode(), as: UTF8.self))
     }
     
