@@ -5,9 +5,13 @@ import Foundation
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
 public struct ClientConfiguration {
+    /// Issuer identifier for identifier provider
     public let issuer: String
+    /// URL of identity provider
     public let serverURL: URL
+    /// Registered client id
     public let clientId: String
+    /// Registered redirect URI
     public let redirectURI: URL
     
     public enum Environment: String {
@@ -38,9 +42,13 @@ internal struct WebFlowData: Codable {
     let mfa: MFAType?
 }
 
+/// Multi-factor authentication methods
 public enum MFAType: String, Codable {
+    /// Ask user to re-authenticate by entering their password
     case password = "password"
+    /// One-time code generated from TOTP app
     case otp = "otp"
+    /// One-time code sent to user as SMS
     case sms = "sms"
 }
 
@@ -54,6 +62,7 @@ public struct SessionStorageConfig {
     }
 }
 
+// Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
 @available(iOS 12.0, *)
 public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
@@ -61,6 +70,7 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
     }
 }
 
+/// Represents a client registered with Schibsted account
 public class Client {
     public let configuration: ClientConfiguration
     
@@ -110,6 +120,7 @@ public class Client {
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
     }
 
+    /// Resume any previously logged-in user session
     public func resumeLastLoggedInUser() -> User? {
         let stored = sessionStorage.get(forClientId: configuration.clientId)
         guard let session = stored else {
@@ -147,24 +158,63 @@ public class Client {
         return session
     }
     
+    /**
+     Start login flow
+     
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter completion: callback that receives the login result
+     */
     @available(iOS 12.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) {
         let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         session.start()
     }
-    
+
+    /**
+     Start login flow
+     
+     This method must be used for devices with iOS 13 and up.
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
+     - parameter completion: callback that receives the login result
+     */
     @available(iOS 13.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) {
         let contextProvider = ASWebAuthSessionContextProvider()
         let session = getLoginSession(contextProvider: contextProvider, withMFA: withMFA, extraScopeValues: extraScopeValues, withSSO: withSSO, completion: completion)
         session.start()
     }
-    
+
+    /**
+     Get web authentication session
+     
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter completion: callback that receives the login result
+     - returns Web authentication session to start for the login flows
+     */
     @available(iOS 12.0, *)
     public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
     }
     
+    /**
+     Get web authentication session
+     
+     This method must be used for devices with iOS 13 and up.
+     - parameter contextProvider: Delegate to provide presentation context for the `ASWebAuthenticationSession`
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
+     - parameter completion: callback that receives the login result
+     - returns Web authentication session to start for the login flows
+     */
     @available(iOS 13.0, *)
     public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
@@ -212,6 +262,15 @@ public class Client {
         )
     }
     
+    /**
+     Call this with the full URL received as deep link to complete the login flow.
+        
+     This only needs to be used if manually starting the login flow using `getLoginSession`.
+     Calling `login()` will handle this for you.
+     
+     - parameter url: full URL from received deep link upon completion of user authentication
+     - parameter completion: callback that receives the login result
+    */
     public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
         // Check if coming back after triggered web flow login
         guard let storedData: WebFlowData = stateStorage.value(forKey: type(of: self).webFlowLoginStateKey),

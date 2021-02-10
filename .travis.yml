@@ -1,8 +1,30 @@
 language: objective-c
 osx_image: xcode12.2
+cache:
+  - bundler
+
+env:
+  global:
+    # GH_TOKEN
+    - secure: "OOdCh7SVKb3JH8L+F16Qi/WRXAVC3XpqOPyAggxI2qjFTT6jUqVxNx1nI/NHTczqF44T5BLqzGpTA3k+xCNgjUxveiVuGVmVlMoVQK651Fm56zxBqmL3ajD6rM9YifYVvj1qQIt6BMhxW3iwu0hXml/MEE/xDH7/2ALQGagtvv9MGFYoUixLaw+9RfpxRc8LBFxyYEXciuR5wGLMgLt+CuJS/HB/qZVmrkYIzGQWuLWD0lxNOp6jzdxxafksinNffSnwi71AhhtVVkFgcbdGzY7Yjj8U+nPRl3VLlwHlo99A9lsbDye/RUYhnPSxjNY41s3r9iYl3+7Rbx0SSuz50N/P8VGlk3XZgnJMqHgKYRFhGo+QTDWzlH4+Yv81YPtaalEnm+LnV/oq9lyic/Gsq5QqxRtQZmAnK5WtKzVn4twOGlisa9TUB2wsjvhEiDi/GcS3CbV1lt9fJXts1KKurNzjWcxIjAR7LQ9NQyW7lYA22OHncuU6ssavR54us6yNlKZwLK67OU8wdAX+R8g7EGZIp4Vp0trGYXj1Q77jvafQhWtCbve7/0gYmaU5ppI9sXkUej2vgTdxppH5fzOoUzy202mK7JDJL/G8e2ILJN6fRszUSM5ByQl4BWKvJe9Sf38EPysBeJ+gQFue+pca6a05ikd7nMYVSfE02YO/ht4="
 
 xcode_project: AccountSDKIOSWeb.xcodeproj
 xcode_destination: platform=iOS Simulator,OS=14.2,name=iPhone 12
 xcode_scheme: AccountSDKIOSWebTests
 
 before_script: xcodebuild -resolvePackageDependencies -project AccountSDKIOSWeb.xcodeproj build
+
+before_deploy:
+ - bundle install
+ - bundle exec jazzy
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  github_url: github.schibsted.io
+  verbose: true
+  local_dir: docs
+  on:
+    repo: spt-identity/AccountSDKIOSWeb
+    branch: master

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Representation of logged-in user.
 public class User: Equatable {
     private let client: Client
 
@@ -8,7 +9,9 @@ public class User: Equatable {
     private let idToken: String
     private let idTokenClaims: IdTokenClaims
     
+    /// User UUID
     public let uuid: String
+    /// User integer id (as string)
     public let userId: String
     
     init(client: Client, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
@@ -31,10 +34,22 @@ public class User: Equatable {
                   idTokenClaims: session.userTokens.idTokenClaims)
     }
     
+    /**
+     Log user out
+     
+     Will remove stored session, including all user tokens.
+     */
     public func logout() {
         client.sessionStorage.remove(forClientId: client.configuration.clientId)
     }
     
+    /**
+     Generate URL with embedded one-time code for creating a web session for the current user.
+
+     - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
+     - parameter redirectURI: where to redirect the user after the session has been created
+     - parameter completion: callback that receives the URL or an error in case of failure
+     */
     public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>) {
         let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
         api.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
@@ -48,6 +63,7 @@ public class User: Equatable {
         }
     }
     
+    /// Fetch user profile data
     public func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         client.schibstedAccountAPI.userProfile(for: self, completion: completion)
     }
@@ -63,9 +79,14 @@ public class User: Equatable {
 }
 
 extension User {
-    /** Perform a request with user access token as Bearer token in Authorization header.
-     *
-     *  If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
+    /**
+     Perform a request with user access token as Bearer token in Authorization header.
+     
+     If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
+     
+     - parameter request: request to perform with authentication using user tokens
+     - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
+     - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
     func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in

@@ -1,0 +1,9 @@
+theme: apple
+min_acl: public
+skip_undocumented: true
+hide_documentation_coverage: true
+exclude:
+  - Package.swift
+copyright: © 2021 Schibsted Products & Technology
+xcodebuild_arguments: ["-project", "AccountSDKIOSWeb.xcodeproj", "-scheme", "AccountSDKIOSWeb", "-sdk", "iphonesimulator", "-derivedDataPath", "build/DerivedData"]
+output: ./docs

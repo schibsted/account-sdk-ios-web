@@ -16,10 +16,16 @@ public struct OAuthError: Codable, Equatable {
 }
 
 public enum LoginError: Error, Equatable {
+    /// Authentication response not related to any outstanding authentication request was received
     case unsolicitedResponse
+    /// The authentication failed
     case authenticationErrorResponse(error: OAuthError)
+    /// Request to obtain user tokens failed
     case tokenErrorResponse(error: OAuthError)
+    /// The user did not complete the requested MFA method(s)
     case missingExpectedMFA
+    /// The login flow was cancelled by the user
     case canceled
+    /// An unexpected error occurred
     case unexpectedError(message: String)
 }
