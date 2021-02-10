@@ -144,10 +144,11 @@ public class Client {
         }
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
-                // TODO log error
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
+                    SchibstedAccountLogger.instance.debug("Login flow was cancelled")
                     completion(.failure(.canceled))
                 } else {
+                    SchibstedAccountLogger.instance.error("Login flow error: \(error)")
                     completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(error)")))
                 }
                 return
@@ -231,7 +232,7 @@ public class Client {
         let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
 
         if !stateStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
-            // TODO log error to store state
+            SchibstedAccountLogger.instance.error("Failed to store login state")
             return nil;
         }
 
@@ -312,19 +313,19 @@ public class Client {
             let user = User(client: self, session: userSession)
             completion(.success(user))
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
+            SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(body)")
             if let errorJSON = body,
                let oauthError = OAuthError.fromJSON(errorJSON) {
                 completion(.failure(.tokenErrorResponse(error: oauthError)))
                 return
             }
-            
-            // TODO log error
+
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         case .failure(.idTokenError(.missingExpectedAMRValue)):
-            // TODO log error
+            SchibstedAccountLogger.instance.error("MFA authentication failed")
             completion(.failure(.missingExpectedMFA))
-        case .failure(_):
-            // TODO log error
+        case .failure(let error):
+            SchibstedAccountLogger.instance.error("Failed to obtain user tokens: \(error)")
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         }
     }

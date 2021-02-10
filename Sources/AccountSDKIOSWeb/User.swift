@@ -95,7 +95,7 @@ extension User {
                 // 401 might indicate expired access token
                 if code == 401 {
                     guard let existingRefreshToken = self.refreshToken else {
-                        // TODO log info about no refresh token
+                        SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
                         completion(requestResult)
                         return
                     }
@@ -104,7 +104,7 @@ extension User {
                     self.client.tokenHandler.makeTokenRequest(refreshToken: existingRefreshToken) { tokenRefreshResult in
                         switch tokenRefreshResult {
                         case .success(let tokenResponse):
-                            // TODO log info about successful token refresh
+                            SchibstedAccountLogger.instance.debug("Successfully refresh user tokens")
                             self.accessToken = tokenResponse.access_token
                             if let newRefreshToken = tokenResponse.refresh_token {
                                 self.refreshToken = newRefreshToken
@@ -113,7 +113,7 @@ extension User {
                             // retry the request with fresh tokens
                             self.makeRequest(request: request, completion: completion)
                         default:
-                            // TODO log error about token refresh
+                            SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
                             completion(requestResult)
                         }
                     }

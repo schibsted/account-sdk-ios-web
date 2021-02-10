@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
+		A908308225D288140065D1D9 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908308125D288140065D1D9 /* Logging.swift */; };
 		A9148A91257A7D3900494164 /* HTTPClientWithURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9148A8F257A7D3900494164 /* HTTPClientWithURLSession.swift */; };
 		A9148A92257A7D3900494164 /* RetryPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9148A90257A7D3900494164 /* RetryPolicy.swift */; };
 		A95F19F225826A08000D19F5 /* SchibstedAccountAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F19F125826A08000D19F5 /* SchibstedAccountAPI.swift */; };
@@ -63,6 +65,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A908307225D2870F0065D1D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9941FD4257523C400513EED;
+			remoteInfo = TestHost;
+		};
 		A9941F37257503F700513EED /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
@@ -80,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A908308125D288140065D1D9 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		A9148A8F257A7D3900494164 /* HTTPClientWithURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientWithURLSession.swift; sourceTree = "<group>"; };
 		A9148A90257A7D3900494164 /* RetryPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetryPolicy.swift; sourceTree = "<group>"; };
 		A95F19F125826A08000D19F5 /* SchibstedAccountAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPI.swift; sourceTree = "<group>"; };
@@ -163,6 +173,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
+				A908307B25D287490065D1D9 /* Logging in Frameworks */,
 				A994206E2575594300513EED /* JOSESwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +423,7 @@
 				OBJ_35 /* URLExtensions.swift */,
 				OBJ_36 /* User.swift */,
 				OBJ_37 /* Version.swift */,
+				A908308125D288140065D1D9 /* Logging.swift */,
 			);
 			name = AccountSDKIOSWeb;
 			path = Sources/AccountSDKIOSWeb;
@@ -456,6 +468,7 @@
 			);
 			dependencies = (
 				OBJ_194 /* PBXTargetDependency */,
+				A908307325D2870F0065D1D9 /* PBXTargetDependency */,
 			);
 			name = AccountSDKIOSWebKeychainTests;
 			productName = AccountSDKIOSKeychainTests;
@@ -476,6 +489,7 @@
 			name = AccountSDKIOSWeb;
 			packageProductDependencies = (
 				A994206D2575594300513EED /* JOSESwift */,
+				A908307A25D287490065D1D9 /* Logging */,
 			);
 			productName = AccountSDKIOSWeb;
 			productReference = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */;
@@ -530,7 +544,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					"AccountSDKIOSWeb::AccountSDKIOSKeychainTests" = {
-						TestTargetID = A9941F76257505F400513EED;
+						TestTargetID = A9941FD4257523C400513EED;
 					};
 				};
 			};
@@ -545,6 +559,7 @@
 			packageReferences = (
 				A994206C2575594300513EED /* XCRemoteSwiftPackageReference "JOSESwift" */,
 				A99420812575597800513EED /* XCRemoteSwiftPackageReference "Cuckoo" */,
+				A908307925D287490065D1D9 /* XCRemoteSwiftPackageReference "swift-log" */,
 			);
 			productRefGroup = OBJ_172 /* Products */;
 			projectDirPath = "";
@@ -597,6 +612,7 @@
 				OBJ_202 /* Cache.swift in Sources */,
 				OBJ_203 /* Client.swift in Sources */,
 				OBJ_204 /* HTTPClient.swift in Sources */,
+				A908308225D288140065D1D9 /* Logging.swift in Sources */,
 				A9C5A18A2577ECB300815DC8 /* SchibstedAccountAPIResponses.swift in Sources */,
 				A9148A91257A7D3900494164 /* HTTPClientWithURLSession.swift in Sources */,
 				OBJ_205 /* HTTPUtil.swift in Sources */,
@@ -657,6 +673,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A908307325D2870F0065D1D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9941FD4257523C400513EED /* TestHost */;
+			targetProxy = A908307225D2870F0065D1D9 /* PBXContainerItemProxy */;
+		};
 		OBJ_194 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "AccountSDKIOSWeb::AccountSDKIOSWeb" /* AccountSDKIOSWeb */;
@@ -1114,6 +1135,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A908307925D287490065D1D9 /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 		A994206C2575594300513EED /* XCRemoteSwiftPackageReference "JOSESwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airsidemobile/JOSESwift.git";
@@ -1133,6 +1162,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A908307A25D287490065D1D9 /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A908307925D287490065D1D9 /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
 		A994206D2575594300513EED /* JOSESwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A994206C2575594300513EED /* XCRemoteSwiftPackageReference "JOSESwift" */;

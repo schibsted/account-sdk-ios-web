@@ -32,12 +32,12 @@ class LegacyKeychainTokenStorage {
         }
 
         guard let deserialised = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String: Any] else {
-            // TODO log failed to deserialise data
+            SchibstedAccountLogger.instance.error("Failed to deserialise legacy keychain data")
             return []
         }
 
         guard let parsed = deserialised["logged_in_users"] as? [String: [String: Any]] else {
-            // TODO log failed to parse data
+            SchibstedAccountLogger.instance.error("Failed to parse legacy keychain data")
             return []
         }
 

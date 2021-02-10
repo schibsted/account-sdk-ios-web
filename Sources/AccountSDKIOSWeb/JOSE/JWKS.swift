@@ -54,7 +54,7 @@ internal class RemoteJWKS: JWKS {
                 
                 completion(self.cache.object(forKey: keyId))
             case .failure:
-                // TODO log error
+                SchibstedAccountLogger.instance.error("Failed to fetch JWKS")
                 completion(nil)
             }
         }

@@ -58,7 +58,7 @@ internal enum JOSEUtil {
                 let payload = try jws.validate(using: verifier).payload
                 completion(.success(payload.data()))
             } catch {
-                // TODO log error
+                SchibstedAccountLogger.instance.debug("Failed to verify JWS signature: \(error)")
                 completion(.failure(.invalidSignature))
             }
         }

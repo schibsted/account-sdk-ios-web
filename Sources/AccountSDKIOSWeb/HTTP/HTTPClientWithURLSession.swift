@@ -15,7 +15,7 @@ public class HTTPClientWithURLSession: HTTPClient {
                     completion(result)
                 case .failure(let error):
                     if attempts > 0 && withRetryPolicy.shouldRetry(for: error) {
-                        // TODO verbose log retry
+                        SchibstedAccountLogger.instance.debug("HTTP client, retrying \(request.url)")
                         retry(attempts - 1)
                     } else {
                         completion(result)

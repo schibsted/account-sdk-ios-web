@@ -73,6 +73,13 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
         }
     }
     ```
+    
+### Configuring logging
+This SDK uses [`SwiftLog`](https://github.com/apple/swift-log), allowing you to easily customise the logging.
+The logger can be modified, for example to change the log level, via the following code:
+```swift
+SchibstedAccountLogger.instance.logLevel = .debug
+```
 
 ## How it works
 
