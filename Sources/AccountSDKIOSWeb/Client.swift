@@ -35,23 +35,6 @@ public struct ClientConfiguration {
     }
 }
 
-internal struct WebFlowData: Codable {
-    let state: String
-    let nonce: String
-    let codeVerifier: String
-    let mfa: MFAType?
-}
-
-/// Multi-factor authentication methods
-public enum MFAType: String, Codable {
-    /// Ask user to re-authenticate by entering their password
-    case password = "password"
-    /// One-time code generated from TOTP app
-    case otp = "otp"
-    /// One-time code sent to user as SMS
-    case sms = "sms"
-}
-
 public struct SessionStorageConfig {
     let accessGroup: String?
     let legacyAccessGroup: String?
@@ -74,7 +57,7 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 public class Client {
     public let configuration: ClientConfiguration
     
-    internal static let webFlowLoginStateKey = "WebFlowLoginState"
+    internal static let authStateKey = "AuthState"
     private static let keychainServiceName = "com.schibsted.account"
     private static let defaultScopeValues = ["openid", "offline_access"]
     
@@ -229,9 +212,9 @@ public class Client {
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
+        let authState = AuthState(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
 
-        if !stateStorage.setValue(webFlowData, forKey: type(of: self).webFlowLoginStateKey) {
+        if !stateStorage.setValue(authState, forKey: type(of: self).authStateKey) {
             SchibstedAccountLogger.instance.error("Failed to store login state")
             return nil;
         }
@@ -274,13 +257,13 @@ public class Client {
     */
     public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
         // Check if coming back after triggered web flow login
-        guard let storedData: WebFlowData = stateStorage.value(forKey: type(of: self).webFlowLoginStateKey),
+        guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
                 completion(.failure(.unsolicitedResponse))
                 return
         }
-        stateStorage.removeValue(forKey: type(of: self).webFlowLoginStateKey)
+        stateStorage.removeValue(forKey: type(of: self).authStateKey)
 
         if let error = url.valueOf(queryParameter: "error") {
             completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
@@ -292,13 +275,7 @@ public class Client {
             return
         }
 
-        let idTokenValidationContext = IdTokenValidationContext(issuer: configuration.issuer,
-                                                                clientId: configuration.clientId,
-                                                                nonce: storedData.nonce,
-                                                                expectedAMR: storedData.mfa?.rawValue)
-        tokenHandler.makeTokenRequest(authCode: authCode,
-                                      codeVerifier: storedData.codeVerifier,
-                                      idTokenValidationContext: idTokenValidationContext) {
+        tokenHandler.makeTokenRequest(authCode: authCode, authState: storedData) {
             self.handleTokenRequestResult($0, completion: completion)
         }
     }

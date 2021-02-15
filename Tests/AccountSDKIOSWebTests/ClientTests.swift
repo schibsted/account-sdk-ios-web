@@ -21,7 +21,7 @@ final class ClientTests: XCTestCase {
     func testLoginURL() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            when(mock.setValue(any(), forKey: Client.authStateKey)).thenDoNothing()
         }
 
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
@@ -50,7 +50,7 @@ final class ClientTests: XCTestCase {
     func testLoginURLWithExtraScopes() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            when(mock.setValue(any(), forKey: Client.authStateKey)).thenDoNothing()
         }
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         let loginURL = client.loginURL(extraScopeValues: ["scope1", "scope2"])
@@ -78,7 +78,7 @@ final class ClientTests: XCTestCase {
     func testLoginURLWithMFAIncludesACRValues() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            when(mock.setValue(any(), forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            when(mock.setValue(any(), forKey: Client.authStateKey)).thenDoNothing()
         }
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         let loginURL = client.loginURL(withMFA: .otp)
@@ -108,7 +108,7 @@ final class ClientTests: XCTestCase {
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(nil)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(nil)
         }
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         
@@ -124,9 +124,9 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
-            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
+            when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
         
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
@@ -142,9 +142,9 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
-            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
+            when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
 
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
@@ -181,9 +181,9 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
-            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            let authState = AuthState(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
+            when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
 
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
@@ -203,9 +203,9 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
-            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            let authState = AuthState(state: state, nonce: idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
+            when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
         
         let testData = [
@@ -260,9 +260,9 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let webFlowData = WebFlowData(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp)
-            when(mock.value(forKey: Client.webFlowLoginStateKey)).thenReturn(try! JSONEncoder().encode(webFlowData))
-            when(mock.removeValue(forKey: Client.webFlowLoginStateKey)).thenDoNothing()
+            let authState = AuthState(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp)
+            when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
+            when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
         
         let client = Client(configuration: config, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)

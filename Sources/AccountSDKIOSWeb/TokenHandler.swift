@@ -72,12 +72,12 @@ internal class TokenHandler {
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String, codeVerifier: String, idTokenValidationContext: IdTokenValidationContext, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(authCode: String, authState: AuthState, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         let parameters = [
             "client_id": configuration.clientId,
             "grant_type": "authorization_code",
             "code": authCode,
-            "code_verifier": codeVerifier,
+            "code_verifier": authState.codeVerifier,
             "redirect_uri": configuration.redirectURI.absoluteString,
         ]
 
@@ -88,6 +88,11 @@ internal class TokenHandler {
                     completion(.failure(.idTokenError(.missingIdToken)))
                     return
                 }
+                
+                let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer,
+                                                                        clientId: self.configuration.clientId,
+                                                                        nonce: authState.nonce,
+                                                                        expectedAMR: authState.mfa?.rawValue)
 
                 IdTokenValidator.validate(idToken: idToken, jwks: self.jwks, context: idTokenValidationContext) { result in
                     switch result {
