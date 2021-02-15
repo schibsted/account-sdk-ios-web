@@ -284,7 +284,7 @@ public class Client {
         switch result {
         case .success(let tokenResult):
             let userSession = UserSession(clientId: self.configuration.clientId,
-                                          userTokens: UserTokens(accessToken: tokenResult.accessToken, refreshToken: tokenResult.refreshToken, idToken: tokenResult.idToken, idTokenClaims: tokenResult.idTokenClaims),
+                                          userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
             sessionStorage.store(userSession)
             let user = User(client: self, session: userSession)

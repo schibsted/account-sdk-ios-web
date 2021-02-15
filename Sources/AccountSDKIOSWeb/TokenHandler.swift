@@ -7,19 +7,13 @@ internal enum TokenError: Error {
 }
 
 internal struct TokenResult: CustomStringConvertible {
-    let accessToken: String
-    let refreshToken: String?
-    let idToken: String
-    let idTokenClaims: IdTokenClaims
+    let userTokens: UserTokens
     let scope: String?
     let expiresIn: Int
     
     var description: String {
         return "TokenResult("
-            + "accessToken: \(removeSignature(fromToken: accessToken)),\n"
-            + "refreshToken: \(removeSignature(fromToken: refreshToken)),\n"
-            + "idToken: \(removeSignature(fromToken: idToken)),\n"
-            + "idTokenClaims: \(idTokenClaims),\n"
+            + "userTokens: \(userTokens),\n"
             + "scope: \(scope ?? ""),\n"
             + "expiresIn: \(expiresIn))"
         
@@ -97,10 +91,11 @@ internal class TokenHandler {
                 IdTokenValidator.validate(idToken: idToken, jwks: self.jwks, context: idTokenValidationContext) { result in
                     switch result {
                     case .success(let claims):
-                        let tokenResult = TokenResult(accessToken: tokenResponse.access_token,
-                                                      refreshToken: tokenResponse.refresh_token,
-                                                      idToken: idToken,
-                                                      idTokenClaims: claims,
+                        let userTokens = UserTokens(accessToken: tokenResponse.access_token,
+                                                    refreshToken: tokenResponse.refresh_token,
+                                                    idToken: idToken,
+                                                    idTokenClaims: claims)
+                        let tokenResult = TokenResult(userTokens: userTokens,
                                                       scope: tokenResponse.scope,
                                                       expiresIn: tokenResponse.expires_in)
                         completion(.success(tokenResult))
