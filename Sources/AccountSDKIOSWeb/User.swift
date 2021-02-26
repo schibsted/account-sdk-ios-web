@@ -40,7 +40,7 @@ public class User: Equatable {
      Will remove stored session, including all user tokens.
      */
     public func logout() {
-        client.sessionStorage.remove(forClientId: client.configuration.clientId)
+        client.destroySession()
     }
     
     /**

@@ -61,12 +61,12 @@ public class Client {
     private static let keychainServiceName = "com.schibsted.account"
     private static let defaultScopeValues = ["openid", "offline_access"]
     
-    internal let sessionStorage: SessionStorage
     internal let httpClient: HTTPClient
     internal let tokenHandler: TokenHandler
     internal let schibstedAccountAPI: SchibstedAccountAPI
     
     private let stateStorage: StateStorage
+    private let sessionStorage: SessionStorage
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -305,6 +305,10 @@ public class Client {
             SchibstedAccountLogger.instance.error("Failed to obtain user tokens: \(error)")
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         }
+    }
+    
+    internal func destroySession() {
+        sessionStorage.remove(forClientId: configuration.clientId)
     }
 
     private func randomString(length: Int) -> String {
