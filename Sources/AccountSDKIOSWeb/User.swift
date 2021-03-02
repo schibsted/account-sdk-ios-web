@@ -88,7 +88,7 @@ extension User {
      - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
-    func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
+    public func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):
