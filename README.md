@@ -7,11 +7,12 @@ API documentation can be found [here](https://pages.github.schibsted.io/spt-iden
 ## Getting started
 
 To implement login with Schibsted account in your app, please first have a look at our
-[getting started documentation](https://ufo.schibsted.io/schibsted-account/gettingstarted).
+[getting started documentation](https://ufo.schibsted.io/schibsted-account/gettingstarted/).
 This will help you create a client and configure the necessary data.
 
 **Note:** This SDK requires your client to be registered as a `public_mobile_client`. Please
 email our [support](mailto:schibstedaccount@schibsted.com) to get help with setting that up.
+
 **Note:** Using [Universal Links](https://developer.apple.com/ios/universal-links/) should be preferred for [security reasons](https://tools.ietf.org/html/rfc8252#appendix-B.1).
 To make it work seamlessly, please see the section below.
 
