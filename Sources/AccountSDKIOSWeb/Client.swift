@@ -110,7 +110,7 @@ public class Client {
             return nil
         }
         
-        return User(client: self, session: session)
+        return User(client: self, tokens: session.userTokens)
     }
     
     private func getMostRecentSession() -> UserSession? {
@@ -287,7 +287,7 @@ public class Client {
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
             sessionStorage.store(userSession)
-            let user = User(client: self, session: userSession)
+            let user = User(client: self, tokens: tokenResult.userTokens)
             completion(.success(user))
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
             SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(body)")

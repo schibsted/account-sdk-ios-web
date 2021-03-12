@@ -189,7 +189,8 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                XCTAssertEqual(result, .success(User(client: client, accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: idToken, idTokenClaims: self.idTokenClaims)))
+                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: tokenResponse.id_token!, idTokenClaims: self.idTokenClaims)
+                XCTAssertEqual(result, .success(User(client: client, tokens: expectedTokens)))
                 done()
             }
         }
@@ -283,7 +284,7 @@ final class ClientTests: XCTestCase {
 
         let client = Client(configuration: config, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(client: client, session: session))
+        XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
     }
 
     func testResumeLastLoggedInUserWithoutSession() {

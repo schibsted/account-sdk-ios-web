@@ -14,24 +14,16 @@ public class User: Equatable {
     /// User integer id (as string)
     public let userId: String
     
-    init(client: Client, accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+    internal init(client: Client, tokens: UserTokens) {
         self.client = client
 
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-        self.idToken = idToken
+        self.accessToken = tokens.accessToken
+        self.refreshToken = tokens.refreshToken
+        self.idToken = tokens.idToken
 
-        self.idTokenClaims = idTokenClaims
-        self.uuid = idTokenClaims.sub
-        self.userId = idTokenClaims.userId
-    }
-    
-    convenience init(client: Client, session: UserSession) {
-        self.init(client: client,
-                  accessToken: session.userTokens.accessToken,
-                  refreshToken: session.userTokens.refreshToken,
-                  idToken: session.userTokens.idToken,
-                  idTokenClaims: session.userTokens.idTokenClaims)
+        self.idTokenClaims = tokens.idTokenClaims
+        self.uuid = tokens.idTokenClaims.sub
+        self.userId = tokens.idTokenClaims.userId
     }
     
     /**

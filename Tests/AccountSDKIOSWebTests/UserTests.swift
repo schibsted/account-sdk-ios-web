@@ -31,7 +31,7 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
@@ -57,7 +57,7 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
@@ -96,7 +96,7 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
@@ -129,7 +129,8 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: nil, idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let noRefreshToken = UserTokens(accessToken: "accessToken", refreshToken: nil, idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: noRefreshToken)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
@@ -163,7 +164,7 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
@@ -191,7 +192,7 @@ final class UserTests: XCTestCase {
         }
 
         let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
-        let user = User(client: client, accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
+        let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.webSessionURL(clientId: "webClientId", redirectURI: "https://example.com/protected") { result in
                 switch result {
