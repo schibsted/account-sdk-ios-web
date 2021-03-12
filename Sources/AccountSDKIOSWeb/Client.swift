@@ -60,11 +60,11 @@ public class Client {
     internal static let authStateKey = "AuthState"
     private static let keychainServiceName = "com.schibsted.account"
     private static let defaultScopeValues = ["openid", "offline_access"]
-    
+
     internal let httpClient: HTTPClient
-    internal let tokenHandler: TokenHandler
     internal let schibstedAccountAPI: SchibstedAccountAPI
-    
+
+    private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
     
@@ -277,6 +277,37 @@ public class Client {
 
         tokenHandler.makeTokenRequest(authCode: authCode, authState: storedData) {
             self.handleTokenRequestResult($0, completion: completion)
+        }
+    }
+    
+    internal func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        guard let existingRefreshToken = user.tokens.refreshToken else {
+            SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
+            completion(.failure(.noRefreshToken))
+            return
+        }
+
+        // try to exchange refresh token for new token
+        tokenHandler.makeTokenRequest(refreshToken: existingRefreshToken) { tokenRefreshResult in
+            switch tokenRefreshResult {
+            case .success(let tokenResponse):
+                SchibstedAccountLogger.instance.debug("Successfully refreshed user tokens")
+                let refreshToken = tokenResponse.refresh_token ?? user.tokens.refreshToken
+                let userTokens = UserTokens(accessToken: tokenResponse.access_token,
+                                            refreshToken: refreshToken,
+                                            idToken: user.tokens.idToken,
+                                            idTokenClaims: user.tokens.idTokenClaims)
+                user.tokens = userTokens
+                
+                let userSession = UserSession(clientId: self.configuration.clientId,
+                                              userTokens: userTokens,
+                                              updatedAt: Date())
+                self.sessionStorage.store(userSession)
+                completion(.success(userTokens))
+            case .failure(let error):
+                SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
+                completion(.failure(.refreshRequestFailed(error: error)))
+            }
         }
     }
 

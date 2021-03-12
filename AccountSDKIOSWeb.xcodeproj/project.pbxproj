@@ -18,6 +18,7 @@
 		A95F1A1F25826AED000D19F5 /* IdTokenValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F1A1D25826AED000D19F5 /* IdTokenValidatorTests.swift */; };
 		A95F1A2025826AED000D19F5 /* IdTokenClaimsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F1A1E25826AED000D19F5 /* IdTokenClaimsTests.swift */; };
 		A98A3A2A25768F36008ED111 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A3A2925768F36008ED111 /* IdTokenClaims.swift */; };
+		A993674325FBA2BE003CF134 /* RefreshTokenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A993674225FBA2BE003CF134 /* RefreshTokenError.swift */; };
 		A9941FD8257523C400513EED /* TestHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD7257523C400513EED /* TestHostApp.swift */; };
 		A9941FDA257523C400513EED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD9257523C400513EED /* ContentView.swift */; };
 		A9941FDC257523C800513EED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDB257523C800513EED /* Assets.xcassets */; };
@@ -101,6 +102,7 @@
 		A95F1A1E25826AED000D19F5 /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
 		A98A3A2925768F36008ED111 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
 		A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
+		A993674225FBA2BE003CF134 /* RefreshTokenError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenError.swift; sourceTree = "<group>"; };
 		A9941FD5257523C400513EED /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9941FD7257523C400513EED /* TestHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostApp.swift; sourceTree = "<group>"; };
 		A9941FD9257523C400513EED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 				OBJ_37 /* Version.swift */,
 				A908308125D288140065D1D9 /* Logging.swift */,
 				A924393525DB0D57007EE78B /* AuthState.swift */,
+				A993674225FBA2BE003CF134 /* RefreshTokenError.swift */,
 			);
 			name = AccountSDKIOSWeb;
 			path = Sources/AccountSDKIOSWeb;
@@ -616,6 +619,7 @@
 				A924393625DB0D57007EE78B /* AuthState.swift in Sources */,
 				OBJ_203 /* Client.swift in Sources */,
 				OBJ_204 /* HTTPClient.swift in Sources */,
+				A993674325FBA2BE003CF134 /* RefreshTokenError.swift in Sources */,
 				A908308225D288140065D1D9 /* Logging.swift in Sources */,
 				A9C5A18A2577ECB300815DC8 /* SchibstedAccountAPIResponses.swift in Sources */,
 				A9148A91257A7D3900494164 /* HTTPClientWithURLSession.swift in Sources */,

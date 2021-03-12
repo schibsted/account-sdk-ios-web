@@ -94,8 +94,12 @@ final class UserTests: XCTestCase {
                     completion(.success(tokenResponse))
                 }
         }
-
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any())).thenDoNothing()
+        }
+        
+        let client = Client(configuration: clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
@@ -110,6 +114,12 @@ final class UserTests: XCTestCase {
                     XCTAssertEqual(calls[0].value(forHTTPHeaderField: "Authorization"), "Bearer accessToken")
                     // refreshed token used in second request
                     XCTAssertEqual(calls[1].value(forHTTPHeaderField: "Authorization"), "Bearer newAccessToken")
+                    
+                    // refreshed tokens are persisted in session storage
+                    verify(mockSessionStorage).store(ParameterMatcher<UserSession>{
+                        $0.userTokens.accessToken == "newAccessToken" &&
+                        $0.userTokens.refreshToken == "newRefreshToken"
+                    })
                 default:
                     XCTFail("Unexpected result \(result)")
                 }

@@ -3,25 +3,18 @@ import Foundation
 /// Representation of logged-in user.
 public class User: Equatable {
     private let client: Client
+    internal var tokens: UserTokens
 
-    private var accessToken: String
-    private var refreshToken: String?
-    private let idToken: String
-    private let idTokenClaims: IdTokenClaims
-    
     /// User UUID
     public let uuid: String
+
     /// User integer id (as string)
     public let userId: String
     
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
-
-        self.accessToken = tokens.accessToken
-        self.refreshToken = tokens.refreshToken
-        self.idToken = tokens.idToken
-
-        self.idTokenClaims = tokens.idTokenClaims
+        self.tokens = tokens
+        
         self.uuid = tokens.idTokenClaims.sub
         self.userId = tokens.idTokenClaims.userId
     }
@@ -63,10 +56,7 @@ public class User: Equatable {
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
             && lhs.client.configuration.clientId == rhs.client.configuration.clientId
-            && lhs.accessToken == rhs.accessToken
-            && lhs.refreshToken == rhs.refreshToken
-            && lhs.idToken == rhs.idToken
-            && lhs.idTokenClaims == rhs.idTokenClaims
+            && lhs.tokens == rhs.tokens
     }
 }
 
@@ -86,26 +76,12 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
-                    guard let existingRefreshToken = self.refreshToken else {
-                        SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
-                        completion(requestResult)
-                        return
-                    }
-
-                    // try to exchange refresh token for new token
-                    self.client.tokenHandler.makeTokenRequest(refreshToken: existingRefreshToken) { tokenRefreshResult in
-                        switch tokenRefreshResult {
-                        case .success(let tokenResponse):
-                            SchibstedAccountLogger.instance.debug("Successfully refresh user tokens")
-                            self.accessToken = tokenResponse.access_token
-                            if let newRefreshToken = tokenResponse.refresh_token {
-                                self.refreshToken = newRefreshToken
-                            }
-                        
+                    self.client.refreshTokens(for: self) { result in
+                        switch result {
+                        case .success(_):
                             // retry the request with fresh tokens
                             self.makeRequest(request: request, completion: completion)
-                        default:
-                            SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
+                        case .failure(_):
                             completion(requestResult)
                         }
                     }
@@ -120,7 +96,7 @@ extension User {
     
     private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         var requestCopy = request
-        requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
         client.httpClient.execute(request: requestCopy, completion: completion)
     }
 }
