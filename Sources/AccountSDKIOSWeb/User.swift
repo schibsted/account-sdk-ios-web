@@ -48,6 +48,14 @@ public class User: Equatable {
         }
     }
     
+    /**
+     Generate URL for Schibsted account pages.
+     */
+    public func accountPagesURL() -> URL {
+        let url = client.configuration.serverURL.appendingPathComponent("/account/summary")
+        return url
+    }
+    
     /// Fetch user profile data
     public func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         client.schibstedAccountAPI.userProfile(for: self, completion: completion)

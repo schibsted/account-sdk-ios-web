@@ -216,4 +216,10 @@ final class UserTests: XCTestCase {
             }
         }
     }
+
+    func testAccountPagesURL() {
+        let client = Client(configuration: clientConfig, httpClient: MockHTTPClient())
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        XCTAssertEqual(user.accountPagesURL().absoluteString, "\(self.clientConfig.serverURL.absoluteString)/account/summary")
+    }
 }
