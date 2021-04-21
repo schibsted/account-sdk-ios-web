@@ -8,13 +8,13 @@ struct SessionExchangeResponse: Codable {
     let code: String
 }
 
-public struct Name: Codable {
+public struct Name: Codable, Equatable {
     public var givenName: String? = nil
     public var familyName: String? = nil
     public var formatted: String? = nil
 }
 
-public struct UserProfileResponse: Codable {
+public struct UserProfileResponse: Codable, Equatable {
     public var userId: String? = nil
     public var email: String? = nil
     public var phoneNumber: String? = nil

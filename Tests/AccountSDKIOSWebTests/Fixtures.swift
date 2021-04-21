@@ -2,6 +2,7 @@ import Foundation
 @testable import AccountSDKIOSWeb
 
 struct Fixtures {
+    static let clientConfig = ClientConfiguration(serverURL: URL(string: "https://issuer.example.com")!, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     static let idTokenClaims = IdTokenClaims(iss: "https://issuer.example.com", sub: "userUuid", userId: "12345", aud: ["client1"], exp: Date().timeIntervalSince1970 + 3600, nonce: "testNonce", amr: nil)
     static let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
     

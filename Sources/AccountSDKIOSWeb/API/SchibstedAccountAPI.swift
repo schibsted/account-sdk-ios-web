@@ -82,7 +82,11 @@ public class SchibstedAccountAPI {
     }
 
     public func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>) {
-        let url = baseURL.appendingPathComponent("/api/2/user/\(user.uuid)")
+        guard let userUuid = user.uuid else {
+            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+            return
+        }
+        let url = baseURL.appendingPathComponent("/api/2/user/\(userUuid)")
         let request = URLRequest(url: url)
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
                                 withRetryPolicy: retryPolicy) {
