@@ -3,7 +3,6 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class UserTests: XCTestCase {
-    private let clientConfig = ClientConfiguration(environment: .pre, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
     private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
     
@@ -30,7 +29,7 @@ final class UserTests: XCTestCase {
                 }
         }
 
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
@@ -56,7 +55,7 @@ final class UserTests: XCTestCase {
                 }
         }
 
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
@@ -99,7 +98,7 @@ final class UserTests: XCTestCase {
             when(mock.store(any())).thenDoNothing()
         }
         
-        let client = Client(configuration: clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
@@ -138,7 +137,7 @@ final class UserTests: XCTestCase {
                 }
         }
 
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let noRefreshToken = UserTokens(accessToken: "accessToken", refreshToken: nil, idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
         let user = User(client: client, tokens: noRefreshToken)
         Await.until { done in
@@ -173,7 +172,7 @@ final class UserTests: XCTestCase {
                 }
         }
 
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
@@ -201,13 +200,13 @@ final class UserTests: XCTestCase {
                 }
         }
 
-        let client = Client(configuration: clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         Await.until { done in
             user.webSessionURL(clientId: "webClientId", redirectURI: "https://example.com/protected") { result in
                 switch result {
                 case .success(let url):
-                    XCTAssertEqual(url.absoluteString, "\(self.clientConfig.serverURL.absoluteString)/session/\(sessionCode)")
+                    XCTAssertEqual(url.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/session/\(sessionCode)")
                 default:
                     XCTFail("Unexpected result \(result)")
                 }
@@ -218,24 +217,24 @@ final class UserTests: XCTestCase {
     }
 
     func testAccountPagesURL() {
-        let client = Client(configuration: clientConfig, httpClient: MockHTTPClient())
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
         let user = User(client: client, tokens: Fixtures.userTokens)
-        XCTAssertEqual(user.accountPagesURL().absoluteString, "\(self.clientConfig.serverURL.absoluteString)/account/summary")
+        XCTAssertEqual(user.accountPagesURL().absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
     }
     
     func testLogoutDestroysTokensAndSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.remove(forClientId: clientConfig.clientId)).thenDoNothing()
+            when(mock.remove(forClientId: Fixtures.clientConfig.clientId)).thenDoNothing()
         }
 
-        let client = Client(configuration: clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: MockHTTPClient())
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: MockHTTPClient())
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         user.logout()
         XCTAssertNil(user.tokens)
         XCTAssertNil(user.uuid)
         
-        verify(mockSessionStorage).remove(forClientId: clientConfig.clientId)
+        verify(mockSessionStorage).remove(forClientId: Fixtures.clientConfig.clientId)
     }
 }
