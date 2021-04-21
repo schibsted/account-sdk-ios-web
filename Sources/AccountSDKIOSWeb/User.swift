@@ -1,22 +1,31 @@
 import Foundation
 
+public enum LoginStateError: Error {
+    case notLoggedIn
+}
+
 /// Representation of logged-in user.
 public class User: Equatable {
     private let client: Client
-    internal var tokens: UserTokens
+    internal var tokens: UserTokens?
 
     /// User UUID
-    public let uuid: String
+    public var uuid: String? {
+        get {
+            tokens?.idTokenClaims.sub
+        }
+    }
 
     /// User integer id (as string)
-    public let userId: String
+    public var userId: String? {
+        get {
+            tokens?.idTokenClaims.userId
+        }
+    }
     
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
         self.tokens = tokens
-        
-        self.uuid = tokens.idTokenClaims.sub
-        self.userId = tokens.idTokenClaims.userId
     }
     
     /**
@@ -25,6 +34,7 @@ public class User: Equatable {
      Will remove stored session, including all user tokens.
      */
     public func logout() {
+        tokens = nil
         client.destroySession()
     }
     
@@ -103,6 +113,10 @@ extension User {
     }
     
     private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
+        guard let tokens = self.tokens else {
+            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+            return
+        }
         var requestCopy = request
         requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
         client.httpClient.execute(request: requestCopy, completion: completion)

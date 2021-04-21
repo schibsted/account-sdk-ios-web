@@ -222,4 +222,20 @@ final class UserTests: XCTestCase {
         let user = User(client: client, tokens: Fixtures.userTokens)
         XCTAssertEqual(user.accountPagesURL().absoluteString, "\(self.clientConfig.serverURL.absoluteString)/account/summary")
     }
+    
+    func testLogoutDestroysTokensAndSession() {
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.remove(forClientId: clientConfig.clientId)).thenDoNothing()
+        }
+
+        let client = Client(configuration: clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: MockHTTPClient())
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        
+        user.logout()
+        XCTAssertNil(user.tokens)
+        XCTAssertNil(user.uuid)
+        
+        verify(mockSessionStorage).remove(forClientId: clientConfig.clientId)
+    }
 }
