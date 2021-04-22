@@ -98,4 +98,14 @@ This SDK implements the [best practices for user authentication via an OpenID Co
   On iOS 13 and above this behavior can be disabled, which also removes the extra user prompt about allowing to use Schibsted account for login, using
   `withSSO: false` in `Client.login(withMFA:extraScopeValues:withSSO:completion:)`.
 * After the completed user authentication, user tokens are obtained and stored securely in the keychain storage.
+    * Authenticated requests to backend services can be done via
+      [`User.withAuthentication`](https://pages.github.schibsted.io/spt-identity/AccountSDKIOSWeb/Classes/User.html#/s:16AccountSDKIOSWeb4UserC18withAuthentication7request0D11RetryPolicy10completiony10Foundation10URLRequestV_AA0gH0_pys6ResultOyxAA9HTTPErrorOGctSeRzlF).
+      The SDK will automatically inject the user access token as a Bearer token in the HTTP
+      Authorization request header.
+      If the access token is rejected with a `401 Unauthorized` response (e.g. due to having
+      expired), the SDK will try to use the refresh token to obtain a new access token and then
+      retry the request once more.
+
+      **Note:** If the refresh token request fails, due to the refresh token itself having expired
+      or been invalidated by the user, the SDK will log the user out.
 * Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage.

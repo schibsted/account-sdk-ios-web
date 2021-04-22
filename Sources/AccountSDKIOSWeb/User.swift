@@ -93,7 +93,9 @@ extension User {
      Perform a request with user access token as Bearer token in Authorization header.
      
      If the initial request fails with a 401, a refresh token request is made to get a new access token and the request will be retried with the new token if successful.
-     
+     If the refresh token request fails with an OAuth 'invalid_grant' error response, meaning the refresh token has expired or been invalidated, the user will be
+     logged-out (and all existing tokens will be destroyed).
+
      - parameter request: request to perform with authentication using user tokens
      - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
      - parameter completion: callback that receives the HTTP response or an error in case of failure
