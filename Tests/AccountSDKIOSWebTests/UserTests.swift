@@ -168,7 +168,7 @@ final class UserTests: XCTestCase {
             let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
                 .then { _, _, completion in
-                    completion(.failure(.errorResponse(code: 400, body: "{\"error\": \"invalid_grant\"}")))
+                    completion(.failure(.errorResponse(code: 500, body: "Something went wrong")))
                 }
         }
 
@@ -185,6 +185,46 @@ final class UserTests: XCTestCase {
                     XCTFail("Unexpected result \(result)")
                 }
 
+                done()
+            }
+        }
+    }
+    
+    func testWithAuthenticationLogsUserOutOnInvalidGrantRefreshResponse() {
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
+                    // 1. service response
+                    completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
+                }
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { (_, _, completion: HTTPResultHandler<TokenResponse>) in
+                    // 2. failed refresh response
+                    completion(.failure(.errorResponse(code: 400, body: """
+                        {
+                            "error": "invalid_grant",
+                            "error_description": "Invalid refresh token"
+                        }
+                        """)))
+                }
+        }
+
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.remove(forClientId: Fixtures.clientConfig.clientId)).thenDoNothing()
+        }
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        Await.until { done in
+            user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
+                switch result {
+                case .failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)):
+                    // expected error, do nothing
+                    break
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
                 done()
             }
         }
@@ -234,6 +274,7 @@ final class UserTests: XCTestCase {
         user.logout()
         XCTAssertNil(user.tokens)
         XCTAssertNil(user.uuid)
+        XCTAssertFalse(user.isLoggedIn())
         
         verify(mockSessionStorage).remove(forClientId: Fixtures.clientConfig.clientId)
     }

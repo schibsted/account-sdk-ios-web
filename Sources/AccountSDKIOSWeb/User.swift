@@ -39,6 +39,16 @@ public class User: Equatable {
     }
     
     /**
+     Check if this user is logged-in.
+         
+     The user may have been logged out either explicitly via `logout` method or automatically if no valid
+     tokens could be obtained (e.g. due to expired or invalidated refresh token).
+     */
+    public func isLoggedIn() -> Bool {
+        return tokens != nil
+    }
+    
+    /**
      Generate URL with embedded one-time code for creating a web session for the current user.
 
      - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
@@ -89,6 +99,16 @@ extension User {
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
     public func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
+        func shouldLogout(tokenResponseBody: String?) -> Bool {
+            if let errorJSON = tokenResponseBody,
+               let oauthError = OAuthError.fromJSON(errorJSON),
+               oauthError.error == "invalid_grant" {
+                return true
+            }
+            
+            return false
+        }
+
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):
@@ -99,6 +119,15 @@ extension User {
                         case .success(_):
                             // retry the request with fresh tokens
                             self.makeRequest(request: request, completion: completion)
+                        case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
+                            guard shouldLogout(tokenResponseBody: body) else {
+                                completion(requestResult)
+                                return
+                            }
+
+                            SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
+                            self.logout()
+                            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
                         case .failure(_):
                             completion(requestResult)
                         }
