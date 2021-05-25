@@ -13,10 +13,10 @@ public struct UserProfileResponse: Codable, Equatable {
     public var userId: String? = nil
     public var status: Int? = nil
     public var email: String? = nil
-    internal var emailVerified: MaybeString? = nil
+    internal var emailVerified: StringOrIgnore? = nil
     public var emails: [Email]? = nil
     public var phoneNumber: String? = nil
-    internal var phoneNumberVerified: MaybeString? = nil
+    internal var phoneNumberVerified: StringOrIgnore? = nil
     public var phoneNumbers: [PhoneNumber]? = nil
     public var displayName: String? = nil
     public var name: Name? = nil
@@ -144,11 +144,11 @@ extension StringBool {
     }
 }
 
-internal struct MaybeString: Codable, Equatable {
+internal struct StringOrIgnore: Codable, Equatable {
     let value: String?
 }
 
-extension MaybeString {
+extension StringOrIgnore {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         self.value = try? container.decode(String.self)

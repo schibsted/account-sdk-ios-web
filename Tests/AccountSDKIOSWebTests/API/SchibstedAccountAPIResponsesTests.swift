@@ -2,14 +2,14 @@ import XCTest
 @testable import AccountSDKIOSWeb
 
 final class SchibstedAccountAPIResponsesTests: XCTestCase {
-    func testMaybeStringParsesStringValue() throws {
+    func testStringOrIgnoreParsesStringValue() throws {
         let value = "testStringValue"
-        let parsed = try! JSONDecoder().decode(MaybeString.self, from: "\"\(value)\"".data(using: .utf8)!)
+        let parsed = try! JSONDecoder().decode(StringOrIgnore.self, from: "\"\(value)\"".data(using: .utf8)!)
         XCTAssertEqual(parsed.value, value)
     }
     
-    func testMaybeStringIgnoresBoolValue() {
-        let parsed = try! JSONDecoder().decode(MaybeString.self, from: "false".data(using: .utf8)!)
+    func testStringOrIgnoreIgnoresBoolValue() {
+        let parsed = try! JSONDecoder().decode(StringOrIgnore.self, from: "false".data(using: .utf8)!)
         XCTAssertNil(parsed.value)
     }
     
@@ -60,7 +60,7 @@ final class SchibstedAccountAPIResponsesTests: XCTestCase {
             userId: "12345",
             status: 1,
             email: "test@example.com",
-            emailVerified: MaybeString(value: "1970-01-01 00:00:00"),
+            emailVerified: StringOrIgnore(value: "1970-01-01 00:00:00"),
             emails: [
                 Email(
                     value: "test@example.com",
@@ -71,7 +71,7 @@ final class SchibstedAccountAPIResponsesTests: XCTestCase {
                 )
             ],
             phoneNumber: "+46123456",
-            phoneNumberVerified: MaybeString(value: nil),
+            phoneNumberVerified: StringOrIgnore(value: nil),
             phoneNumbers: [
                 PhoneNumber(
                     value: "+46123456",
