@@ -67,6 +67,9 @@ public class Client {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
+
+    @available(iOS 12.0, *)
+    private lazy var asWebAuthSession: ASWebAuthenticationSession? = nil
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -126,6 +129,7 @@ public class Client {
             preconditionFailure("Couldn't create loginURL")
         }
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
+            self.asWebAuthSession = nil
             guard let url = callbackURL else {
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
@@ -153,6 +157,9 @@ public class Client {
     @available(iOS 12.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) {
         let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+        
+        // keep a strong reference to the ASWebAuthenticationSession, only necessary on iOS < 13
+        asWebAuthSession = session
         session.start()
     }
 
