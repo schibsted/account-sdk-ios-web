@@ -46,7 +46,6 @@ public struct SessionStorageConfig {
 }
 
 // Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
-@available(iOS 12.0, *)
 public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return ASPresentationAnchor()
@@ -68,7 +67,6 @@ public class Client {
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
 
-    @available(iOS 12.0, *)
     private lazy var asWebAuthSession: ASWebAuthenticationSession? = nil
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
@@ -122,7 +120,6 @@ public class Client {
             .first
     }
     
-    @available(iOS 12.0, *)
     private func createWebAuthenticationSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let clientScheme = configuration.redirectURI.scheme
         guard let url = loginURL(withMFA: withMFA, extraScopeValues: extraScopeValues) else {
@@ -154,7 +151,6 @@ public class Client {
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter completion: callback that receives the login result
      */
-    @available(iOS 12.0, *)
     public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) {
         let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
         
@@ -189,7 +185,6 @@ public class Client {
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
-    @available(iOS 12.0, *)
     public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
     }
