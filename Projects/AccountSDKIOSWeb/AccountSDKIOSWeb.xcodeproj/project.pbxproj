@@ -129,7 +129,6 @@
 		OBJ_17 /* JOSEUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtil.swift; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_18 /* JWKS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKS.swift; sourceTree = "<group>"; };
-		OBJ_180 /* workspace.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = workspace.xcworkspace; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_183 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_19 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
@@ -404,7 +403,6 @@
 				A9941FD6257523C400513EED /* TestHost */,
 				OBJ_172 /* Products */,
 				OBJ_178 /* cuckoo */,
-				OBJ_180 /* workspace.xcworkspace */,
 				OBJ_182 /* generate_mocks.sh */,
 				OBJ_183 /* README.md */,
 				A95F19EB258269EF000D19F5 /* Recovered References */,
