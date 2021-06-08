@@ -88,6 +88,14 @@ public class Client {
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
+    convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        self.init(configuration: configuration,
+                  sessionStorage: sessionStorage,
+                  stateStorage: stateStorage,
+                  httpClient: httpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+    }
+    
     init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
