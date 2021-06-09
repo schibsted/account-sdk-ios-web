@@ -316,7 +316,7 @@ struct URLBuilder {
     let stateStorage: StateStorage
     let authStateKey: String
     
-    func loginURL(withMFA: MFAType? = nil ,
+    func loginURL(withMFA: MFAType? = nil,
                   loginHint: String? = nil,
                   extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
