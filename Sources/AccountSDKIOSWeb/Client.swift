@@ -77,6 +77,7 @@ public class Client {
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
+    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new  Schibsted keychain storage using UserSession
     public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
@@ -86,8 +87,8 @@ public class Client {
                   httpClient: httpClient,
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
-
-    internal convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    
+    convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
                   stateStorage: stateStorage,
@@ -95,7 +96,7 @@ public class Client {
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
-    internal init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS) {
+    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
@@ -104,22 +105,14 @@ public class Client {
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
     }
 
-    /// Resume any previously logged-in user session
-    public func resumeLastLoggedInUser() -> User? {
-        let stored = sessionStorage.get(forClientId: configuration.clientId)
-        guard let session = stored else {
-            return nil
-        }
-        
-        return User(client: self, tokens: session.userTokens)
-    }
+    
     
     private func getMostRecentSession() -> UserSession? {
         sessionStorage.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }
             .first
     }
-    
+
     private func createWebAuthenticationSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let clientScheme = configuration.redirectURI.scheme
         guard let url = loginURL(withMFA: withMFA, extraScopeValues: extraScopeValues) else {
@@ -132,8 +125,8 @@ public class Client {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
                     completion(.failure(.canceled))
                 } else {
-                    SchibstedAccountLogger.instance.error("Login flow error: \(error)")
-                    completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(error)")))
+                    SchibstedAccountLogger.instance.error("Login flow error: \(String(describing: error))")
+                    completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(String(describing: error))")))
                 }
                 return
             }
@@ -143,74 +136,7 @@ public class Client {
         return session
     }
     
-    /**
-     Start login flow
-     
-     - parameter withMFA: Optional MFA verification to prompt the user with
-     - parameter extraScopeValues: Any additional scope values to request
-        By default `openid` and `offline_access` will always be included as scope values.
-     - parameter completion: callback that receives the login result
-     */
-    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) {
-        let session = getLoginSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
-        
-        // keep a strong reference to the ASWebAuthenticationSession, only necessary on iOS < 13
-        asWebAuthSession = session
-        session.start()
-    }
-
-    /**
-     Start login flow
-     
-     This method must be used for devices with iOS 13 and up.
-     - parameter withMFA: Optional MFA verification to prompt the user with
-     - parameter extraScopeValues: Any additional scope values to request
-        By default `openid` and `offline_access` will always be included as scope values.
-     - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
-     - parameter completion: callback that receives the login result
-     */
-    @available(iOS 13.0, *)
-    public func login(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) {
-        let contextProvider = ASWebAuthSessionContextProvider()
-        let session = getLoginSession(contextProvider: contextProvider, withMFA: withMFA, extraScopeValues: extraScopeValues, withSSO: withSSO, completion: completion)
-        session.start()
-    }
-
-    /**
-     Get web authentication session
-     
-     - parameter withMFA: Optional MFA verification to prompt the user with
-     - parameter extraScopeValues: Any additional scope values to request
-        By default `openid` and `offline_access` will always be included as scope values.
-     - parameter completion: callback that receives the login result
-     - returns Web authentication session to start for the login flows
-     */
-    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
-    }
-    
-    /**
-     Get web authentication session
-     
-     This method must be used for devices with iOS 13 and up.
-     - parameter contextProvider: Delegate to provide presentation context for the `ASWebAuthenticationSession`
-     - parameter withMFA: Optional MFA verification to prompt the user with
-     - parameter extraScopeValues: Any additional scope values to request
-        By default `openid` and `offline_access` will always be included as scope values.
-     - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
-     - parameter completion: callback that receives the login result
-     - returns Web authentication session to start for the login flows
-     */
-    @available(iOS 13.0, *)
-    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
-        session.presentationContextProvider = contextProvider
-        session.prefersEphemeralWebBrowserSession = !withSSO
-        
-        return session
-    }
-    
-    internal func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
+    func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
@@ -248,41 +174,7 @@ public class Client {
         )
     }
     
-    /**
-     Call this with the full URL received as deep link to complete the login flow.
-        
-     This only needs to be used if manually starting the login flow using `getLoginSession`.
-     Calling `login()` will handle this for you.
-     
-     - parameter url: full URL from received deep link upon completion of user authentication
-     - parameter completion: callback that receives the login result
-    */
-    public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
-        // Check if coming back after triggered web flow login
-        guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
-           let receivedState = url.valueOf(queryParameter: "state"),
-           storedData.state == receivedState else {
-                completion(.failure(.unsolicitedResponse))
-                return
-        }
-        stateStorage.removeValue(forKey: type(of: self).authStateKey)
-
-        if let error = url.valueOf(queryParameter: "error") {
-            completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
-            return
-        }
-        
-        guard let authCode = url.valueOf(queryParameter: "code") else {
-            completion(.failure(.unexpectedError(message: "Missing authorization code from authentication response")))
-            return
-        }
-
-        tokenHandler.makeTokenRequest(authCode: authCode, authState: storedData) {
-            self.handleTokenRequestResult($0, completion: completion)
-        }
-    }
-    
-    internal func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
             completion(.failure(.noRefreshToken))
@@ -345,7 +237,7 @@ public class Client {
         }
     }
     
-    internal func destroySession() {
+    func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
 
@@ -385,5 +277,88 @@ public class Client {
             preconditionFailure("Failed to create URL from \(urlComponents)")
         }
         return finalUrl
+    }
+}
+
+extension Client {
+    
+    // MARK: - Public
+    
+    /// Resume any previously logged-in user session
+    public func resumeLastLoggedInUser() -> User? {
+        let stored = sessionStorage.get(forClientId: configuration.clientId)
+        guard let session = stored else {
+            return nil
+        }
+        
+        return User(client: self, tokens: session.userTokens)
+    }
+ 
+    /**
+     Get web authentication session
+     
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter completion: callback that receives the login result
+     - returns Web authentication session to start for the login flows
+     */
+    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+    }
+    
+    /**
+     Get web authentication session
+     
+     This method must be used for devices with iOS 13 and up.
+     - parameter contextProvider: Delegate to provide presentation context for the `ASWebAuthenticationSession`
+     - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter extraScopeValues: Any additional scope values to request
+        By default `openid` and `offline_access` will always be included as scope values.
+     - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
+     - parameter completion: callback that receives the login result
+     - returns Web authentication session to start for the login flows
+     */
+    @available(iOS 13.0, *)
+    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+        session.presentationContextProvider = contextProvider
+        session.prefersEphemeralWebBrowserSession = !withSSO
+        
+        return session
+    }
+    
+    /**
+     Call this with the full URL received as deep link to complete the login flow.
+        
+     This only needs to be used if manually starting the login flow using `getLoginSession`.
+     Calling `login()` will handle this for you.
+     
+     - parameter url: full URL from received deep link upon completion of user authentication
+     - parameter completion: callback that receives the login result
+    */
+    public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
+        // Check if coming back after triggered web flow login
+        guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
+           let receivedState = url.valueOf(queryParameter: "state"),
+           storedData.state == receivedState else {
+                completion(.failure(.unsolicitedResponse))
+                return
+        }
+        stateStorage.removeValue(forKey: type(of: self).authStateKey)
+
+        if let error = url.valueOf(queryParameter: "error") {
+            completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
+            return
+        }
+        
+        guard let authCode = url.valueOf(queryParameter: "code") else {
+            completion(.failure(.unexpectedError(message: "Missing authorization code from authentication response")))
+            return
+        }
+
+        tokenHandler.makeTokenRequest(authCode: authCode, authState: storedData) {
+            self.handleTokenRequestResult($0, completion: completion)
+        }
     }
 }
