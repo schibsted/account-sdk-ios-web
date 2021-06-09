@@ -167,7 +167,7 @@ public class Client {
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
         
-        if let loginHint = loginHint { authRequestParams.append(URLQueryItem(name: "loginHint", value: loginHint)) }
+        if let loginHint = loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
         
         if let mfa = withMFA {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
