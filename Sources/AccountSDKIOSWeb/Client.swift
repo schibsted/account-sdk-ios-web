@@ -77,7 +77,7 @@ public class Client {
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
-    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new  Schibsted keychain storage using UserSession
+    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
     public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
@@ -113,9 +113,12 @@ public class Client {
             .first
     }
 
-    private func createWebAuthenticationSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+    private func createWebAuthenticationSession(withMFA: MFAType? = nil,
+                                                loginHint: String?,
+                                                extraScopeValues: Set<String> = [],
+                                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let clientScheme = configuration.redirectURI.scheme
-        guard let url = loginURL(withMFA: withMFA, extraScopeValues: extraScopeValues) else {
+        guard let url = loginURL(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues) else {
             preconditionFailure("Couldn't create loginURL")
         }
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
@@ -136,7 +139,9 @@ public class Client {
         return session
     }
     
-    func loginURL(withMFA: MFAType? = nil, extraScopeValues: Set<String> = []) -> URL? {
+    func loginURL(withMFA: MFAType? = nil ,
+                  loginHint: String? = nil,
+                  extraScopeValues: Set<String> = []) -> URL? {
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
@@ -161,6 +166,9 @@ public class Client {
             URLQueryItem(name: "code_challenge", value: codeChallenge),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
+        
+        if let loginHint = loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
+        
         if let mfa = withMFA {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
         } else {
@@ -303,8 +311,11 @@ extension Client {
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
-    public func getLoginSession(withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        return createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+    public func getLoginSession(withMFA: MFAType? = nil,
+                                loginHint: String? = nil,
+                                extraScopeValues: Set<String> = [],
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
     }
     
     /**
@@ -320,8 +331,12 @@ extension Client {
      - returns Web authentication session to start for the login flows
      */
     @available(iOS 13.0, *)
-    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding, withMFA: MFAType? = nil, extraScopeValues: Set<String> = [], withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let session = createWebAuthenticationSession(withMFA: withMFA, extraScopeValues: extraScopeValues, completion: completion)
+    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
+                                withMFA: MFAType? = nil,
+                                loginHint: String? = nil,
+                                extraScopeValues: Set<String> = [],
+                                withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
         
