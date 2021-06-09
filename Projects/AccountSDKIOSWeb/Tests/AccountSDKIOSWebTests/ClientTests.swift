@@ -22,7 +22,7 @@ final class ClientTests: XCTestCase {
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        let loginURL = client.loginURL()
+        let loginURL = client.urlBuilder.loginURL()
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -50,7 +50,7 @@ final class ClientTests: XCTestCase {
             when(mock.setValue(any(), forKey: Client.authStateKey)).thenDoNothing()
         }
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        let loginURL = client.loginURL(extraScopeValues: ["scope1", "scope2"])
+        let loginURL = client.urlBuilder.loginURL(extraScopeValues: ["scope1", "scope2"])
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -78,7 +78,7 @@ final class ClientTests: XCTestCase {
             when(mock.setValue(any(), forKey: Client.authStateKey)).thenDoNothing()
         }
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        let loginURL = client.loginURL(withMFA: .otp)
+        let loginURL = client.urlBuilder.loginURL(withMFA: .otp)
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
