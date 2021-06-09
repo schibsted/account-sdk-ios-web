@@ -52,7 +52,7 @@ internal enum IdTokenValidator {
                 }
                 
                 guard IdTokenValidator.contains(claims.amr, value: context.expectedAMR) else {
-                    SchibstedAccountLogger.instance.info("Requested AMR values were not fulfilled: \(claims.amr) != \(context.expectedAMR)")
+                    SchibstedAccountLogger.instance.info("Requested AMR values were not fulfilled: \(String(describing: claims.amr)) != \(String(describing: context.expectedAMR))")
                     completion(.failure(.missingExpectedAMRValue))
                     return
                 }

@@ -54,7 +54,7 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 
 /// Represents a client registered with Schibsted account
 public class Client {
-    public let configuration: ClientConfiguration
+    let configuration: ClientConfiguration
     let urlBuilder: URLBuilder
     
     internal static let authStateKey = "AuthState"
@@ -259,6 +259,7 @@ extension Client {
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
