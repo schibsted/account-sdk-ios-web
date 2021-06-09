@@ -77,7 +77,7 @@ public class Client {
                   jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
     }
     
-    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new  Schibsted keychain storage using UserSession
+    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
     public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
