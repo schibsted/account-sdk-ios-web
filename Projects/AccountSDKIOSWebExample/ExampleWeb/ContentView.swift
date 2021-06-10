@@ -6,7 +6,7 @@ import AuthenticationServices
 struct ContentView: View {
     let client: Client
     private let clientScheme: String
-//    private var asWebAuthSession: ASWebAuthenticationSession?
+
     @State private var user: User?
     var userIsLoggedIn: Bool {
         get {
@@ -50,7 +50,6 @@ struct ContentView: View {
                         let context = ASWebAuthSessionContextProvider()
                         asWebAuthSession = client.getLoginSession(contextProvider: context,
                                                                   withMFA: .otp,
-                                                                  loginHint: "daniel.echegaray@schibsted.com", extraScopeValues: [], //  ["offline_access", "email", "openid", "profile", "address", "phone"],
                                                                   withSSO: true,
                                                                   completion: { result in
                             switch result {
@@ -74,7 +73,6 @@ struct ContentView: View {
                         let context = ASWebAuthSessionContextProvider()
                         asWebAuthSession = client.getLoginSession(contextProvider: context,
                                                                   withMFA: .sms,
-                                                                  loginHint: "daniel.echegaray@schibsted.com",
                                                                   withSSO: true) { result in
                             switch result {
                             case .success(let user):
@@ -94,7 +92,6 @@ struct ContentView: View {
                 let loginButton = Button(action: {
                     let context = ASWebAuthSessionContextProvider()
                     asWebAuthSession = client.getLoginSession(contextProvider: context,
-                                                              loginHint: "daniel.echegaray@schibsted.com",
                                                               withSSO: true,
                                                               completion: handleResult)
                     asWebAuthSession?.start()

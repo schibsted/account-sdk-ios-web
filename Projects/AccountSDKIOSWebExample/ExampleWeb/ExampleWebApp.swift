@@ -3,14 +3,10 @@ import AccountSDKIOSWeb
 
 @main
 struct ExampleWebApp: App {
-//    private let clientData = ClientData.fromPlist(resource: "ClientData.pre")!
     private let client: Client
     
     init() {
-        
-        
-
-        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")! //SchibstedAccount.Development.RedirectURI"
+        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
         let clientConfiguration = ClientConfiguration(environment: .pre,
                                                       clientId: "602504e1b41fa31789a95aa7",
                                                       redirectURI: clientRedirectURI)

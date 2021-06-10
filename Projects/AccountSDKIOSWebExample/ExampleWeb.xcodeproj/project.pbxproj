@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		240AC5A6266A55CE00E4C3D3 /* ClientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240AC5A5266A55CE00E4C3D3 /* ClientData.swift */; };
 		2421BF5B266F97FA0043E620 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */; };
 		2421BF5C266F97FA0043E620 /* AccountSDKIOSWeb.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		249F9FAE266A52AF00F166CB /* ExampleWebApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */; };
@@ -76,7 +75,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		240AC5A5266A55CE00E4C3D3 /* ClientData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientData.swift; sourceTree = "<group>"; };
 		2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		249F9FAA266A52AF00F166CB /* ExampleWeb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleWeb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleWebApp.swift; sourceTree = "<group>"; };
@@ -147,7 +145,6 @@
 			isa = PBXGroup;
 			children = (
 				249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */,
-				240AC5A5266A55CE00E4C3D3 /* ClientData.swift */,
 				249F9FAF266A52AF00F166CB /* ContentView.swift */,
 				249F9FB1266A52B000F166CB /* Assets.xcassets */,
 				249F9FB6266A52B000F166CB /* Info.plist */,
@@ -344,7 +341,6 @@
 			files = (
 				249F9FB0266A52AF00F166CB /* ContentView.swift in Sources */,
 				249F9FAE266A52AF00F166CB /* ExampleWebApp.swift in Sources */,
-				240AC5A6266A55CE00E4C3D3 /* ClientData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
