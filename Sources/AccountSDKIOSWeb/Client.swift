@@ -56,7 +56,6 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 public class Client {
     let configuration: ClientConfiguration
     let urlBuilder: URLBuilder
-    var contextProvider: ASWebAuthSessionContextProvider?
     
     internal static let authStateKey = "AuthState"
     private static let keychainServiceName = "com.schibsted.account"
@@ -255,21 +254,15 @@ extension Client {
      - returns Web authentication session to start for the login flows
      */
     @available(iOS 13.0, *)
-    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding? = nil,
+    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
                                 withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
+        session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
-        
-        if let contextProvider = contextProvider {
-            session.presentationContextProvider = contextProvider
-        } else {
-            self.contextProvider = ASWebAuthSessionContextProvider()
-            session.presentationContextProvider = self.contextProvider
-        }
         
         return session
     }
