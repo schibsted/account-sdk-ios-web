@@ -66,8 +66,6 @@ public class Client {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
-
-    private lazy var asWebAuthSession: ASWebAuthenticationSession? = nil
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -125,7 +123,6 @@ public class Client {
         }
         
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
-            self.asWebAuthSession = nil
             guard let url = callbackURL else {
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
