@@ -1,10 +1,3 @@
-//
-//  URLBuilderTests.swift
-//  AccountSDKIOSWeb
-//
-//  Created by Daniel Echegaray on 2021-06-11.
-//
-
 import XCTest
 import Cuckoo
 @testable import AccountSDKIOSWeb
