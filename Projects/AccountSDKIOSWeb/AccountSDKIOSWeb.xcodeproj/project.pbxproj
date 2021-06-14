@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2449DCAC2673633C00FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2449DCBE267363CF00FE7197 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCB2267363BF00FE7197 /* URLBuilderTests.swift */; };
+		2449DD312677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C97F26733A0900AA0A4C /* TokenHandler.swift */; };
 		2489C9A626733A0900AA0A4C /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C98026733A0900AA0A4C /* Logging.swift */; };
@@ -98,6 +99,7 @@
 /* Begin PBXFileReference section */
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DCB2267363BF00FE7197 /* URLBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
+		2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorisationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		2489C97F26733A0900AA0A4C /* TokenHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
 		2489C98026733A0900AA0A4C /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				2489C9A126733A0900AA0A4C /* API */,
 				2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */,
 				2449DCAB2673633C00FE7197 /* URLBuilder.swift */,
+				2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */,
 			);
 			name = AccountSDKIOSWeb;
 			path = ../../Sources/AccountSDKIOSWeb;
@@ -677,6 +680,7 @@
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,
 				2489C9B526733A0900AA0A4C /* LegacyKeychainTokenStorage.swift in Sources */,
 				2489C9B226733A0900AA0A4C /* UserDefaultsStorage.swift in Sources */,
+				2449DD312677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift in Sources */,
 				2489C9AB26733A0900AA0A4C /* Version.swift in Sources */,
 				2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */,
 				2489C9AA26733A0900AA0A4C /* Cache.swift in Sources */,

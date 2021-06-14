@@ -100,7 +100,7 @@ public class Client {
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
-        self.urlBuilder = URLBuilder(configuration: configuration, stateStorage: stateStorage, authStateKey: Client.authStateKey)
+        self.urlBuilder = URLBuilder(configuration: configuration)
     }
 
     
@@ -111,13 +111,31 @@ public class Client {
             .first
     }
 
+    /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
+    private func storeOAuth2State(withMFA: MFAType?) -> URLBuilder.AuthorisationRequest {
+        let authorisationRequest = URLBuilder.AuthorisationRequest()
+        
+        let authState = AuthState(state: authorisationRequest.state, nonce: authorisationRequest.nonce, codeVerifier: authorisationRequest.codeVerifier, mfa: withMFA)
+        
+        guard stateStorage.setValue(authState, forKey: Client.authStateKey) else {
+            SchibstedAccountLogger.instance.error("Failed to store login state")
+            preconditionFailure("Couln't store login state")
+        }
+        
+        return authorisationRequest
+    }
+    
     private func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                                 loginHint: String?,
                                                 extraScopeValues: Set<String> = [],
                                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let clientScheme = configuration.redirectURI.scheme
         
-        guard let url = urlBuilder.loginURL(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues) else {
+        let clientScheme = configuration.redirectURI.scheme
+        let request = storeOAuth2State(withMFA: withMFA)        
+        guard let url = urlBuilder.loginURL(withMFA: withMFA,
+                                            loginHint: loginHint,
+                                            extraScopeValues: extraScopeValues,
+                                            authorisationRequest: request) else {
             preconditionFailure("Couldn't create loginURL")
         }
         
