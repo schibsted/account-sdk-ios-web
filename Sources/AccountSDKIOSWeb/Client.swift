@@ -65,6 +65,7 @@ public class Client {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
+    private let urlBuilder: URLBuilder
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -132,7 +133,7 @@ public class Client {
         
         let clientScheme = configuration.redirectURI.scheme
         let request = storeOAuth2State(withMFA: withMFA)        
-        guard let url = urlBuilder.loginURL(withMFA: withMFA,
+        guard let url = self.urlBuilder.loginURL(withMFA: withMFA,
                                             loginHint: loginHint,
                                             extraScopeValues: extraScopeValues,
                                             authorisationRequest: request) else {
