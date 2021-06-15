@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2449DD312677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */; };
+		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
@@ -98,7 +98,7 @@
 
 /* Begin PBXFileReference section */
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
-		2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorisationRequest.swift"; sourceTree = "<group>"; };
+		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
 		2489C97F26733A0900AA0A4C /* TokenHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
@@ -224,7 +224,7 @@
 				2489C9A126733A0900AA0A4C /* API */,
 				2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */,
 				2449DCAB2673633C00FE7197 /* URLBuilder.swift */,
-				2449DD302677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift */,
+				2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */,
 			);
 			name = AccountSDKIOSWeb;
 			path = ../../Sources/AccountSDKIOSWeb;
@@ -680,7 +680,7 @@
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,
 				2489C9B526733A0900AA0A4C /* LegacyKeychainTokenStorage.swift in Sources */,
 				2489C9B226733A0900AA0A4C /* UserDefaultsStorage.swift in Sources */,
-				2449DD312677527F00FE7197 /* URLBuilder+AuthorisationRequest.swift in Sources */,
+				2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */,
 				2489C9AB26733A0900AA0A4C /* Version.swift in Sources */,
 				2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */,
 				2489C9AA26733A0900AA0A4C /* Cache.swift in Sources */,
