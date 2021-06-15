@@ -132,8 +132,7 @@ public class Client {
         let authState = storeAuthState(withMFA: withMFA)
         let authRequest = URLBuilder.AuthorizationRequest(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, authState: authState)
         
-        guard let url = self.urlBuilder.loginURL(authRequest: authRequest,
-                                                 authState: authState) else {
+        guard let url = self.urlBuilder.loginURL(authRequest: authRequest) else {
             preconditionFailure("Couldn't create loginURL")
         }
         

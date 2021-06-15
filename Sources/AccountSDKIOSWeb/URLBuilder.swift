@@ -5,8 +5,7 @@ struct URLBuilder {
     let configuration: ClientConfiguration
     let defaultScopeValues = ["openid", "offline_access"]
     
-    func loginURL(authRequest: AuthorizationRequest,
-                  authState: AuthState) -> URL? {
+    func loginURL(authRequest: AuthorizationRequest) -> URL? {
 
         let scopes = authRequest.extraScopeValues.union(defaultScopeValues)
         let scopeString = scopes.joined(separator: " ")
@@ -17,9 +16,9 @@ struct URLBuilder {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: scopeString),
             
-            URLQueryItem(name: "state", value: authState.state),
-            URLQueryItem(name: "nonce", value: authState.nonce),
-            URLQueryItem(name: "code_challenge", value: authState.codeChallenge),
+            URLQueryItem(name: "state", value: authRequest.authState.state),
+            URLQueryItem(name: "nonce", value: authRequest.authState.nonce),
+            URLQueryItem(name: "code_challenge", value: authRequest.authState.codeChallenge),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
         ]
         
