@@ -1,5 +1,4 @@
 import AuthenticationServices
-import CommonCrypto
 import Foundation
 
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
@@ -54,20 +53,18 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 
 /// Represents a client registered with Schibsted account
 public class Client {
-    public let configuration: ClientConfiguration
+    let configuration: ClientConfiguration
     
-    internal static let authStateKey = "AuthState"
+    static let authStateKey = "AuthState"
     private static let keychainServiceName = "com.schibsted.account"
-    private static let defaultScopeValues = ["openid", "offline_access"]
 
-    internal let httpClient: HTTPClient
-    internal let schibstedAccountAPI: SchibstedAccountAPI
+    let httpClient: HTTPClient
+    let schibstedAccountAPI: SchibstedAccountAPI
 
+    private let urlBuilder: URLBuilder
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
-
-    private lazy var asWebAuthSession: ASWebAuthenticationSession? = nil
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
@@ -103,6 +100,7 @@ public class Client {
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
+        self.urlBuilder = URLBuilder(configuration: configuration, stateStorage: stateStorage, authStateKey: Client.authStateKey)
     }
 
     
@@ -118,11 +116,12 @@ public class Client {
                                                 extraScopeValues: Set<String> = [],
                                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let clientScheme = configuration.redirectURI.scheme
-        guard let url = loginURL(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues) else {
+        
+        guard let url = urlBuilder.loginURL(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues) else {
             preconditionFailure("Couldn't create loginURL")
         }
+        
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
-            self.asWebAuthSession = nil
             guard let url = callbackURL else {
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
@@ -138,50 +137,7 @@ public class Client {
         }
         return session
     }
-    
-    func loginURL(withMFA: MFAType? = nil ,
-                  loginHint: String? = nil,
-                  extraScopeValues: Set<String> = []) -> URL? {
-        let state = randomString(length: 10)
-        let nonce = randomString(length: 10)
-        let codeVerifier = randomString(length: 60)
-        let authState = AuthState(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: withMFA)
-
-        if !stateStorage.setValue(authState, forKey: type(of: self).authStateKey) {
-            SchibstedAccountLogger.instance.error("Failed to store login state")
-            return nil;
-        }
-
-        let scopes = extraScopeValues.union(Client.defaultScopeValues)
-        let scopeString = scopes.joined(separator: " ")
-        let codeChallenge = computeCodeChallenge(from: codeVerifier)
-
-        var authRequestParams = [
-            URLQueryItem(name: "client_id", value: configuration.clientId),
-            URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: scopeString),
-            URLQueryItem(name: "state", value: state),
-            URLQueryItem(name: "nonce", value: nonce),
-            URLQueryItem(name: "code_challenge", value: codeChallenge),
-            URLQueryItem(name: "code_challenge_method", value: "S256"),
-        ]
         
-        if let loginHint = loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
-        
-        if let mfa = withMFA {
-            authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
-        } else {
-            // Only add this if no MFA is specified to avoid prompting user unnecessarily
-            authRequestParams.append(URLQueryItem(name: "prompt", value: "select_account"))
-        }
-
-        return makeURLWithQuery(
-            forPath: "/oauth/authorize",
-            queryItems: authRequestParams
-        )
-    }
-    
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
@@ -228,7 +184,7 @@ public class Client {
             let user = User(client: self, tokens: tokenResult.userTokens)
             completion(.success(user))
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
-            SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(body)")
+            SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(String(describing: body))")
             if let errorJSON = body,
                let oauthError = OAuthError.fromJSON(errorJSON) {
                 completion(.failure(.tokenErrorResponse(error: oauthError)))
@@ -248,44 +204,7 @@ public class Client {
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
-
-    private func randomString(length: Int) -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return String((0..<length).map { _ in letters.randomElement()! })
-    }
     
-    private func computeCodeChallenge(from codeVerifier: String) -> String {
-        func base64url(data: Data) -> String {
-            let base64url = data.base64EncodedString()
-                .replacingOccurrences(of: "/", with: "_")
-                .replacingOccurrences(of: "+", with: "-")
-                .replacingOccurrences(of: "=", with: "")
-            return base64url
-        }
-
-        func sha256(data: Data) -> Data {
-            var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-            data.withUnsafeBytes {
-                _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
-            }
-            return Data(hash)
-        }
-
-        return base64url(data: sha256(data: Data(codeVerifier.utf8)))
-    }
-    
-    private func makeURLWithQuery(forPath path: String, queryItems: [URLQueryItem]) -> URL {
-        let url = configuration.serverURL.appendingPathComponent(path)
-        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            preconditionFailure("Failed to create URLComponents from \(url)")
-        }
-        urlComponents.queryItems = queryItems
-
-        guard let finalUrl = urlComponents.url else {
-            preconditionFailure("Failed to create URL from \(urlComponents)")
-        }
-        return finalUrl
-    }
 }
 
 extension Client {

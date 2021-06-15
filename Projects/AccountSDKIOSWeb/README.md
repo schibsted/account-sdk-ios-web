@@ -27,11 +27,13 @@ Use Swift Package Manager: `.package(url: "https://github.schibsted.io/spt-ident
 let clientConfiguration = ClientConfiguration(environment: .pre,
                                               clientId: clientId,
                                               redirectURI: redirectURI)
-let client = Client(configuration: clientConfiguration)
-client.login(withSSO: true) { result in
+let client = Client(configuration: clientConfiguration) 
+let contextProvider = ASWebAuthSessionContextProvider()
+let asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, withSSO: true, completion: { result in
     switch result {
     case .success(let user):
-        print("Success - logged in as \(user.uuid)!")
+        print("Success - logged in as \(String(describing: user.uuid))")
+        self.user = user
     case .failure(let error):
         print(error)
     }
@@ -44,7 +46,9 @@ client.login(withSSO: true) { result in
             print(error)
         }
     }
-}
+})
+
+asWebAuthSession.start()
 ```
 
 ### Notes when using Universal Links
@@ -96,7 +100,7 @@ This SDK implements the [best practices for user authentication via an OpenID Co
 * It uses [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
   This allows for single-sign on between apps, with the user being recognized as a returning user to Schibsted account via cookies.
   On iOS 13 and above this behavior can be disabled, which also removes the extra user prompt about allowing to use Schibsted account for login, using
-  `withSSO: false` in `Client.login(withMFA:extraScopeValues:withSSO:completion:)`.
+  `withSSO: false` in `Client.getLoginSession(withMFA:loginHint:extraScopeValues:withSSO:completion:)`.
 * After the completed user authentication, user tokens are obtained and stored securely in the keychain storage.
     * Authenticated requests to backend services can be done via
       [`User.withAuthentication`](https://pages.github.schibsted.io/spt-identity/AccountSDKIOSWeb/Classes/User.html#/s:16AccountSDKIOSWeb4UserC18withAuthentication7request0D11RetryPolicy10completiony10Foundation10URLRequestV_AA0gH0_pys6ResultOyxAA9HTTPErrorOGctSeRzlF).

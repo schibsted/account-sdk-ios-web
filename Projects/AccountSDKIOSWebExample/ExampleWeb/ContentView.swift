@@ -5,6 +5,7 @@ import AuthenticationServices
 
 struct ContentView: View {
     let client: Client
+    private let clientID: String
     private let clientScheme: String
 
     @State private var user: User?
@@ -19,9 +20,10 @@ struct ContentView: View {
 
     @State private var asWebAuthSession: ASWebAuthenticationSession?
 
-    init(client: Client) {
+    init(client: Client, clientID: String, clientRedirectURIScheme: String?) {
         self.client = client
-        clientScheme = client.configuration.redirectURI.scheme!
+        self.clientID = clientID
+        self.clientScheme = clientRedirectURIScheme!
     }
 
     var body: some View {
@@ -30,7 +32,7 @@ struct ContentView: View {
 
             VStack(spacing: 20) {
                 Group {
-                    Text("Client: \(client.configuration.clientId)")
+                    Text("Client: \(clientID)")
                     Text("Logged-in as \(user?.uuid ?? "unknown")")
                 }
                 
