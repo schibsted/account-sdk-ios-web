@@ -29,7 +29,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil, codeChallenge: "challenge")
             when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
             when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
@@ -47,7 +47,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil)
+            let authState = AuthState(state: state, nonce: "testNonce", codeVerifier: "codeVerifier", mfa: nil, codeChallenge: "challenge")
             when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
             when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
@@ -86,7 +86,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let authState = AuthState(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            let authState = AuthState(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil, codeChallenge: "challenge")
             when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
             when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
@@ -109,7 +109,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let authState = AuthState(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil)
+            let authState = AuthState(state: state, nonce: Fixtures.idTokenClaims.nonce!, codeVerifier: "codeVerifier", mfa: nil, codeChallenge: "challenge")
             when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
             when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }
@@ -166,7 +166,7 @@ final class ClientTests: XCTestCase {
         let state = "testState"
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
-            let authState = AuthState(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp)
+            let authState = AuthState(state: state, nonce: nonce, codeVerifier: "codeVerifier", mfa: MFAType.otp, codeChallenge: "challenge")
             when(mock.value(forKey: Client.authStateKey)).thenReturn(try! JSONEncoder().encode(authState))
             when(mock.removeValue(forKey: Client.authStateKey)).thenDoNothing()
         }

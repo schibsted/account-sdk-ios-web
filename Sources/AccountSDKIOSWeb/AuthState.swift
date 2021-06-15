@@ -8,12 +8,18 @@ internal struct AuthState: Codable {
     let mfa: MFAType?
     let codeChallenge: String
     
+}
+
+extension AuthState {
+    
     init(mfa: MFAType?) {
-        self.mfa = mfa
-        self.state = randomString(length: 10)
-        self.nonce = randomString(length: 10)
-        self.codeVerifier = randomString(length: 60)
-        self.codeChallenge = computeCodeChallenge(from: codeVerifier)
+        
+        let state = randomString(length: 10)
+        let nonce = randomString(length: 10)
+        let codeVerifier = randomString(length: 60)
+        let codeChallenge = computeCodeChallenge(from: codeVerifier)
+        
+        self.init(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: mfa, codeChallenge: codeChallenge)
     }
 }
 
