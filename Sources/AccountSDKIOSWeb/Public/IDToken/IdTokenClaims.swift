@@ -1,6 +1,7 @@
 import Foundation
 
-public struct IdTokenClaims: Codable, Equatable {
+// DO NOT SEEM TO BE USED BY ANY PUBLIC FUNCITON. DOES IT NEED TO BE PUBLIC?
+struct IdTokenClaims: Codable, Equatable {
     let iss: String
     let sub: String
     let userId: String
@@ -21,7 +22,7 @@ public struct IdTokenClaims: Codable, Equatable {
 }
 
 extension IdTokenClaims {
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
         self.iss = try values.decode(String.self, forKey: .iss)
@@ -45,7 +46,7 @@ extension IdTokenClaims {
 }
 
 extension IdTokenClaims {
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(iss, forKey: .iss)

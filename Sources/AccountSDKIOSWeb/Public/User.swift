@@ -1,9 +1,5 @@
 import Foundation
 
-public enum LoginStateError: Error {
-    case notLoggedIn
-}
-
 /// Representation of logged-in user.
 public class User: Equatable {
     private let client: Client

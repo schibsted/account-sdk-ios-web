@@ -66,7 +66,7 @@ public class Client {
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
     
-    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient?) {
+    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         self.init(configuration: configuration,
                   sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
@@ -76,7 +76,7 @@ public class Client {
     }
     
     /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
-    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient?) {
+    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
