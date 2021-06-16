@@ -347,9 +347,8 @@
 				24EB156E267A2482002D9628 /* IdTokenValidator.swift */,
 				24EB1557267A2350002D9628 /* IdTokenClaims.swift */,
 			);
-			name = IDToken;
-			path = "/Users/daniel.echegarayschibsted.com/Documents/Schibsted/git-repos/AccountSDKIOSWeb/Sources/AccountSDKIOSWeb/Internal/IDToken";
-			sourceTree = "<absolute>";
+			path = IDToken;
+			sourceTree = "<group>";
 		};
 		24EB14F72679F70E002D9628 /* HTTP */ = {
 			isa = PBXGroup;
