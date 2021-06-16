@@ -45,6 +45,8 @@
 		24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */; };
 		24EB14DE2679E139002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */; };
 		24EB14F92679F882002D9628 /* NoRetries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14F82679F882002D9628 /* NoRetries.swift */; };
+		24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */; };
+		24EB1512267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
 		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
 		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
@@ -139,6 +141,8 @@
 		24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidationError.swift; sourceTree = "<group>"; };
 		24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
 		24EB14F82679F882002D9628 /* NoRetries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRetries.swift; sourceTree = "<group>"; };
+		24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRetryPolicy.swift; sourceTree = "<group>"; };
+		24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSchibstedAccountAPIResponses.swift; sourceTree = "<group>"; };
 		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
 		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
 		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
@@ -288,7 +292,6 @@
 			isa = PBXGroup;
 			children = (
 				2489C9A226733A0900AA0A4C /* SchibstedAccountAPIResponses.swift */,
-				2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 		24EB14692679D81F002D9628 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
+				24EB1504267A0E29002D9628 /* API */,
 				2489C99B26733A0900AA0A4C /* HTTP */,
 				2489C98A26733A0900AA0A4C /* JOSE */,
 				24EB14A62679DD6C002D9628 /* IdToken */,
@@ -352,6 +356,16 @@
 				2489C99F26733A0900AA0A4C /* HTTPClient.swift */,
 			);
 			path = HTTP;
+			sourceTree = "<group>";
+		};
+		24EB1504267A0E29002D9628 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */,
+				24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */,
+				24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 		A93EFCD2263012FC008200D1 /* API */ = {
@@ -723,7 +737,9 @@
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
 				2489C9B426733A0900AA0A4C /* MigratingKeychainCompatStorage.swift in Sources */,
 				2489C9B826733A0900AA0A4C /* SessionStorage.swift in Sources */,
+				24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */,
 				2489C9B326733A0900AA0A4C /* LegacyKeychainSessionStorage.swift in Sources */,
+				24EB1512267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift in Sources */,
 				2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */,
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,
 				24EB14DE2679E139002D9628 /* IdTokenValidator.swift in Sources */,
