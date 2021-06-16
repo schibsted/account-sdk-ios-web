@@ -6,7 +6,6 @@ import AuthenticationServices
 struct ContentView: View {
     let client: Client
     private let clientID: String
-    private let clientScheme: String
 
     @State private var user: User?
     var userIsLoggedIn: Bool {
@@ -20,10 +19,9 @@ struct ContentView: View {
 
     @State private var asWebAuthSession: ASWebAuthenticationSession?
 
-    init(client: Client, clientID: String, clientRedirectURIScheme: String?) {
+    init(client: Client, clientID: String) {
         self.client = client
         self.clientID = clientID
-        self.clientScheme = clientRedirectURIScheme!
     }
 
     var body: some View {
