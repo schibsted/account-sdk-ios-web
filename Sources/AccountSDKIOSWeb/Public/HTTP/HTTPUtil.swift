@@ -9,7 +9,7 @@ internal enum HTTPUtil {
         return allowedCharacterSet as CharacterSet
     }()
 
-    public static func formURLEncode(parameters: [String: String]) -> Data? {
+    static func formURLEncode(parameters: [String: String]) -> Data? {
         let encoded = parameters.map { key, value in
             let encodedKey = formURLEncodeValue(key)
             let encodedValue = formURLEncodeValue(value)

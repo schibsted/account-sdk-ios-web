@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-internal enum UserAgent {
+private enum UserAgent {
     private static let deviceInfo = UIDevice.current
     static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
 }

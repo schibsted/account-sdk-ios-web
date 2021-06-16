@@ -7,17 +7,6 @@ internal struct IdTokenValidationContext {
     var expectedAMR: String? = nil
 }
 
-public enum IdTokenValidationError: Error, Equatable {
-    case signatureValidationError(SignatureValidationError)
-    case failedToDecodePayload
-    case missingIdToken
-    case invalidNonce
-    case missingExpectedAMRValue
-    case invalidIssuer
-    case invalidAudience
-    case expired
-}
-
 internal enum IdTokenValidator {
     static func validate(idToken: String, jwks: JWKS, context: IdTokenValidationContext, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
         JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
