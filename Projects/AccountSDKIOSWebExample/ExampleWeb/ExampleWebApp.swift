@@ -16,7 +16,7 @@ struct ExampleWebApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(client: client, clientID: clientId, clientRedirectURIScheme: clientRedirectURIScheme)
+            ContentView(client: client, clientID: clientId)
         }
     }
 }
