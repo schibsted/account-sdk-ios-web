@@ -66,23 +66,25 @@ public class Client {
     private let stateStorage: StateStorage
     private let sessionStorage: SessionStorage
     
-    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient?) {
+        let chttpClient = httpClient ?? HTTPClientWithURLSession()
         self.init(configuration: configuration,
                   sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
                   stateStorage: StateStorage(),
-                  httpClient: httpClient,
-                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+                  httpClient: chttpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient))
     }
     
     /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
-    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient?) {
+        let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
                   stateStorage: StateStorage(),
-                  httpClient: httpClient,
-                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+                  httpClient: chttpClient,
+                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient))
     }
     
     convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {

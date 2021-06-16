@@ -88,8 +88,7 @@ public class SchibstedAccountAPI {
         }
         let url = baseURL.appendingPathComponent("/api/2/user/\(userUuid)")
         let request = URLRequest(url: url)
-        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request),
-                                withRetryPolicy: retryPolicy) {
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
         }
     }

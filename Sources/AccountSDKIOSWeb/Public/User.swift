@@ -100,7 +100,7 @@ extension User {
      - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
-    public func withAuthentication<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
+    public func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         func shouldLogout(tokenResponseBody: String?) -> Bool {
             if let errorJSON = tokenResponseBody,
                let oauthError = OAuthError.fromJSON(errorJSON),

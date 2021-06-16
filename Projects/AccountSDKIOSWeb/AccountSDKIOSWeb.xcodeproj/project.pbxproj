@@ -44,6 +44,7 @@
 		24EB14882679DB3A002D9628 /* SignatureValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14872679DB3A002D9628 /* SignatureValidationError.swift */; };
 		24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */; };
 		24EB14DE2679E139002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */; };
+		24EB14F92679F882002D9628 /* NoRetries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14F82679F882002D9628 /* NoRetries.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
 		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
 		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
@@ -137,6 +138,7 @@
 		24EB14872679DB3A002D9628 /* SignatureValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureValidationError.swift; sourceTree = "<group>"; };
 		24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidationError.swift; sourceTree = "<group>"; };
 		24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
+		24EB14F82679F882002D9628 /* NoRetries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRetries.swift; sourceTree = "<group>"; };
 		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
 		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
 		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
@@ -275,10 +277,9 @@
 			isa = PBXGroup;
 			children = (
 				2489C99C26733A0900AA0A4C /* HTTPUtil.swift */,
-				2489C99D26733A0900AA0A4C /* RetryPolicy.swift */,
 				2489C99E26733A0900AA0A4C /* HTTPClientWithURLSession.swift */,
-				2489C99F26733A0900AA0A4C /* HTTPClient.swift */,
 				2489C9A026733A0900AA0A4C /* URLSessionProtocol.swift */,
+				24EB14F82679F882002D9628 /* NoRetries.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -295,7 +296,7 @@
 		24EB14682679D816002D9628 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				2489C99B26733A0900AA0A4C /* HTTP */,
+				24EB14F72679F70E002D9628 /* HTTP */,
 				2489C9A126733A0900AA0A4C /* API */,
 				24EB14932679DB9A002D9628 /* IDToken */,
 				2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */,
@@ -312,6 +313,7 @@
 		24EB14692679D81F002D9628 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
+				2489C99B26733A0900AA0A4C /* HTTP */,
 				2489C98A26733A0900AA0A4C /* JOSE */,
 				24EB14A62679DD6C002D9628 /* IdToken */,
 				2489C98D26733A0900AA0A4C /* Storage */,
@@ -342,6 +344,15 @@
 			name = IdToken;
 			path = "/Users/daniel.echegarayschibsted.com/Documents/Schibsted/git-repos/AccountSDKIOSWeb/Sources/AccountSDKIOSWeb/Internal/IdToken";
 			sourceTree = "<absolute>";
+		};
+		24EB14F72679F70E002D9628 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				2489C99D26733A0900AA0A4C /* RetryPolicy.swift */,
+				2489C99F26733A0900AA0A4C /* HTTPClient.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
 		};
 		A93EFCD2263012FC008200D1 /* API */ = {
 			isa = PBXGroup;
@@ -703,6 +714,7 @@
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
 				2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */,
 				2489C9BA26733A0900AA0A4C /* Client.swift in Sources */,
+				24EB14F92679F882002D9628 /* NoRetries.swift in Sources */,
 				2489C9AF26733A0900AA0A4C /* JWKS.swift in Sources */,
 				2489C9B626733A0900AA0A4C /* Keychain.swift in Sources */,
 				2489C9B026733A0900AA0A4C /* Storage.swift in Sources */,
