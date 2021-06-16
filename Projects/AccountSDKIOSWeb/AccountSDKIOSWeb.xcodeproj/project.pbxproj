@@ -47,8 +47,8 @@
 		24EB1512267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */; };
 		24EB151F267A17A0002D9628 /* LoginStateError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB151E267A17A0002D9628 /* LoginStateError.swift */; };
 		24EB1526267A17CC002D9628 /* HTTPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1525267A17CC002D9628 /* HTTPError.swift */; };
-		24EB1551267A20C4002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */; };
 		24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1557267A2350002D9628 /* IdTokenClaims.swift */; };
+		24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB156E267A2482002D9628 /* IdTokenValidator.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
 		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
 		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
@@ -140,13 +140,13 @@
 		24EB146F2679D8C8002D9628 /* MFAType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAType.swift; sourceTree = "<group>"; };
 		24EB14872679DB3A002D9628 /* SignatureValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureValidationError.swift; sourceTree = "<group>"; };
 		24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidationError.swift; sourceTree = "<group>"; };
-		24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
 		24EB14F82679F882002D9628 /* NoRetries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRetries.swift; sourceTree = "<group>"; };
 		24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRetryPolicy.swift; sourceTree = "<group>"; };
 		24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSchibstedAccountAPIResponses.swift; sourceTree = "<group>"; };
 		24EB151E267A17A0002D9628 /* LoginStateError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStateError.swift; sourceTree = "<group>"; };
 		24EB1525267A17CC002D9628 /* HTTPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPError.swift; sourceTree = "<group>"; };
 		24EB1557267A2350002D9628 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
+		24EB156E267A2482002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
 		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
 		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
 		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
@@ -344,8 +344,8 @@
 		24EB14A62679DD6C002D9628 /* IDToken */ = {
 			isa = PBXGroup;
 			children = (
+				24EB156E267A2482002D9628 /* IdTokenValidator.swift */,
 				24EB1557267A2350002D9628 /* IdTokenClaims.swift */,
-				24EB14A72679DD7B002D9628 /* IdTokenValidator.swift */,
 			);
 			name = IDToken;
 			path = "/Users/daniel.echegarayschibsted.com/Documents/Schibsted/git-repos/AccountSDKIOSWeb/Sources/AccountSDKIOSWeb/Internal/IDToken";
@@ -758,7 +758,7 @@
 				2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */,
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,
 				24EB1526267A17CC002D9628 /* HTTPError.swift in Sources */,
-				24EB1551267A20C4002D9628 /* IdTokenValidator.swift in Sources */,
+				24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */,
 				2489C9B526733A0900AA0A4C /* LegacyKeychainTokenStorage.swift in Sources */,
 				2489C9B226733A0900AA0A4C /* UserDefaultsStorage.swift in Sources */,
 				2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */,
