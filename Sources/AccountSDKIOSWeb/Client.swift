@@ -100,7 +100,7 @@ public class Client {
         self.httpClient = httpClient
         self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
-        self.urlBuilder = URLBuilder(configuration: configuration, stateStorage: stateStorage, authStateKey: Client.authStateKey)
+        self.urlBuilder = URLBuilder(configuration: configuration)
     }
 
     
@@ -111,13 +111,28 @@ public class Client {
             .first
     }
 
+    /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
+    private func storeAuthState(withMFA: MFAType?) -> AuthState {
+        let authState = AuthState(mfa: withMFA)
+        
+        guard stateStorage.setValue(authState, forKey: Client.authStateKey) else {
+            SchibstedAccountLogger.instance.error("Failed to store login state")
+            preconditionFailure("Couln't store login state")
+        }
+        
+        return authState
+    }
+    
     private func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                                 loginHint: String?,
                                                 extraScopeValues: Set<String> = [],
                                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let clientScheme = configuration.redirectURI.scheme
         
-        guard let url = urlBuilder.loginURL(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues) else {
+        let clientScheme = configuration.redirectURI.scheme
+        let authState = storeAuthState(withMFA: withMFA)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, extraScopeValues: extraScopeValues)
+        
+        guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
         }
         
@@ -137,7 +152,7 @@ public class Client {
         }
         return session
     }
-        
+
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
