@@ -19,7 +19,7 @@ struct URLBuilder {
             URLQueryItem(name: "state", value: authState.state),
             URLQueryItem(name: "nonce", value: authState.nonce),
             URLQueryItem(name: "code_challenge", value: authState.makeCodeChallenge()),
-            URLQueryItem(name: "code_challenge_method", value: authState.codeChallengeMethod),
+            URLQueryItem(name: "code_challenge_method", value: authState.codeChallengeMethod()),
         ]
         
         if let loginHint = authRequest.loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
