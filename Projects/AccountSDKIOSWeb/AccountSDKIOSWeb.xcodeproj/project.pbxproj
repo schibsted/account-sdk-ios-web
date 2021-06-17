@@ -221,13 +221,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
+		2461668E267B3FFE00F77C5A /* Client */ = {
 			isa = PBXGroup;
 			children = (
 				2489C99A26733A0900AA0A4C /* Client.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		2461668F267B400200F77C5A /* User */ = {
+			isa = PBXGroup;
+			children = (
 				2489C98826733A0900AA0A4C /* User.swift */,
-				24EB14682679D816002D9628 /* Public */,
-				24EB14692679D81F002D9628 /* Internal */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		24616695267B40EB00F77C5A /* URLBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				2449DCAB2673633C00FE7197 /* URLBuilder.swift */,
+				2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */,
+				2489C99926733A0900AA0A4C /* URLExtensions.swift */,
+			);
+			path = URLBuilder;
+			sourceTree = "<group>";
+		};
+		2461669C267B41A000F77C5A /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				24EB151D267A1209002D9628 /* Errors */,
+				24EB14F72679F70E002D9628 /* HTTP */,
+				2489C9A126733A0900AA0A4C /* API */,
+				24EB14932679DB9A002D9628 /* IDToken */,
+				2489C98A26733A0900AA0A4C /* JOSE */,
+				2489C98D26733A0900AA0A4C /* Storage */,
+				2489C98526733A0900AA0A4C /* Cache */,
+				24616695267B40EB00F77C5A /* URLBuilder */,
+				2489C98026733A0900AA0A4C /* Logging.swift */,
+				24EB146F2679D8C8002D9628 /* MFAType.swift */,
+				2489C98926733A0900AA0A4C /* AuthState.swift */,
+				2489C97F26733A0900AA0A4C /* TokenHandler.swift */,
+				2489C98726733A0900AA0A4C /* Version.swift */,
+			);
+			path = Lib;
+			sourceTree = "<group>";
+		};
+		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
+			isa = PBXGroup;
+			children = (
+				2461668F267B400200F77C5A /* User */,
+				2461668E267B3FFE00F77C5A /* Client */,
+				2461669C267B41A000F77C5A /* Lib */,
 			);
 			name = AccountSDKIOSWeb;
 			path = ../../Sources/AccountSDKIOSWeb;
@@ -282,66 +327,18 @@
 			path = Compat;
 			sourceTree = "<group>";
 		};
-		2489C99B26733A0900AA0A4C /* HTTP */ = {
-			isa = PBXGroup;
-			children = (
-				2489C99C26733A0900AA0A4C /* HTTPUtil.swift */,
-				2489C99E26733A0900AA0A4C /* HTTPClientWithURLSession.swift */,
-				2489C9A026733A0900AA0A4C /* URLSessionProtocol.swift */,
-				24EB14F82679F882002D9628 /* NoRetries.swift */,
-			);
-			path = HTTP;
-			sourceTree = "<group>";
-		};
 		2489C9A126733A0900AA0A4C /* API */ = {
 			isa = PBXGroup;
 			children = (
 				2489C9A226733A0900AA0A4C /* SchibstedAccountAPIResponses.swift */,
+				2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */,
+				24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */,
+				24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
 		};
-		24EB14682679D816002D9628 /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				24EB151D267A1209002D9628 /* Errors */,
-				24EB14F72679F70E002D9628 /* HTTP */,
-				2489C9A126733A0900AA0A4C /* API */,
-				24EB14932679DB9A002D9628 /* IDToken */,
-				2489C98726733A0900AA0A4C /* Version.swift */,
-				2489C98026733A0900AA0A4C /* Logging.swift */,
-				24EB146F2679D8C8002D9628 /* MFAType.swift */,
-			);
-			path = Public;
-			sourceTree = "<group>";
-		};
-		24EB14692679D81F002D9628 /* Internal */ = {
-			isa = PBXGroup;
-			children = (
-				24EB1504267A0E29002D9628 /* API */,
-				2489C99B26733A0900AA0A4C /* HTTP */,
-				2489C98A26733A0900AA0A4C /* JOSE */,
-				24EB14A62679DD6C002D9628 /* IDToken */,
-				2489C98D26733A0900AA0A4C /* Storage */,
-				2449DCAB2673633C00FE7197 /* URLBuilder.swift */,
-				2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */,
-				2489C99926733A0900AA0A4C /* URLExtensions.swift */,
-				2489C98926733A0900AA0A4C /* AuthState.swift */,
-				2489C97F26733A0900AA0A4C /* TokenHandler.swift */,
-				2489C98526733A0900AA0A4C /* Cache */,
-			);
-			path = Internal;
-			sourceTree = "<group>";
-		};
 		24EB14932679DB9A002D9628 /* IDToken */ = {
-			isa = PBXGroup;
-			children = (
-				24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */,
-			);
-			path = IDToken;
-			sourceTree = "<group>";
-		};
-		24EB14A62679DD6C002D9628 /* IDToken */ = {
 			isa = PBXGroup;
 			children = (
 				24EB156E267A2482002D9628 /* IdTokenValidator.swift */,
@@ -355,23 +352,18 @@
 			children = (
 				2489C99D26733A0900AA0A4C /* RetryPolicy.swift */,
 				2489C99F26733A0900AA0A4C /* HTTPClient.swift */,
+				2489C99C26733A0900AA0A4C /* HTTPUtil.swift */,
+				2489C99E26733A0900AA0A4C /* HTTPClientWithURLSession.swift */,
+				2489C9A026733A0900AA0A4C /* URLSessionProtocol.swift */,
+				24EB14F82679F882002D9628 /* NoRetries.swift */,
 			);
 			path = HTTP;
-			sourceTree = "<group>";
-		};
-		24EB1504267A0E29002D9628 /* API */ = {
-			isa = PBXGroup;
-			children = (
-				2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */,
-				24EB1505267A0E44002D9628 /* APIRetryPolicy.swift */,
-				24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */,
-			);
-			path = API;
 			sourceTree = "<group>";
 		};
 		24EB151D267A1209002D9628 /* Errors */ = {
 			isa = PBXGroup;
 			children = (
+				24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */,
 				24EB14872679DB3A002D9628 /* SignatureValidationError.swift */,
 				2489C98426733A0900AA0A4C /* LoginError.swift */,
 				2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */,
