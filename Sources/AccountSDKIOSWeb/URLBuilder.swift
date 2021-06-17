@@ -5,7 +5,7 @@ struct URLBuilder {
     let configuration: ClientConfiguration
     let defaultScopeValues = ["openid", "offline_access"]
     
-    func loginURL(authRequest: AuthorizationRequest) -> URL? {
+    func loginURL(authRequest: AuthorizationRequest, authState: AuthState) -> URL? {
 
         let scopes = authRequest.extraScopeValues.union(defaultScopeValues)
         let scopeString = scopes.joined(separator: " ")
@@ -16,15 +16,15 @@ struct URLBuilder {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: scopeString),
             
-            URLQueryItem(name: "state", value: authRequest.authState.state),
-            URLQueryItem(name: "nonce", value: authRequest.authState.nonce),
-            URLQueryItem(name: "code_challenge", value: authRequest.authState.codeChallenge),
-            URLQueryItem(name: "code_challenge_method", value: "S256"),
+            URLQueryItem(name: "state", value: authState.state),
+            URLQueryItem(name: "nonce", value: authState.nonce),
+            URLQueryItem(name: "code_challenge", value: authState.makeCodeChallenge()),
+            URLQueryItem(name: "code_challenge_method", value: authState.codeChallengeMethod),
         ]
         
         if let loginHint = authRequest.loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
         
-        if let mfa = authRequest.withMFA {
+        if let mfa = authState.mfa {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
         } else {
             // Only add this if no MFA is specified to avoid prompting user unnecessarily

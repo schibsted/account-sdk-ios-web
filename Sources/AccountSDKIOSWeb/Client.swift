@@ -130,9 +130,9 @@ public class Client {
         
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
-        let authRequest = URLBuilder.AuthorizationRequest(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, authState: authState)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, extraScopeValues: extraScopeValues)
         
-        guard let url = self.urlBuilder.loginURL(authRequest: authRequest) else {
+        guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
         }
         

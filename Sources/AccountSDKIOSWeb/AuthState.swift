@@ -6,7 +6,11 @@ internal struct AuthState: Codable {
     let nonce: String
     let codeVerifier: String
     let mfa: MFAType?
-    let codeChallenge: String
+    let codeChallengeMethod: String
+    
+    func makeCodeChallenge () -> String {
+        return computeCodeChallenge(from: codeVerifier)
+    }
     
 }
 
@@ -17,9 +21,9 @@ extension AuthState {
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        let codeChallenge = computeCodeChallenge(from: codeVerifier)
+        let codeChallengeMethod = "S256"
         
-        self.init(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: mfa, codeChallenge: codeChallenge)
+        self.init(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: mfa, codeChallengeMethod: codeChallengeMethod)
     }
 }
 

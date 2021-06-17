@@ -15,8 +15,8 @@ final class URLBuilderTests: XCTestCase {
 
     func testLoginURL() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(withMFA: nil, loginHint: "", extraScopeValues: [], authState: AuthState(mfa: nil))
-        let loginURL = sut.loginURL(authRequest: authRequest)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: [])
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -41,8 +41,8 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURLWithExtraScopes() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
 
-        let authRequest = URLBuilder.AuthorizationRequest(withMFA: nil, loginHint: "", extraScopeValues: ["scope1", "scope2"], authState: AuthState(mfa: nil))
-        let loginURL = sut.loginURL(authRequest: authRequest)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: ["scope1", "scope2"])
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -66,8 +66,8 @@ final class URLBuilderTests: XCTestCase {
     
     func testLoginURLWithMFAIncludesACRValues() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(withMFA: .otp, loginHint: "", extraScopeValues: [], authState: AuthState(mfa: nil))
-        let loginURL = sut.loginURL(authRequest: authRequest)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: [])
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: .otp))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
