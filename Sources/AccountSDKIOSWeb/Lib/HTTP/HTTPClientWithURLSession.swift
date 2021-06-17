@@ -1,13 +1,13 @@
 import Foundation
 
-public class HTTPClientWithURLSession: HTTPClient {
+class HTTPClientWithURLSession: HTTPClient {
     private let session: URLSessionProtocol
 
-    public init(session: URLSessionProtocol = URLSession.shared) {
+    init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
     
-    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>) {
+    func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>) {
         func retry(_ attempts: Int) {
             execute(request: request) { (result: Result<T, HTTPError>) in
                 switch result {

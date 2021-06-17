@@ -29,16 +29,6 @@ extension AuthState {
     }
 }
 
-/// Multi-factor authentication methods
-public enum MFAType: String, Codable {
-    /// Ask user to re-authenticate by entering their password
-    case password = "password"
-    /// One-time code generated from TOTP app
-    case otp = "otp"
-    /// One-time code sent to user as SMS
-    case sms = "sms"
-}
-
 fileprivate func randomString(length: Int) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     return String((0..<length).map { _ in letters.randomElement()! })

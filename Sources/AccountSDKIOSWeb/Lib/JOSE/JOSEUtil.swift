@@ -1,15 +1,6 @@
 import Foundation
 import JOSESwift
 
-public enum SignatureValidationError: Error {
-    case invalidJWS
-    case unknownKeyId
-    case noKeyId
-    case unsupportedKeyType
-    case unspecifiedAlgorithm
-    case invalidSignature
-}
-
 internal extension JWK {
     func toSecKey() -> SecKey? {
         if let key = self as? RSAPublicKey,
