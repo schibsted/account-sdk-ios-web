@@ -4,7 +4,6 @@ import AccountSDKIOSWeb
 @main
 struct ExampleWebApp: App {
     private let client: Client
-    private let clientId = "602504e1b41fa31789a95aa7"
     
     init() {
         let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
@@ -16,7 +15,7 @@ struct ExampleWebApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(client: client, clientID: clientId)
+            ContentView(client: client)
         }
     }
 }

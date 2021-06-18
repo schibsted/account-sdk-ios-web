@@ -52,7 +52,7 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 }
 
 /// Represents a client registered with Schibsted account
-public class Client {
+public class Client: CustomStringConvertible {
     let configuration: ClientConfiguration
     
     static let authStateKey = "AuthState"
@@ -221,7 +221,6 @@ public class Client {
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
-    
 }
 
 extension Client {
@@ -311,5 +310,9 @@ extension Client {
         tokenHandler.makeTokenRequest(authCode: authCode, authState: storedData) {
             self.handleTokenRequestResult($0, completion: completion)
         }
+    }
+    
+    public var description: String {
+        return "Client(\(configuration.clientId))"
     }
 }
