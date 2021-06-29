@@ -26,6 +26,16 @@ final class SchibstedAccountAPIResponsesTests: XCTestCase {
         XCTAssertEqual(decode("\"notTrue\""), StringBool(value: false, asString: true))
     }
     
+    func testUserProfileResponseHandleAddressesAsEmptyArray() {
+        let json = """
+        {
+            "addresses": [],
+        }
+        """
+        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
+        XCTAssertTrue(parsed.addresses?.isEmpty == true, "An empty array in addresses field should be converted to an empty dictionary in the UserProfileResponse struct")
+    }
+    
     func testUserProfileResponseHandlesBoolInStringFields() {
         let json = """
         {
