@@ -42,6 +42,97 @@ public struct UserProfileResponse: Codable, Equatable {
             return birthday
         }
     }
+    
+    init(
+        uuid: String? = nil,
+        userId: String? = nil,
+        status: Int? = nil,
+        email: String? = nil,
+        emailVerified: StringOrIgnore? = nil,
+        emails: [Email]? = nil,
+        phoneNumber: String? = nil,
+        phoneNumberVerified: StringOrIgnore? = nil,
+        phoneNumbers: [PhoneNumber]? = nil,
+        displayName: String? = nil,
+        name: Name? = nil,
+        addresses: [String: Address]? = nil,
+        gender: String? = nil,
+        birthday: String? = nil,
+        accounts: [String: Account]? = nil,
+        merchants: [Int]? = nil,
+        published: String? = nil,
+        verified: String? = nil,
+        updated: String? = nil,
+        passwordChanged: String? = nil,
+        lastAuthenticated: String? = nil,
+        lastLoggedIn: String? = nil,
+        locale: String? = nil,
+        utcOffset: String? = nil
+    ) {
+        self.uuid = uuid
+        self.userId = userId
+        self.status = status
+        self.email = email
+        self.emailVerified = emailVerified
+        self.emails = emails
+        self.phoneNumber = phoneNumber
+        self.phoneNumberVerified = phoneNumberVerified
+        self.phoneNumbers = phoneNumbers
+        self.displayName = displayName
+        self.name = name
+        self.addresses = addresses
+        self.gender = gender
+        self.birthday = birthday
+        self.accounts = accounts
+        self.merchants = merchants
+        self.published = published
+        self.verified = verified
+        self.updated = updated
+        self.passwordChanged = passwordChanged
+        self.lastAuthenticated = lastAuthenticated
+        self.lastLoggedIn = lastLoggedIn
+        self.locale = locale
+        self.utcOffset = utcOffset
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let keyedContainer = try decoder.container(keyedBy: CodingKeys.self)
+        self.uuid = try? keyedContainer.decode(String.self, forKey: .uuid)
+        self.userId = try? keyedContainer.decode(String.self, forKey: .userId)
+        self.status = try? keyedContainer.decode(Int.self, forKey: .status)
+        self.email = try? keyedContainer.decode(String.self, forKey: .email)
+        self.emailVerified = try? keyedContainer.decode(StringOrIgnore.self, forKey: .emailVerified)
+        self.emails = try? keyedContainer.decode([Email].self, forKey: .emails)
+        self.phoneNumber = try? keyedContainer.decode(String.self, forKey: .phoneNumber)
+        self.phoneNumberVerified = try? keyedContainer.decode(StringOrIgnore.self, forKey: .phoneNumberVerified)
+        self.phoneNumbers = try? keyedContainer.decode([PhoneNumber].self, forKey: .phoneNumbers)
+        self.displayName = try? keyedContainer.decode(String.self, forKey: .displayName)
+        self.name = try? keyedContainer.decode(Name.self, forKey: .name)
+        self.gender = try? keyedContainer.decode(String.self, forKey: .gender)
+        self.birthday = try? keyedContainer.decode(String.self, forKey: .birthday)
+        self.merchants = try? keyedContainer.decode([Int].self, forKey: .merchants)
+        self.published = try? keyedContainer.decode(String.self, forKey: .published)
+        self.verified = try? keyedContainer.decode(String.self, forKey: .verified)
+        self.updated = try? keyedContainer.decode(String.self, forKey: .updated)
+        self.passwordChanged = try? keyedContainer.decode(String.self, forKey: .passwordChanged)
+        self.lastAuthenticated = try? keyedContainer.decode(String.self, forKey: .lastAuthenticated)
+        self.lastLoggedIn = try? keyedContainer.decode(String.self, forKey: .lastLoggedIn)
+        self.locale = try? keyedContainer.decode(String.self, forKey: .locale)
+        self.utcOffset = try? keyedContainer.decode(String.self, forKey: .utcOffset)
+        
+        // Backend service could return empty dictionary as an array.
+        if let addresses = try? keyedContainer.decodeIfPresent([String: Address].self, forKey: .addresses) {
+            self.addresses = addresses
+        } else {
+            self.addresses = [:]
+        }
+        
+        if let accounts = try? keyedContainer.decodeIfPresent([String: Account].self, forKey: .accounts) {
+            self.accounts = accounts
+        } else {
+            self.accounts = [:]
+        }
+    }
 }
 
 public protocol Identifier: Codable, Equatable {
