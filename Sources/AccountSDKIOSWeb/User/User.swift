@@ -1,10 +1,17 @@
 import Foundation
 
+public protocol UserDelegate {
+    func userDidLogout()
+}
+
 /// Representation of logged-in user.
 public class User: Equatable {
     private let client: Client
     internal var tokens: UserTokens?
 
+    /// Delegates listening to User events such as logout
+    public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
+    
     /// User UUID
     public var uuid: String? {
         get {
@@ -32,6 +39,7 @@ public class User: Equatable {
     public func logout() {
         tokens = nil
         client.destroySession()
+        self.delegates.invokeDelegates({ $0.userDidLogout() })
     }
     
     /**
