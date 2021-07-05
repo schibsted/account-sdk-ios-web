@@ -11,6 +11,9 @@
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
+		248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440162692E97700CE88F2 /* ClientConfiguration.swift */; };
+		24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24844038269347C500CE88F2 /* MulticastDelegate.swift */; };
+		248440422693482900CE88F2 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C97F26733A0900AA0A4C /* TokenHandler.swift */; };
 		2489C9A626733A0900AA0A4C /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C98026733A0900AA0A4C /* Logging.swift */; };
 		2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C98426733A0900AA0A4C /* LoginError.swift */; };
@@ -109,6 +112,9 @@
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
+		248440162692E97700CE88F2 /* ClientConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
+		24844038269347C500CE88F2 /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
+		248440412693482900CE88F2 /* MulticastDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegateTests.swift; sourceTree = "<group>"; };
 		2489C97F26733A0900AA0A4C /* TokenHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
 		2489C98026733A0900AA0A4C /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		2489C98426733A0900AA0A4C /* LoginError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
@@ -225,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				2489C99A26733A0900AA0A4C /* Client.swift */,
+				248440162692E97700CE88F2 /* ClientConfiguration.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -265,6 +272,24 @@
 				2489C98726733A0900AA0A4C /* Version.swift */,
 			);
 			path = Lib;
+			sourceTree = "<group>";
+		};
+		24844037269347C500CE88F2 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				24844038269347C500CE88F2 /* MulticastDelegate.swift */,
+			);
+			name = Util;
+			path = ../../Sources/Util;
+			sourceTree = "<group>";
+		};
+		248440402693480E00CE88F2 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				248440412693482900CE88F2 /* MulticastDelegateTests.swift */,
+			);
+			name = Util;
+			path = Tests/Util;
 			sourceTree = "<group>";
 		};
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
@@ -443,6 +468,7 @@
 		OBJ_38 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				248440402693480E00CE88F2 /* Util */,
 				A93EFD04263299DA008200D1 /* Resources */,
 				OBJ_39 /* AccountSDKIOSWebKeychainTests */,
 				OBJ_41 /* AccountSDKIOSWebTests */,
@@ -534,6 +560,7 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				24844037269347C500CE88F2 /* Util */,
 				2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */,
 			);
 			name = Sources;
@@ -743,7 +770,9 @@
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
 				2489C9B426733A0900AA0A4C /* MigratingKeychainCompatStorage.swift in Sources */,
 				2489C9B826733A0900AA0A4C /* SessionStorage.swift in Sources */,
+				24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */,
 				24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */,
+				248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */,
 				2489C9B326733A0900AA0A4C /* LegacyKeychainSessionStorage.swift in Sources */,
 				24EB1512267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift in Sources */,
 				2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */,
@@ -775,6 +804,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				248440422693482900CE88F2 /* MulticastDelegateTests.swift in Sources */,
 				OBJ_245 /* Await.swift in Sources */,
 				OBJ_246 /* ClientTests.swift in Sources */,
 				OBJ_247 /* Fixtures.swift in Sources */,
