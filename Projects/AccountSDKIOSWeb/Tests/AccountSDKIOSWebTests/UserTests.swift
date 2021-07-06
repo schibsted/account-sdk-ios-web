@@ -255,6 +255,32 @@ final class UserTests: XCTestCase {
             }
         }
     }
+    
+    func testCodeExchangeReturnsCorrectOneTimeCode() {
+        let oneTimeCode = "testCode"
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: CodeExchangeResponse(code: oneTimeCode))))
+                }
+        }
+
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        Await.until { done in
+            user.oneTimeCode(clientId: "webClientId") { result in
+                switch result {
+                case .success(let code):
+                    XCTAssertEqual(code, oneTimeCode)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+
+                done()
+            }
+        }
+    }
 
     func testAccountPagesURL() {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())

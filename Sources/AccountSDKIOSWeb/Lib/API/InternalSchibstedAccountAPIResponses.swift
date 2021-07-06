@@ -61,3 +61,7 @@ internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
 struct SessionExchangeResponse: Codable {
     let code: String
 }
+
+struct CodeExchangeResponse: Codable {
+    let code: String
+}

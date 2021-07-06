@@ -65,6 +65,26 @@ public class User: Equatable {
     }
     
     /**
+     Requests a OAuth authorization code for the current user.
+     The code is short-lived and one-time use only.
+    
+     - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
+     - parameter completion: callback callback that receives the one time code
+     */
+    public func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>) {
+        let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
+        api.codeExchange(for: self, clientId: clientId) { result in
+            switch result {
+            case .success(let response):
+                let code = response.code
+                completion(.success(code))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /**
      Generate URL for Schibsted account pages.
      */
     public func accountPagesURL() -> URL {
