@@ -15,13 +15,13 @@ class SchibstedAccountAPI {
         self.baseURL = baseURL
     }
 
-    internal static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
+    static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
         var requestWithHeaders = request
         requestWithHeaders.addValue(UserAgent.value, forHTTPHeaderField: "User-Agent")
         return requestWithHeaders
     }
     
-    internal func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
+    func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         let parameters = [
             "type": "session",
@@ -42,7 +42,7 @@ class SchibstedAccountAPI {
         }
     }
 
-    internal func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>) {
+    func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create token request")
@@ -59,7 +59,6 @@ class SchibstedAccountAPI {
                            completion: completion)
     }
 
-    // TODO: IS THIS NEEDED TO BE PUBLIC? TORI USES USER.fetchProfileData()
     func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         guard let userUuid = user.uuid else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
