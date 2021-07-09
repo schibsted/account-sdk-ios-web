@@ -188,8 +188,9 @@ final class ClientTests: XCTestCase {
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
+        client.resumeLastLoggedInUser { user in
+            XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
+        }        
     }
 
     func testResumeLastLoggedInUserWithoutSession() {
@@ -199,7 +200,9 @@ final class ClientTests: XCTestCase {
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        XCTAssertNil(client.resumeLastLoggedInUser())
+        client.resumeLastLoggedInUser  { user in
+            XCTAssertNil(user)
+        }
     }
 
     private func createIdToken(claims: IdTokenClaims) -> String {

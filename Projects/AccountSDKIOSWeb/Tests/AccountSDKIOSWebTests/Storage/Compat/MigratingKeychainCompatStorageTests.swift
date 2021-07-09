@@ -12,7 +12,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.store(equal(to: userSession))).thenDoNothing()
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
         migratingStorage.store(userSession)
 
         verify(newStorage).store(equal(to: userSession))
@@ -28,7 +28,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.getAll()).thenReturn([userSession])
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
         migratingStorage.getAll()
 
         verify(newStorage).getAll()
@@ -44,7 +44,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.remove(forClientId: equal(to: clientId))).thenDoNothing()
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
         migratingStorage.remove(forClientId: clientId)
 
         verify(newStorage).remove(forClientId: equal(to: clientId))
@@ -61,8 +61,11 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.get(forClientId: equal(to: clientId))).thenReturn(userSession)
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
-        XCTAssertEqual(migratingStorage.get(forClientId: clientId), userSession)
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
+        
+        migratingStorage.get(forClientId: clientId) { retrievedUserSession in
+            XCTAssertEqual(retrievedUserSession, userSession)
+        }
 
         verify(newStorage).get(forClientId: equal(to: clientId))
         verifyNoMoreInteractions(legacyStorage)
@@ -83,9 +86,12 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.store(equal(to: legacyUserSession))).thenDoNothing()
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
-        XCTAssertEqual(migratingStorage.get(forClientId: clientId), legacyUserSession)
-
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
+        
+        migratingStorage.get(forClientId: clientId) { retrievedUserSession in
+            XCTAssertEqual(retrievedUserSession, legacyUserSession)
+        }
+        
         verify(newStorage).get(forClientId: equal(to: clientId))
         verify(legacyStorage).get(forClientId: equal(to: clientId))
         verify(newStorage).store(equal(to: legacyUserSession))
@@ -104,9 +110,12 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
             when(mock.get(forClientId: equal(to: clientId))).thenReturn(nil)
         }
 
-        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage)
-        XCTAssertNil(migratingStorage.get(forClientId: clientId))
-
+        let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage, legacyClientConfiguration: Fixtures.clientConfig, newClientConfiguration: Fixtures.clientConfig)
+        
+        migratingStorage.get(forClientId: clientId) { retrievedUserSession in
+            XCTAssertNil(retrievedUserSession)
+        }
+        
         verify(newStorage).get(forClientId: equal(to: clientId))
         verify(legacyStorage).get(forClientId: clientId)
     }

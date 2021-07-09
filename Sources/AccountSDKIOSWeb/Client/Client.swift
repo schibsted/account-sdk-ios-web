@@ -4,10 +4,12 @@ import Foundation
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
 public struct SessionStorageConfig {
+    let legacyClientId: String
     let accessGroup: String?
     let legacyAccessGroup: String?
     
-    public init(accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
+    public init(legacyClientID: String, accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
+        self.legacyClientId = legacyClientID
         self.accessGroup = accessGroup
         self.legacyAccessGroup = legacyAccessGroup
     }
@@ -47,8 +49,19 @@ public class Client: CustomStringConvertible {
     /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
     public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
+        
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
-        let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage, to: KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup))
+        let newSessiontStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
+        
+        let legacyClientConfiguration = ClientConfiguration(serverURL: configuration.serverURL,
+                                                            clientId: sessionStorageConfig.legacyClientId,
+                                                            redirectURI: configuration.redirectURI)
+        
+        let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
+                                                            to: newSessiontStorage,
+                                                            legacyClientConfiguration: legacyClientConfiguration,
+                                                            newClientConfiguration: configuration)
+        
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
                   stateStorage: StateStorage(),
@@ -74,7 +87,9 @@ public class Client: CustomStringConvertible {
         self.urlBuilder = URLBuilder(configuration: configuration)
     }
 
-    
+    func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+        self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
+    }
     
     private func getMostRecentSession() -> UserSession? {
         sessionStorage.getAll()
@@ -197,13 +212,15 @@ extension Client {
     // MARK: - Public
     
     /// Resume any previously logged-in user session
-    public func resumeLastLoggedInUser() -> User? {
-        let stored = sessionStorage.get(forClientId: configuration.clientId)
-        guard let session = stored else {
-            return nil
+    public func resumeLastLoggedInUser(completion: @escaping (User?) -> Void) {
+        sessionStorage.get(forClientId: configuration.clientId) { storedSession in
+            guard let session = storedSession else {
+                completion(nil)
+                return
+            }
+            
+            completion(User(client: self, tokens: session.userTokens))
         }
-        
-        return User(client: self, tokens: session.userTokens)
     }
  
     /**
