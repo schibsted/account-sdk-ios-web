@@ -29,7 +29,27 @@ class SchibstedAccountAPI {
             "redirectUri": redirectURI
         ]
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create OAuth token exchange request")
+            preconditionFailure("Failed to create session exchange request")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+            completion(self.unpackResponse($0))
+        }
+    }
+    
+    func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
+        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
+        let parameters = [
+            "type": "code",
+            "clientId": clientId
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create code exchange request")
         }
         
         var request = URLRequest(url: url)
