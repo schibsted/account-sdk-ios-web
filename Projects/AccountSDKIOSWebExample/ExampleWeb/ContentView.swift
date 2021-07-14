@@ -6,7 +6,15 @@ import AuthenticationServices
 struct ContentView: View {
     let client: Client
 
-    @State private var user: User?
+    @State var userDelegate: MyUserDelegate?
+    @State private var user: User? {
+        didSet {
+            let userDelegate = MyUserDelegate()
+            userDelegate.onLogout = { print("Callback will be invoked when user is logged out") }
+            user?.delegates.addDelegate(userDelegate)
+            self.userDelegate = userDelegate // Needs to be retained
+        }
+    }
     var userIsLoggedIn: Bool {
         get {
             user?.isLoggedIn() ?? false
@@ -183,5 +191,15 @@ struct WebView : UIViewRepresentable {
         if let u = url {
             uiView.load(URLRequest(url: u))
         }
+    }
+}
+
+class MyUserDelegate: UserDelegate {
+    var onLogout: (() -> Void)?
+    
+    // MARK: UserDelegate
+    
+    func userDidLogout() {
+        onLogout?()
     }
 }
