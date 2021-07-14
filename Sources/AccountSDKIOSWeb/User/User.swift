@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol UserDelegate {
+public protocol UserDelegate: AnyObject {
     func userDidLogout()
 }
 
