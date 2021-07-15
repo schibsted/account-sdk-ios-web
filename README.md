@@ -23,6 +23,8 @@ Use Swift Package Manager: `.package(url: "https://github.schibsted.io/spt-ident
 
 ### Usage
 
+#### Login user and fetch profile data
+
 ```swift
 let clientConfiguration = ClientConfiguration(environment: .pre,
                                               clientId: clientId,
@@ -49,6 +51,20 @@ let asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, 
 })
 
 asWebAuthSession.start()
+```
+
+#### Get notified on logout
+
+```swift
+let userDelegate: UserDelegate = MyUserDelegate()
+user?.delegates.addDelegate(userDelegate)
+self.userDelegate = userDelegate // Needs to be retained
+
+class MyUserDelegate: UserDelegate {
+    func userDidLogout() {
+        print("Callback will be invoked when user is logged out")
+    }
+}
 ```
 
 ### Notes when using Universal Links
