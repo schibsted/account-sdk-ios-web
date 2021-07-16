@@ -206,4 +206,9 @@ final class ClientTests: XCTestCase {
         let data = try! JSONEncoder().encode(claims)
         return ClientTests.jwsUtil.createJWS(payload: data, keyId: ClientTests.keyId)
     }
+    
+    func testAccountPagesURL() {
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
+        XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
+    }
 }

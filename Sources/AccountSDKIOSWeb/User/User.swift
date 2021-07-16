@@ -4,8 +4,22 @@ public protocol UserDelegate: AnyObject {
     func userDidLogout()
 }
 
+public protocol UserProtocol {
+    var delegates: MulticastDelegate<UserDelegate> { get }
+    var uuid: String? { get }
+    var userId: String? { get }
+    
+    func logout()
+    func isLoggedIn() -> Bool
+    
+    func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>)
+    func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>)
+    func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
+    func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>)
+}
+
 /// Representation of logged-in user.
-public class User: Equatable {
+public class User: Equatable, UserProtocol {
     private let client: Client
     internal var tokens: UserTokens?
 
@@ -90,14 +104,6 @@ public class User: Equatable {
                 completion(.failure(error))
             }
         }
-    }
-    
-    /**
-     Generate URL for Schibsted account pages.
-     */
-    public func accountPagesURL() -> URL {
-        let url = client.configuration.serverURL.appendingPathComponent("/account/summary")
-        return url
     }
     
     /// Fetch user profile data
