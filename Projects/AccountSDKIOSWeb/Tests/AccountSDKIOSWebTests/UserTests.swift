@@ -299,3 +299,15 @@ final class UserTests: XCTestCase {
         verify(mockSessionStorage).remove(forClientId: Fixtures.clientConfig.clientId)
     }
 }
+
+fileprivate extension Client {
+    convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient)
+        let tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
+        self.init(configuration: configuration,
+                  sessionStorage: sessionStorage,
+                  stateStorage: stateStorage,
+                  httpClient: httpClient,
+                  jwks:jwks, tokenHandler: tokenHandler)
+    }
+}

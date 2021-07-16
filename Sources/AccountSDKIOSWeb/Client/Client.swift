@@ -35,15 +35,18 @@ public class Client: CustomStringConvertible {
     private let urlBuilder: URLBuilder
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
-    private let sessionStorage: SessionStorage
+    private var sessionStorage: SessionStorage
     
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
+        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
+        let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
         self.init(configuration: configuration,
                   sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
-                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient))
+                  jwks: jwks,
+                  tokenHandler: tokenHandler)
     }
     
     /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
@@ -51,38 +54,42 @@ public class Client: CustomStringConvertible {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
-        let newSessiontStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
+        let newSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
         
         let legacyClientConfiguration = ClientConfiguration(serverURL: configuration.serverURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
-                                                            redirectURI: configuration.redirectURI)
+                                                            redirectURI: URL(string: "http://")!) // TODO: Handle url
+        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
+        let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
+        let stateStorage = StateStorage()
         
+        // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
+        // TODO: MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
+        let legacyClient = Client(configuration: legacyClientConfiguration,
+                                  sessionStorage:  newSessionStorage,
+                                  stateStorage: stateStorage,
+                                  httpClient: chttpClient,
+                                  jwks: jwks,
+                                  tokenHandler: tokenHandler)
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
-                                                            to: newSessiontStorage,
-                                                            legacyClientConfiguration: legacyClientConfiguration,
-                                                            newClientConfiguration: configuration)
+                                                            to: newSessionStorage,
+                                                            legacyClient: legacyClient,
+                                                            makeTokenRequest: { authCode, authState, completion in tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)})
         
-        self.init(configuration: configuration,
-                  sessionStorage: sessionStorage,
-                  stateStorage: StateStorage(),
-                  httpClient: chttpClient,
-                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient))
-    }
-    
-    convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
                   stateStorage: stateStorage,
-                  httpClient: httpClient,
-                  jwks: RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient))
+                  httpClient: chttpClient,
+                  jwks: jwks,
+                  tokenHandler: tokenHandler)
     }
     
-    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS) {
+    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
         self.httpClient = httpClient
-        self.tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
+        self.tokenHandler = tokenHandler
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
     }

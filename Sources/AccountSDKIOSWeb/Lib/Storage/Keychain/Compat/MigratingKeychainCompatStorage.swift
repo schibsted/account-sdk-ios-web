@@ -3,14 +3,18 @@ import Foundation
 class MigratingKeychainCompatStorage: SessionStorage {
     private let newStorage: KeychainSessionStorage
     private let legacyStorage: LegacyKeychainSessionStorage
-    private let legacyClientConfiguration: ClientConfiguration
-    private let newClientConfiguration: ClientConfiguration
+    private let legacyClient: Client
+    private let makeTokenRequest: (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void
     
-    init(from: LegacyKeychainSessionStorage, to: KeychainSessionStorage, legacyClientConfiguration: ClientConfiguration, newClientConfiguration: ClientConfiguration) {
+    init(from: LegacyKeychainSessionStorage,
+         to: KeychainSessionStorage,
+         legacyClient: Client,
+         makeTokenRequest: @escaping (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void)
+    {
         self.newStorage = to
         self.legacyStorage = from
-        self.legacyClientConfiguration = legacyClientConfiguration
-        self.newClientConfiguration = newClientConfiguration
+        self.legacyClient = legacyClient
+        self.makeTokenRequest = makeTokenRequest
     }
     
     func store(_ value: UserSession) {
@@ -27,35 +31,35 @@ class MigratingKeychainCompatStorage: SessionStorage {
             }
             
             // if no existing session found, look in legacy storage with
-            guard let legacySession = legacyStorage.get(forClientId: legacyClientConfiguration.clientId) else {
+            guard let legacySession = self.legacyStorage.get(forClientId: self.legacyClient.configuration.clientId) else {
                 completion(nil)
                 return
             }
 
-            migrateLegacyUserSession(forClientId: forClientId, legacySession: legacySession, completion: completion)
+            self.migrateLegacyUserSession(forClientId: forClientId, legacySession: legacySession, completion: completion)
         }
     }
     
     private func migrateLegacyUserSession(forClientId: String, legacySession: UserSession, completion: @escaping (UserSession?) -> Void) {
-        let legacyClient = Client(configuration: legacyClientConfiguration)
         let legacyUser = User(client: legacyClient, tokens: legacySession.userTokens)
-        let client = Client(configuration: newClientConfiguration)
         
         legacyUser.oneTimeCode(clientId: forClientId) { result in
             switch result {
             case .success(let code):
-                client.makeTokenRequest(authCode: code, authState: nil) { result in
+                self.makeTokenRequest(code, nil) { result in
                     switch result {
                     case .success(let tokenResult):
-                        let newUserSession = UserSession(clientId: client.configuration.clientId, userTokens: tokenResult.userTokens, updatedAt: Date())
+                        let newUserSession = UserSession(clientId: forClientId, userTokens: tokenResult.userTokens, updatedAt: Date())
                         self.newStorage.store(newUserSession)
                         self.legacyStorage.remove()
                         completion(newUserSession)
-                    case .failure( _):
+                    case .failure(let error):
+                        SchibstedAccountLogger.instance.info("Token error response: \(error.localizedDescription)")
                         completion(nil)
                     }
                 }
-            case .failure( _):
+            case .failure(let error):
+                SchibstedAccountLogger.instance.info("Failed to migrate tokens. With error: \(error.localizedDescription)")
                 completion(nil)
             }
         }

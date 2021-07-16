@@ -67,14 +67,14 @@ internal class TokenHandler {
     }
 
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
-        let parameters = [
+        var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "authorization_code",
             "code": authCode,
-            "code_verifier": authState?.codeVerifier ?? "",
             "redirect_uri": configuration.redirectURI.absoluteString,
         ]
-
+        if let codeVerifier = authState?.codeVerifier { parameters["code_verifier"] = codeVerifier }
+        
         schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters) { result in
             switch result {
             case .success(let tokenResponse):

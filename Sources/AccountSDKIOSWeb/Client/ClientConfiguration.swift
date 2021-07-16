@@ -7,9 +7,9 @@ public struct ClientConfiguration {
     /// URL of identity provider
     public let serverURL: URL
     /// Registered client id
-    public let clientId: String
+    public var clientId: String
     /// Registered redirect URI
-    public let redirectURI: URL
+    public var redirectURI: URL
     
     public enum Environment: String {
         case proCom = "https://login.schibsted.com"
