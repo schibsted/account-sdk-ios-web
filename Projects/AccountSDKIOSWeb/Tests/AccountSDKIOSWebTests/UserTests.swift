@@ -281,12 +281,6 @@ final class UserTests: XCTestCase {
             }
         }
     }
-
-    func testAccountPagesURL() {
-        let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
-        let user = User(client: client, tokens: Fixtures.userTokens)
-        XCTAssertEqual(user.accountPagesURL().absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
-    }
     
     func testLogoutDestroysTokensAndSession() {
         let mockSessionStorage = MockSessionStorage()
