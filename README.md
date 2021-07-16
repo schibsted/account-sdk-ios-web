@@ -118,6 +118,8 @@ This SDK implements the [best practices for user authentication via an OpenID Co
   On iOS 13 and above this behavior can be disabled, which also removes the extra user prompt about allowing to use Schibsted account for login, using
   `withSSO: false` in `Client.getLoginSession(withMFA:loginHint:extraScopeValues:withSSO:completion:)`.
 * After the completed user authentication, user tokens are obtained and stored securely in the keychain storage.
+    * The ID Token is validated according to the [specification](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation).
+      The signature of the ID Token (which is a [JWS](https://datatracker.ietf.org/doc/html/rfc7515)) is verified by the library [`JOSESwift`](https://github.com/airsidemobile/JOSESwift).
     * Authenticated requests to backend services can be done via
       [`User.withAuthentication`](https://pages.github.schibsted.io/spt-identity/AccountSDKIOSWeb/Classes/User.html#/s:16AccountSDKIOSWeb4UserC18withAuthentication7request0D11RetryPolicy10completiony10Foundation10URLRequestV_AA0gH0_pys6ResultOyxAA9HTTPErrorOGctSeRzlF).
       The SDK will automatically inject the user access token as a Bearer token in the HTTP
