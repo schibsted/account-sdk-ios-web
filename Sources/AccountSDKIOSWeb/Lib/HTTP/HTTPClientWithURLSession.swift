@@ -34,8 +34,7 @@ class HTTPClientWithURLSession: HTTPClient {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse,
-                  !(200...399).contains(httpResponse.statusCode) {
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.isError {
                 let errorBody = data.map { String(decoding: $0, as: UTF8.self) }
                 completion(.failure(.errorResponse(code: httpResponse.statusCode, body: errorBody)))
                 return

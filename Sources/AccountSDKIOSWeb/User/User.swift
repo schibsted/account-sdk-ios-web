@@ -119,6 +119,16 @@ public class User: Equatable, UserProtocol {
 }
 
 extension User {
+    static func shouldLogout(tokenResponseBody: String?) -> Bool {
+        if let errorJSON = tokenResponseBody,
+           let oauthError = OAuthError.fromJSON(errorJSON),
+           oauthError.error == "invalid_grant" {
+            return true
+        }
+
+        return false
+    }
+
     /**
      Perform a request with user access token as Bearer token in Authorization header.
      
@@ -131,16 +141,6 @@ extension User {
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
     public func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-        func shouldLogout(tokenResponseBody: String?) -> Bool {
-            if let errorJSON = tokenResponseBody,
-               let oauthError = OAuthError.fromJSON(errorJSON),
-               oauthError.error == "invalid_grant" {
-                return true
-            }
-            
-            return false
-        }
-
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):
@@ -152,7 +152,7 @@ extension User {
                             // retry the request with fresh tokens
                             self.makeRequest(request: request, completion: completion)
                         case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                            guard shouldLogout(tokenResponseBody: body) else {
+                            guard User.shouldLogout(tokenResponseBody: body) else {
                                 completion(requestResult)
                                 return
                             }
@@ -172,7 +172,11 @@ extension User {
             }
         }
     }
-    
+
+    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        client.refreshTokens(for: self, completion: completion)
+    }
+
     private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         guard let tokens = self.tokens else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
