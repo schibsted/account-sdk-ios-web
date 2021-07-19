@@ -66,15 +66,15 @@ internal class TokenHandler {
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String, authState: AuthState, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
-        let parameters = [
+    func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+        var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "authorization_code",
             "code": authCode,
-            "code_verifier": authState.codeVerifier,
             "redirect_uri": configuration.redirectURI.absoluteString,
         ]
-
+        if let codeVerifier = authState?.codeVerifier { parameters["code_verifier"] = codeVerifier }
+        
         schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters) { result in
             switch result {
             case .success(let tokenResponse):
@@ -85,8 +85,8 @@ internal class TokenHandler {
                 
                 let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer,
                                                                         clientId: self.configuration.clientId,
-                                                                        nonce: authState.nonce,
-                                                                        expectedAMR: authState.mfa?.rawValue)
+                                                                        nonce: authState?.nonce,
+                                                                        expectedAMR: authState?.mfa?.rawValue)
 
                 IdTokenValidator.validate(idToken: idToken, jwks: self.jwks, context: idTokenValidationContext) { result in
                     switch result {

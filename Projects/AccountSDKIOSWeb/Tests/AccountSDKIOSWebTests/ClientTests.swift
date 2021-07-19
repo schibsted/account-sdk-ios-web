@@ -184,22 +184,31 @@ final class ClientTests: XCTestCase {
         let session = UserSession(clientId: Fixtures.clientConfig.clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.get(forClientId: Fixtures.clientConfig.clientId)).thenReturn(session)
+            when(mock.get(forClientId: Fixtures.clientConfig.clientId, completion: anyClosure()))
+                .then { clientID, completion in
+                    completion(session)
+                }
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
+        client.resumeLastLoggedInUser { user in
+            XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
+        }        
     }
 
     func testResumeLastLoggedInUserWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.get(forClientId: Fixtures.clientConfig.clientId)).thenReturn(nil)
+            when(mock.get(forClientId: Fixtures.clientConfig.clientId, completion: anyClosure()))
+                .then { clientID, completion in
+                    completion(nil)
+                }
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        XCTAssertNil(client.resumeLastLoggedInUser())
+        client.resumeLastLoggedInUser  { user in
+            XCTAssertNil(user)
+        }
     }
 
     private func createIdToken(claims: IdTokenClaims) -> String {
@@ -210,5 +219,17 @@ final class ClientTests: XCTestCase {
     func testAccountPagesURL() {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
         XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
+    }
+}
+
+fileprivate extension Client {
+    convenience init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient = HTTPClientWithURLSession()) {
+        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: httpClient)
+        let tokenHandler = TokenHandler(configuration: configuration, httpClient: httpClient, jwks: jwks)
+        self.init(configuration: configuration,
+                  sessionStorage: sessionStorage,
+                  stateStorage: stateStorage,
+                  httpClient: httpClient,
+                  jwks:jwks, tokenHandler: tokenHandler)
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
+    
     private let keychain: KeychainStorage
     
     init(service: String, accessGroup: String? = nil) {
@@ -15,12 +16,13 @@ internal class KeychainSessionStorage: SessionStorage {
         keychain.setValue(tokenData, forAccount: value.clientId)
     }
 
-    func get(forClientId: String) -> UserSession? {
+    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
         guard let data = keychain.getValue(forAccount: forClientId),
               let tokenData = try? JSONDecoder().decode(UserSession.self, from: data) else {
-            return nil
+            completion(nil)
+            return
         }
-        return tokenData
+        completion(tokenData)
     }
     
     func getAll() -> [UserSession] {

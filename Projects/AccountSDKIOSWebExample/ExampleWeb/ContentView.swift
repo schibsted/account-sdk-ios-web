@@ -41,12 +41,14 @@ struct ContentView: View {
                 }
                 
                 Button(action: {
-                    guard let user = client.resumeLastLoggedInUser() else {
-                        print("User could not be resumed")
-                        return
+                    client.resumeLastLoggedInUser() { user in
+                        guard let user = user else {
+                            print("User could not be resumed")
+                            return
+                        }
+                        self.user = user
+                        print("Resumed user")
                     }
-                    self.user = user
-                    print("Resumed user")
                 }) {
                     Text("Resume user")
                 }

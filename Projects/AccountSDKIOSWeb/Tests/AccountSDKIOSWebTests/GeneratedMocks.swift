@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/HTTPClient.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -32,9 +32,9 @@ public class MockHTTPClient: HTTPClient, Cuckoo.ProtocolMock {
     
     
     
-    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void)  {
+    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)  {
         
-    return cuckoo_manager.call("execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void)",
+    return cuckoo_manager.call("execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)",
             parameters: (request, withRetryPolicy, completion),
             escapingParameters: (request, withRetryPolicy, completion),
             superclassCall:
@@ -54,9 +54,9 @@ public class MockHTTPClient: HTTPClient, Cuckoo.ProtocolMock {
 	    }
 	    
 	    
-	    func execute<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, T: Decodable>(request: M1, withRetryPolicy: M2, completion: M3) -> Cuckoo.ProtocolStubNoReturnFunction<(URLRequest, RetryPolicy, (Result<T, HTTPError>) -> Void)> where M1.MatchedType == URLRequest, M2.MatchedType == RetryPolicy, M3.MatchedType == (Result<T, HTTPError>) -> Void {
-	        let matchers: [Cuckoo.ParameterMatcher<(URLRequest, RetryPolicy, (Result<T, HTTPError>) -> Void)>] = [wrap(matchable: request) { $0.0 }, wrap(matchable: withRetryPolicy) { $0.1 }, wrap(matchable: completion) { $0.2 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockHTTPClient.self, method: "execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void)", parameterMatchers: matchers))
+	    func execute<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, T: Decodable>(request: M1, withRetryPolicy: M2, completion: M3) -> Cuckoo.ProtocolStubNoReturnFunction<(URLRequest, RetryPolicy, HTTPResultHandler<T>)> where M1.MatchedType == URLRequest, M2.MatchedType == RetryPolicy, M3.MatchedType == HTTPResultHandler<T> {
+	        let matchers: [Cuckoo.ParameterMatcher<(URLRequest, RetryPolicy, HTTPResultHandler<T>)>] = [wrap(matchable: request) { $0.0 }, wrap(matchable: withRetryPolicy) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockHTTPClient.self, method: "execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)", parameterMatchers: matchers))
 	    }
 	    
 	}
@@ -76,9 +76,9 @@ public class MockHTTPClient: HTTPClient, Cuckoo.ProtocolMock {
 	
 	    
 	    @discardableResult
-	    func execute<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, T: Decodable>(request: M1, withRetryPolicy: M2, completion: M3) -> Cuckoo.__DoNotUse<(URLRequest, RetryPolicy, (Result<T, HTTPError>) -> Void), Void> where M1.MatchedType == URLRequest, M2.MatchedType == RetryPolicy, M3.MatchedType == (Result<T, HTTPError>) -> Void {
-	        let matchers: [Cuckoo.ParameterMatcher<(URLRequest, RetryPolicy, (Result<T, HTTPError>) -> Void)>] = [wrap(matchable: request) { $0.0 }, wrap(matchable: withRetryPolicy) { $0.1 }, wrap(matchable: completion) { $0.2 }]
-	        return cuckoo_manager.verify("execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    func execute<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, T: Decodable>(request: M1, withRetryPolicy: M2, completion: M3) -> Cuckoo.__DoNotUse<(URLRequest, RetryPolicy, HTTPResultHandler<T>), Void> where M1.MatchedType == URLRequest, M2.MatchedType == RetryPolicy, M3.MatchedType == HTTPResultHandler<T> {
+	        let matchers: [Cuckoo.ParameterMatcher<(URLRequest, RetryPolicy, HTTPResultHandler<T>)>] = [wrap(matchable: request) { $0.0 }, wrap(matchable: withRetryPolicy) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return cuckoo_manager.verify("execute(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	}
@@ -90,14 +90,14 @@ public class HTTPClientStub: HTTPClient {
     
 
     
-    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping (Result<T, HTTPError>) -> Void)   {
+    public func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/HTTP/URLSessionProtocol.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/URLSessionProtocol.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -106,19 +106,19 @@ import Cuckoo
 import Foundation
 
 
-public class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
+ class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
     
-    public typealias MocksType = URLSessionProtocol
+     typealias MocksType = URLSessionProtocol
     
-    public typealias Stubbing = __StubbingProxy_URLSessionProtocol
-    public typealias Verification = __VerificationProxy_URLSessionProtocol
+     typealias Stubbing = __StubbingProxy_URLSessionProtocol
+     typealias Verification = __VerificationProxy_URLSessionProtocol
 
-    public let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: false)
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: false)
 
     
     private var __defaultImplStub: URLSessionProtocol?
 
-    public func enableDefaultImplementation(_ stub: URLSessionProtocol) {
+     func enableDefaultImplementation(_ stub: URLSessionProtocol) {
         __defaultImplStub = stub
         cuckoo_manager.enableDefaultStubImplementation()
     }
@@ -131,7 +131,7 @@ public class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
     
     
     
-    public func dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask {
+     func dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask {
         
     return cuckoo_manager.call("dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask",
             parameters: (with, completionHandler),
@@ -145,10 +145,10 @@ public class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
     }
     
 
-	public struct __StubbingProxy_URLSessionProtocol: Cuckoo.StubbingProxy {
+	 struct __StubbingProxy_URLSessionProtocol: Cuckoo.StubbingProxy {
 	    private let cuckoo_manager: Cuckoo.MockManager
 	
-	    public init(manager: Cuckoo.MockManager) {
+	     init(manager: Cuckoo.MockManager) {
 	        self.cuckoo_manager = manager
 	    }
 	    
@@ -160,12 +160,12 @@ public class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
 	    
 	}
 
-	public struct __VerificationProxy_URLSessionProtocol: Cuckoo.VerificationProxy {
+	 struct __VerificationProxy_URLSessionProtocol: Cuckoo.VerificationProxy {
 	    private let cuckoo_manager: Cuckoo.MockManager
 	    private let callMatcher: Cuckoo.CallMatcher
 	    private let sourceLocation: Cuckoo.SourceLocation
 	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
 	        self.cuckoo_manager = manager
 	        self.callMatcher = callMatcher
 	        self.sourceLocation = sourceLocation
@@ -183,20 +183,20 @@ public class MockURLSessionProtocol: URLSessionProtocol, Cuckoo.ProtocolMock {
 	}
 }
 
-public class URLSessionProtocolStub: URLSessionProtocol {
+ class URLSessionProtocolStub: URLSessionProtocol {
     
 
     
 
     
-    public func dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask  {
+     func dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask  {
         return DefaultValueRegistry.defaultValue(for: (URLSessionDataTask).self)
     }
     
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -326,7 +326,7 @@ import JOSESwift
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -455,7 +455,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Keychain/KeychainSessionStorage.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -504,16 +504,16 @@ import Foundation
     
     
     
-     override func get(forClientId: String) -> UserSession? {
+     override func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  {
         
-    return cuckoo_manager.call("get(forClientId: String) -> UserSession?",
-            parameters: (forClientId),
-            escapingParameters: (forClientId),
+    return cuckoo_manager.call("get(forClientId: String, completion: @escaping (UserSession?) -> Void)",
+            parameters: (forClientId, completion),
+            escapingParameters: (forClientId, completion),
             superclassCall:
                 
-                super.get(forClientId: forClientId)
+                super.get(forClientId: forClientId, completion: completion)
                 ,
-            defaultCall: __defaultImplStub!.get(forClientId: forClientId))
+            defaultCall: __defaultImplStub!.get(forClientId: forClientId, completion: completion))
         
     }
     
@@ -561,9 +561,9 @@ import Foundation
 	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "store(_: UserSession)", parameterMatchers: matchers))
 	    }
 	    
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ClassStubFunction<(String), UserSession?> where M1.MatchedType == String {
-	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
+	    func get<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(forClientId: M1, completion: M2) -> Cuckoo.ClassStubNoReturnFunction<(String, (UserSession?) -> Void)> where M1.MatchedType == String, M2.MatchedType == (UserSession?) -> Void {
+	        let matchers: [Cuckoo.ParameterMatcher<(String, (UserSession?) -> Void)>] = [wrap(matchable: forClientId) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockKeychainSessionStorage.self, method: "get(forClientId: String, completion: @escaping (UserSession?) -> Void)", parameterMatchers: matchers))
 	    }
 	    
 	    func getAll() -> Cuckoo.ClassStubFunction<(), [UserSession]> {
@@ -599,9 +599,9 @@ import Foundation
 	    }
 	    
 	    @discardableResult
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), UserSession?> where M1.MatchedType == String {
-	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return cuckoo_manager.verify("get(forClientId: String) -> UserSession?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    func get<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(forClientId: M1, completion: M2) -> Cuckoo.__DoNotUse<(String, (UserSession?) -> Void), Void> where M1.MatchedType == String, M2.MatchedType == (UserSession?) -> Void {
+	        let matchers: [Cuckoo.ParameterMatcher<(String, (UserSession?) -> Void)>] = [wrap(matchable: forClientId) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return cuckoo_manager.verify("get(forClientId: String, completion: @escaping (UserSession?) -> Void)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	    @discardableResult
@@ -629,8 +629,8 @@ import Foundation
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
-     override func get(forClientId: String) -> UserSession?  {
-        return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
+     override func get(forClientId: String, completion: @escaping (UserSession?) -> Void)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
      override func getAll() -> [UserSession]  {
@@ -644,7 +644,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/SessionStorage.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
@@ -694,16 +694,16 @@ import Security
     
     
     
-     func get(forClientId: String) -> UserSession? {
+     func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  {
         
-    return cuckoo_manager.call("get(forClientId: String) -> UserSession?",
-            parameters: (forClientId),
-            escapingParameters: (forClientId),
+    return cuckoo_manager.call("get(forClientId: String, completion: @escaping (UserSession?) -> Void)",
+            parameters: (forClientId, completion),
+            escapingParameters: (forClientId, completion),
             superclassCall:
                 
                 Cuckoo.MockManager.crashOnProtocolSuperclassCall()
                 ,
-            defaultCall: __defaultImplStub!.get(forClientId: forClientId))
+            defaultCall: __defaultImplStub!.get(forClientId: forClientId, completion: completion))
         
     }
     
@@ -751,9 +751,9 @@ import Security
 	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "store(_: UserSession)", parameterMatchers: matchers))
 	    }
 	    
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.ProtocolStubFunction<(String), UserSession?> where M1.MatchedType == String {
-	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "get(forClientId: String) -> UserSession?", parameterMatchers: matchers))
+	    func get<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(forClientId: M1, completion: M2) -> Cuckoo.ProtocolStubNoReturnFunction<(String, (UserSession?) -> Void)> where M1.MatchedType == String, M2.MatchedType == (UserSession?) -> Void {
+	        let matchers: [Cuckoo.ParameterMatcher<(String, (UserSession?) -> Void)>] = [wrap(matchable: forClientId) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSessionStorage.self, method: "get(forClientId: String, completion: @escaping (UserSession?) -> Void)", parameterMatchers: matchers))
 	    }
 	    
 	    func getAll() -> Cuckoo.ProtocolStubFunction<(), [UserSession]> {
@@ -789,9 +789,9 @@ import Security
 	    }
 	    
 	    @discardableResult
-	    func get<M1: Cuckoo.Matchable>(forClientId: M1) -> Cuckoo.__DoNotUse<(String), UserSession?> where M1.MatchedType == String {
-	        let matchers: [Cuckoo.ParameterMatcher<(String)>] = [wrap(matchable: forClientId) { $0 }]
-	        return cuckoo_manager.verify("get(forClientId: String) -> UserSession?", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    func get<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(forClientId: M1, completion: M2) -> Cuckoo.__DoNotUse<(String, (UserSession?) -> Void), Void> where M1.MatchedType == String, M2.MatchedType == (UserSession?) -> Void {
+	        let matchers: [Cuckoo.ParameterMatcher<(String, (UserSession?) -> Void)>] = [wrap(matchable: forClientId) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return cuckoo_manager.verify("get(forClientId: String, completion: @escaping (UserSession?) -> Void)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	    @discardableResult
@@ -819,8 +819,8 @@ import Security
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
-     func get(forClientId: String) -> UserSession?  {
-        return DefaultValueRegistry.defaultValue(for: (UserSession?).self)
+     func get(forClientId: String, completion: @escaping (UserSession?) -> Void)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
      func getAll() -> [UserSession]  {
@@ -834,7 +834,7 @@ import Security
 }
 
 
-// MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Storage/Storage.swift at 2020-12-07 09:57:57 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift at 2021-07-16 13:47:30 +0000
 
 
 import Cuckoo
