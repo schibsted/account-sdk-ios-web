@@ -121,7 +121,7 @@ This SDK implements the [best practices for user authentication via an OpenID Co
     * The ID Token is validated according to the [specification](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation).
       The signature of the ID Token (which is a [JWS](https://datatracker.ietf.org/doc/html/rfc7515)) is verified by the library [`JOSESwift`](https://github.com/airsidemobile/JOSESwift).
     * Authenticated requests to backend services can be done via
-      [`User.withAuthentication`](https://pages.github.schibsted.io/spt-identity/AccountSDKIOSWeb/Classes/User.html#/s:16AccountSDKIOSWeb4UserC18withAuthentication7request0D11RetryPolicy10completiony10Foundation10URLRequestV_AA0gH0_pys6ResultOyxAA9HTTPErrorOGctSeRzlF).
+      `AuthenticatedURLSession.dataTask(with: URLRequest, completionHandler: ...` 
       The SDK will automatically inject the user access token as a Bearer token in the HTTP
       Authorization request header.
       If the access token is rejected with a `401 Unauthorized` response (e.g. due to having
