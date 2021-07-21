@@ -15,7 +15,6 @@ public protocol UserProtocol {
     func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>)
     func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>)
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
-    func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>)
 }
 
 /// Representation of logged-in user.
@@ -140,7 +139,7 @@ extension User {
      - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
-    public func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
+    func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         makeRequest(request: request) { (requestResult: Result<T, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):

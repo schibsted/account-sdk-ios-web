@@ -5,7 +5,8 @@ import AuthenticationServices
 
 struct ContentView: View {
     let client: Client
-
+    let clientConfiguration: ClientConfiguration
+    
     @State var userDelegate: MyUserDelegate?
     @State private var user: User? {
         didSet {
@@ -26,8 +27,9 @@ struct ContentView: View {
 
     @State private var asWebAuthSession: ASWebAuthenticationSession?
 
-    init(client: Client) {
+    init(client: Client, clientConfiguration: ClientConfiguration) {
         self.client = client
+        self.clientConfiguration = clientConfiguration
     }
 
     var body: some View {
@@ -149,10 +151,8 @@ struct ContentView: View {
                 }.disabled(!userIsLoggedIn)
 
                 Button(action: {
-                    if let url = self.user?.accountPagesURL() {
-                        accountPagesURL = url
-                        showAccountPages = true
-                    }
+                    accountPagesURL = self.clientConfiguration.accountPagesURL
+                    showAccountPages = true
                 }) {
                     Text("Show account pages")
                 }.disabled(!userIsLoggedIn)
