@@ -9,6 +9,7 @@ extension XCTWaiter.Result: CustomStringConvertible {
         case .incorrectOrder: state = "incorrectOrder"
         case .invertedFulfillment: state = "invertedFulfillment"
         case .interrupted: state = "interrupted"
+        @unknown default: state = "unknown"
         }
         
         return "XCTWaiterResult(\(state))"
