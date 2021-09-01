@@ -22,9 +22,8 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GH_TOKEN
-  github_url: github.schibsted.io
   verbose: true
   local_dir: docs
   on:
-    repo: spt-identity/AccountSDKIOSWeb
+    repo: schibsted/AccountSDKIOSWeb
     branch: master
