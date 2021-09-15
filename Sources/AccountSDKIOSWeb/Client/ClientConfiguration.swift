@@ -16,6 +16,7 @@ public struct ClientConfiguration {
         case proFi = "https://login.schibsted.fi"
         case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
+        case proDk = "https://login.schibsted.dk"
     }
     
     /**
