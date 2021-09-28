@@ -4,16 +4,19 @@ class MigratingKeychainCompatStorage: SessionStorage {
     private let newStorage: KeychainSessionStorage
     private let legacyStorage: LegacyKeychainSessionStorage
     private let legacyClient: Client
+    private let legacyClientSecret: String
     private let makeTokenRequest: (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void
     
     init(from: LegacyKeychainSessionStorage,
          to: KeychainSessionStorage,
          legacyClient: Client,
+         legacyClientSecret: String,
          makeTokenRequest: @escaping (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void)
     {
         self.newStorage = to
         self.legacyStorage = from
         self.legacyClient = legacyClient
+        self.legacyClientSecret = legacyClientSecret
         self.makeTokenRequest = makeTokenRequest
     }
     
