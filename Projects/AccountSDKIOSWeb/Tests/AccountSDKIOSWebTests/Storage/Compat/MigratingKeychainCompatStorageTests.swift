@@ -15,6 +15,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage,
                                                               to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         migratingStorage.store(userSession)
 
@@ -34,6 +35,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage,
                                                               to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         migratingStorage.getAll()
 
@@ -52,6 +54,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         migratingStorage.remove(forClientId: clientId)
 
@@ -75,6 +78,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         
         migratingStorage.get(forClientId: clientId) { retrievedUserSession in
@@ -105,6 +109,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         
         migratingStorage.get(forClientId: clientId) { retrievedUserSession in
@@ -133,6 +138,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
+                                                              legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
         
         migratingStorage.get(forClientId: clientId) { retrievedUserSession in
