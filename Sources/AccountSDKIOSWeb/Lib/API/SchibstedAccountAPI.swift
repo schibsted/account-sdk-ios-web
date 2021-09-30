@@ -135,4 +135,45 @@ class SchibstedAccountAPI {
             return .failure(error)
         }
     }
+    
+    /// API endpoint called with New SDK clientID, and oldSDKAccesstoken
+    func oldSDKCodeExchange(with httpClient: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> ) {
+        let codeExchangeRequest = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
+        let authenticatedRequest = authenticatedBearerRequest(codeExchangeRequest, token: oldSDKAccessToken)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
+                           withRetryPolicy: retryPolicy,
+                           completion: completion)
+    }
+    
+    /// API endpoint called with old SDK clientID and old SDK Client secret, and old SDK refreshToken
+    func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse> ) {
+        let request = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: refreshToken).asRequest(baseURL: baseURL)
+        let authenticatedBasicRequest = authenticatedBasicRequest(request, legacyClientId: clientId, legacyClientSecret: clientSecret)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedBasicRequest),
+                           withRetryPolicy: retryPolicy,
+                           completion: completion)
+    }
+}
+
+// MARK: Helper functions used for API endpoints from legacy SDK
+
+fileprivate func authenticatedBearerRequest(_ request: URLRequest, token: String) -> URLRequest {
+    var requestCopy = request
+    requestCopy.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    return requestCopy
+}
+
+fileprivate func authenticatedBasicRequest(_ request: URLRequest, legacyClientId: String, legacyClientSecret: String) -> URLRequest {
+    var requestCopy = request
+    
+    let loginString = encode(legacyClientId: legacyClientId, legacyClientSecret: legacyClientSecret)
+    requestCopy.setValue("Basic " + loginString, forHTTPHeaderField: "Authorization")
+    return requestCopy
+}
+
+fileprivate func encode(legacyClientId: String, legacyClientSecret: String) -> String {
+    let loginString = String(format: "%@:%@", legacyClientId, legacyClientSecret)
+    let loginData = loginString.data(using: String.Encoding.utf8)!
+    let base64LoginString = loginData.base64EncodedString()
+    return base64LoginString
 }

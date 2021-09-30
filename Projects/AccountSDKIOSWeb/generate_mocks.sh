@@ -6,4 +6,5 @@
     ../../Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift \
+    ../../Sources/AccountSDKIOSWeb/Lib/API/SchibstedAccountAPI.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift

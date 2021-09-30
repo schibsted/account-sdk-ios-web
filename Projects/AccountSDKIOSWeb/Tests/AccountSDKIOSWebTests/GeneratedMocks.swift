@@ -1,4 +1,254 @@
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/API/SchibstedAccountAPI.swift at 2021-09-29 13:57:12 +0000
+
+
+import Cuckoo
+@testable import AccountSDKIOSWeb
+
+import Foundation
+import UIKit
+
+
+ class MockSchibstedAccountAPI: SchibstedAccountAPI, Cuckoo.ClassMock {
+    
+     typealias MocksType = SchibstedAccountAPI
+    
+     typealias Stubbing = __StubbingProxy_SchibstedAccountAPI
+     typealias Verification = __VerificationProxy_SchibstedAccountAPI
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: true)
+
+    
+    private var __defaultImplStub: SchibstedAccountAPI?
+
+     func enableDefaultImplementation(_ stub: SchibstedAccountAPI) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     override func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>)  {
+        
+    return cuckoo_manager.call("sessionExchange(for: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>)",
+            parameters: (user, clientId, redirectURI, completion),
+            escapingParameters: (user, clientId, redirectURI, completion),
+            superclassCall:
+                
+                super.sessionExchange(for: user, clientId: clientId, redirectURI: redirectURI, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.sessionExchange(for: user, clientId: clientId, redirectURI: redirectURI, completion: completion))
+        
+    }
+    
+    
+    
+     override func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>)  {
+        
+    return cuckoo_manager.call("codeExchange(for: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>)",
+            parameters: (user, clientId, completion),
+            escapingParameters: (user, clientId, completion),
+            superclassCall:
+                
+                super.codeExchange(for: user, clientId: clientId, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.codeExchange(for: user, clientId: clientId, completion: completion))
+        
+    }
+    
+    
+    
+     override func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>)  {
+        
+    return cuckoo_manager.call("tokenRequest(with: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>)",
+            parameters: (httpClient, parameters, completion),
+            escapingParameters: (httpClient, parameters, completion),
+            superclassCall:
+                
+                super.tokenRequest(with: httpClient, parameters: parameters, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.tokenRequest(with: httpClient, parameters: parameters, completion: completion))
+        
+    }
+    
+    
+    
+     override func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>)  {
+        
+    return cuckoo_manager.call("userProfile(for: User, completion: @escaping HTTPResultHandler<UserProfileResponse>)",
+            parameters: (user, completion),
+            escapingParameters: (user, completion),
+            superclassCall:
+                
+                super.userProfile(for: user, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.userProfile(for: user, completion: completion))
+        
+    }
+    
+    
+    
+     override func oldSDKCodeExchange(with httpClient: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)  {
+        
+    return cuckoo_manager.call("oldSDKCodeExchange(with: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)",
+            parameters: (httpClient, clientId, oldSDKAccessToken, completion),
+            escapingParameters: (httpClient, clientId, oldSDKAccessToken, completion),
+            superclassCall:
+                
+                super.oldSDKCodeExchange(with: httpClient, clientId: clientId, oldSDKAccessToken: oldSDKAccessToken, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.oldSDKCodeExchange(with: httpClient, clientId: clientId, oldSDKAccessToken: oldSDKAccessToken, completion: completion))
+        
+    }
+    
+    
+    
+     override func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse>)  {
+        
+    return cuckoo_manager.call("oldSDKRefresh(with: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse>)",
+            parameters: (httpClient, refreshToken, clientId, clientSecret, completion),
+            escapingParameters: (httpClient, refreshToken, clientId, clientSecret, completion),
+            superclassCall:
+                
+                super.oldSDKRefresh(with: httpClient, refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.oldSDKRefresh(with: httpClient, refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completion: completion))
+        
+    }
+    
+
+	 struct __StubbingProxy_SchibstedAccountAPI: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func sessionExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable>(for user: M1, clientId: M2, redirectURI: M3, completion: M4) -> Cuckoo.ClassStubNoReturnFunction<(User, String, String, HTTPResultHandler<SessionExchangeResponse>)> where M1.MatchedType == User, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == HTTPResultHandler<SessionExchangeResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, String, String, HTTPResultHandler<SessionExchangeResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: redirectURI) { $0.2 }, wrap(matchable: completion) { $0.3 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "sessionExchange(for: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>)", parameterMatchers: matchers))
+	    }
+	    
+	    func codeExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(for user: M1, clientId: M2, completion: M3) -> Cuckoo.ClassStubNoReturnFunction<(User, String, HTTPResultHandler<CodeExchangeResponse>)> where M1.MatchedType == User, M2.MatchedType == String, M3.MatchedType == HTTPResultHandler<CodeExchangeResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, String, HTTPResultHandler<CodeExchangeResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "codeExchange(for: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>)", parameterMatchers: matchers))
+	    }
+	    
+	    func tokenRequest<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(with httpClient: M1, parameters: M2, completion: M3) -> Cuckoo.ClassStubNoReturnFunction<(HTTPClient, [String: String], HTTPResultHandler<TokenResponse>)> where M1.MatchedType == HTTPClient, M2.MatchedType == [String: String], M3.MatchedType == HTTPResultHandler<TokenResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, [String: String], HTTPResultHandler<TokenResponse>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: parameters) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "tokenRequest(with: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>)", parameterMatchers: matchers))
+	    }
+	    
+	    func userProfile<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(for user: M1, completion: M2) -> Cuckoo.ClassStubNoReturnFunction<(User, HTTPResultHandler<UserProfileResponse>)> where M1.MatchedType == User, M2.MatchedType == HTTPResultHandler<UserProfileResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, HTTPResultHandler<UserProfileResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "userProfile(for: User, completion: @escaping HTTPResultHandler<UserProfileResponse>)", parameterMatchers: matchers))
+	    }
+	    
+	    func oldSDKCodeExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable>(with httpClient: M1, clientId: M2, oldSDKAccessToken: M3, completion: M4) -> Cuckoo.ClassStubNoReturnFunction<(HTTPClient, String, String, HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)> where M1.MatchedType == HTTPClient, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, String, String, HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: oldSDKAccessToken) { $0.2 }, wrap(matchable: completion) { $0.3 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "oldSDKCodeExchange(with: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)", parameterMatchers: matchers))
+	    }
+	    
+	    func oldSDKRefresh<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable, M5: Cuckoo.Matchable>(with httpClient: M1, refreshToken: M2, clientId: M3, clientSecret: M4, completion: M5) -> Cuckoo.ClassStubNoReturnFunction<(HTTPClient, String, String, String, HTTPResultHandler<TokenResponse>)> where M1.MatchedType == HTTPClient, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == String, M5.MatchedType == HTTPResultHandler<TokenResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, String, String, String, HTTPResultHandler<TokenResponse>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: refreshToken) { $0.1 }, wrap(matchable: clientId) { $0.2 }, wrap(matchable: clientSecret) { $0.3 }, wrap(matchable: completion) { $0.4 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockSchibstedAccountAPI.self, method: "oldSDKRefresh(with: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse>)", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_SchibstedAccountAPI: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func sessionExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable>(for user: M1, clientId: M2, redirectURI: M3, completion: M4) -> Cuckoo.__DoNotUse<(User, String, String, HTTPResultHandler<SessionExchangeResponse>), Void> where M1.MatchedType == User, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == HTTPResultHandler<SessionExchangeResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, String, String, HTTPResultHandler<SessionExchangeResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: redirectURI) { $0.2 }, wrap(matchable: completion) { $0.3 }]
+	        return cuckoo_manager.verify("sessionExchange(for: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func codeExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(for user: M1, clientId: M2, completion: M3) -> Cuckoo.__DoNotUse<(User, String, HTTPResultHandler<CodeExchangeResponse>), Void> where M1.MatchedType == User, M2.MatchedType == String, M3.MatchedType == HTTPResultHandler<CodeExchangeResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, String, HTTPResultHandler<CodeExchangeResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return cuckoo_manager.verify("codeExchange(for: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func tokenRequest<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(with httpClient: M1, parameters: M2, completion: M3) -> Cuckoo.__DoNotUse<(HTTPClient, [String: String], HTTPResultHandler<TokenResponse>), Void> where M1.MatchedType == HTTPClient, M2.MatchedType == [String: String], M3.MatchedType == HTTPResultHandler<TokenResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, [String: String], HTTPResultHandler<TokenResponse>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: parameters) { $0.1 }, wrap(matchable: completion) { $0.2 }]
+	        return cuckoo_manager.verify("tokenRequest(with: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func userProfile<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(for user: M1, completion: M2) -> Cuckoo.__DoNotUse<(User, HTTPResultHandler<UserProfileResponse>), Void> where M1.MatchedType == User, M2.MatchedType == HTTPResultHandler<UserProfileResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(User, HTTPResultHandler<UserProfileResponse>)>] = [wrap(matchable: user) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+	        return cuckoo_manager.verify("userProfile(for: User, completion: @escaping HTTPResultHandler<UserProfileResponse>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func oldSDKCodeExchange<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable>(with httpClient: M1, clientId: M2, oldSDKAccessToken: M3, completion: M4) -> Cuckoo.__DoNotUse<(HTTPClient, String, String, HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>), Void> where M1.MatchedType == HTTPClient, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, String, String, HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: clientId) { $0.1 }, wrap(matchable: oldSDKAccessToken) { $0.2 }, wrap(matchable: completion) { $0.3 }]
+	        return cuckoo_manager.verify("oldSDKCodeExchange(with: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func oldSDKRefresh<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable, M5: Cuckoo.Matchable>(with httpClient: M1, refreshToken: M2, clientId: M3, clientSecret: M4, completion: M5) -> Cuckoo.__DoNotUse<(HTTPClient, String, String, String, HTTPResultHandler<TokenResponse>), Void> where M1.MatchedType == HTTPClient, M2.MatchedType == String, M3.MatchedType == String, M4.MatchedType == String, M5.MatchedType == HTTPResultHandler<TokenResponse> {
+	        let matchers: [Cuckoo.ParameterMatcher<(HTTPClient, String, String, String, HTTPResultHandler<TokenResponse>)>] = [wrap(matchable: httpClient) { $0.0 }, wrap(matchable: refreshToken) { $0.1 }, wrap(matchable: clientId) { $0.2 }, wrap(matchable: clientSecret) { $0.3 }, wrap(matchable: completion) { $0.4 }]
+	        return cuckoo_manager.verify("oldSDKRefresh(with: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse>)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class SchibstedAccountAPIStub: SchibstedAccountAPI {
+    
+
+    
+
+    
+     override func sessionExchange(for user: User, clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<SessionExchangeResponse>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func oldSDKCodeExchange(with httpClient: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+     override func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -97,7 +347,7 @@ public class HTTPClientStub: HTTPClient {
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/URLSessionProtocol.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/HTTP/URLSessionProtocol.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -196,7 +446,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainSessionStorage.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -326,7 +576,7 @@ import JOSESwift
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/Compat/LegacyKeychainTokenStorage.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -455,7 +705,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -644,7 +894,7 @@ import Foundation
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo
@@ -834,7 +1084,7 @@ import Security
 }
 
 
-// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift at 2021-07-16 13:47:30 +0000
+// MARK: - Mocks generated from file: ../../Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift at 2021-09-29 13:57:12 +0000
 
 
 import Cuckoo

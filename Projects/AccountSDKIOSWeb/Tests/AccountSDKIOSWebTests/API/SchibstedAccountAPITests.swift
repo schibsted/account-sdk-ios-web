@@ -37,6 +37,114 @@ final class SchibstedAccountAPITests: XCTestCase {
             }
         }
     }
+    
+    // MARK: OldSDK Api endpoints
+    
+    func testOldSDKCodeExchangeSuccessResponse() {
+        let expectedCode = "A code"
+        let response = CodeExchangeResponse(code: expectedCode)
+
+        
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: response)))
+                }
+        }
+        
+        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        Await.until { done in
+            api.oldSDKCodeExchange(with: mockHTTPClient, clientId: "", oldSDKAccessToken: "") { result in
+                switch result {
+                case .success(let receivedResponse):
+                    XCTAssertEqual(receivedResponse.data.code, expectedCode)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
+    }
+    
+    func testOldSDKCodeExchangeURL() {
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: CodeExchangeResponse(code: ""))))
+                }
+        }
+        
+        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        Await.until { done in
+            api.oldSDKCodeExchange(with: mockHTTPClient, clientId: "", oldSDKAccessToken: "") { result in
+                
+                let argumentCaptor = ArgumentCaptor<URLRequest>()
+                let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>>> = anyClosure()
+                verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
+                let requestUrl = argumentCaptor.value!.url
+                XCTAssertEqual(requestUrl, Fixtures.clientConfig.serverURL.appendingPathComponent("/api/2/oauth/exchange"))
+                
+                done()
+            }
+        }
+    }
+    
+  
+    
+    func testOldSDKRefreshSuccessResponse() {
+        let expectedResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
+                                             refresh_token: Fixtures.userTokens.refreshToken,
+                                             id_token: nil,
+                                             scope: nil,
+                                             expires_in: 1337)
+        
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(expectedResponse))
+                }
+        }
+        
+        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        Await.until { done in
+            api.oldSDKRefresh(with: mockHTTPClient, refreshToken: "", clientId: "", clientSecret: "") { result in
+                switch result {
+                case .success(let receivedResponse):
+                    XCTAssertEqual(receivedResponse.access_token, expectedResponse.access_token)
+                    XCTAssertEqual(receivedResponse.refresh_token, expectedResponse.refresh_token)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
+    }
+    
+    func testOldSDKRefreshURL() {
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(TokenResponse(access_token: "", refresh_token: "", id_token: nil, scope: nil, expires_in: 1337)))
+                }
+        }
+        
+        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        Await.until { done in
+            api.oldSDKRefresh(with: mockHTTPClient, refreshToken: "", clientId: "", clientSecret: "") { result in
+                let argumentCaptor = ArgumentCaptor<URLRequest>()
+                let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
+                verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
+                let requestUrl = argumentCaptor.value!.url
+                XCTAssertEqual(requestUrl, Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/token"))
+                    
+                done()
+            }
+        }
+    }
 }
 
 final class RequestBuilderTests: XCTestCase {
