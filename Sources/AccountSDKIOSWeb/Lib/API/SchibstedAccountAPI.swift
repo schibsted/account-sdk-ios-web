@@ -148,8 +148,8 @@ class SchibstedAccountAPI {
     /// API endpoint called with old SDK clientID and old SDK Client secret, and old SDK refreshToken
     func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse> ) {
         let request = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: refreshToken).asRequest(baseURL: baseURL)
-        let authenticatedBasicRequest = authenticatedBasicRequest(request, legacyClientId: clientId, legacyClientSecret: clientSecret)
-        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedBasicRequest),
+        let authenticatedRequest = authenticatedBasicRequest(request, legacyClientId: clientId, legacyClientSecret: clientSecret)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
                            withRetryPolicy: retryPolicy,
                            completion: completion)
     }

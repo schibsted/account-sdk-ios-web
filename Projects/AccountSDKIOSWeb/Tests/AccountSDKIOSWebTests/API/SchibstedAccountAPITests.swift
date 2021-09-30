@@ -91,8 +91,6 @@ final class SchibstedAccountAPITests: XCTestCase {
         }
     }
     
-  
-    
     func testOldSDKRefreshSuccessResponse() {
         let expectedResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
                                              refresh_token: Fixtures.userTokens.refreshToken,
