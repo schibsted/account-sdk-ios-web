@@ -38,3 +38,51 @@ final class SchibstedAccountAPITests: XCTestCase {
         }
     }
 }
+
+final class RequestBuilderTests: XCTestCase {
+    
+    // MARK: CodeExchange tests
+
+    func testCodeExchangeAsRequestExpectedURL() throws {
+        let expectedClientId = "aString"
+        let baseURL = URL("https://example.com")
+        let expectedURL = baseURL.appendingPathComponent("/api/2/oauth/exchange")
+        
+        let sut = RequestBuilder.codeExchange(clientId: expectedClientId)
+        let request = sut.asRequest(baseURL: baseURL)
+        XCTAssertEqual(request.url, expectedURL)
+    }
+    
+    func testCodeExchangeAsRequestWrongURL() throws {
+        let expectedClientId = "aString"
+        let baseURL = URL("https://example.com")
+        let expectedURL = baseURL.appendingPathComponent("/bad/path")
+        
+        let sut = RequestBuilder.codeExchange(clientId: expectedClientId)
+        let request = sut.asRequest(baseURL: baseURL)
+        XCTAssertNotEqual(request.url, expectedURL)
+    }
+    
+    // MARK: OldSDKRefreshToken tests
+    
+    func testOldSDKRefreshTokenAsRequestExpectedURL() throws {
+        let baseURL = URL("https://example.com")
+        let expectedURL = baseURL.appendingPathComponent("/oauth/token")
+        let expectedRefreshToken = "A refreshToken"
+        
+        let sut = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: expectedRefreshToken)
+        let request = sut.asRequest(baseURL: baseURL)
+        XCTAssertEqual(request.url, expectedURL, "The url expected path should be: \(expectedURL.absoluteString)")
+    }
+    
+    func testOldSDKRefreshTokenAsRequestWrongURL() throws {
+        let baseURL = URL("https://example.com")
+        let expectedURL = baseURL.appendingPathComponent("/bad/path")
+        let expectedRefreshToken = "A refreshToken"
+        
+        let sut = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: expectedRefreshToken)
+        let request = sut.asRequest(baseURL: baseURL)
+        XCTAssertNotEqual(request.url, expectedURL, "The url expected path should be: /oauth/token")
+    }
+    
+}

@@ -1,6 +1,54 @@
 import Foundation
 import UIKit
 
+enum RequestBuilder {
+    case codeExchange(clientId: String)
+    case oldSDKRefreshToken(oldSDKRefreshToken: String)
+
+    func asRequest(baseURL: URL) -> URLRequest {
+        switch self {
+        case .codeExchange(clientId: let clientId): return exchangeRequest(baseURL: baseURL, clientId: clientId)
+        case .oldSDKRefreshToken(oldSDKRefreshToken: let refreshToken): return buildOldSDKRefreshTokenRequest(baseURL: baseURL, oldSDKRefreshToken: refreshToken)
+        }
+    }
+    
+    func exchangeRequest(baseURL: URL, clientId: String) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
+        let parameters = [
+            "type": "code",
+            "clientId": clientId
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create code exchange request")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+        return request
+    }
+    
+    func buildOldSDKRefreshTokenRequest(baseURL: URL, oldSDKRefreshToken: String) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/oauth/token")
+        let parameters = [
+            "grant_type": "refresh_token",
+            "refresh_token": oldSDKRefreshToken
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create token request")
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("v1", forHTTPHeaderField: "X-OIDC")
+        request.httpBody = requestBody
+        return request
+    }
+
+}
+
 class SchibstedAccountAPI {
     
     private enum UserAgent {
@@ -43,19 +91,7 @@ class SchibstedAccountAPI {
     }
     
     func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
-        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
-        let parameters = [
-            "type": "code",
-            "clientId": clientId
-        ]
-        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create code exchange request")
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = requestBody
+        let request = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
