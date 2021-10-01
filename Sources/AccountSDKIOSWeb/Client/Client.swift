@@ -29,7 +29,7 @@ public class Client: CustomStringConvertible {
     let configuration: ClientConfiguration
     
     static let authStateKey = "AuthState"
-    private static let keychainServiceName = "com.schibsted.account"
+    static let keychainServiceName = "com.schibsted.account"
 
     let httpClient: HTTPClient
     let schibstedAccountAPI: SchibstedAccountAPI
