@@ -5,13 +5,15 @@ public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
 public struct SessionStorageConfig {
     let legacyClientId: String
+    let legacyClientSecret: String
     let accessGroup: String?
     let legacyAccessGroup: String?
     
-    public init(legacyClientID: String, accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
+    public init(legacyClientID: String, legacyClientSecret: String, accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
         self.legacyClientId = legacyClientID
         self.accessGroup = accessGroup
         self.legacyAccessGroup = legacyAccessGroup
+        self.legacyClientSecret = legacyClientSecret
     }
 }
 
@@ -74,6 +76,7 @@ public class Client: CustomStringConvertible {
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
                                                             to: newSessionStorage,
                                                             legacyClient: legacyClient,
+                                                            legacyClientSecret: sessionStorageConfig.legacyClientSecret,
                                                             makeTokenRequest: { authCode, authState, completion in tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)})
         
         self.init(configuration: configuration,

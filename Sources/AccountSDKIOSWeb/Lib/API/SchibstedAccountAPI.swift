@@ -1,6 +1,54 @@
 import Foundation
 import UIKit
 
+enum RequestBuilder {
+    case codeExchange(clientId: String)
+    case oldSDKRefreshToken(oldSDKRefreshToken: String)
+
+    func asRequest(baseURL: URL) -> URLRequest {
+        switch self {
+        case .codeExchange(clientId: let clientId): return exchangeRequest(baseURL: baseURL, clientId: clientId)
+        case .oldSDKRefreshToken(oldSDKRefreshToken: let refreshToken): return buildOldSDKRefreshTokenRequest(baseURL: baseURL, oldSDKRefreshToken: refreshToken)
+        }
+    }
+    
+    func exchangeRequest(baseURL: URL, clientId: String) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
+        let parameters = [
+            "type": "code",
+            "clientId": clientId
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create code exchange request")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = requestBody
+        return request
+    }
+    
+    func buildOldSDKRefreshTokenRequest(baseURL: URL, oldSDKRefreshToken: String) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/oauth/token")
+        let parameters = [
+            "grant_type": "refresh_token",
+            "refresh_token": oldSDKRefreshToken
+        ]
+        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
+            preconditionFailure("Failed to create token request")
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("v1", forHTTPHeaderField: "X-OIDC")
+        request.httpBody = requestBody
+        return request
+    }
+
+}
+
 class SchibstedAccountAPI {
     
     private enum UserAgent {
@@ -43,19 +91,7 @@ class SchibstedAccountAPI {
     }
     
     func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
-        let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
-        let parameters = [
-            "type": "code",
-            "clientId": clientId
-        ]
-        guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
-            preconditionFailure("Failed to create code exchange request")
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = requestBody
+        let request = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
@@ -99,4 +135,45 @@ class SchibstedAccountAPI {
             return .failure(error)
         }
     }
+    
+    /// API endpoint called with New SDK clientID, and oldSDKAccesstoken
+    func oldSDKCodeExchange(with httpClient: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> ) {
+        let codeExchangeRequest = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
+        let authenticatedRequest = authenticatedBearerRequest(codeExchangeRequest, token: oldSDKAccessToken)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
+                           withRetryPolicy: retryPolicy,
+                           completion: completion)
+    }
+    
+    /// API endpoint called with old SDK clientID and old SDK Client secret, and old SDK refreshToken
+    func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse> ) {
+        let request = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: refreshToken).asRequest(baseURL: baseURL)
+        let authenticatedRequest = authenticatedBasicRequest(request, legacyClientId: clientId, legacyClientSecret: clientSecret)
+        httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
+                           withRetryPolicy: retryPolicy,
+                           completion: completion)
+    }
+}
+
+// MARK: Helper functions used for API endpoints from legacy SDK
+
+fileprivate func authenticatedBearerRequest(_ request: URLRequest, token: String) -> URLRequest {
+    var requestCopy = request
+    requestCopy.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    return requestCopy
+}
+
+fileprivate func authenticatedBasicRequest(_ request: URLRequest, legacyClientId: String, legacyClientSecret: String) -> URLRequest {
+    var requestCopy = request
+    
+    let loginString = encode(legacyClientId: legacyClientId, legacyClientSecret: legacyClientSecret)
+    requestCopy.setValue("Basic " + loginString, forHTTPHeaderField: "Authorization")
+    return requestCopy
+}
+
+fileprivate func encode(legacyClientId: String, legacyClientSecret: String) -> String {
+    let loginString = String(format: "%@:%@", legacyClientId, legacyClientSecret)
+    let loginData = loginString.data(using: String.Encoding.utf8)!
+    let base64LoginString = loginData.base64EncodedString()
+    return base64LoginString
 }
