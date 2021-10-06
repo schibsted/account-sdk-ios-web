@@ -10,27 +10,39 @@ internal class KeychainSessionStorage: SessionStorage {
     
     func store(_ value: UserSession) {
         guard let tokenData = try? JSONEncoder().encode(value) else {
-             fatalError("Failed to JSON encode user tokens for storage")
-        }
-        
-        keychain.setValue(tokenData, forAccount: value.clientId)
-    }
-
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
-        guard let data = keychain.getValue(forAccount: forClientId),
-              let tokenData = try? JSONDecoder().decode(UserSession.self, from: data) else {
-            completion(nil)
+            SchibstedAccountLogger.instance.error("Failed to JSON encode user tokens for storage")
             return
         }
-        completion(tokenData)
+        
+        do {
+            try keychain.setValue(tokenData, forAccount: value.clientId)
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+        }
+    }
+    
+    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
+        do {
+            if let data = try keychain.getValue(forAccount: forClientId) {
+                let tokenData = try? JSONDecoder().decode(UserSession.self, from: data)
+                completion(tokenData)
+            }
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+            completion(nil)
+        }
     }
     
     func getAll() -> [UserSession] {
         let data = keychain.getAll()
         return data.compactMap { try? JSONDecoder().decode(UserSession.self, from: $0) }
     }
-
+    
     func remove(forClientId: String) {
-        keychain.removeValue(forAccount: forClientId)
+        do {
+            try keychain.removeValue(forAccount: forClientId)
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+        }
     }
 }

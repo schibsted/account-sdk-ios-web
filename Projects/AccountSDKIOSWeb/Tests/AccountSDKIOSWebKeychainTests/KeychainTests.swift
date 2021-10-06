@@ -2,35 +2,35 @@ import XCTest
 @testable import AccountSDKIOSWeb
 
 final class KeychainTests: XCTestCase {
-    func testSetGetValue() {
+    func testSetGetValue() throws {
         let keychainStorage = KeychainStorage(forService: "testService")
-        keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
-        let stored = keychainStorage.getValue(forAccount: "client1")!
+        try keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
+        let stored = try keychainStorage.getValue(forAccount: "client1")!
         XCTAssertEqual(String(data: stored, encoding: .utf8), "foo")
     }
     
-    func testGetRemovedValue() {
+    func testGetRemovedValue() throws {
         let keychainStorage = KeychainStorage(forService: "testService")
-        keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
-        keychainStorage.removeValue(forAccount: "client1")
-        XCTAssertNil(keychainStorage.getValue(forAccount: "client1"))
+        try keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
+        try keychainStorage.removeValue(forAccount: "client1")
+        XCTAssertNil(try keychainStorage.getValue(forAccount: "client1"))
     }
     
-    func testSetValueShouldOverwriteExistingValue() {
+    func testSetValueShouldOverwriteExistingValue() throws {
         let keychainStorage = KeychainStorage(forService: "testService")
-        keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
-        keychainStorage.setValue("bar".data(using: .utf8)!, forAccount: "client1")
+        try keychainStorage.setValue("foo".data(using: .utf8)!, forAccount: "client1")
+        try keychainStorage.setValue("bar".data(using: .utf8)!, forAccount: "client1")
         
-        let stored = keychainStorage.getValue(forAccount: "client1")!
+        let stored = try keychainStorage.getValue(forAccount: "client1")!
         XCTAssertEqual(String(data: stored, encoding: .utf8), "bar")
     }
     
-    func testGetAll() {
+    func testGetAll() throws {
         let keychainStorage = KeychainStorage(forService: "testService")
         let v1 = "foo".data(using: .utf8)!
         let v2 = "bar".data(using: .utf8)!
-        keychainStorage.setValue(v1, forAccount: "client1")
-        keychainStorage.setValue(v2, forAccount: "client2")
+        try keychainStorage.setValue(v1, forAccount: "client1")
+        try keychainStorage.setValue(v2, forAccount: "client2")
         
         XCTAssertEqual(keychainStorage.getAll(), [v1, v2])
     }
