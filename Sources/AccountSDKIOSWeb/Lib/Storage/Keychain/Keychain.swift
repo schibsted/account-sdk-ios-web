@@ -1,25 +1,6 @@
 import Foundation
 import Security
 
-enum KeychainError: Error {
-    case storeError
-    case operationError
-    case deleteError
-}
-
-extension KeychainError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .storeError:
-            return NSLocalizedString("Unable to store the secret", comment: "")
-        case .operationError:
-            return NSLocalizedString("Unable to fulfill the keychain query", comment: "")
-        case .deleteError:
-            return NSLocalizedString("Unable to delete the secret", comment: "")
-        }
-    }
-}
-
 class KeychainStorage {
     private let service: String
     private let accessGroup: String?
@@ -43,7 +24,7 @@ class KeychainStorage {
         }
         
         guard status == errSecSuccess else {
-            throw KeychainError.storeError
+            throw KeychainStorageError.storeError
         }
     }
 
@@ -87,7 +68,7 @@ class KeychainStorage {
         }
 
         guard status == errSecSuccess else {
-            throw KeychainError.operationError
+            throw KeychainStorageError.operationError
         }
 
         return extractedData
@@ -96,7 +77,7 @@ class KeychainStorage {
     func removeValue(forAccount: String?) throws {
         let result = SecItemDelete(itemQuery(forAccount: forAccount, returnData: false) as CFDictionary)
         guard result == errSecSuccess || result == errSecItemNotFound else {
-            throw KeychainError.deleteError
+            throw KeychainStorageError.deleteError
         }
     }
 }
