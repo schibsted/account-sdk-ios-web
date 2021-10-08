@@ -21,9 +21,10 @@ class MigratingKeychainCompatStorage: SessionStorage {
         self.makeTokenRequest = makeTokenRequest
     }
     
-    func store(_ value: UserSession) {
+    func store(_ value: UserSession, completion: @escaping (Result<Void, Error>) -> Void) {
         // only delegate to new storage; no need to store in legacy storage
-        newStorage.store(value)
+        newStorage.store(value, completion: completion)
+            
     }
     
     func get(forClientId: String, completion: @escaping (UserSession?) -> Void ) {
@@ -54,9 +55,16 @@ class MigratingKeychainCompatStorage: SessionStorage {
                     switch result {
                     case .success(let tokenResult):
                         let newUserSession = UserSession(clientId: forClientId, userTokens: tokenResult.userTokens, updatedAt: Date())
-                        self.newStorage.store(newUserSession)
-                        self.legacyStorage.remove()
-                        completion(newUserSession)
+                        self.newStorage.store(newUserSession) { output in
+                            switch output {
+                            case .success():
+                                self.legacyStorage.remove()
+                                completion(newUserSession)
+                            case .failure(let error):
+                                SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+                                completion(nil)
+                            }
+                        }
                     case .failure(let error):
                         SchibstedAccountLogger.instance.info("Token error response: \(error.localizedDescription)")
                         completion(nil)

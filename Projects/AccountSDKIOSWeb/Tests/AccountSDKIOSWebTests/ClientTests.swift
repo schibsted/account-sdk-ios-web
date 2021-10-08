@@ -81,7 +81,9 @@ final class ClientTests: XCTestCase {
         
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any())).thenDoNothing()
+            when(mock.store(any(), completion: anyClosure())).then {_, completion in
+                completion(.success())
+            }
         }
         let state = "testState"
         let mockStorage = MockStorage()
@@ -104,7 +106,7 @@ final class ClientTests: XCTestCase {
     func testHandleAuthenticationResponseHandlesTokenErrorResponse() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any())).thenDoNothing()
+            when(mock.store(any(), completion: anyClosure())).thenDoNothing()
         }
         let state = "testState"
         let mockStorage = MockStorage()

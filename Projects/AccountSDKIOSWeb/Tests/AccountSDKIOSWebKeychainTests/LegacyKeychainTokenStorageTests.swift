@@ -51,10 +51,10 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
         query[kSecValueData as String] = data
         SecItemAdd(query as CFDictionary, nil)
 
-        XCTAssertEqual(LegacyKeychainTokenStorage().get(), [
-            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1"),
-            LegacyTokenData(accessToken: "accessToken2", refreshToken: "refreshToken2", idToken: "idToken2"),
-        ])
+        let tokenDataArray = LegacyKeychainTokenStorage().get()
+        XCTAssertEqual(tokenDataArray.count, 2)
+        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken2", refreshToken: "refreshToken2", idToken: "idToken2")))
+        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1")))
     }
     
     func testExistingLegacyDataWithoutRefreshTokenIsIgnored() {
