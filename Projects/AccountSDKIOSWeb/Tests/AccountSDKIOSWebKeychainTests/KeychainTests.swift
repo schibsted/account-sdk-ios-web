@@ -32,6 +32,9 @@ final class KeychainTests: XCTestCase {
         try keychainStorage.setValue(v1, forAccount: "client1")
         try keychainStorage.setValue(v2, forAccount: "client2")
         
-        XCTAssertEqual(keychainStorage.getAll(), [v1, v2])
+        let all = keychainStorage.getAll()
+        XCTAssertEqual(all.count, 2)
+        XCTAssertTrue(all.contains(v1))
+        XCTAssertTrue(all.contains(v2))
     }
 }
