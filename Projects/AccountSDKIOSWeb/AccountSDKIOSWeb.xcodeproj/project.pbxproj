@@ -68,12 +68,12 @@
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
 		A9C7881C25CC0D7500B7E027 /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
+		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
 		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
 		OBJ_246 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ClientTests.swift */; };
 		OBJ_247 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* Fixtures.swift */; };
-		OBJ_248 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* GeneratedMocks.swift */; };
 		OBJ_249 /* HTTPUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* HTTPUtilTests.swift */; };
 		OBJ_251 /* JOSEUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* JOSEUtilTests.swift */; };
 		OBJ_252 /* JWKSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* JWKSTests.swift */; };
@@ -176,13 +176,13 @@
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
 		OBJ_42 /* Await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Await.swift; sourceTree = "<group>"; };
 		OBJ_43 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
 		OBJ_44 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
-		OBJ_45 /* GeneratedMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		OBJ_47 /* HTTPUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPUtilTests.swift; sourceTree = "<group>"; };
 		OBJ_49 /* IdTokenValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidatorTests.swift; sourceTree = "<group>"; };
 		OBJ_50 /* JOSEUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtilTests.swift; sourceTree = "<group>"; };
@@ -499,7 +499,7 @@
 				OBJ_42 /* Await.swift */,
 				OBJ_43 /* ClientTests.swift */,
 				OBJ_44 /* Fixtures.swift */,
-				OBJ_45 /* GeneratedMocks.swift */,
+				CE754A5627103071000F2EA9 /* GeneratedMocks.swift */,
 				OBJ_46 /* HTTP */,
 				A95F1A1C25826AED000D19F5 /* IdToken */,
 				OBJ_48 /* JOSE */,
@@ -595,6 +595,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = OBJ_186 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebKeychainTests" */;
 			buildPhases = (
+				CE754A5527102F6D000F2EA9 /* ShellScript */,
 				OBJ_189 /* Sources */,
 				OBJ_191 /* Frameworks */,
 			);
@@ -633,6 +634,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = OBJ_241 /* Build configuration list for PBXNativeTarget "AccountSDKIOSWebTests" */;
 			buildPhases = (
+				CE754A58271030DF000F2EA9 /* ShellScript */,
 				OBJ_244 /* Sources */,
 				OBJ_258 /* Frameworks */,
 				A93EFD1026329F06008200D1 /* Resources */,
@@ -729,6 +731,45 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		CE754A5527102F6D000F2EA9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./generate_mocks.sh\n";
+		};
+		CE754A58271030DF000F2EA9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Tests/AccountSDKIOSWebTests/GeneratedMocks.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./generate_mocks.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A9941FD1257523C400513EED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -812,10 +853,10 @@
 			buildActionMask = 0;
 			files = (
 				243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */,
+				CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */,
 				OBJ_245 /* Await.swift in Sources */,
 				OBJ_246 /* ClientTests.swift in Sources */,
 				OBJ_247 /* Fixtures.swift in Sources */,
-				OBJ_248 /* GeneratedMocks.swift in Sources */,
 				OBJ_249 /* HTTPUtilTests.swift in Sources */,
 				OBJ_251 /* JOSEUtilTests.swift in Sources */,
 				OBJ_252 /* JWKSTests.swift in Sources */,
