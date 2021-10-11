@@ -3,5 +3,4 @@
 /Packages
 xcuserdata/
 Tests/**/*.plist
-build/
-docs/
+*/DerivedData/*
