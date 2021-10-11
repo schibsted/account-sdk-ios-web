@@ -9,7 +9,9 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
-            when(mock.store(equal(to: userSession))).thenDoNothing()
+            when(mock.store(equal(to: userSession), completion: anyClosure())).then { _, completion in
+                completion(.success())
+            }
         }
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage,
@@ -17,9 +19,9 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
                                                               legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
-        migratingStorage.store(userSession)
+        migratingStorage.store(userSession) { _ in }
 
-        verify(newStorage).store(equal(to: userSession))
+        verify(newStorage).store(equal(to: userSession), completion: anyClosure())
         verifyNoMoreInteractions(legacyStorage)
     }
 
@@ -37,7 +39,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
                                                               legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
-        migratingStorage.getAll()
+        _ = migratingStorage.getAll()
 
         verify(newStorage).getAll()
         verifyNoMoreInteractions(legacyStorage)
@@ -104,7 +106,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                 .then{ _, completion in
                     completion(nil)
                 }
-            when(mock.store(equal(to: legacyUserSession))).thenDoNothing()
+            when(mock.store(equal(to: legacyUserSession), completion: anyClosure())).thenDoNothing()
         }
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,

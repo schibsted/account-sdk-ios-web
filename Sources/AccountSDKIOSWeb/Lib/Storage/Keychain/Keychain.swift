@@ -10,10 +10,10 @@ class KeychainStorage {
         self.accessGroup = accessGroup
     }
 
-    func setValue(_ value: Data, forAccount: String?) {
+    func setValue(_ value: Data, forAccount: String?) throws {
         let status: OSStatus
         
-        if getValue(forAccount: forAccount) == nil {
+        if try getValue(forAccount: forAccount) == nil {
             var query = itemQuery(forAccount: forAccount)
             query[kSecValueData as String] = value
             status = SecItemAdd(query as CFDictionary, nil)
@@ -24,19 +24,19 @@ class KeychainStorage {
         }
         
         guard status == errSecSuccess else {
-            fatalError("Unable to store the secret")
+            throw KeychainStorageError.storeError
         }
     }
 
-    func getValue(forAccount: String?) -> Data? {
-        return get(query: itemQuery(forAccount: forAccount)) as? Data
+    func getValue(forAccount: String?) throws -> Data? {
+        return try get(query: itemQuery(forAccount: forAccount)) as? Data
     }
     
     func getAll() -> [Data] {
         var query: [String: Any] = itemQuery(forAccount: nil)
         query[kSecMatchLimit as String] = kSecMatchLimitAll
 
-        guard let items = get(query: query) else {
+        guard let items = try? get(query: query) else {
             return []
         }
 
@@ -59,7 +59,7 @@ class KeychainStorage {
         return query
     }
 
-    private func get(query: [String: Any]) -> AnyObject? {
+    private func get(query: [String: Any]) throws -> AnyObject? {
         var extractedData: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &extractedData)
         
@@ -68,16 +68,16 @@ class KeychainStorage {
         }
 
         guard status == errSecSuccess else {
-            fatalError("Unable to fulfill the keychain query")
+            throw KeychainStorageError.operationError
         }
 
         return extractedData
     }
 
-    func removeValue(forAccount: String?) {       
+    func removeValue(forAccount: String?) throws {
         let result = SecItemDelete(itemQuery(forAccount: forAccount, returnData: false) as CFDictionary)
         guard result == errSecSuccess || result == errSecItemNotFound else {
-            fatalError("Unable to delete the secret")
+            throw KeychainStorageError.deleteError
         }
     }
 }

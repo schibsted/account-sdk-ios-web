@@ -8,29 +8,43 @@ internal class KeychainSessionStorage: SessionStorage {
         self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
     
-    func store(_ value: UserSession) {
+    func store(_ value: UserSession, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let tokenData = try? JSONEncoder().encode(value) else {
-             fatalError("Failed to JSON encode user tokens for storage")
-        }
-        
-        keychain.setValue(tokenData, forAccount: value.clientId)
-    }
-
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
-        guard let data = keychain.getValue(forAccount: forClientId),
-              let tokenData = try? JSONDecoder().decode(UserSession.self, from: data) else {
-            completion(nil)
+            SchibstedAccountLogger.instance.error("\(KeychainStorageError.itemEncodingError.localizedDescription)")
+            completion(.failure(KeychainStorageError.itemEncodingError))
             return
         }
-        completion(tokenData)
+        do {
+            try keychain.setValue(tokenData, forAccount: value.clientId)
+            completion(.success())
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+    
+    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
+        do {
+            if let data = try keychain.getValue(forAccount: forClientId) {
+                let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
+                completion(tokenData)
+            }
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+            completion(nil)
+        }
     }
     
     func getAll() -> [UserSession] {
         let data = keychain.getAll()
         return data.compactMap { try? JSONDecoder().decode(UserSession.self, from: $0) }
     }
-
+    
     func remove(forClientId: String) {
-        keychain.removeValue(forAccount: forClientId)
+        do {
+            try keychain.removeValue(forAccount: forClientId)
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+        }
     }
 }

@@ -176,8 +176,14 @@ public class Client: CustomStringConvertible {
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
-                self.sessionStorage.store(userSession)
-                completion(.success(userTokens))
+                self.sessionStorage.store(userSession) { result in
+                    switch result {
+                    case .success():
+                        completion(.success(userTokens))
+                    case .failure(let error):
+                        completion(.failure(.unexpectedError(error: error)))
+                    }
+                }
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
                 completion(.failure(.refreshRequestFailed(error: error)))
@@ -185,15 +191,21 @@ public class Client: CustomStringConvertible {
         }
     }
 
-    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: LoginResultHandler) {
+    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: @escaping LoginResultHandler) {
         switch result {
         case .success(let tokenResult):
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
-            sessionStorage.store(userSession)
-            let user = User(client: self, tokens: tokenResult.userTokens)
-            completion(.success(user))
+            sessionStorage.store(userSession) { output in
+                switch output {
+                case .success():
+                    let user = User(client: self, tokens: tokenResult.userTokens)
+                    completion(.success(user))
+                case .failure(let error):
+                    completion(.failure(.unexpectedError(message: error.localizedDescription)))
+                }
+            }
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
             SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(String(describing: body))")
             if let errorJSON = body,
