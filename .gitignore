@@ -4,3 +4,4 @@
 xcuserdata/
 Tests/**/*.plist
 */DerivedData/*
+Projects/AccountSDKIOSWeb/Tests/AccountSDKIOSWebTests/GeneratedMocks.swift
