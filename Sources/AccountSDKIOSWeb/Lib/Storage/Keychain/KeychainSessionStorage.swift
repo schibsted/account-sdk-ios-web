@@ -28,6 +28,8 @@ internal class KeychainSessionStorage: SessionStorage {
             if let data = try keychain.getValue(forAccount: forClientId) {
                 let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
                 completion(tokenData)
+            } else {
+                completion(nil)
             }
         } catch {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
