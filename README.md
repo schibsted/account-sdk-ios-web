@@ -16,6 +16,7 @@ email our [support](mailto:schibstedaccount@schibsted.com) to get help with sett
 
 **Note:** Using [Universal Links](https://developer.apple.com/ios/universal-links/) should be preferred for [security reasons](https://tools.ietf.org/html/rfc8252#appendix-B.1).
 To make it work seamlessly, please see the section below.
+OBS: Universal Links should be used where possible. A technical limitation of universal links is that they can only be used on user interaction such as clicks. This means that a combination of Universal Links and custom URI schemes need to be used.  
 
 ### Installation
 
@@ -68,6 +69,8 @@ class MyUserDelegate: UserDelegate {
 ```
 
 ### Notes when using Universal Links
+
+OBS: Universal Links should be used where possible. A technical limitation of universal links is that they can only be used on user interaction such as clicks. This means that a combination of Universal Links and custom URI schemes need to be used.  
 
 When using Universal Links as redirect URI, the OS handles opening the app associated with the link instead of triggering the `ASWebAuthenticationSession` callback.
 It results in the `ASWebAuthenticationSession` view not being closed properly, which instead needs to be done manually:
