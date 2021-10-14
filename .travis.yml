@@ -13,9 +13,9 @@ xcode_destination: platform=iOS Simulator,OS=14.2,name=iPhone 12
 xcode_scheme: AccountSDKIOSWebTests
 
 before_script: xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj build
-
- - bundle install
- - bundle exec jazzy
+script:
+  - bundle install
+  - bundle exec jazzy
 
 deploy:
   provider: pages
