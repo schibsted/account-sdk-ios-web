@@ -5,7 +5,6 @@ public final class AuthenticatedURLSession {
     private let user: User
     private let urlSession: URLSession
     private var refreshTokenDataTask: URLSessionDataTask?
-    private let dispatchSemaphore = DispatchSemaphore(value: 1)
 
     public init(user: User, configuration: URLSessionConfiguration) {
         self.user = user
@@ -49,9 +48,7 @@ public final class AuthenticatedURLSession {
                 return
             }
 
-            self?.dispatchSemaphore.wait()
             user.refreshTokens { result in
-                self?.dispatchSemaphore.signal()
 
                 switch result {
                 case .success(let tokens):
