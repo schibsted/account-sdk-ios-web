@@ -25,6 +25,8 @@ public class User: Equatable, UserProtocol {
     /// Delegates listening to User events such as logout
     public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
     
+    private let dispatchSemaphore = DispatchSemaphore(value: 1)
+    
     /// User UUID
     public var uuid: String? {
         get {
@@ -145,22 +147,29 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
-                    self.client.refreshTokens(for: self) { result in
-                        switch result {
-                        case .success(_):
-                            // retry the request with fresh tokens
-                            self.makeRequest(request: request, completion: completion)
-                        case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                            guard User.shouldLogout(tokenResponseBody: body) else {
+                    // Multiple parallel requests to refreshToken endpoint is not supported
+                    DispatchQueue.global(qos: .background).async {
+                        // Setting to wait in less important background thread. Making sure to not use main.
+                        self.dispatchSemaphore.wait()
+                        self.client.refreshTokens(for: self) { result in
+                            self.dispatchSemaphore.signal()
+                            
+                            switch result {
+                            case .success(_):
+                                // retry the request with fresh tokens
+                                self.makeRequest(request: request, completion: completion)
+                            case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
+                                guard User.shouldLogout(tokenResponseBody: body) else {
+                                    completion(requestResult)
+                                    return
+                                }
+                                
+                                SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
+                                self.logout()
+                                completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+                            case .failure(_):
                                 completion(requestResult)
-                                return
                             }
-
-                            SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
-                            self.logout()
-                            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
-                        case .failure(_):
-                            completion(requestResult)
                         }
                     }
                 } else {
