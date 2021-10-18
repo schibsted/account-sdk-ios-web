@@ -52,7 +52,7 @@ class LegacyKeychainSessionStorage {
                                           exp: unverifiedIdTokenClaims["exp"] as! Double,
                                           nonce: unverifiedIdTokenClaims["nonce"] as? String,
                                           amr: nil)
-        let userTokens = UserTokens(accessToken: legacyTokenData.accessToken,
+        let userTokens = UserTokens(accessToken: validatedAccessToken,
                                     refreshToken: legacyTokenData.refreshToken,
                                     idToken: legacyTokenData.idToken,
                                     idTokenClaims: idTokenClaims)
