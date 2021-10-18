@@ -18,9 +18,11 @@ email our [support](mailto:schibstedaccount@schibsted.com) to get help with sett
 To make it work seamlessly, please see the section below.
 OBS: Universal Links should be used where possible. A technical limitation of universal links is that they can only be used on user interaction such as clicks. This means that a combination of Universal Links and custom URI schemes need to be used.  
 
+**Note:** If you have implemented the [Old Schibsted SDK](https://github.com/schibsted/account-sdk-ios) in your app, and want these users to remain logged in, do not forget to add the SessionStorageConfig on instantiating your Client, `Client(configuration:sessionStorageConfig:httpClient:)`.   
+    
 ### Installation
 
-Use Swift Package Manager: `.package(url: "https://github.schibsted.io/spt-identity/AccountSDKIOSWeb")`
+Use Swift Package Manager: `.package(url: "https://github.com/schibsted/AccountSDKIOSWeb")`
 
 ### Usage
 
