@@ -59,10 +59,20 @@ class LegacyKeychainSessionStorage {
     }
     
     private func unverifiedClaims(from token: String) -> [String: Any]? {
-        guard let jws = try? JWS(compactSerialization: token) else {
+        let validatedToken = validateTokenFormat(token)
+        guard let jws = try? JWS(compactSerialization: validatedToken) else {
             return nil
         }
 
         return try? JSONSerialization.jsonObject(with: jws.payload.data()) as? [String: Any]
     }
+    
+    private func validateTokenFormat(_ token: String) -> String {
+        var validToken = token
+        if !validToken.starts(with: "e") {
+            validToken = "e\(token.dropFirst())"
+        }
+        return validToken
+    }
 }
+

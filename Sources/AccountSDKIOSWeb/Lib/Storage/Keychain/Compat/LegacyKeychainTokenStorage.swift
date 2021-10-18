@@ -38,7 +38,7 @@ class LegacyKeychainTokenStorage {
             return []
         }
         
-        guard let deserialised = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String: Any] else {
+        guard let deserialised = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [String: Any] else {
             SchibstedAccountLogger.instance.error("Failed to deserialise legacy keychain data")
             return []
         }
