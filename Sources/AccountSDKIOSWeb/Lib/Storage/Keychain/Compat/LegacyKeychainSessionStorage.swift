@@ -26,7 +26,8 @@ class LegacyKeychainSessionStorage {
     }
     
     private func toUserSession(_ legacyTokenData: LegacyTokenData) -> UserSession? {
-        guard let accessTokenClaims = unverifiedClaims(from: legacyTokenData.accessToken),
+        let validatedAccessToken = validateTokenFormat(legacyTokenData.accessToken)
+        guard let accessTokenClaims = unverifiedClaims(from: validatedAccessToken),
               let clientId = accessTokenClaims["client_id"] as? String else {
             return nil
         }
@@ -51,7 +52,7 @@ class LegacyKeychainSessionStorage {
                                           exp: unverifiedIdTokenClaims["exp"] as! Double,
                                           nonce: unverifiedIdTokenClaims["nonce"] as? String,
                                           amr: nil)
-        let userTokens = UserTokens(accessToken: legacyTokenData.accessToken,
+        let userTokens = UserTokens(accessToken: validatedAccessToken,
                                     refreshToken: legacyTokenData.refreshToken,
                                     idToken: legacyTokenData.idToken,
                                     idTokenClaims: idTokenClaims)
@@ -65,4 +66,14 @@ class LegacyKeychainSessionStorage {
 
         return try? JSONSerialization.jsonObject(with: jws.payload.data()) as? [String: Any]
     }
+    
+    // Access token saved by the old SDK sometimes has a wrong first character. This leads to JWS token decoding error and migration failure. To prevent this issue swapping characters is make before decoding.
+    private func validateTokenFormat(_ token: String) -> String {
+        var validToken = token
+        if !validToken.starts(with: "e") {
+            validToken = "e\(token.dropFirst())"
+        }
+        return validToken
+    }
 }
+
