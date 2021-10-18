@@ -26,7 +26,8 @@ class LegacyKeychainSessionStorage {
     }
     
     private func toUserSession(_ legacyTokenData: LegacyTokenData) -> UserSession? {
-        guard let accessTokenClaims = unverifiedClaims(from: legacyTokenData.accessToken),
+        let validatedAccessToken = validateTokenFormat(legacyTokenData.accessToken)
+        guard let accessTokenClaims = unverifiedClaims(from: validatedAccessToken),
               let clientId = accessTokenClaims["client_id"] as? String else {
             return nil
         }
@@ -59,8 +60,7 @@ class LegacyKeychainSessionStorage {
     }
     
     private func unverifiedClaims(from token: String) -> [String: Any]? {
-        let validatedToken = validateTokenFormat(token)
-        guard let jws = try? JWS(compactSerialization: validatedToken) else {
+        guard let jws = try? JWS(compactSerialization: token) else {
             return nil
         }
 
