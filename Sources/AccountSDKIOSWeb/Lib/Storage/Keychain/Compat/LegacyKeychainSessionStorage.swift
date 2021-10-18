@@ -67,6 +67,7 @@ class LegacyKeychainSessionStorage {
         return try? JSONSerialization.jsonObject(with: jws.payload.data()) as? [String: Any]
     }
     
+    // Access token saved by the old SDK sometimes has a wrong first character. This leads to JWS token decoding error and migration failure. To prevent this issue swapping characters is make before decoding.
     private func validateTokenFormat(_ token: String) -> String {
         var validToken = token
         if !validToken.starts(with: "e") {
