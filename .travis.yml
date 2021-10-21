@@ -27,3 +27,12 @@ deploy:
   on:
     repo: schibsted/AccountSDKIOSWeb
     branch: master
+
+notifications:
+  email:
+    if: branch = master
+    recipients:
+      - anna.zamora@schibsted.com
+      - daniel.echegaray@schibsted.com
+    on_success: change
+    on_failure: always
