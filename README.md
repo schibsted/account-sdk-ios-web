@@ -3,7 +3,7 @@
 New implementation of the Schibsted account iOS SDK using the web flows via 
 [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
 
-API documentation can be found [here](https://pages.github.schibsted.io/spt-identity/AccountSDKIOSWeb/).
+API documentation can be found [here](https://schibsted.github.io/AccountSDKIOSWeb/).
 
 ## Getting started
 
