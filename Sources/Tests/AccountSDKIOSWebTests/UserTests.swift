@@ -2,14 +2,19 @@ import XCTest
 import Cuckoo
 @testable import AccountSDKIOSWeb
 
-final class UserTests: XCTestCase {
+public final class UserTests: XCTestCase {
+    public func setUserAccessToken(accessToken: String, client: Client){
+        let userToken = UserTokens(accessToken: accessToken, refreshToken: nil, idToken: Fixtures.userTokens.idToken, idTokenClaims: Fixtures.userTokens.idTokenClaims)
+        let user = User(client: client, tokens: userToken)
+    }
+    
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
     private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
     
     private static let keyId = "test key"
     private static var jwsUtil: JWSUtil!
     
-    override class func setUp() {
+    public override class func setUp() {
         jwsUtil = JWSUtil()
     }
     

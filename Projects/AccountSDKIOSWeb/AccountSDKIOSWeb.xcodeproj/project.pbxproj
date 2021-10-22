@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		240CA7212722BF2600501BCF /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7092722BF2600501BCF /* URLBuilderTests.swift */; };
+		240CA7222722BF2600501BCF /* JOSEUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA70A2722BF2600501BCF /* JOSEUtil.swift */; };
+		240CA7232722BF2600501BCF /* IdTokenValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA70C2722BF2600501BCF /* IdTokenValidatorTests.swift */; };
+		240CA7242722BF2600501BCF /* IdTokenClaimsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA70D2722BF2600501BCF /* IdTokenClaimsTests.swift */; };
+		240CA7252722BF2600501BCF /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA70E2722BF2600501BCF /* ClientTests.swift */; };
+		240CA7262722BF2600501BCF /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA70F2722BF2600501BCF /* UserTests.swift */; };
+		240CA7272722BF2600501BCF /* JWKSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7112722BF2600501BCF /* JWKSTests.swift */; };
+		240CA7282722BF2600501BCF /* JOSEUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7122722BF2600501BCF /* JOSEUtilTests.swift */; };
+		240CA7292722BF2600501BCF /* MigratingKeychainCompatStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7152722BF2600501BCF /* MigratingKeychainCompatStorageTests.swift */; };
+		240CA72A2722BF2600501BCF /* LegacyKeychainSessionStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7162722BF2600501BCF /* LegacyKeychainSessionStorageTests.swift */; };
+		240CA72B2722BF2600501BCF /* StateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7172722BF2600501BCF /* StateStorageTests.swift */; };
+		240CA72C2722BF2600501BCF /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7182722BF2600501BCF /* GeneratedMocks.swift */; };
+		240CA72D2722BF2600501BCF /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7192722BF2600501BCF /* Await.swift */; };
+		240CA72E2722BF2600501BCF /* HTTPUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA71B2722BF2600501BCF /* HTTPUtilTests.swift */; };
+		240CA72F2722BF2600501BCF /* HTTPClientWithURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA71C2722BF2600501BCF /* HTTPClientWithURLSessionTests.swift */; };
+		240CA7302722BF2600501BCF /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA71E2722BF2600501BCF /* SchibstedAccountAPITests.swift */; };
+		240CA7312722BF2600501BCF /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA71F2722BF2600501BCF /* SchibstedAccountAPIResponsesTests.swift */; };
+		240CA7322722BF2600501BCF /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240CA7202722BF2600501BCF /* Fixtures.swift */; };
 		243437A026A82883009BB8A8 /* URLSessionWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2434379F26A82883009BB8A8 /* URLSessionWithUser.swift */; };
-		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B035927071E6E0041F15A /* Client+AppTransfer.swift */; };
-		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
 		248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440162692E97700CE88F2 /* ClientConfiguration.swift */; };
 		24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24844038269347C500CE88F2 /* MulticastDelegate.swift */; };
 		2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C97F26733A0900AA0A4C /* TokenHandler.swift */; };
@@ -56,35 +72,15 @@
 		24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1557267A2350002D9628 /* IdTokenClaims.swift */; };
 		24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB156E267A2482002D9628 /* IdTokenValidator.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
-		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
-		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
-		A93EFD1126329F31008200D1 /* user-profile-response.json in Resources */ = {isa = PBXBuildFile; fileRef = A93EFD0526329A25008200D1 /* user-profile-response.json */; platformFilter = ios; };
-		A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F19FF25826A59000D19F5 /* HTTPClientWithURLSessionTests.swift */; };
-		A95F1A1F25826AED000D19F5 /* IdTokenValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F1A1D25826AED000D19F5 /* IdTokenValidatorTests.swift */; };
-		A95F1A2025826AED000D19F5 /* IdTokenClaimsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95F1A1E25826AED000D19F5 /* IdTokenClaimsTests.swift */; };
 		A9941FD8257523C400513EED /* TestHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD7257523C400513EED /* TestHostApp.swift */; };
 		A9941FDA257523C400513EED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9941FD9257523C400513EED /* ContentView.swift */; };
 		A9941FDC257523C800513EED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDB257523C800513EED /* Assets.xcassets */; };
 		A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDE257523C800513EED /* Preview Assets.xcassets */; };
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
-		A9C7881C25CC0D7500B7E027 /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
-		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
 		CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */; };
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
-		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
-		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
-		OBJ_246 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ClientTests.swift */; };
-		OBJ_247 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* Fixtures.swift */; };
-		OBJ_249 /* HTTPUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* HTTPUtilTests.swift */; };
-		OBJ_251 /* JOSEUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* JOSEUtilTests.swift */; };
-		OBJ_252 /* JWKSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* JWKSTests.swift */; };
-		OBJ_253 /* JOSEUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* JOSEUtil.swift */; };
-		OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* LegacyKeychainSessionStorageTests.swift */; };
-		OBJ_255 /* MigratingKeychainCompatStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* MigratingKeychainCompatStorageTests.swift */; };
-		OBJ_256 /* StateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_57 /* StateStorageTests.swift */; };
-		OBJ_257 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* UserTests.swift */; };
 		OBJ_260 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 /* End PBXBuildFile section */
 
@@ -113,15 +109,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		240CA7092722BF2600501BCF /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
+		240CA70A2722BF2600501BCF /* JOSEUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEUtil.swift; sourceTree = "<group>"; };
+		240CA70C2722BF2600501BCF /* IdTokenValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdTokenValidatorTests.swift; sourceTree = "<group>"; };
+		240CA70D2722BF2600501BCF /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
+		240CA70E2722BF2600501BCF /* ClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
+		240CA70F2722BF2600501BCF /* UserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
+		240CA7112722BF2600501BCF /* JWKSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKSTests.swift; sourceTree = "<group>"; };
+		240CA7122722BF2600501BCF /* JOSEUtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEUtilTests.swift; sourceTree = "<group>"; };
+		240CA7152722BF2600501BCF /* MigratingKeychainCompatStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigratingKeychainCompatStorageTests.swift; sourceTree = "<group>"; };
+		240CA7162722BF2600501BCF /* LegacyKeychainSessionStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyKeychainSessionStorageTests.swift; sourceTree = "<group>"; };
+		240CA7172722BF2600501BCF /* StateStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateStorageTests.swift; sourceTree = "<group>"; };
+		240CA7182722BF2600501BCF /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
+		240CA7192722BF2600501BCF /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Await.swift; sourceTree = "<group>"; };
+		240CA71B2722BF2600501BCF /* HTTPUtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUtilTests.swift; sourceTree = "<group>"; };
+		240CA71C2722BF2600501BCF /* HTTPClientWithURLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientWithURLSessionTests.swift; sourceTree = "<group>"; };
+		240CA71E2722BF2600501BCF /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
+		240CA71F2722BF2600501BCF /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
+		240CA7202722BF2600501BCF /* Fixtures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		2434379F26A82883009BB8A8 /* URLSessionWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionWithUser.swift; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		246B035927071E6E0041F15A /* Client+AppTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Client+AppTransfer.swift"; sourceTree = "<group>"; };
-		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
 		248440162692E97700CE88F2 /* ClientConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
 		24844038269347C500CE88F2 /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
-		248440412693482900CE88F2 /* MulticastDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegateTests.swift; sourceTree = "<group>"; };
 		2489C97F26733A0900AA0A4C /* TokenHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenHandler.swift; sourceTree = "<group>"; };
 		2489C98026733A0900AA0A4C /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		2489C98426733A0900AA0A4C /* LoginError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
@@ -161,13 +173,7 @@
 		24EB1525267A17CC002D9628 /* HTTPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPError.swift; sourceTree = "<group>"; };
 		24EB1557267A2350002D9628 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
 		24EB156E267A2482002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
-		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
-		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
-		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
 		A95C4640268A3ECE0098E684 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
-		A95F19FF25826A59000D19F5 /* HTTPClientWithURLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientWithURLSessionTests.swift; sourceTree = "<group>"; };
-		A95F1A1D25826AED000D19F5 /* IdTokenValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdTokenValidatorTests.swift; sourceTree = "<group>"; };
-		A95F1A1E25826AED000D19F5 /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
 		A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaimsTests.swift; sourceTree = "<group>"; };
 		A9941FD5257523C400513EED /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9941FD7257523C400513EED /* TestHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostApp.swift; sourceTree = "<group>"; };
@@ -175,29 +181,15 @@
 		A9941FDB257523C800513EED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9941FDE257523C800513EED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A9941FE0257523C800513EED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainTests.swift; sourceTree = "<group>"; };
 		A9DD2D0E257E321F00AD3601 /* HTTPClientWithURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientWithURLSessionTests.swift; sourceTree = "<group>"; };
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
-		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
-		OBJ_42 /* Await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Await.swift; sourceTree = "<group>"; };
-		OBJ_43 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
-		OBJ_44 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
-		OBJ_47 /* HTTPUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPUtilTests.swift; sourceTree = "<group>"; };
 		OBJ_49 /* IdTokenValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidatorTests.swift; sourceTree = "<group>"; };
-		OBJ_50 /* JOSEUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtilTests.swift; sourceTree = "<group>"; };
-		OBJ_51 /* JWKSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKSTests.swift; sourceTree = "<group>"; };
-		OBJ_52 /* JOSEUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JOSEUtil.swift; sourceTree = "<group>"; };
-		OBJ_55 /* LegacyKeychainSessionStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainSessionStorageTests.swift; sourceTree = "<group>"; };
-		OBJ_56 /* MigratingKeychainCompatStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigratingKeychainCompatStorageTests.swift; sourceTree = "<group>"; };
-		OBJ_57 /* StateStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStorageTests.swift; sourceTree = "<group>"; };
-		OBJ_58 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +229,80 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		240CA7082722BF2600501BCF /* AccountSDKIOSWebTests */ = {
+			isa = PBXGroup;
+			children = (
+				240CA7092722BF2600501BCF /* URLBuilderTests.swift */,
+				240CA70A2722BF2600501BCF /* JOSEUtil.swift */,
+				240CA70B2722BF2600501BCF /* IdToken */,
+				240CA70E2722BF2600501BCF /* ClientTests.swift */,
+				240CA70F2722BF2600501BCF /* UserTests.swift */,
+				240CA7102722BF2600501BCF /* JOSE */,
+				240CA7132722BF2600501BCF /* Storage */,
+				240CA7182722BF2600501BCF /* GeneratedMocks.swift */,
+				240CA7192722BF2600501BCF /* Await.swift */,
+				240CA71A2722BF2600501BCF /* HTTP */,
+				240CA71D2722BF2600501BCF /* API */,
+				240CA7202722BF2600501BCF /* Fixtures.swift */,
+			);
+			name = AccountSDKIOSWebTests;
+			path = ../../Sources/Tests/AccountSDKIOSWebTests;
+			sourceTree = "<group>";
+		};
+		240CA70B2722BF2600501BCF /* IdToken */ = {
+			isa = PBXGroup;
+			children = (
+				240CA70C2722BF2600501BCF /* IdTokenValidatorTests.swift */,
+				240CA70D2722BF2600501BCF /* IdTokenClaimsTests.swift */,
+			);
+			path = IdToken;
+			sourceTree = "<group>";
+		};
+		240CA7102722BF2600501BCF /* JOSE */ = {
+			isa = PBXGroup;
+			children = (
+				240CA7112722BF2600501BCF /* JWKSTests.swift */,
+				240CA7122722BF2600501BCF /* JOSEUtilTests.swift */,
+			);
+			path = JOSE;
+			sourceTree = "<group>";
+		};
+		240CA7132722BF2600501BCF /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				240CA7142722BF2600501BCF /* Compat */,
+				240CA7172722BF2600501BCF /* StateStorageTests.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		240CA7142722BF2600501BCF /* Compat */ = {
+			isa = PBXGroup;
+			children = (
+				240CA7152722BF2600501BCF /* MigratingKeychainCompatStorageTests.swift */,
+				240CA7162722BF2600501BCF /* LegacyKeychainSessionStorageTests.swift */,
+			);
+			path = Compat;
+			sourceTree = "<group>";
+		};
+		240CA71A2722BF2600501BCF /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				240CA71B2722BF2600501BCF /* HTTPUtilTests.swift */,
+				240CA71C2722BF2600501BCF /* HTTPClientWithURLSessionTests.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
+		240CA71D2722BF2600501BCF /* API */ = {
+			isa = PBXGroup;
+			children = (
+				240CA71E2722BF2600501BCF /* SchibstedAccountAPITests.swift */,
+				240CA71F2722BF2600501BCF /* SchibstedAccountAPIResponsesTests.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,15 +358,6 @@
 				24844038269347C500CE88F2 /* MulticastDelegate.swift */,
 			);
 			path = Util;
-			sourceTree = "<group>";
-		};
-		248440402693480E00CE88F2 /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				248440412693482900CE88F2 /* MulticastDelegateTests.swift */,
-			);
-			name = Util;
-			path = Tests/Util;
 			sourceTree = "<group>";
 		};
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
@@ -413,23 +470,6 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
-		A93EFCD2263012FC008200D1 /* API */ = {
-			isa = PBXGroup;
-			children = (
-				A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */,
-				A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */,
-			);
-			path = API;
-			sourceTree = "<group>";
-		};
-		A93EFD04263299DA008200D1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A93EFD0526329A25008200D1 /* user-profile-response.json */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		A95F19EB258269EF000D19F5 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,15 +478,6 @@
 				A98A3A3625768FD8008ED111 /* IdTokenClaimsTests.swift */,
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		A95F1A1C25826AED000D19F5 /* IdToken */ = {
-			isa = PBXGroup;
-			children = (
-				A95F1A1D25826AED000D19F5 /* IdTokenValidatorTests.swift */,
-				A95F1A1E25826AED000D19F5 /* IdTokenClaimsTests.swift */,
-			);
-			path = IdToken;
 			sourceTree = "<group>";
 		};
 		A9941FD6257523C400513EED /* TestHost */ = {
@@ -480,71 +511,11 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_38 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				248440402693480E00CE88F2 /* Util */,
-				A93EFD04263299DA008200D1 /* Resources */,
-				OBJ_39 /* AccountSDKIOSWebKeychainTests */,
-				OBJ_41 /* AccountSDKIOSWebTests */,
-			);
-			name = Tests;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_39 /* AccountSDKIOSWebKeychainTests */ = {
-			isa = PBXGroup;
-			children = (
-				A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */,
-				OBJ_40 /* LegacyKeychainTokenStorageTests.swift */,
-			);
-			name = AccountSDKIOSWebKeychainTests;
-			path = Tests/AccountSDKIOSWebKeychainTests;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_41 /* AccountSDKIOSWebTests */ = {
-			isa = PBXGroup;
-			children = (
-				A93EFCD2263012FC008200D1 /* API */,
-				OBJ_42 /* Await.swift */,
-				OBJ_43 /* ClientTests.swift */,
-				OBJ_44 /* Fixtures.swift */,
-				CE754A5627103071000F2EA9 /* GeneratedMocks.swift */,
-				OBJ_46 /* HTTP */,
-				A95F1A1C25826AED000D19F5 /* IdToken */,
-				OBJ_48 /* JOSE */,
-				OBJ_52 /* JOSEUtil.swift */,
-				OBJ_53 /* Storage */,
-				OBJ_58 /* UserTests.swift */,
-				2473CB9F2678AED60001B861 /* URLBuilderTests.swift */,
-			);
-			name = AccountSDKIOSWebTests;
-			path = Tests/AccountSDKIOSWebTests;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_46 /* HTTP */ = {
-			isa = PBXGroup;
-			children = (
-				A95F19FF25826A59000D19F5 /* HTTPClientWithURLSessionTests.swift */,
-				OBJ_47 /* HTTPUtilTests.swift */,
-			);
-			path = HTTP;
-			sourceTree = "<group>";
-		};
-		OBJ_48 /* JOSE */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_50 /* JOSEUtilTests.swift */,
-				OBJ_51 /* JWKSTests.swift */,
-			);
-			path = JOSE;
-			sourceTree = "<group>";
-		};
 		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				2459C7A026735C39007A373B /* Package.swift */,
 				OBJ_7 /* Sources */,
-				OBJ_38 /* Tests */,
 				A9941FD6257523C400513EED /* TestHost */,
 				OBJ_172 /* Products */,
 				OBJ_178 /* cuckoo */,
@@ -554,27 +525,10 @@
 			);
 			sourceTree = "<group>";
 		};
-		OBJ_53 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_54 /* Compat */,
-				OBJ_57 /* StateStorageTests.swift */,
-			);
-			path = Storage;
-			sourceTree = "<group>";
-		};
-		OBJ_54 /* Compat */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_55 /* LegacyKeychainSessionStorageTests.swift */,
-				OBJ_56 /* MigratingKeychainCompatStorageTests.swift */,
-			);
-			path = Compat;
-			sourceTree = "<group>";
-		};
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				240CA7082722BF2600501BCF /* AccountSDKIOSWebTests */,
 				2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */,
 			);
 			name = Sources;
@@ -725,7 +679,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A93EFD1126329F31008200D1 /* user-profile-response.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,8 +747,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */,
-				A9C7881C25CC0D7500B7E027 /* KeychainTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -865,25 +816,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */,
-				CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */,
-				OBJ_245 /* Await.swift in Sources */,
-				OBJ_246 /* ClientTests.swift in Sources */,
-				OBJ_247 /* Fixtures.swift in Sources */,
-				OBJ_249 /* HTTPUtilTests.swift in Sources */,
-				OBJ_251 /* JOSEUtilTests.swift in Sources */,
-				OBJ_252 /* JWKSTests.swift in Sources */,
-				OBJ_253 /* JOSEUtil.swift in Sources */,
-				A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */,
-				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
-				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
-				2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */,
-				OBJ_255 /* MigratingKeychainCompatStorageTests.swift in Sources */,
-				OBJ_256 /* StateStorageTests.swift in Sources */,
-				A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */,
-				A95F1A2025826AED000D19F5 /* IdTokenClaimsTests.swift in Sources */,
-				OBJ_257 /* UserTests.swift in Sources */,
-				A95F1A1F25826AED000D19F5 /* IdTokenValidatorTests.swift in Sources */,
+				240CA7282722BF2600501BCF /* JOSEUtilTests.swift in Sources */,
+				240CA72F2722BF2600501BCF /* HTTPClientWithURLSessionTests.swift in Sources */,
+				240CA7262722BF2600501BCF /* UserTests.swift in Sources */,
+				240CA7222722BF2600501BCF /* JOSEUtil.swift in Sources */,
+				240CA72D2722BF2600501BCF /* Await.swift in Sources */,
+				240CA7322722BF2600501BCF /* Fixtures.swift in Sources */,
+				240CA72A2722BF2600501BCF /* LegacyKeychainSessionStorageTests.swift in Sources */,
+				240CA72E2722BF2600501BCF /* HTTPUtilTests.swift in Sources */,
+				240CA7252722BF2600501BCF /* ClientTests.swift in Sources */,
+				240CA7242722BF2600501BCF /* IdTokenClaimsTests.swift in Sources */,
+				240CA7312722BF2600501BCF /* SchibstedAccountAPIResponsesTests.swift in Sources */,
+				240CA7292722BF2600501BCF /* MigratingKeychainCompatStorageTests.swift in Sources */,
+				240CA72C2722BF2600501BCF /* GeneratedMocks.swift in Sources */,
+				240CA7212722BF2600501BCF /* URLBuilderTests.swift in Sources */,
+				240CA7302722BF2600501BCF /* SchibstedAccountAPITests.swift in Sources */,
+				240CA7232722BF2600501BCF /* IdTokenValidatorTests.swift in Sources */,
+				240CA72B2722BF2600501BCF /* StateStorageTests.swift in Sources */,
+				240CA7272722BF2600501BCF /* JWKSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

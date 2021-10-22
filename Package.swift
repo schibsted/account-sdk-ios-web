@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "AccountSDKIOSWeb",
             targets: ["AccountSDKIOSWeb"]),
+        .library(
+                   name: "AccountSDKIOSWebTests",
+                   targets: ["AccountSDKIOSWebTests"])
     ],
     dependencies: [
         .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3.0"),
