@@ -1,5 +1,5 @@
 ./cuckoo/run generate --testable AccountSDKIOSWeb \
-  --output Tests/AccountSDKIOSWebTests/GeneratedMocks.swift \
+  --output ../../Sources/Tests/AccountSDKIOSWebTests/GeneratedMocks.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/HTTP/URLSessionProtocol.swift \
     ../../Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift \
