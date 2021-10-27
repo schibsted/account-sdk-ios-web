@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		243437A026A82883009BB8A8 /* URLSessionWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2434379F26A82883009BB8A8 /* URLSessionWithUser.swift */; };
 		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
@@ -72,6 +71,7 @@
 		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
 		CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */; };
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
+		CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */; };
 		OBJ_190 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
@@ -113,7 +113,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2434379F26A82883009BB8A8 /* URLSessionWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionWithUser.swift; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
@@ -183,6 +182,7 @@
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
+		CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSession.swift; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
@@ -387,12 +387,12 @@
 		24EB14F72679F70E002D9628 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
+				CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */,
 				24AE1A3D26A5972600865A68 /* HTTPURLResponse+Extensions.swift */,
 				2489C99D26733A0900AA0A4C /* RetryPolicy.swift */,
 				2489C99F26733A0900AA0A4C /* HTTPClient.swift */,
 				2489C99C26733A0900AA0A4C /* HTTPUtil.swift */,
 				2489C99E26733A0900AA0A4C /* HTTPClientWithURLSession.swift */,
-				2434379F26A82883009BB8A8 /* URLSessionWithUser.swift */,
 				2489C9A026733A0900AA0A4C /* URLSessionProtocol.swift */,
 				24EB14F82679F882002D9628 /* NoRetries.swift */,
 			);
@@ -820,12 +820,12 @@
 				24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */,
 				24EB14F92679F882002D9628 /* NoRetries.swift in Sources */,
 				2489C9AF26733A0900AA0A4C /* JWKS.swift in Sources */,
-				243437A026A82883009BB8A8 /* URLSessionWithUser.swift in Sources */,
 				2489C9B626733A0900AA0A4C /* Keychain.swift in Sources */,
 				2489C9B026733A0900AA0A4C /* Storage.swift in Sources */,
 				2489C9B926733A0900AA0A4C /* URLExtensions.swift in Sources */,
 				24EB14702679D8C8002D9628 /* MFAType.swift in Sources */,
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
+				CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */,
 				2489C9B426733A0900AA0A4C /* MigratingKeychainCompatStorage.swift in Sources */,
 				CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */,
 				246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */,

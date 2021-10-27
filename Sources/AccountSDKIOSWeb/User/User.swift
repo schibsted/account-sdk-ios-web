@@ -18,7 +18,7 @@ public protocol UserProtocol {
 }
 
 /// Representation of logged-in user.
-public class User: Equatable, UserProtocol {
+public class User: UserProtocol {
     private let client: Client
     internal var tokens: UserTokens?
 
@@ -75,8 +75,7 @@ public class User: Equatable, UserProtocol {
      - parameter completion: callback that receives the URL or an error in case of failure
      */
     public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>) {
-        let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
-        api.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
+        client.schibstedAccountAPI.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
             switch result {
             case .success(let response):
                 let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
@@ -95,8 +94,7 @@ public class User: Equatable, UserProtocol {
      - parameter completion: callback callback that receives the one time code
      */
     public func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>) {
-        let api = SchibstedAccountAPI.init(baseURL: client.configuration.serverURL)
-        api.codeExchange(for: self, clientId: clientId) { result in
+        client.schibstedAccountAPI.codeExchange(for: self, clientId: clientId) { result in
             switch result {
             case .success(let response):
                 let code = response.code
@@ -110,12 +108,6 @@ public class User: Equatable, UserProtocol {
     /// Fetch user profile data
     public func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         client.schibstedAccountAPI.userProfile(for: self, completion: completion)
-    }
-        
-    public static func == (lhs: User, rhs: User) -> Bool {
-        return lhs.uuid == rhs.uuid
-            && lhs.client.configuration.clientId == rhs.client.configuration.clientId
-            && lhs.tokens == rhs.tokens
     }
 }
 
@@ -169,7 +161,14 @@ extension User {
             }
         }
     }
+}
 
+extension User: Equatable {
+    public static func == (lhs: User, rhs: User) -> Bool {
+        return lhs.uuid == rhs.uuid
+            && lhs.client.configuration.clientId == rhs.client.configuration.clientId
+            && lhs.tokens == rhs.tokens
+    }
 }
 
 // MARK: NetworkRefreshRequestHandler

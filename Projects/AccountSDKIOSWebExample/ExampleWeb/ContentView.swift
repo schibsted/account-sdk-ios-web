@@ -64,7 +64,7 @@ struct ContentView: View {
                                                                   completion: { result in
                             switch result {
                             case .success(let user):
-                                print("Success - logged in as \(String(describing: user.uuid))")
+                                print("Success - logged in as \(user.uuid ?? "")")
                                 self.user = user
                             case .failure(let error):
                                 print(error)
@@ -86,7 +86,7 @@ struct ContentView: View {
                                                                   withSSO: true) { result in
                             switch result {
                             case .success(let user):
-                                print("Success - logged in as \(String(describing: user.uuid))!")
+                                print("Success - logged in as \(user.uuid ?? "")")
                                 self.user = user
                             case .failure(let error):
                                 print(error)
@@ -172,7 +172,7 @@ struct ContentView: View {
     func handleResult(_ result: Result<User, LoginError>) {
         switch result {
         case .success(let user):
-            print("Success - logged in as \(String(describing: user.uuid)) - \(user.userId)!")
+            print("Success - logged in as \(user.uuid ?? "")")
             self.user = user
         case .failure(let error):
             print(error)

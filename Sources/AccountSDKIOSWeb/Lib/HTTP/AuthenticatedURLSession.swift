@@ -11,16 +11,6 @@ public final class AuthenticatedURLSession {
         self.urlSession = URLSession(configuration: configuration)
     }
 
-    public func dataTask(with url: URL) -> URLSessionDataTask {
-        return dataTask(with: URLRequest(url: url))
-    }
-
-    public func dataTask(with url: URL,
-                         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        let request = URLRequest(url: url)
-        return dataTask(with: request, completionHandler: completionHandler)
-    }
-
     public func dataTask(with request: URLRequest) -> URLSessionDataTask {
         return dataTask(with: request) { _, _, _ in }
     }
@@ -36,7 +26,7 @@ public final class AuthenticatedURLSession {
                          completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         let user = self.user
         let request = authenticatedRequest(request, tokens: user.tokens)
-        return urlSession.dataTask(with: request) { [weak self] data, response, error in
+        return urlSession.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.isError else {
                 completionHandler(data, response, error)
                 return
@@ -49,27 +39,7 @@ public final class AuthenticatedURLSession {
             }
 
             user.refreshTokens { result in
-
-                switch result {
-                case .success(let tokens):
-                    let requestWithRefreshedTokens = authenticatedRequest(request, tokens: tokens)
-                    self?.refreshTokenDataTask = self?.urlSession.dataTask(
-                        with: requestWithRefreshedTokens,
-                        completionHandler: completionHandler
-                    )
-                    self?.refreshTokenDataTask?.resume()
-                case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                    guard User.shouldLogout(tokenResponseBody: body) else {
-                        completionHandler(data, response, error)
-                        return
-                    }
-
-                    SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
-                    user.logout()
-                    completionHandler(data, response, error)
-                case .failure(_):
-                    completionHandler(data, response, error)
-                }
+                completionHandler(data, response, error)
             }
         }
     }
