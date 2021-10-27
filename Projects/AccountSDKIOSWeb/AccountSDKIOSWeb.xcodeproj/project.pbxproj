@@ -44,6 +44,7 @@
 		2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */; };
 		2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */; };
 		24AE1A3E26A5972600865A68 /* HTTPURLResponse+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AE1A3D26A5972600865A68 /* HTTPURLResponse+Extensions.swift */; };
+		24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BF4C9C2728232A008F11F3 /* TokenRefreshRequestHandlerTests.swift */; };
 		24EB14702679D8C8002D9628 /* MFAType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB146F2679D8C8002D9628 /* MFAType.swift */; };
 		24EB14882679DB3A002D9628 /* SignatureValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14872679DB3A002D9628 /* SignatureValidationError.swift */; };
 		24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */; };
@@ -150,6 +151,7 @@
 		2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPI.swift; sourceTree = "<group>"; };
 		2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshTokenError.swift; sourceTree = "<group>"; };
 		24AE1A3D26A5972600865A68 /* HTTPURLResponse+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+Extensions.swift"; sourceTree = "<group>"; };
+		24BF4C9C2728232A008F11F3 /* TokenRefreshRequestHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequestHandlerTests.swift; sourceTree = "<group>"; };
 		24EB146F2679D8C8002D9628 /* MFAType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAType.swift; sourceTree = "<group>"; };
 		24EB14872679DB3A002D9628 /* SignatureValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureValidationError.swift; sourceTree = "<group>"; };
 		24EB14942679DBB9002D9628 /* IdTokenValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidationError.swift; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				OBJ_52 /* JOSEUtil.swift */,
 				OBJ_53 /* Storage */,
 				OBJ_58 /* UserTests.swift */,
+				24BF4C9C2728232A008F11F3 /* TokenRefreshRequestHandlerTests.swift */,
 				2473CB9F2678AED60001B861 /* URLBuilderTests.swift */,
 			);
 			name = AccountSDKIOSWebTests;
@@ -875,6 +878,7 @@
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
 				A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */,
+				24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */,
 				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
 				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
 				2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */,
