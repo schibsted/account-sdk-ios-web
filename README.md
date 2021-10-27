@@ -1,9 +1,9 @@
-# AccountSDKIOSWeb
+# Schibsted account iOS SDK
 
 New implementation of the Schibsted account iOS SDK using the web flows via 
 [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
 
-API documentation can be found [here](https://schibsted.github.io/AccountSDKIOSWeb/).
+API documentation can be found [here](https://schibsted.github.io/account-sdk-ios-web/).
 
 ## Getting started
 
@@ -18,7 +18,7 @@ email our [support](mailto:schibstedaccount@schibsted.com) to get help with sett
     
 ### Installation
 
-Use Swift Package Manager: `.package(url: "https://github.com/schibsted/AccountSDKIOSWeb")`
+Use Swift Package Manager: `.package(url: "https://github.com/schibsted/account-sdk-ios-web")`
 
 ### Usage
 
