@@ -25,6 +25,8 @@ public class User: Equatable, UserProtocol {
     /// Delegates listening to User events such as logout
     public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
     
+    let refreshHandler = TokenRefreshRequestHandler()
+
     /// User UUID
     public var uuid: String? {
         get {
@@ -127,7 +129,21 @@ extension User {
 
         return false
     }
+    
+    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
+    }
 
+    func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
+        guard let tokens = self.tokens else {
+            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+            return
+        }
+        var requestCopy = request
+        requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
+        client.httpClient.execute(request: requestCopy, completion: completion)
+    }
+    
     /**
      Perform a request with user access token as Bearer token in Authorization header.
      
@@ -136,7 +152,6 @@ extension User {
      logged-out (and all existing tokens will be destroyed).
 
      - parameter request: request to perform with authentication using user tokens
-     - parameter withRetryPolicy: optional rety policy for the HTTP request (defaults to not retrying)
      - parameter completion: callback that receives the HTTP response or an error in case of failure
      */
     func withAuthentication<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
@@ -145,24 +160,7 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
-                    self.client.refreshTokens(for: self) { result in
-                        switch result {
-                        case .success(_):
-                            // retry the request with fresh tokens
-                            self.makeRequest(request: request, completion: completion)
-                        case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                            guard User.shouldLogout(tokenResponseBody: body) else {
-                                completion(requestResult)
-                                return
-                            }
-
-                            SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
-                            self.logout()
-                            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
-                        case .failure(_):
-                            completion(requestResult)
-                        }
-                    }
+                    self.refreshHandler.refreshWithRetry(user: self, requestResult: requestResult, request: request, completion: completion)
                 } else {
                     completion(.failure(.errorResponse(code: code, body: body)))
                 }
@@ -172,17 +170,138 @@ extension User {
         }
     }
 
-    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
-        client.refreshTokens(for: self, completion: completion)
+}
+
+// MARK: NetworkRefreshRequestHandler
+
+extension User {
+    
+    /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
+    class TokenRefreshRequestHandler {
+        
+        var isTokenRefreshing: State = .notRefreshing
+        var stateLock = NSLock()
+        
+        enum State {
+            case isRefreshing
+            case notRefreshing
+        }
+        
+        let queue = DispatchQueue(label: "NetworkRefreshRequestHandler", attributes: .concurrent)
+        private var requestsOnRefreshFailure: [(Result<UserTokens, RefreshTokenError>) -> Void] = []
+        private var requestsOnRefreshSuccess: [DispatchWorkItem] = []
+        private var completionsOnRefreshWithoutRetry: [(Result<UserTokens, RefreshTokenError>) -> Void] = []
+        
+        // MARK: Refresh flows
+        
+        func refreshWithRetry<T:Decodable>(user: User, requestResult: Result<T, HTTPError>, request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
+            
+            // Save work to be executed on refresh success and failure
+            self.saveRequestOnRefreshSuccess { user.makeRequest(request: request, completion: completion)}
+            self.saveRequestOnRefreshFailure(initialRequestResult: requestResult, completion: completion)
+            
+            stateLock.lock()
+            defer { stateLock.unlock() }
+            switch self.isTokenRefreshing {
+            case .notRefreshing:
+                self.isTokenRefreshing = .isRefreshing // Update state
+                self.refreshAndExecute(user: user)
+            case .isRefreshing:
+                break;
+            }
+        }
+        
+        func refreshWithoutRetry(user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+            self.saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
+            
+            stateLock.lock()
+            defer { stateLock.unlock() }
+            switch self.isTokenRefreshing {
+            case .notRefreshing:
+                self.isTokenRefreshing = .isRefreshing // Update state
+                self.refreshAndExecute(user: user)
+            case .isRefreshing:
+                break
+            }
+        }
+        
+        private func refreshAndExecute(user: User) {
+            user.client.refreshTokens(for: user) { result in
+                self.isTokenRefreshing = .notRefreshing // Update state
+                self.executeAfterRefresh(with: result)
+                
+                switch result {
+                case .success(_):
+                    // On successfull refresh. Execute all waiting requests.
+                    self.executeRequestOnRefreshSuccess()
+                case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
+                    // Should logout on invalid grant
+                    if User.shouldLogout(tokenResponseBody: body) {
+                        SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
+                        user.logout()
+                    }
+                    
+                    self.executeOnRefreshFailure(with: result)
+                default:
+                    self.executeOnRefreshFailure(with: result)
+                }
+            }
+        }
+       
+        // MARK: Read and write request lists
+        
+        private func saveRefreshWithoutRetryCompletion(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+            queue.sync(flags: .barrier) { self.completionsOnRefreshWithoutRetry.append(completion)}
+        }
+        
+        private func saveRequestOnRefreshSuccess(_ block: @escaping () -> Void) {
+            queue.sync(flags: .barrier) {
+                self.requestsOnRefreshSuccess.append( DispatchWorkItem { block() })
+            }
+        }
+        
+        private func saveRequestOnRefreshFailure<T:Decodable>(initialRequestResult: Result<T, HTTPError>, completion: @escaping HTTPResultHandler<T>) {
+            let failure: (Result<UserTokens, RefreshTokenError>) -> Void = { result in
+                switch result {
+                case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
+                    guard User.shouldLogout(tokenResponseBody: body) else {
+                        completion(initialRequestResult)
+                        return
+                    }
+                    completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+                case .failure(_):
+                    completion(initialRequestResult)
+                
+                default: // Should not get here
+                    completion(initialRequestResult)
+                }
+            }
+            
+            queue.sync(flags: .barrier) { self.requestsOnRefreshFailure.append(failure) }
+        }
+        
+        private func removeAll() {
+            requestsOnRefreshSuccess.removeAll()
+            requestsOnRefreshFailure.removeAll()
+        }
+        
+        // MARK: Execute requests and completions
+        
+        private func executeRequestOnRefreshSuccess() {
+            requestsOnRefreshSuccess.forEach({ DispatchQueue.global().async(execute: $0) }) // Execute in FIFO order.
+            self.removeAll()
+        }
+        
+        private func executeOnRefreshFailure(with result: Result<UserTokens, RefreshTokenError>) {
+            requestsOnRefreshFailure.forEach { $0(result) }
+            self.removeAll()
+        }
+        
+        private func executeAfterRefresh(with result: Result<UserTokens, RefreshTokenError>)  {
+            self.completionsOnRefreshWithoutRetry.forEach{ $0(result) }
+            self.completionsOnRefreshWithoutRetry.removeAll()
+        }
+        
     }
 
-    private func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-        guard let tokens = self.tokens else {
-            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
-            return
-        }
-        var requestCopy = request
-        requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
-        client.httpClient.execute(request: requestCopy, completion: completion)
-    }
 }
