@@ -28,7 +28,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
     
     func testSerialisedInvalidData() {
         var query: [String: Any] = defaultQuery
-        query[kSecValueData as String] = NSKeyedArchiver.archivedData(withRootObject: ["key": "value"])
+        query[kSecValueData as String] = try? NSKeyedArchiver.archivedData(withRootObject: ["key": "value"], requiringSecureCoding: false)
         SecItemAdd(query as CFDictionary, nil)
 
         let keychainStorage = LegacyKeychainTokenStorage()
@@ -46,7 +46,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
                 "id_token": "idToken2"
             ]
         ]
-        let data = NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens])
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
         var query: [String: Any] = defaultQuery
         query[kSecValueData as String] = data
         SecItemAdd(query as CFDictionary, nil)
@@ -67,7 +67,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
                 "id_token": "idToken2"
             ]
         ]
-        let data = NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens])
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
         var query: [String: Any] = defaultQuery
         query[kSecValueData as String] = data
         SecItemAdd(query as CFDictionary, nil)
@@ -87,7 +87,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
                 "refresh_token": "refreshToken2"
             ]
         ]
-        let data = NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens])
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
         var query: [String: Any] = defaultQuery
         query[kSecValueData as String] = data
         SecItemAdd(query as CFDictionary, nil)
@@ -104,7 +104,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
                 "id_token": "idToken1"
             ]
         ]
-        let data = NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens])
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
         var query: [String: Any] = defaultQuery
         query[kSecValueData as String] = data
         SecItemAdd(query as CFDictionary, nil)

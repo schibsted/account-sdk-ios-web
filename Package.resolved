@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Cuckoo",
-        "repositoryURL": "https://github.com/Brightify/Cuckoo.git",
-        "state": {
-          "branch": null,
-          "revision": "39e05cdf563f90be1652483ce7731d5be45c7153",
-          "version": "1.5.1"
-        }
-      },
-      {
         "package": "JOSESwift",
         "repositoryURL": "https://github.com/airsidemobile/JOSESwift.git",
         "state": {
