@@ -39,8 +39,8 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
         let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
         self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
         
-        let testResponse = TestResponse(data:  "Retried request SUCCESS")
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .success(testResponse))
+        let sucessResponse = TestResponse(data:  "Retried request SUCCESS")
+        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .success(sucessResponse))
 
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
@@ -55,8 +55,8 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
                              requestResult: anyResult,
                              request: self.request) { result in
             switch result {
-            case .success(let response):
-                XCTAssertEqual("Retried request SUCCESS", response.data)
+            case .success(let receivedResponse):
+                XCTAssertEqual(sucessResponse.data, receivedResponse.data)
                 expectation.fulfill()
             default:
                 XCTFail()
