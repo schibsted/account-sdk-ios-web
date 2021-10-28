@@ -11,16 +11,6 @@ public final class AuthenticatedURLSession {
         self.urlSession = URLSession(configuration: configuration)
     }
 
-    public func dataTask(with url: URL) -> URLSessionDataTask {
-        return dataTask(with: URLRequest(url: url))
-    }
-
-    public func dataTask(with url: URL,
-                         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        let request = URLRequest(url: url)
-        return dataTask(with: request, completionHandler: completionHandler)
-    }
-
     public func dataTask(with request: URLRequest) -> URLSessionDataTask {
         return dataTask(with: request) { _, _, _ in }
     }
@@ -49,7 +39,6 @@ public final class AuthenticatedURLSession {
             }
 
             user.refreshTokens { result in
-
                 switch result {
                 case .success(let tokens):
                     let requestWithRefreshedTokens = authenticatedRequest(request, tokens: tokens)
@@ -58,15 +47,6 @@ public final class AuthenticatedURLSession {
                         completionHandler: completionHandler
                     )
                     self?.refreshTokenDataTask?.resume()
-                case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                    guard User.shouldLogout(tokenResponseBody: body) else {
-                        completionHandler(data, response, error)
-                        return
-                    }
-
-                    SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
-                    user.logout()
-                    completionHandler(data, response, error)
                 case .failure(_):
                     completionHandler(data, response, error)
                 }
