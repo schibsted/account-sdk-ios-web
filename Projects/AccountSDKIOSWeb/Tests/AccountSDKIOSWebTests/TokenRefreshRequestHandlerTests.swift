@@ -95,6 +95,38 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
         self.wait(for: [expectation], timeout: 1)
     }
     
+    func testRefreshWithRetrySameRequestRetried() {
+        let mockHTTPClient = MockHTTPClient()
+        let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        
+        let successResponse = TestResponse(data:  "Any response for retried request")
+        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .success(successResponse))
+        let mockSessionStorage = MockSessionStorage()
+        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
+        
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        let anyInitialResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
+        
+        let expectation = self.expectation(description: "After successfull refresh the passedRequest should be executed")
+        let passedRequest = URLRequest(url: URL(string: "http://anyurl.com/test")!)
+        
+        let sut = User.TokenRefreshRequestHandler()
+        sut.refreshWithRetry(user: user,
+                             requestResult: anyInitialResult,
+                             request: passedRequest) { _ in
+            
+            let argumentCaptor = ArgumentCaptor<URLRequest>()
+            verify(mockHTTPClient, times(1)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
+            let calls = argumentCaptor.allValues
+            XCTAssertEqual(calls[0].url!.absoluteString, passedRequest.url!.absoluteString, "HTTPClient should execute the primary passedRequest")
+            
+            expectation.fulfill()
+        }
+        self.wait(for: [expectation], timeout: 1)
+    }
+    
     // MARK: refreshWithoutRetry
     
     func testRefreshWithoutRetryCompletionCalledWithRefreshResultFailure() {
