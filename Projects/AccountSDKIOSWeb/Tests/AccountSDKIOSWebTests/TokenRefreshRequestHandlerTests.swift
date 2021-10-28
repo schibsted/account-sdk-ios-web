@@ -4,6 +4,7 @@ import Cuckoo
 
 class TokenRefreshRequestHandlerTests: XCTestCase {
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
+    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
     
     // MARK: refreshWithRetry
     
