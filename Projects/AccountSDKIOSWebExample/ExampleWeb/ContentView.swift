@@ -138,7 +138,7 @@ struct ContentView: View {
                 }.disabled(!userIsLoggedIn)
                 
                 Button(action: {
-                    self.user?.webSessionURL(clientId: "5bcdd51bfba0cc7427315112", redirectURI: "http://zoopermarket.com/safepage") { result in
+                    self.user?.webSessionURL(clientId: "602504e1b41fa31789a95aa7", redirectURI: "http://zoopermarket.com/safepage") { result in
                         switch result {
                         case .success(let sessionUrl):
                             print(sessionUrl)
@@ -151,8 +151,17 @@ struct ContentView: View {
                 }.disabled(!userIsLoggedIn)
 
                 Button(action: {
-                    accountPagesURL = self.clientConfiguration.accountPagesURL
-                    showAccountPages = true
+                    self.user?.webSessionURL(clientId: "602504e1b41fa31789a95aa7", redirectURI: self.clientConfiguration.accountPagesURL.absoluteString) { result in
+                        switch result {
+                        case .success(let sessionUrl):
+                            print(sessionUrl)
+                            accountPagesURL = sessionUrl
+                            showAccountPages = true
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+
                 }) {
                     Text("Show account pages")
                 }.disabled(!userIsLoggedIn)
