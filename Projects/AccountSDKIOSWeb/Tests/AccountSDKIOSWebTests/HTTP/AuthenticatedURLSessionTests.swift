@@ -2,21 +2,20 @@ import XCTest
 import Cuckoo
 @testable import AccountSDKIOSWeb
 
-final class AccountSDKIOSWebTests: XCTestCase {
+final class AccountSDKIOSWebTests: XCTestCaseWithMockHTTPClient {
     
     let testURL = URL("http://www.example.com")
     
     func testRetryRequestWithSuccessfullyRefreshedToken() {
         
         // given
-        let mockHTTPClient = MockHTTPClient()
         let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
         
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         let session = URLSessionMock()
@@ -42,8 +41,7 @@ final class AccountSDKIOSWebTests: XCTestCase {
     
     func testReturnOriginalErrorOnRefreshTokenRequestFailure() {
         // given
-        let mockHTTPClient = MockHTTPClient()
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
         
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
@@ -67,27 +65,6 @@ final class AccountSDKIOSWebTests: XCTestCase {
         test.resume()
         self.waitForExpectations(timeout: 0.5, handler: nil)
     }
-    
-    func stubHTTPClientExecuteRefreshRequest(mockHTTPClient: MockHTTPClient, refreshResult: Result<TokenResponse, HTTPError>) {
-        stub(mockHTTPClient) { mock in
-            // refresh token request
-            let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
-                .then { _, _, completion in
-                    completion(refreshResult)
-                }
-        }
-    }
-    
-    //TODO: move to common file
-    func stubSessionStorageStore(mockSessionStorage: MockSessionStorage, result: Result<Void, Error>) {
-        stub(mockSessionStorage) { mock in
-            when(mock.store(any(), completion: anyClosure())).then { _, completion in
-                completion(result)
-            }
-        }
-    }
-    
 }
 
 fileprivate extension Client {
