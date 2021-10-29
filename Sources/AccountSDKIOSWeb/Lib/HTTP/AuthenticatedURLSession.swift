@@ -10,11 +10,6 @@ public final class AuthenticatedURLSession {
         self.user = user
         self.urlSession = URLSession(configuration: configuration)
     }
-    
-    public init(user: User, session: URLSession) {
-        self.user = user
-        self.urlSession = session
-    }
 
     public func dataTask(with request: URLRequest) -> URLSessionDataTask {
         return dataTask(with: request) { _, _, _ in }
