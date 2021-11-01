@@ -5,6 +5,7 @@ extension Client {
     public enum AppTransfer {
         case preTransfer(_ clientId: String, _ accessGroup: String?)
         case postTransfer(accessGroup: String?, completion: (Result<Void, Error>) -> Void)
+        case postTransferFromOldSDK(accessGroup: String?, completion: (Result<Void, Error>) -> Void)  /// Only needs to be invoked if the old SDK was used to store login data pre App Transfer.
         case clear
         
         public enum AppTransferError: Error {
@@ -17,6 +18,8 @@ extension Client {
                 try Client.storeOnDevice(clientId: clientId, key: key, accessGroup: accessGroup)
             case .postTransfer(let accessGroup, let completion):
                 Client.loadFromDeviceToKeychain(key: key, accessGroup: accessGroup, completion: completion)
+            case .postTransferFromOldSDK(let accessGroup, let completion):
+                try Client.loadOldSDKDataFromDeviceToKeychain(key: key, accessGroup: accessGroup, completion: completion)
             case .clear:
                 Client.clearStoredUserOnDevice(key: key)
             }
@@ -24,6 +27,7 @@ extension Client {
     }
     
     private static let keyPrefix = "new-sdk-app-transfer-"
+    private static let oldSDKKeyPrefix = "old-sdk-app-transfer-"
 
     private static func storeOnDevice(clientId: String, key: String, accessGroup: String?) throws {
         do {
@@ -61,6 +65,23 @@ extension Client {
             }
         } catch {
             SchibstedAccountLogger.instance.info("Failed from to storeFromDeviceToKeychain: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+    
+    private static func loadOldSDKDataFromDeviceToKeychain(key: String, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) throws {
+        guard let tokenData = UserDefaults.standard.object(forKey: Client.oldSDKKeyPrefix + key) as? Data else {
+            completion(.failure(AppTransfer.AppTransferError.UserSessionNotFound))
+            return
+        }
+        
+        do {
+            let kc = LegacyKeychainTokenStorage(accessGroup: accessGroup)
+            try kc.set(legacySDKtokenData: tokenData)
+            Client.clearStoredUserOnDevice(key: key)
+            completion(.success())
+        } catch {
+            SchibstedAccountLogger.instance.info("failed from to storeFromDeviceToKeychain: \(error.localizedDescription)")
             completion(.failure(error))
         }
     }
