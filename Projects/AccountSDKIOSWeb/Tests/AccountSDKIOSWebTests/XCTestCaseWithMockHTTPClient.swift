@@ -32,6 +32,7 @@ class XCTestCaseWithMockHTTPClient: XCTestCase {
                 }
         }
     }
+    
     func stubSessionStorageStore(mockSessionStorage: MockSessionStorage, result: Result<Void, Error>) {
         stub(mockSessionStorage) { mock in
             when(mock.store(any(), completion: anyClosure())).then { _, completion in

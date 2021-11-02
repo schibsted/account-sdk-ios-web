@@ -34,7 +34,7 @@ final class AccountSDKIOSWebTests: XCTestCaseWithMockHTTPClient {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
         
-        let expectation = self.expectation(description: "Original request should be retired with success server response")
+        let expectation = self.expectation(description: "Original request should be retried with success server response")
 
         // when
         let sut = AuthenticatedURLSession(user: user, configuration: testConfig)
