@@ -2,15 +2,14 @@ import XCTest
 import Cuckoo
 @testable import AccountSDKIOSWeb
 
-class TokenRefreshRequestHandlerTests: XCTestCase {
+class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
     private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
     
     // MARK: refreshWithRetry
     
     func testRefreshWithRetryOnRefreshFailureCompletionCalled() {
-        let mockHTTPClient = MockHTTPClient()
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
 
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
@@ -35,17 +34,16 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
     }
     
     func testRefreshWithRetryRetriedRequestSucess() {
-        let mockHTTPClient = MockHTTPClient()
         let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
         let sucessResponse = TestResponse(data:  "Retried request SUCCESS")
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .success(sucessResponse))
+        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .success(sucessResponse))
 
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
         
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         let anyResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
@@ -66,17 +64,16 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
     }
     
     func testRefreshWithRetryRetriedRequestFailure() {
-        let mockHTTPClient = MockHTTPClient()
         let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
 
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .failure(.errorResponse(code: 1337, body: "Retried request FAILING")))
+        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .failure(.errorResponse(code: 1337, body: "Retried request FAILING")))
 
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
         
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         let anyResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
@@ -97,16 +94,15 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
     }
     
     func testRefreshWithRetrySameRequestRetried() {
-        let mockHTTPClient = MockHTTPClient()
         let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
         let successResponse = TestResponse(data:  "Any response for retried request")
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient, result: .success(successResponse))
+        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .success(successResponse))
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
         
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
         let anyInitialResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
         
@@ -119,7 +115,7 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
                              request: passedRequest) { _ in
             
             let argumentCaptor = ArgumentCaptor<URLRequest>()
-            verify(mockHTTPClient, times(1)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
+            verify(self.mockHTTPClient!, times(1)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
             let calls = argumentCaptor.allValues
             XCTAssertEqual(calls[0].url!.absoluteString, passedRequest.url!.absoluteString, "HTTPClient should execute the primary passedRequest")
             
@@ -131,10 +127,9 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
     // MARK: refreshWithoutRetry
     
     func testRefreshWithoutRetryCompletionCalledWithRefreshResultFailure() {
-        let mockHTTPClient = MockHTTPClient()
         let refreshResultBody = "Something went wrong"
         let refreshResult: Result<TokenResponse, HTTPError> = .failure(.errorResponse(code: 500, body: refreshResultBody))
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: refreshResult)
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: refreshResult)
 
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
@@ -154,14 +149,13 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
     }
     
     func testRefreshWithoutRetryCompletionCalledWithRefreshResultSuccess() {
-        let mockHTTPClient = MockHTTPClient()
         let tokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient, refreshResult: .success(tokenResponse))
+        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
 
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
 
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
                                      
         let expectation = self.expectation(description: "completion should be called with refresh result")
@@ -177,36 +171,6 @@ class TokenRefreshRequestHandlerTests: XCTestCase {
             }
         }
         self.wait(for: [expectation], timeout: 1)
-    }
-    
-    // MARK: Helper mocking methods
-    
-    func stubHTTPClientExecuteRefreshRequest(mockHTTPClient: MockHTTPClient, refreshResult: Result<TokenResponse, HTTPError>) {
-        stub(mockHTTPClient) { mock in
-            // refresh token request
-            let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
-                .then { _, _, completion in
-                    completion(refreshResult)
-                }
-        }
-    }
-    
-    func stubHTTPClientExecuteRequest(mockHTTPClient: MockHTTPClient, result: Result<TestResponse, HTTPError>) {
-        stub(mockHTTPClient) { mock in
-            // makeRequest on saveRequestOnRefreshSuccess
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
-                .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
-                    completion(result)
-                }
-        }
-    }
-    func stubSessionStorageStore(mockSessionStorage: MockSessionStorage, result: Result<Void, Error>) {
-        stub(mockSessionStorage) { mock in
-            when(mock.store(any(), completion: anyClosure())).then { _, completion in
-                completion(result)
-            }
-        }
     }
 }
 
