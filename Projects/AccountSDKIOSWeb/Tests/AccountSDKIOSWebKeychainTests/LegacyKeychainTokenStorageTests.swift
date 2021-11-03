@@ -116,4 +116,53 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
         keychainStorage.remove()
         XCTAssertEqual(keychainStorage.get(), [])
     }
+    
+    func testSettingLegacyToken() {
+        
+        let tokenDictionary: [String : Any] = [
+            "accessToken": "foo",
+            "refreshToken": "bar",
+            "idToken": [
+                "string": "foo-bar"
+            ],
+            "userID": "foobar"
+        ]
+        
+        guard let data = try? JSONSerialization.data(withJSONObject: tokenDictionary, options: []) else {
+            XCTFail("Cannot serialize test input")
+            return
+        }
+        
+        let keychainStorage = LegacyKeychainTokenStorage()
+        do {
+            try keychainStorage.set(legacySDKtokenData: data)
+        } catch (let error) {
+            XCTFail("Cannot set legacy token data in keychain \(error.localizedDescription)")
+        }
+        
+        XCTAssertEqual(LegacyKeychainTokenStorage().get(), [
+            LegacyTokenData(accessToken: "foo", refreshToken: "bar", idToken: "foo-bar")
+        ])
+    }
+    
+    func testSettingIncorrectLegacyToken() {
+        
+        let tokenDictionary: [String : Any] = [
+            "accessToken": "foo",
+            "refreshToken": "bar",
+            "userID": "foobar"
+        ]
+        
+        guard let data = try? JSONSerialization.data(withJSONObject: tokenDictionary, options: []) else {
+            XCTFail("Cannot serialize test input")
+            return
+        }
+        
+        let keychainStorage = LegacyKeychainTokenStorage()
+        do {
+            try keychainStorage.set(legacySDKtokenData: data)
+        } catch (let error) {
+            XCTAssertEqual(KeychainStorageError.storeError, error as! KeychainStorageError)
+        }
+    }
 }
