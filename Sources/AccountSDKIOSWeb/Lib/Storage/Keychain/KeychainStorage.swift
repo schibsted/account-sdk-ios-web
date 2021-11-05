@@ -1,7 +1,14 @@
 import Foundation
 import Security
 
-class KeychainStorage {
+protocol KeychainStoring {
+    func setValue(_ value: Data, forAccount: String?) throws
+    func getValue(forAccount: String?) throws -> Data?
+    func getAll() -> [Data]
+    func removeValue(forAccount: String?) throws
+}
+
+class KeychainStorage: KeychainStoring {
     private let service: String
     private let accessGroup: String?
 

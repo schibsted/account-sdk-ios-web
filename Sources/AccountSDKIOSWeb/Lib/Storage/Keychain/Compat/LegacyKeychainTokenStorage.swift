@@ -16,10 +16,15 @@ class LegacyKeychainTokenStorage {
         static let userID = "user_id"
     }
     
-    private let keychain: KeychainStorage
+    private let keychain: KeychainStoring
 
     init(accessGroup: String? = nil) {
         keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
+    }
+    
+    // Now just for test purposes (proper dependency injection in the future)
+    init(keychain: KeychainStoring) {
+        self.keychain = keychain
     }
 
     /**
