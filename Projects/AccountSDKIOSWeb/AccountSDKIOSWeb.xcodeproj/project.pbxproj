@@ -44,6 +44,11 @@
 		2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */; };
 		2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */; };
 		24AE1A3E26A5972600865A68 /* HTTPURLResponse+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AE1A3D26A5972600865A68 /* HTTPURLResponse+Extensions.swift */; };
+		24BC39F32735738C0089A585 /* for_use_simplified-widget_translations_da.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BC39EE2735738C0089A585 /* for_use_simplified-widget_translations_da.json */; };
+		24BC39F42735738C0089A585 /* for_use_simplified-widget_translations_sv.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BC39EF2735738C0089A585 /* for_use_simplified-widget_translations_sv.json */; };
+		24BC39F52735738C0089A585 /* simplified-widget_translations_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BC39F02735738C0089A585 /* simplified-widget_translations_en.json */; };
+		24BC39F62735738C0089A585 /* for_use_simplified-widget_translations_nb.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BC39F12735738C0089A585 /* for_use_simplified-widget_translations_nb.json */; };
+		24BC39F72735738C0089A585 /* for_use_simplified-widget_translations_fi.json in Resources */ = {isa = PBXBuildFile; fileRef = 24BC39F22735738C0089A585 /* for_use_simplified-widget_translations_fi.json */; };
 		24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BF4C9C2728232A008F11F3 /* TokenRefreshRequestHandlerTests.swift */; };
 		24EB14702679D8C8002D9628 /* MFAType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB146F2679D8C8002D9628 /* MFAType.swift */; };
 		24EB14882679DB3A002D9628 /* SignatureValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB14872679DB3A002D9628 /* SignatureValidationError.swift */; };
@@ -155,6 +160,11 @@
 		2489C9A326733A0900AA0A4C /* SchibstedAccountAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPI.swift; sourceTree = "<group>"; };
 		2489C9A426733A0900AA0A4C /* RefreshTokenError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshTokenError.swift; sourceTree = "<group>"; };
 		24AE1A3D26A5972600865A68 /* HTTPURLResponse+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+Extensions.swift"; sourceTree = "<group>"; };
+		24BC39EE2735738C0089A585 /* for_use_simplified-widget_translations_da.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_da.json"; sourceTree = "<group>"; };
+		24BC39EF2735738C0089A585 /* for_use_simplified-widget_translations_sv.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_sv.json"; sourceTree = "<group>"; };
+		24BC39F02735738C0089A585 /* simplified-widget_translations_en.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "simplified-widget_translations_en.json"; sourceTree = "<group>"; };
+		24BC39F12735738C0089A585 /* for_use_simplified-widget_translations_nb.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_nb.json"; sourceTree = "<group>"; };
+		24BC39F22735738C0089A585 /* for_use_simplified-widget_translations_fi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_fi.json"; sourceTree = "<group>"; };
 		24BF4C9C2728232A008F11F3 /* TokenRefreshRequestHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequestHandlerTests.swift; sourceTree = "<group>"; };
 		24C2F26F273191700010C21D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24EB146F2679D8C8002D9628 /* MFAType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAType.swift; sourceTree = "<group>"; };
@@ -318,6 +328,7 @@
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
 			isa = PBXGroup;
 			children = (
+				24BC39ED273572CE0089A585 /* Localization */,
 				24C2F26F273191700010C21D /* Assets.xcassets */,
 				24844037269347C500CE88F2 /* Util */,
 				2461668F267B400200F77C5A /* User */,
@@ -386,6 +397,18 @@
 				24EB1511267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		24BC39ED273572CE0089A585 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				24BC39EE2735738C0089A585 /* for_use_simplified-widget_translations_da.json */,
+				24BC39F22735738C0089A585 /* for_use_simplified-widget_translations_fi.json */,
+				24BC39F12735738C0089A585 /* for_use_simplified-widget_translations_nb.json */,
+				24BC39EF2735738C0089A585 /* for_use_simplified-widget_translations_sv.json */,
+				24BC39F02735738C0089A585 /* simplified-widget_translations_en.json */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		24EB14932679DB9A002D9628 /* IDToken */ = {
@@ -752,7 +775,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24BC39F52735738C0089A585 /* simplified-widget_translations_en.json in Resources */,
+				24BC39F32735738C0089A585 /* for_use_simplified-widget_translations_da.json in Resources */,
+				24BC39F62735738C0089A585 /* for_use_simplified-widget_translations_nb.json in Resources */,
 				24460E252732A54B001CAB4D /* Assets.xcassets in Resources */,
+				24BC39F72735738C0089A585 /* for_use_simplified-widget_translations_fi.json in Resources */,
+				24BC39F42735738C0089A585 /* for_use_simplified-widget_translations_sv.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

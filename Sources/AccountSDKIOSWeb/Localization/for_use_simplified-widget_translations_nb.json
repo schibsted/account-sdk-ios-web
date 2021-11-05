@@ -1,0 +1,10 @@
+{
+  "SimplifiedWidget.schibstedAccount": "Schibsted-konto",
+  "SimplifiedWidget.continueAs": "Fortsett som",
+  "SimplifiedWidget.continueWithoutLogin": "Fortsett uten å logge inn",
+  "SimplifiedWidget.footer": "Du er logget inn på en tjeneste med Schibsted og \nkan fortsette på {0} med ett klikk",
+  "SimplifiedWidget.privacyPolicy": "Personvernerklæring",
+  "SimplifiedWidget.privacyPolicyLink": "https://info.privacy.schibsted.com/no/schibsted-norge-personvernerklaering/",
+  "SimplifiedWidget.notYou": "Ikke deg?",
+  "SimplifiedWidget.loginWithDifferentAccount": "Bytt konto"
+}
