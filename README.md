@@ -3,7 +3,7 @@
 
 [![Build Status](https://app.travis-ci.com/schibsted/account-sdk-ios-web.svg?branch=master)](https://app.travis-ci.com/schibsted/account-sdk-ios-web)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web)
-![Platform](https://img.shields.io/badge/Platform-iOS%2012.0%2B-brightgreen.svg?style=flat)
+![Platform](https://img.shields.io/badge/Platform-iOS%2012.0%2B-orange.svg?style=flat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/schibsted/account-sdk-ios-web/blob/master/LICENSE)
 
 
