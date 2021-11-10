@@ -1,5 +1,4 @@
 # Schibsted account iOS SDK
-========
 
 [![Build Status](https://app.travis-ci.com/schibsted/account-sdk-ios-web.svg?branch=master)](https://app.travis-ci.com/schibsted/account-sdk-ios-web)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web)
