@@ -15,7 +15,11 @@ This will help you create a client and configure the necessary data.
 email our [support](mailto:schibstedaccount@schibsted.com) to get help with setting that up.
 
 **Note:** If you have implemented the [Old Schibsted SDK](https://github.com/schibsted/account-sdk-ios) in your app, and want these users to remain logged in, do not forget to add the SessionStorageConfig on instantiating your Client, `Client(configuration:sessionStorageConfig:httpClient:)`.   
-    
+  
+### Requirements
+
+* iOS 12.0+
+
 ### Installation
 
 Use Swift Package Manager: `.package(url: "https://github.com/schibsted/account-sdk-ios-web")`
