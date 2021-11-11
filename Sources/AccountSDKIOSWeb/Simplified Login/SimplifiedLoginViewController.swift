@@ -67,8 +67,11 @@ public struct SimplifiedLoginViewModel {
 }
 
 public class SimplifiedLoginViewController: UIViewController {
+    
+    private var viewModel: SimplifiedLoginViewModel
+    
     private lazy var userInformationView: UserInformationView = {
-        let view = UserInformationView()
+        let view = UserInformationView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -85,7 +88,8 @@ public class SimplifiedLoginViewController: UIViewController {
     
     private lazy var primaryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Continue as Daniel.Echegaray", for: .normal) // put display_text here
+        let title = viewModel.localisation.continuAsButtonTitle + " " + viewModel.displayName
+        button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -98,7 +102,7 @@ public class SimplifiedLoginViewController: UIViewController {
     // MARK: Links
     
     private lazy var linksView: LinksView = {
-        let view = LinksView()
+        let view = LinksView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -114,7 +118,7 @@ public class SimplifiedLoginViewController: UIViewController {
     // MARK: Footer
     
     private lazy var footerStackView: FooterView = {
-        let view = FooterView()
+        let view = FooterView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -130,8 +134,10 @@ public class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    public init() {
+    public init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
         view.backgroundColor = .white
         
         // Main view
@@ -190,7 +196,7 @@ struct SimplifiedLoginViewController_Previews: PreviewProvider {
 @available(iOS 13.0.0, *)
 struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
-        let s = SimplifiedLoginViewController()
+        let s = SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(env: .pre)!)
         return s
     }
     

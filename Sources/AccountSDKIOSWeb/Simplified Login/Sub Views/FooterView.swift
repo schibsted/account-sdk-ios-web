@@ -1,8 +1,11 @@
 import UIKit
+import SwiftUI
 
 class FooterView: UIStackView {
+    let viewModel: SimplifiedLoginViewModel
     
-    init() {
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
 
         ////  Ecosystem
@@ -42,10 +45,12 @@ class FooterView: UIStackView {
     
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: "Schibsted_Logotype_L2_Small size_Black_RGB", in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
+        let image: UIImage = UIImage(named: viewModel.schibstedLogoName, in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
         
         view.image = image
         view.contentMode = .center
+        view.contentMode = .scaleAspectFit
+
         return view
     }()
     
@@ -62,12 +67,9 @@ class FooterView: UIStackView {
     
     private lazy var popularBrandsImageViews: [UIImageView] = {
         var views = [UIImageView]()
-
-        views.append(getRoundedImageView(name: "Aftenposten"))
-        views.append(getRoundedImageView(name: "BergensTidene"))
-        views.append(getRoundedImageView(name: "E24"))
-        views.append(getRoundedImageView(name: "Finn"))
-        views.append(getRoundedImageView(name: "VG"))
+        for imageName in viewModel.iconNames {
+            views.append(getRoundedImageView(name: imageName))
+        }
         
         return views
     }()
@@ -88,7 +90,8 @@ class FooterView: UIStackView {
     private lazy var explanationLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = -1
-        view.text = "Du er logget inn på en tjeneste med Schibsted og kan fortsette på client_name med et klikk." // TODO: Put client_name
+        
+        view.text = viewModel.localisation.explanationText// TODO: Insert client_name
         view.font = UIFont.systemFont(ofSize: 12)
         view.textAlignment = .center
         
@@ -104,7 +107,7 @@ class FooterView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 12),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        view.attributedText = NSAttributedString(string: "Privacy policy", // TODO: Move
+        view.attributedText = NSAttributedString(string: viewModel.localisation.privacyPolicyTitle,
                                                  attributes: attributes)
                                                  
         view.textAlignment = .center
