@@ -12,7 +12,7 @@ public protocol UserProtocol {
     func logout()
     func isLoggedIn() -> Bool
     
-    func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>)
+    func webSessionURL(clientId: String, state: String?, redirectURI: String, completion: @escaping HTTPResultHandler<URL>)
     func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>)
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
 }
@@ -74,8 +74,8 @@ public class User: UserProtocol {
      - parameter redirectURI: where to redirect the user after the session has been created
      - parameter completion: callback that receives the URL or an error in case of failure
      */
-    public func webSessionURL(clientId: String, redirectURI: String, completion: @escaping HTTPResultHandler<URL>) {
-        client.schibstedAccountAPI.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI) { result in
+    public func webSessionURL(clientId: String, state: String? = nil, redirectURI: String, completion: @escaping HTTPResultHandler<URL>) {
+        client.schibstedAccountAPI.sessionExchange(for: self, state: state, clientId: clientId, redirectURI: redirectURI) { result in
             switch result {
             case .success(let response):
                 let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
