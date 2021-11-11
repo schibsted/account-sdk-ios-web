@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var accountPagesURL: URL?
     @State private var showAccountPages = false
     @State private var asWebAuthSession: ASWebAuthenticationSession?
+    @State var isPresentedSimplifiedLogin = false
     
     init(client: Client, clientConfiguration: ClientConfiguration) {
         self.client = client
@@ -44,7 +45,8 @@ struct ContentView: View {
                     Button(action: resumeUser, label: { Text("Resume user") } )
                     Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)") } )
                     Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)") } )
-                    
+                    Button(action: { self.isPresentedSimplifiedLogin.toggle() }){ Text("Simplified Login view")}
+
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
@@ -61,7 +63,7 @@ struct ContentView: View {
                 
                 NavigationLink("", destination: webView, isActive: $showAccountPages)
             }
-        }
+        }.sheet(isPresented: $isPresentedSimplifiedLogin, content: { SimplifiedLoginSwiftUIView() })
     }
     
     func resumeUser() {
@@ -205,4 +207,22 @@ class MyUserDelegate: UserDelegate {
     func userDidLogout() {
         onLogout?()
     }
+}
+
+struct SimplifiedLoginSwiftUIView: View {
+    var body: some View {
+        SimplifiedLoginViewControllerRepresentable()
+    }
+}
+
+struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
+        return SimplifiedLoginViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {
+    }
+
+    typealias UIViewControllerType = SimplifiedLoginViewController
+
 }

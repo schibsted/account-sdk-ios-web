@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24209496273D025E004CF03D /* SimplifiedLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */; };
+		24209497273D0266004CF03D /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0E273D00EA007C63A6 /* UserInformationView.swift */; };
+		24209498273D0269004CF03D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD12273D0120007C63A6 /* FooterView.swift */; };
+		24209499273D026C004CF03D /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD10273D010B007C63A6 /* LinksView.swift */; };
 		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		24460E252732A54B001CAB4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24C2F26F273191700010C21D /* Assets.xcassets */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
@@ -124,6 +128,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewController.swift; sourceTree = "<group>"; };
+		2401AD0E273D00EA007C63A6 /* UserInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformationView.swift; sourceTree = "<group>"; };
+		2401AD10273D010B007C63A6 /* LinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksView.swift; sourceTree = "<group>"; };
+		2401AD12273D0120007C63A6 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
@@ -259,6 +267,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
+			isa = PBXGroup;
+			children = (
+				2401AD0D273D00D9007C63A6 /* Sub Views */,
+				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
+			);
+			path = "Simplified Login";
+			sourceTree = "<group>";
+		};
+		2401AD0D273D00D9007C63A6 /* Sub Views */ = {
+			isa = PBXGroup;
+			children = (
+				2401AD0E273D00EA007C63A6 /* UserInformationView.swift */,
+				2401AD10273D010B007C63A6 /* LinksView.swift */,
+				2401AD12273D0120007C63A6 /* FooterView.swift */,
+			);
+			path = "Sub Views";
+			sourceTree = "<group>";
+		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,6 +357,7 @@
 			children = (
 				24BC39ED273572CE0089A585 /* Localization */,
 				24C2F26F273191700010C21D /* Assets.xcassets */,
+				2401AD0A273D009C007C63A6 /* Simplified Login */,
 				24844037269347C500CE88F2 /* Util */,
 				2461668F267B400200F77C5A /* User */,
 				2461668E267B3FFE00F77C5A /* Client */,
@@ -868,6 +896,8 @@
 				2489C9BF26733A0900AA0A4C /* URLSessionProtocol.swift in Sources */,
 				2489C9BB26733A0900AA0A4C /* HTTPUtil.swift in Sources */,
 				24EB14882679DB3A002D9628 /* SignatureValidationError.swift in Sources */,
+				24209498273D0269004CF03D /* FooterView.swift in Sources */,
+				24209497273D0266004CF03D /* UserInformationView.swift in Sources */,
 				2489C9BD26733A0900AA0A4C /* HTTPClientWithURLSession.swift in Sources */,
 				24AE1A3E26A5972600865A68 /* HTTPURLResponse+Extensions.swift in Sources */,
 				24EB151F267A17A0002D9628 /* LoginStateError.swift in Sources */,
@@ -893,6 +923,7 @@
 				246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */,
 				2489C9B826733A0900AA0A4C /* SessionStorage.swift in Sources */,
 				24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */,
+				24209496273D025E004CF03D /* SimplifiedLoginViewController.swift in Sources */,
 				24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */,
 				248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */,
 				2489C9B326733A0900AA0A4C /* LegacyKeychainSessionStorage.swift in Sources */,
@@ -902,6 +933,7 @@
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,
 				24EB1526267A17CC002D9628 /* HTTPError.swift in Sources */,
 				24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */,
+				24209499273D026C004CF03D /* LinksView.swift in Sources */,
 				2489C9B526733A0900AA0A4C /* LegacyKeychainTokenStorage.swift in Sources */,
 				2489C9B226733A0900AA0A4C /* UserDefaultsStorage.swift in Sources */,
 				2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */,
