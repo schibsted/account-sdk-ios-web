@@ -270,6 +270,8 @@
 		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
 			isa = PBXGroup;
 			children = (
+				24BC39ED273572CE0089A585 /* Localization */,
+				24C2F26F273191700010C21D /* Assets.xcassets */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 			);
@@ -355,8 +357,6 @@
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
 			isa = PBXGroup;
 			children = (
-				24BC39ED273572CE0089A585 /* Localization */,
-				24C2F26F273191700010C21D /* Assets.xcassets */,
 				2401AD0A273D009C007C63A6 /* Simplified Login */,
 				24844037269347C500CE88F2 /* Util */,
 				2461668F267B400200F77C5A /* User */,
