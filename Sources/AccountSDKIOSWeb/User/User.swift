@@ -71,6 +71,7 @@ public class User: UserProtocol {
      Generate URL with embedded one-time code for creating a web session for the current user.
 
      - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
+     - parameter state: used for adding a path to the redirectUri where user needs to be redirected in order to be authenticated
      - parameter redirectURI: where to redirect the user after the session has been created
      - parameter completion: callback that receives the URL or an error in case of failure
      */
