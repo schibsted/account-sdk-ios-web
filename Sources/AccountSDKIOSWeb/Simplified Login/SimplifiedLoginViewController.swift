@@ -145,6 +145,7 @@ public class SimplifiedLoginViewController: UIViewController {
         view.addSubview(primaryButton)
         view.addSubview(linksView)
         view.addSubview(footerStackView)
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
