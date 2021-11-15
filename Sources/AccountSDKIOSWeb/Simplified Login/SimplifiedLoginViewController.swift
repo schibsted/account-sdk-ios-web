@@ -1,7 +1,35 @@
 import SwiftUI
 import UIKit
 
-public struct SimplifiedLoginViewModel {
+public struct SimplifiedLoginUIFactory {
+    
+    public static func buildViewController() -> UIViewController {
+        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
+        let clientConfiguration = ClientConfiguration(environment: .pre,
+                                                      clientId: "602504e1b41fa31789a95aa7",
+                                                      redirectURI: clientRedirectURI)
+        
+        let client = Client(configuration: clientConfiguration)
+        let viewModel = SimplifiedLoginViewModel(client: client, env: .pre)! // TODO: throw error
+        let s = SimplifiedLoginViewController(viewModel: viewModel )
+        
+        viewModel.onClickedContinueAsUser = {} // TODO:
+        viewModel.onClickedSwitchAccount = {}  // TODO:
+        viewModel.onClickedContinueWithoutLogin = { s.dismiss(animated: true, completion: nil) }
+        viewModel.onClickedPrivacyPolicy = {}  // TODO:
+        
+        return s
+    }
+}
+
+
+class SimplifiedLoginViewModel {
+    
+    var onClickedContinueWithoutLogin: (() -> Void)?
+    var onClickedSwitchAccount: (() -> Void)?
+    var onClickedPrivacyPolicy: (() -> Void)?
+    var onClickedContinueAsUser: (() -> Void)? // TODO:
+    
     var localisation: Localisation
     var iconNames: [String]
     let schibstedLogoName = "sch-logo"
@@ -9,7 +37,12 @@ public struct SimplifiedLoginViewModel {
     let displayName = "Daniel.User" // TODO: Need to be fetched
     let clientName = "Finn" // TODO: Need to be fetched
     
-    init?(env: ClientConfiguration.Environment){
+    let client: Client
+    
+    public init?(client: Client, env: ClientConfiguration.Environment) {
+        
+        self.client = client
+        
         let resourceName: String
         let orderedIconNames: [String]
         switch env {
@@ -40,6 +73,19 @@ public struct SimplifiedLoginViewModel {
         
         self.localisation = localisation
         self.iconNames = orderedIconNames
+    }
+    
+    func send(action: SimplifiedLoginViewController.UserAction){
+        switch action {
+        case .clickedContinueAsUser:
+            self.onClickedContinueAsUser?()
+        case .clickedLoginWithDifferentAccount:
+            self.onClickedSwitchAccount?()
+        case .clickedContinueWithoutLogin:
+            self.onClickedContinueWithoutLogin?()
+        case .clickedClickPrivacyPolicy:
+            self.onClickedPrivacyPolicy?()
+        }
     }
     
     struct Localisation: Codable {
@@ -134,8 +180,10 @@ public class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    public init(viewModel: SimplifiedLoginViewModel) {
+    init(viewModel: SimplifiedLoginViewModel) {
+        
         self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
         
         view.backgroundColor = .white
@@ -146,6 +194,11 @@ public class SimplifiedLoginViewController: UIViewController {
         view.addSubview(linksView)
         view.addSubview(footerStackView)
         setupConstraints()
+        
+        primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
+        linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
+        linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
+//        footerStackView.privacyURLLabel.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -184,6 +237,21 @@ public class SimplifiedLoginViewController: UIViewController {
     }
 }
 
+extension SimplifiedLoginViewController {
+    
+    @objc func primaryButtonClicked() { viewModel.send(action: .clickedContinueAsUser) }
+    @objc func loginWithDifferentAccountClicked() { viewModel.send(action: .clickedLoginWithDifferentAccount) }
+    @objc func continueWithoutLoginClicked() { viewModel.send(action: .clickedContinueWithoutLogin) }
+    @objc func privacyPolicyClicked() { viewModel.send(action: .clickedClickPrivacyPolicy) }
+    
+    enum UserAction {
+        case clickedContinueAsUser
+        case clickedLoginWithDifferentAccount
+        case clickedContinueWithoutLogin
+        case clickedClickPrivacyPolicy
+    }
+}
+
 #if DEBUG
 @available(iOS 13.0.0, *)
 struct SimplifiedLoginViewController_Previews: PreviewProvider {
@@ -197,7 +265,14 @@ struct SimplifiedLoginViewController_Previews: PreviewProvider {
 @available(iOS 13.0.0, *)
 struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
-        let s = SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(env: .pre)!)
+        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
+        let clientConfiguration = ClientConfiguration(environment: .pre,
+                                                      clientId: "602504e1b41fa31789a95aa7",
+                                                      redirectURI: clientRedirectURI)
+        
+        let client = Client(configuration: clientConfiguration)
+        let s = SimplifiedLoginUIFactory.buildViewController() as! SimplifiedLoginViewController// SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(client: client, env: .pre)!)
+        
         return s
     }
     

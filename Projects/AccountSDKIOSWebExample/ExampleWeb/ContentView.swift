@@ -217,7 +217,7 @@ struct SimplifiedLoginSwiftUIView: View {
 
 struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
-        return SimplifiedLoginViewController()
+        return SimplifiedLoginUIFactory.buildViewController() as! SimplifiedLoginViewController
     }
 
     func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {

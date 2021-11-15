@@ -71,7 +71,7 @@ class FooterView: UIStackView {
         return view
     }()
     
-    private lazy var privacyURLLabel: UILabel = {
+    lazy var privacyURLLabel: UILabel = {
         let view = UILabel()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
                                                            .font: UIFont.systemFont(ofSize: 12),
