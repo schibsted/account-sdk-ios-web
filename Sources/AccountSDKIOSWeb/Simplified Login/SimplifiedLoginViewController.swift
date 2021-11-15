@@ -1,10 +1,76 @@
 import SwiftUI
 import UIKit
 
-public class SimplifiedLoginViewController: UIViewController {
+public struct SimplifiedLoginViewModel {
+    var localisation: Localisation
+    var iconNames: [String]
+    let schibstedLogoName = "sch-logo"
+    
+    let displayName = "Daniel.User" // TODO: Need to be fetched
+    let clientName = "Finn" // TODO: Need to be fetched
+    
+    init?(env: ClientConfiguration.Environment){
+        let resourceName: String
+        let orderedIconNames: [String]
+        switch env {
+        case .proCom:
+            resourceName = "for_use_simplified-widget_translations_sv"
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
+        case .proNo:
+            resourceName = "for_use_simplified-widget_translations_nb"
+            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
+        case .proFi:
+            resourceName = "for_use_simplified-widget_translations_fi"
+            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
+        case .proDk:
+            resourceName = "for_use_simplified-widget_translations_da"
+            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"] //TODO: NEED DK 5 brands with icons
+        case .pre:
+            resourceName = "simplified-widget_translations_en"
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Using SV icons
+        }
         
+        let decoder = JSONDecoder()
+        guard let url = Bundle(for: SimplifiedLoginViewController.self).url(forResource: resourceName, withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let localisation = try? decoder.decode(Localisation.self, from: data)
+        else {
+            return nil
+        }
+        
+        self.localisation = localisation
+        self.iconNames = orderedIconNames
+    }
+    
+    struct Localisation: Codable {
+        var schibstedTitle: String
+        var continueWithoutLogin: String
+        var explanationText: String
+        var privacyPolicyTitle: String
+        var privacyPolicyURL: String
+        var switchAccount: String
+        var notYouTitle: String
+        var continuAsButtonTitle: String
+        
+        enum CodingKeys: String, CodingKey {
+            case schibstedTitle = "SimplifiedWidget.schibstedAccount"
+            case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
+            case explanationText = "SimplifiedWidget.footer"
+            case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
+            case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
+            case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
+            case notYouTitle = "SimplifiedWidget.notYou"
+            case continuAsButtonTitle = "SimplifiedWidget.continueAs"
+        }
+    }
+}
+
+public class SimplifiedLoginViewController: UIViewController {
+    
+    private var viewModel: SimplifiedLoginViewModel
+    
     private lazy var userInformationView: UserInformationView = {
-        let view = UserInformationView()
+        let view = UserInformationView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -21,7 +87,9 @@ public class SimplifiedLoginViewController: UIViewController {
     
     private lazy var primaryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Continue as Daniel.Echegaray", for: .normal) // put display_text here
+        let title = "\(viewModel.localisation.continuAsButtonTitle) \(viewModel.displayName)"
+        
+        button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -34,7 +102,7 @@ public class SimplifiedLoginViewController: UIViewController {
     // MARK: Links
     
     private lazy var linksView: LinksView = {
-        let view = LinksView()
+        let view = LinksView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -50,7 +118,7 @@ public class SimplifiedLoginViewController: UIViewController {
     // MARK: Footer
     
     private lazy var footerStackView: FooterView = {
-        let view = FooterView()
+        let view = FooterView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
@@ -66,8 +134,10 @@ public class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    public init() {
+    public init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
         view.backgroundColor = .white
         
         // Main view
@@ -75,11 +145,16 @@ public class SimplifiedLoginViewController: UIViewController {
         view.addSubview(primaryButton)
         view.addSubview(linksView)
         view.addSubview(footerStackView)
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupConstraints() {
         
-
-        // Constraints
         let margin = view.layoutMarginsGuide
-        
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -96,7 +171,6 @@ public class SimplifiedLoginViewController: UIViewController {
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
-//            linksView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             
             // Footer
@@ -107,9 +181,6 @@ public class SimplifiedLoginViewController: UIViewController {
         ]
         
         NSLayoutConstraint.activate(allConstraints)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -126,7 +197,7 @@ struct SimplifiedLoginViewController_Previews: PreviewProvider {
 @available(iOS 13.0.0, *)
 struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
-        let s = SimplifiedLoginViewController()
+        let s = SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(env: .pre)!)
         return s
     }
     

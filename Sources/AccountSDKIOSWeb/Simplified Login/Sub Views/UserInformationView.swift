@@ -1,16 +1,7 @@
 import UIKit
 
 class UserInformationView: UIStackView {
-    
-    init() {
-        super.init(frame: .zero)
-        avatarView.addSubview(initialsLabel)
-        addArrangedSubview(avatarView)
-        addArrangedSubview(nameLabel)
-        addArrangedSubview(schibstedTitleLabel)
-    }
-    
-    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [avatarView.heightAnchor.constraint(equalToConstant: 48),
@@ -33,7 +24,7 @@ class UserInformationView: UIStackView {
     
     private lazy var initialsLabel: UILabel = {
         let view = UILabel()
-        view.text = "DE"
+        view.text = "DE" // TODO: How do we get Initials
         view.font = UIFont.boldSystemFont(ofSize: 17)
         view.textAlignment = .center
         view.textColor = UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
@@ -45,7 +36,7 @@ class UserInformationView: UIStackView {
     
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
-        view.text = "Daniel.Echegaray"
+        view.text = viewModel.displayName
         view.font = UIFont.boldSystemFont(ofSize: 15)
         view.textAlignment = .center
         view.textColor = UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
@@ -56,7 +47,7 @@ class UserInformationView: UIStackView {
 
     private lazy var schibstedTitleLabel: UILabel = {
         let view = UILabel()
-        view.text = "Schibsted account"
+        view.text = viewModel.localisation.schibstedTitle
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 15)
 
@@ -64,4 +55,16 @@ class UserInformationView: UIStackView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
+        
+        super.init(frame: .zero)
+        avatarView.addSubview(initialsLabel)
+        addArrangedSubview(avatarView)
+        addArrangedSubview(nameLabel)
+        addArrangedSubview(schibstedTitleLabel)
+    }
+    
+    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
