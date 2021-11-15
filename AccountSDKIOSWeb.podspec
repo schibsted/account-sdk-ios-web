@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'SchibstedAccountWeb'
+  s.name             = 'AccountSDKIOSWeb'
   s.version          = '2.2.0'
   s.summary          = 'New implementation of the Schibsted account iOS SDK using the web flows via ASWebAuthenticationSession.'
   s.homepage         = 'https://schibsted.github.io/account-sdk-ios-web/'
