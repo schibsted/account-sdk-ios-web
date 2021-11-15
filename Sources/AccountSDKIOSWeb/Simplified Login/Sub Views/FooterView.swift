@@ -1,24 +1,8 @@
 import UIKit
+import SwiftUI
 
 class FooterView: UIStackView {
-    
-    init() {
-        super.init(frame: .zero)
-
-        ////  Ecosystem
-        for iv in popularBrandsImageViews {
-            popularBrandsStackView.addArrangedSubview(iv) // TODO> make brand icons overlapping
-        }
-        ecoSystemBarStackView.addArrangedSubview(popularBrandsStackView)
-        ecoSystemBarStackView.addArrangedSubview(schibstedIconImageView)
-        self.addArrangedSubview(ecoSystemBarStackView)
-        
-        ////  Privacy and Explanation
-        self.addArrangedSubview(explanationLabel)
-        self.addArrangedSubview(privacyURLLabel)
-
-    }
-    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 27) }
@@ -42,10 +26,12 @@ class FooterView: UIStackView {
     
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: "Schibsted_Logotype_L2_Small size_Black_RGB", in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
+        let image: UIImage = UIImage(named: viewModel.schibstedLogoName, in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
         
         view.image = image
         view.contentMode = .center
+        view.contentMode = .scaleAspectFit
+
         return view
     }()
     
@@ -62,33 +48,20 @@ class FooterView: UIStackView {
     
     private lazy var popularBrandsImageViews: [UIImageView] = {
         var views = [UIImageView]()
-
-        views.append(getRoundedImageView(name: "Aftenposten"))
-        views.append(getRoundedImageView(name: "BergensTidene"))
-        views.append(getRoundedImageView(name: "E24"))
-        views.append(getRoundedImageView(name: "Finn"))
-        views.append(getRoundedImageView(name: "VG"))
+        for imageName in viewModel.iconNames {
+            views.append(getRoundedImageView(name: imageName))
+        }
         
         return views
     }()
-    
-    private func getRoundedImageView(name: String) -> UIImageView {
-        let view = UIImageView()
-        
-        view.layer.cornerRadius = 13
-        view.clipsToBounds = true
-        let image  = UIImage(named: name, in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
-        view.image = image
-        
-        return view
-    }
     
     // Privacy
     
     private lazy var explanationLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = -1
-        view.text = "Du er logget inn på en tjeneste med Schibsted og kan fortsette på client_name med et klikk." // TODO: Put client_name
+        
+        view.text = viewModel.localisation.explanationText// TODO: Insert client_name
         view.font = UIFont.systemFont(ofSize: 12)
         view.textAlignment = .center
         
@@ -104,7 +77,7 @@ class FooterView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 12),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        view.attributedText = NSAttributedString(string: "Privacy policy", // TODO: Move
+        view.attributedText = NSAttributedString(string: viewModel.localisation.privacyPolicyTitle,
                                                  attributes: attributes)
                                                  
         view.textAlignment = .center
@@ -112,4 +85,33 @@ class FooterView: UIStackView {
         return view
     }()
     
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
+
+        ////  Ecosystem
+        for iv in popularBrandsImageViews {
+            popularBrandsStackView.addArrangedSubview(iv) // TODO> make brand icons overlapping
+        }
+        ecoSystemBarStackView.addArrangedSubview(popularBrandsStackView)
+        ecoSystemBarStackView.addArrangedSubview(schibstedIconImageView)
+        self.addArrangedSubview(ecoSystemBarStackView)
+        
+        ////  Privacy and Explanation
+        self.addArrangedSubview(explanationLabel)
+        self.addArrangedSubview(privacyURLLabel)
+
+    }
+    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    private func getRoundedImageView(name: String) -> UIImageView {
+        let view = UIImageView()
+        
+        view.layer.cornerRadius = 13
+        view.clipsToBounds = true
+        let image  = UIImage(named: name, in: Bundle(for: SimplifiedLoginViewController.self), compatibleWith: nil) ?? UIImage()
+        view.image = image
+        
+        return view
+    }
 }

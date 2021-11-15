@@ -1,7 +1,8 @@
 import UIKit
 
 class LinksView: UIStackView {
-    
+    let viewModel: SimplifiedLoginViewModel
+
     private lazy var differentAccountStackView: UIStackView = {
         let view = UIStackView()
         view.alignment = .center
@@ -32,7 +33,7 @@ class LinksView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 14),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: "Continue without logging in",
+        let attributedText = NSAttributedString(string: viewModel.localisation.continueWithoutLogin,
                                                  attributes: attributes)
         button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -45,14 +46,15 @@ class LinksView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 14),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: "Log in with different account",
+        let attributedText = NSAttributedString(string: viewModel.localisation.switchAccount, // TODO: Need localisation "Log in with different account"
                                                  attributes: attributes)
         button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    init() {
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
         super.init(frame: .zero)
     
         differentAccountStackView.addArrangedSubview(notYouLabel)
