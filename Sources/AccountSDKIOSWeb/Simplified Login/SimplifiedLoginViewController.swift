@@ -3,18 +3,14 @@ import UIKit
 
 public struct SimplifiedLoginUIFactory {
     
-    public static func buildViewController() -> UIViewController {
-        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
-        let clientConfiguration = ClientConfiguration(environment: .pre,
-                                                      clientId: "602504e1b41fa31789a95aa7",
-                                                      redirectURI: clientRedirectURI)
-        
-        let client = Client(configuration: clientConfiguration)
-        let viewModel = SimplifiedLoginViewModel(client: client, env: .pre)! // TODO: throw error
+    public static func buildViewController(client: Client,
+                                           env: ClientConfiguration.Environment,
+                                           clientStartLoginSession: @escaping () -> Void ) -> UIViewController {
+        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
         let s = SimplifiedLoginViewController(viewModel: viewModel )
         
         viewModel.onClickedContinueAsUser = {} // TODO:
-        viewModel.onClickedSwitchAccount = {}  // TODO:
+        viewModel.onClickedSwitchAccount = { clientStartLoginSession() }
         viewModel.onClickedContinueWithoutLogin = { s.dismiss(animated: true, completion: nil) }
         viewModel.onClickedPrivacyPolicy = {}  // TODO:
         
@@ -39,7 +35,7 @@ class SimplifiedLoginViewModel {
     
     let client: Client
     
-    public init?(client: Client, env: ClientConfiguration.Environment) {
+    init?(client: Client, env: ClientConfiguration.Environment) {
         
         self.client = client
         
@@ -262,23 +258,48 @@ struct SimplifiedLoginViewController_Previews: PreviewProvider {
     }
 }
 
+
+import AuthenticationServices
 @available(iOS 13.0.0, *)
-struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
+public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
+    public init(){}
+    @State var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    public func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
         let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
         let clientConfiguration = ClientConfiguration(environment: .pre,
                                                       clientId: "602504e1b41fa31789a95aa7",
                                                       redirectURI: clientRedirectURI)
-        
         let client = Client(configuration: clientConfiguration)
-        let s = SimplifiedLoginUIFactory.buildViewController() as! SimplifiedLoginViewController// SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(client: client, env: .pre)!)
+        
+        let clientStartLoginSession: () -> Void = {
+            let context = ASWebAuthSessionContextProvider()
+            self.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
+                                                      withMFA: .otp,
+                                                      withSSO: true,
+                                                      completion: { result in
+                switch result {
+                case .success(let user):
+                    print("Success - logged in as \(user.uuid ?? "")")
+                    print("userTokens: \(user.tokens.debugDescription)")
+                case .failure(let error):
+                    print(error)
+                }
+            })
+            self.asWebAuthenticationSession?.start()
+        }
+        
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre,
+                                                             clientStartLoginSession: clientStartLoginSession) as! SimplifiedLoginViewController
         
         return s
     }
     
-    func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {
     }
     
-    typealias UIViewControllerType = SimplifiedLoginViewController
+    public typealias UIViewControllerType = SimplifiedLoginViewController
 }
+
 #endif
+
