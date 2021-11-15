@@ -3,18 +3,6 @@ import UIKit
 class UserInformationView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
     
-    init(viewModel: SimplifiedLoginViewModel) {
-        self.viewModel = viewModel
-        
-        super.init(frame: .zero)
-        avatarView.addSubview(initialsLabel)
-        addArrangedSubview(avatarView)
-        addArrangedSubview(nameLabel)
-        addArrangedSubview(schibstedTitleLabel)
-    }
-    
-    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [avatarView.heightAnchor.constraint(equalToConstant: 48),
                 avatarView.widthAnchor.constraint(equalToConstant: 48),
@@ -67,4 +55,16 @@ class UserInformationView: UIStackView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
+        
+        super.init(frame: .zero)
+        avatarView.addSubview(initialsLabel)
+        addArrangedSubview(avatarView)
+        addArrangedSubview(nameLabel)
+        addArrangedSubview(schibstedTitleLabel)
+    }
+    
+    required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }

@@ -31,10 +31,9 @@ public struct SimplifiedLoginViewModel {
         }
         
         let decoder = JSONDecoder()
-        guard
-            let url = Bundle(for: SimplifiedLoginViewController.self).url(forResource: resourceName, withExtension: "json"),
-            let data = try? Data(contentsOf: url),
-            let localisation = try? decoder.decode(Localisation.self, from: data)
+        guard let url = Bundle(for: SimplifiedLoginViewController.self).url(forResource: resourceName, withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let localisation = try? decoder.decode(Localisation.self, from: data)
         else {
             return nil
         }
@@ -42,14 +41,14 @@ public struct SimplifiedLoginViewModel {
         self.localisation = localisation
         self.iconNames = orderedIconNames
     }
-
+    
     struct Localisation: Codable {
         var schibstedTitle: String
         var continueWithoutLogin: String
         var explanationText: String
         var privacyPolicyTitle: String
         var privacyPolicyURL: String
-        var switchAccoutn: String
+        var switchAccount: String
         var notYouTitle: String
         var continuAsButtonTitle: String
         
@@ -59,7 +58,7 @@ public struct SimplifiedLoginViewModel {
             case explanationText = "SimplifiedWidget.footer"
             case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
             case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
-            case switchAccoutn = "SimplifiedWidget.loginWithDifferentAccount"
+            case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
             case notYouTitle = "SimplifiedWidget.notYou"
             case continuAsButtonTitle = "SimplifiedWidget.continueAs"
         }
@@ -88,7 +87,8 @@ public class SimplifiedLoginViewController: UIViewController {
     
     private lazy var primaryButton: UIButton = {
         let button = UIButton()
-        let title = viewModel.localisation.continuAsButtonTitle + " " + viewModel.displayName
+        let title = "\(viewModel.localisation.continuAsButtonTitle) \(viewModel.displayName)"
+        
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
@@ -145,11 +145,15 @@ public class SimplifiedLoginViewController: UIViewController {
         view.addSubview(primaryButton)
         view.addSubview(linksView)
         view.addSubview(footerStackView)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupConstraints() {
         
-
-        // Constraints
         let margin = view.layoutMarginsGuide
-        
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -166,7 +170,6 @@ public class SimplifiedLoginViewController: UIViewController {
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
-//            linksView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             
             // Footer
@@ -177,9 +180,6 @@ public class SimplifiedLoginViewController: UIViewController {
         ]
         
         NSLayoutConstraint.activate(allConstraints)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

@@ -46,7 +46,7 @@ class LinksView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 14),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: viewModel.localisation.switchAccoutn, // TODO: Need localisation "Log in with different account"
+        let attributedText = NSAttributedString(string: viewModel.localisation.switchAccount, // TODO: Need localisation "Log in with different account"
                                                  attributes: attributes)
         button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
