@@ -2,22 +2,65 @@ import SwiftUI
 import UIKit
 
 public struct SimplifiedLoginUIFactory {
-    
+
+    @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     public static func buildViewController(client: Client,
-                                           env: ClientConfiguration.Environment,
-                                           clientStartLoginSession: @escaping () -> Void ) -> UIViewController {
+                                           env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+                                           withMFA: MFAType? = nil,
+                                           loginHint: String? = nil,
+                                           extraScopeValues: Set<String> = [],
+                                           completion: @escaping LoginResultHandler) -> UIViewController {
         let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
         let s = SimplifiedLoginViewController(viewModel: viewModel )
         
         viewModel.onClickedContinueAsUser = {} // TODO:
-        viewModel.onClickedSwitchAccount = { clientStartLoginSession() }
-        viewModel.onClickedContinueWithoutLogin = { s.dismiss(animated: true, completion: nil) }
-        viewModel.onClickedPrivacyPolicy = {}  // TODO:
+        viewModel.onClickedSwitchAccount = {
+            viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
+                                                                          loginHint: loginHint,
+                                                                          extraScopeValues: extraScopeValues,
+                                                                          completion: completion)
+            viewModel.asWebAuthenticationSession?.start()
+        }
+        viewModel.onClickedContinueWithoutLogin = {
+            s.dismiss(animated: true, completion: nil)
+        }
+        viewModel.onClickedPrivacyPolicy = {}  // TODO: Setup webview
+        
+        return s
+    }
+    
+    @available(iOS 13.0, *)
+    public static func buildViewController(client: Client,
+                                           env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+                                           withMFA: MFAType? = nil,
+                                           loginHint: String? = nil,
+                                           extraScopeValues: Set<String> = [],
+                                           withSSO: Bool = true,
+                                           completion: @escaping LoginResultHandler) -> UIViewController {
+        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
+        let s = SimplifiedLoginViewController(viewModel: viewModel )
+        
+        viewModel.onClickedContinueAsUser = {} // TODO:
+        viewModel.onClickedSwitchAccount = {
+            let context = ASWebAuthSessionContextProvider()
+            viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
+                                                                          withMFA: withMFA,
+                                                                          loginHint: loginHint,
+                                                                          extraScopeValues: extraScopeValues,
+                                                                          withSSO: withSSO,
+                                                                          completion: completion)
+            viewModel.asWebAuthenticationSession?.start()
+        }
+        
+        viewModel.onClickedContinueWithoutLogin = {
+            s.dismiss(animated: true, completion: nil)
+        }
+        
+        viewModel.onClickedPrivacyPolicy = {}  // TODO: Setup webview
         
         return s
     }
 }
-
 
 class SimplifiedLoginViewModel {
     
@@ -34,6 +77,7 @@ class SimplifiedLoginViewModel {
     let clientName = "Finn" // TODO: Need to be fetched
     
     let client: Client
+    var asWebAuthenticationSession: ASWebAuthenticationSession?
     
     init?(client: Client, env: ClientConfiguration.Environment) {
         
@@ -272,25 +316,19 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
                                                       redirectURI: clientRedirectURI)
         let client = Client(configuration: clientConfiguration)
         
-        let clientStartLoginSession: () -> Void = {
-            let context = ASWebAuthSessionContextProvider()
-            self.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
-                                                      withMFA: .otp,
-                                                      withSSO: true,
-                                                      completion: { result in
-                switch result {
-                case .success(let user):
-                    print("Success - logged in as \(user.uuid ?? "")")
-                    print("userTokens: \(user.tokens.debugDescription)")
-                case .failure(let error):
-                    print(error)
-                }
-            })
-            self.asWebAuthenticationSession?.start()
+        let completion: LoginResultHandler = { result in
+            switch result {
+            case .success(let user):
+                print("Success - logged in as \(user.uuid ?? ""), tokens: \(user.tokens?.description ?? "")")
+                
+            case .failure(let error):
+                print(error)
+            }
         }
         
-        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre,
-                                                             clientStartLoginSession: clientStartLoginSession) as! SimplifiedLoginViewController
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client,
+                                                             env: .pre,
+                                                             completion: completion) as! SimplifiedLoginViewController
         
         return s
     }
