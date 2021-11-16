@@ -80,7 +80,11 @@ public struct SimplifiedLoginUIFactory {
             s.dismiss(animated: true, completion: nil)
         }
         
-        viewModel.onClickedPrivacyPolicy = {}  // TODO: Setup webview
+        viewModel.onClickedPrivacyPolicy = {
+            let url = URL(string: viewModel.localisation.privacyPolicyURL)!
+            let webVC = WebViewController(url: url)
+            s.present(webVC, animated: false, completion: nil) // TODO: NEED to present in NC
+        }
         
         return s
     }
