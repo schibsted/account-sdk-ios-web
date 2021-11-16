@@ -29,28 +29,17 @@ public struct SimplifiedLoginUIFactory {
                                            loginHint: String? = nil,
                                            extraScopeValues: Set<String> = [],
                                            completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
-        let s = SimplifiedLoginViewController(viewModel: viewModel )
         
-        viewModel.onClickedContinueAsUser = {} // TODO:
-        viewModel.onClickedSwitchAccount = {
+        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
+        viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
-                                                                          completion: completion)
+                                                                          completion: completion) //
             viewModel.asWebAuthenticationSession?.start()
         }
-        viewModel.onClickedContinueWithoutLogin = {
-            s.dismiss(animated: true, completion: nil)
-        }
         
-        viewModel.onClickedPrivacyPolicy = {
-            let url = URL(string: viewModel.localisation.privacyPolicyURL)!
-            let webVC = WebViewController(url: url)
-            s.present(webVC, animated: false, completion: nil) // TODO: NEED to present in NC
-        }
-        
-        return s
+        return commonSetup(viewModel: viewModel)
     }
     
     @available(iOS 13.0, *)
@@ -62,9 +51,6 @@ public struct SimplifiedLoginUIFactory {
                                            withSSO: Bool = true,
                                            completion: @escaping LoginResultHandler) -> UIViewController {
         let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
-        let s = SimplifiedLoginViewController(viewModel: viewModel )
-        
-        viewModel.onClickedContinueAsUser = {} // TODO:
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
@@ -76,17 +62,27 @@ public struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession?.start()
         }
         
+        return commonSetup(viewModel: viewModel)
+    }
+    
+    private static func commonSetup(viewModel: SimplifiedLoginViewModel) -> UIViewController {
+        let s = SimplifiedLoginViewController(viewModel: viewModel )
+        let nc = UINavigationController()
+        nc.pushViewController(s, animated: false)
+        
+        viewModel.onClickedContinueAsUser = {} // TODO:
+        
         viewModel.onClickedContinueWithoutLogin = {
-            s.dismiss(animated: true, completion: nil)
+            nc.dismiss(animated: true, completion: nil)
         }
         
-        viewModel.onClickedPrivacyPolicy = {
+        viewModel.onClickedPrivacyPolicy = { // TODO: Connect so that the text is a button or something else actionable
             let url = URL(string: viewModel.localisation.privacyPolicyURL)!
             let webVC = WebViewController(url: url)
-            s.present(webVC, animated: false, completion: nil) // TODO: NEED to present in NC
+            nc.pushViewController(webVC, animated: false)
         }
         
-        return s
+        return nc
     }
 }
 
@@ -266,7 +262,7 @@ public class SimplifiedLoginViewController: UIViewController {
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
-//        footerStackView.privacyURLLabel.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
+        footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -337,7 +333,7 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
     public init(){}
     @State var asWebAuthenticationSession: ASWebAuthenticationSession?
     
-    public func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
+    public func makeUIViewController(context: Context) -> UINavigationController {
         let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
         let clientConfiguration = ClientConfiguration(environment: .pre,
                                                       clientId: "602504e1b41fa31789a95aa7",
@@ -354,17 +350,15 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
             }
         }
         
-        let s = SimplifiedLoginUIFactory.buildViewController(client: client,
-                                                             env: .pre,
-                                                             completion: completion) as! SimplifiedLoginViewController
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
         
         return s
     }
     
-    public func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
     }
     
-    public typealias UIViewControllerType = SimplifiedLoginViewController
+    public typealias UIViewControllerType = UINavigationController
 }
 
 #endif
