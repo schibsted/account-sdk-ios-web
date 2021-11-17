@@ -2,7 +2,7 @@ import Foundation
 
 /// AuthenticatedURLSession wraps a User to allow Bearer authenticated requests and the use of URLSessionDataTask
 public final class AuthenticatedURLSession {
-    private let user: User
+    public var user: User
     private let urlSession: URLSession
     private var refreshTokenDataTask: URLSessionDataTask?
 
