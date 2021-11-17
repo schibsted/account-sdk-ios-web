@@ -27,7 +27,7 @@ class LinksView: UIStackView {
         return view
     }()
     
-    private lazy var continueWithoutLoginButton: UIButton = {
+    lazy var continueWithoutLoginButton: UIButton = {
         let button = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
                                                            .font: UIFont.systemFont(ofSize: 14),
@@ -40,7 +40,7 @@ class LinksView: UIStackView {
         return button
     }()
     
-    private lazy var loginWithDifferentAccountButton: UIButton = {
+    lazy var loginWithDifferentAccountButton: UIButton = {
         let button = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
                                                            .font: UIFont.systemFont(ofSize: 14),
