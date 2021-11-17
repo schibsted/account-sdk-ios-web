@@ -71,17 +71,18 @@ class FooterView: UIStackView {
         return view
     }()
     
-    private lazy var privacyURLLabel: UILabel = {
-        let view = UILabel()
+    lazy var privacyURLButton: UIButton = {
+        let view = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
                                                            .font: UIFont.systemFont(ofSize: 12),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        view.attributedText = NSAttributedString(string: viewModel.localisation.privacyPolicyTitle,
+        let attributedText = NSAttributedString(string: viewModel.localisation.privacyPolicyTitle,
                                                  attributes: attributes)
                                                  
-        view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.setAttributedTitle(attributedText, for: .normal)
+        
         return view
     }()
     
@@ -99,7 +100,7 @@ class FooterView: UIStackView {
         
         ////  Privacy and Explanation
         self.addArrangedSubview(explanationLabel)
-        self.addArrangedSubview(privacyURLLabel)
+        self.addArrangedSubview(privacyURLButton)
 
     }
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }

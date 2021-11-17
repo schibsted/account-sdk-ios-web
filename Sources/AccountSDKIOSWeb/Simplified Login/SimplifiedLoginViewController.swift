@@ -1,7 +1,98 @@
 import SwiftUI
 import UIKit
+import WebKit
 
-public struct SimplifiedLoginViewModel {
+class WebViewController: UIViewController, WKNavigationDelegate {
+
+    let webView: WKWebView
+    
+    override func loadView() {
+        webView.navigationDelegate = self
+        view = webView
+    }
+    
+    init(url: URL) {
+        webView = WKWebView()
+        webView.load(URLRequest(url: url))
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+}
+
+public struct SimplifiedLoginUIFactory {
+
+    @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
+    public static func buildViewController(client: Client,
+                                           env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+                                           withMFA: MFAType? = nil,
+                                           loginHint: String? = nil,
+                                           extraScopeValues: Set<String> = [],
+                                           completion: @escaping LoginResultHandler) -> UIViewController {
+        
+        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
+        viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
+            viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
+                                                                          loginHint: loginHint,
+                                                                          extraScopeValues: extraScopeValues,
+                                                                          completion: completion) //
+            viewModel.asWebAuthenticationSession?.start()
+        }
+        
+        return commonSetup(viewModel: viewModel)
+    }
+    
+    @available(iOS 13.0, *)
+    public static func buildViewController(client: Client,
+                                           env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+                                           withMFA: MFAType? = nil,
+                                           loginHint: String? = nil,
+                                           extraScopeValues: Set<String> = [],
+                                           withSSO: Bool = true,
+                                           completion: @escaping LoginResultHandler) -> UIViewController {
+        let viewModel = SimplifiedLoginViewModel(client: client, env: env)! // TODO: throw error
+        viewModel.onClickedSwitchAccount = {
+            let context = ASWebAuthSessionContextProvider()
+            viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
+                                                                          withMFA: withMFA,
+                                                                          loginHint: loginHint,
+                                                                          extraScopeValues: extraScopeValues,
+                                                                          withSSO: withSSO,
+                                                                          completion: completion)
+            viewModel.asWebAuthenticationSession?.start()
+        }
+        
+        return commonSetup(viewModel: viewModel)
+    }
+    
+    private static func commonSetup(viewModel: SimplifiedLoginViewModel) -> UIViewController {
+        let s = SimplifiedLoginViewController(viewModel: viewModel )
+        let nc = UINavigationController()
+        nc.pushViewController(s, animated: false)
+        
+        viewModel.onClickedContinueAsUser = {} // TODO:
+        
+        viewModel.onClickedContinueWithoutLogin = {
+            nc.dismiss(animated: true, completion: nil)
+        }
+        
+        viewModel.onClickedPrivacyPolicy = { // TODO: Connect so that the text is a button or something else actionable
+            let url = URL(string: viewModel.localisation.privacyPolicyURL)!
+            let webVC = WebViewController(url: url)
+            nc.pushViewController(webVC, animated: false)
+        }
+        
+        return nc
+    }
+}
+
+class SimplifiedLoginViewModel {
+    
+    var onClickedContinueWithoutLogin: (() -> Void)?
+    var onClickedSwitchAccount: (() -> Void)?
+    var onClickedPrivacyPolicy: (() -> Void)?
+    var onClickedContinueAsUser: (() -> Void)? // TODO:
+    
     var localisation: Localisation
     var iconNames: [String]
     let schibstedLogoName = "sch-logo"
@@ -9,7 +100,13 @@ public struct SimplifiedLoginViewModel {
     let displayName = "Daniel.User" // TODO: Need to be fetched
     let clientName = "Finn" // TODO: Need to be fetched
     
-    init?(env: ClientConfiguration.Environment){
+    let client: Client
+    var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    init?(client: Client, env: ClientConfiguration.Environment) {
+        
+        self.client = client
+        
         let resourceName: String
         let orderedIconNames: [String]
         switch env {
@@ -40,6 +137,19 @@ public struct SimplifiedLoginViewModel {
         
         self.localisation = localisation
         self.iconNames = orderedIconNames
+    }
+    
+    func send(action: SimplifiedLoginViewController.UserAction){
+        switch action {
+        case .clickedContinueAsUser:
+            self.onClickedContinueAsUser?()
+        case .clickedLoginWithDifferentAccount:
+            self.onClickedSwitchAccount?()
+        case .clickedContinueWithoutLogin:
+            self.onClickedContinueWithoutLogin?()
+        case .clickedClickPrivacyPolicy:
+            self.onClickedPrivacyPolicy?()
+        }
     }
     
     struct Localisation: Codable {
@@ -134,8 +244,10 @@ public class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    public init(viewModel: SimplifiedLoginViewModel) {
+    init(viewModel: SimplifiedLoginViewModel) {
+        
         self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
         
         view.backgroundColor = .white
@@ -146,6 +258,11 @@ public class SimplifiedLoginViewController: UIViewController {
         view.addSubview(linksView)
         view.addSubview(footerStackView)
         setupConstraints()
+        
+        primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
+        linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
+        linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
+        footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -184,6 +301,21 @@ public class SimplifiedLoginViewController: UIViewController {
     }
 }
 
+extension SimplifiedLoginViewController {
+    
+    @objc func primaryButtonClicked() { viewModel.send(action: .clickedContinueAsUser) }
+    @objc func loginWithDifferentAccountClicked() { viewModel.send(action: .clickedLoginWithDifferentAccount) }
+    @objc func continueWithoutLoginClicked() { viewModel.send(action: .clickedContinueWithoutLogin) }
+    @objc func privacyPolicyClicked() { viewModel.send(action: .clickedClickPrivacyPolicy) }
+    
+    enum UserAction {
+        case clickedContinueAsUser
+        case clickedLoginWithDifferentAccount
+        case clickedContinueWithoutLogin
+        case clickedClickPrivacyPolicy
+    }
+}
+
 #if DEBUG
 @available(iOS 13.0.0, *)
 struct SimplifiedLoginViewController_Previews: PreviewProvider {
@@ -194,16 +326,40 @@ struct SimplifiedLoginViewController_Previews: PreviewProvider {
     }
 }
 
+
+import AuthenticationServices
 @available(iOS 13.0.0, *)
-struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> SimplifiedLoginViewController {
-        let s = SimplifiedLoginViewController(viewModel: SimplifiedLoginViewModel(env: .pre)!)
+public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepresentable {
+    public init(){}
+    @State var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    public func makeUIViewController(context: Context) -> UINavigationController {
+        let clientRedirectURI = URL(string: "com.sdk-example.pre.602504e1b41fa31789a95aa7:/login")!
+        let clientConfiguration = ClientConfiguration(environment: .pre,
+                                                      clientId: "602504e1b41fa31789a95aa7",
+                                                      redirectURI: clientRedirectURI)
+        let client = Client(configuration: clientConfiguration)
+        
+        let completion: LoginResultHandler = { result in
+            switch result {
+            case .success(let user):
+                print("Success - logged in as \(user.uuid ?? ""), tokens: \(user.tokens?.description ?? "")")
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
+        
         return s
     }
     
-    func updateUIViewController(_ uiViewController: SimplifiedLoginViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
     }
     
-    typealias UIViewControllerType = SimplifiedLoginViewController
+    public typealias UIViewControllerType = UINavigationController
 }
+
 #endif
+
