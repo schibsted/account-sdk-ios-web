@@ -6,6 +6,8 @@ public struct ClientConfiguration {
     public let issuer: String
     /// URL of identity provider
     public let serverURL: URL
+    /// URL of session service
+    public let sessionServiceURL: URL
     /// Registered client id
     public var clientId: String
     /// Registered redirect URI
@@ -17,6 +19,23 @@ public struct ClientConfiguration {
         case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
         case proDk = "https://login.schibsted.dk"
+        
+        var sessionService: String {
+            let sessionServiceStr: String
+            switch self {
+            case .proCom:
+                sessionServiceStr = "https://session-service.login.schibsted.com"
+            case .proFi:
+                sessionServiceStr = "https://session-service.login.schibsted.fi"
+            case .proNo:
+                sessionServiceStr = "https://session-service.payment.schibsted.no"
+            case .pre:
+                sessionServiceStr = "https://session-service.identity-pre.schibsted.com"
+            case .proDk:
+                sessionServiceStr = "https://session-service.login.schibsted.dk"
+            }
+            return sessionServiceStr
+        }
     }
     
     /**
@@ -29,12 +48,14 @@ public struct ClientConfiguration {
     
     public init(environment: Environment, clientId: String, redirectURI: URL) {
         self.init(serverURL: URL(string: environment.rawValue)!,
+                  sessionServiceURL: URL(string: environment.sessionService)!,
                   clientId: clientId,
                   redirectURI: redirectURI)
     }
     
-    public init(serverURL: URL, clientId: String, redirectURI: URL) {
+    init(serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
         self.serverURL = serverURL
+        self.sessionServiceURL = sessionServiceURL
         self.issuer = serverURL.absoluteString
         self.clientId = clientId
         self.redirectURI = redirectURI

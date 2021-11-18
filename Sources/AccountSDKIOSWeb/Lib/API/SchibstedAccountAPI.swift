@@ -69,10 +69,12 @@ class SchibstedAccountAPI {
     }
     
     private let baseURL: URL
+    private let sessionServiceURL: URL
     private let retryPolicy = APIRetryPolicy()
 
-    init(baseURL: URL) {
+    init(baseURL: URL, sessionServiceURL: URL) {
         self.baseURL = baseURL
+        self.sessionServiceURL = sessionServiceURL
     }
 
     static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
@@ -115,7 +117,7 @@ class SchibstedAccountAPI {
     }
     
     func userContextFromToken(for user: User, completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
-        let request = RequestBuilder.userContextFromToken.buildUserContextFromTokenRequest(baseURL: URL(string: "https://session-service.identity-pre.schibsted.com")!)
+        let request = RequestBuilder.userContextFromToken.buildUserContextFromTokenRequest(baseURL: sessionServiceURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion($0)
