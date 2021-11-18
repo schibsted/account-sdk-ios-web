@@ -170,7 +170,7 @@ final class OldSDKClientTests: XCTestCase {
                                              id_token: nil,
                                              scope: nil,
                                              expires_in: 1337)
-        let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
         var codeExchangeCallCount = 0
         stub(mockApi) { mock in
             when(mock.oldSDKCodeExchange(with: any(), clientId: any(), oldSDKAccessToken: any(), completion: anyClosure()))
@@ -217,7 +217,7 @@ final class OldSDKClientTests: XCTestCase {
                                              id_token: nil,
                                              scope: nil,
                                              expires_in: 1337)
-        let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
         var codeExchangeCallCount = 0
         stub(mockApi) { mock in
             when(mock.oldSDKCodeExchange(with: any(), clientId: any(), oldSDKAccessToken: any(), completion: anyClosure()))
@@ -263,7 +263,7 @@ final class OldSDKClientTests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
         
         Await.until { done in
@@ -291,7 +291,7 @@ final class OldSDKClientTests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
         
         Await.until { done in

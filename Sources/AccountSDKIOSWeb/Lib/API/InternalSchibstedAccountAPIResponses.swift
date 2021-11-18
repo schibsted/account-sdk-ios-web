@@ -66,7 +66,7 @@ struct CodeExchangeResponse: Codable {
     let code: String
 }
 
-struct UserContextFromTokenResponse: Codable {
+struct UserContextFromTokenResponse: Codable, Equatable {
     let identifier: String
     let display_text: String
     let client_name: String
