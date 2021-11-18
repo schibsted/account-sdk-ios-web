@@ -53,7 +53,7 @@ public struct ClientConfiguration {
                   redirectURI: redirectURI)
     }
     
-    public init(serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
+    init(serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
         self.serverURL = serverURL
         self.sessionServiceURL = sessionServiceURL
         self.issuer = serverURL.absoluteString
