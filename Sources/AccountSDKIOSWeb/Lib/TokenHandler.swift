@@ -62,7 +62,7 @@ internal class TokenHandler {
     init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.httpClient = httpClient
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
         self.jwks = jwks
     }
 

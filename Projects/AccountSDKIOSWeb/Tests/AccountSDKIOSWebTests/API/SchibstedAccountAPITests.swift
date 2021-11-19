@@ -3,6 +3,77 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class SchibstedAccountAPITests: XCTestCase {
+    
+    // MARK: SessionService endpoints
+
+    func testUserContextFromTokenUsesSessionServiceURL() {
+        let response = UserContextFromTokenResponse(identifier: "An identifier",
+                                                    display_text: "A display name",
+                                                    client_name: "Schibsted Client Name")
+
+        
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(response))
+                }
+        }
+        
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        let api = Fixtures.schibstedAccountAPI
+        Await.until { done in
+            api.userContextFromToken(for: user) { result in
+                switch result {
+                case .success:
+                    let argumentCaptor = ArgumentCaptor<URLRequest>()
+                    let closureMatcher: ParameterMatcher<HTTPResultHandler<UserContextFromTokenResponse>> = anyClosure()
+                    verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
+                    let requestUrl = argumentCaptor.value!.url
+                    
+                    XCTAssertEqual(requestUrl, Fixtures.clientConfig.sessionServiceURL.appendingPathComponent("/user-context-from-token"),
+                                   "The request URL should be a session-service url \(Fixtures.clientConfig.sessionServiceURL.appendingPathComponent("/user-context-from-token"))")
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
+    }
+    
+    func testUserContextFromTokenSuccessResponse() {
+        let response = UserContextFromTokenResponse(identifier: "An identifier",
+                                                    display_text: "A display name",
+                                                    client_name: "Schibsted Client Name")
+
+        
+        let mockHTTPClient = MockHTTPClient()
+        stub(mockHTTPClient) {mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(response))
+                }
+        }
+        
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        let api = Fixtures.schibstedAccountAPI
+        Await.until { done in
+            api.userContextFromToken(for: user) { result in
+                switch result {
+                case .success(let receivedResponse):
+                    XCTAssertEqual(response, receivedResponse)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
+    }
+    
+    // MARK: OldSDK Api endpoints
+   
     func testUserProfile() {
         let userProfileResponse = UserProfileResponse(userId: "12345", email: "test@example.com")
         
@@ -17,7 +88,7 @@ final class SchibstedAccountAPITests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         Await.until { done in
             api.userProfile(for: user) { result in
                 switch result {
@@ -53,7 +124,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         Await.until { done in
             api.oldSDKCodeExchange(with: mockHTTPClient, clientId: "", oldSDKAccessToken: "") { result in
                 switch result {
@@ -76,7 +147,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         Await.until { done in
             api.oldSDKCodeExchange(with: mockHTTPClient, clientId: "", oldSDKAccessToken: "") { result in
                 
@@ -106,7 +177,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         Await.until { done in
             api.oldSDKRefresh(with: mockHTTPClient, refreshToken: "", clientId: "", clientSecret: "") { result in
                 switch result {
@@ -130,7 +201,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 }
         }
         
-        let api = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL)
+        let api = Fixtures.schibstedAccountAPI
         Await.until { done in
             api.oldSDKRefresh(with: mockHTTPClient, refreshToken: "", clientId: "", clientSecret: "") { result in
                 let argumentCaptor = ArgumentCaptor<URLRequest>()
@@ -146,6 +217,17 @@ final class SchibstedAccountAPITests: XCTestCase {
 }
 
 final class RequestBuilderTests: XCTestCase {
+    
+    // MARK: Session Service Request
+    
+    func testUserContextFromTokensRequestWrongURL() throws {
+        let sessionURL = URL("https://example.com")
+        let expectedURL = sessionURL.appendingPathComponent("/user-context-from-path")
+
+        let sut = RequestBuilder.userContextFromToken
+        let request = sut.asRequest(baseURL: sessionURL)
+        XCTAssertNotEqual(request.url, expectedURL, "expexted url should be \(sessionURL.absoluteString)/user-context-from-path")
+    }
     
     // MARK: CodeExchange tests
 

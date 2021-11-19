@@ -4,11 +4,16 @@ import UIKit
 enum RequestBuilder {
     case codeExchange(clientId: String)
     case oldSDKRefreshToken(oldSDKRefreshToken: String)
+    case userContextFromToken
 
     func asRequest(baseURL: URL) -> URLRequest {
         switch self {
-        case .codeExchange(clientId: let clientId): return exchangeRequest(baseURL: baseURL, clientId: clientId)
-        case .oldSDKRefreshToken(oldSDKRefreshToken: let refreshToken): return buildOldSDKRefreshTokenRequest(baseURL: baseURL, oldSDKRefreshToken: refreshToken)
+        case .codeExchange(clientId: let clientId):
+            return exchangeRequest(baseURL: baseURL, clientId: clientId)
+        case .oldSDKRefreshToken(oldSDKRefreshToken: let refreshToken):
+            return buildOldSDKRefreshTokenRequest(baseURL: baseURL, oldSDKRefreshToken: refreshToken)
+        case .userContextFromToken:
+            return buildUserContextFromTokenRequest(baseURL: baseURL)
         }
     }
     
@@ -47,6 +52,13 @@ enum RequestBuilder {
         return request
     }
 
+    func buildUserContextFromTokenRequest(baseURL: URL) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/user-context-from-token")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        return request
+    }
 }
 
 class SchibstedAccountAPI {
@@ -57,10 +69,12 @@ class SchibstedAccountAPI {
     }
     
     private let baseURL: URL
+    private let sessionServiceURL: URL
     private let retryPolicy = APIRetryPolicy()
 
-    init(baseURL: URL) {
+    init(baseURL: URL, sessionServiceURL: URL) {
         self.baseURL = baseURL
+        self.sessionServiceURL = sessionServiceURL
     }
 
     static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
@@ -99,6 +113,14 @@ class SchibstedAccountAPI {
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion(self.unpackResponse($0))
+        }
+    }
+    
+    func userContextFromToken(for user: User, completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
+        let request = RequestBuilder.userContextFromToken.buildUserContextFromTokenRequest(baseURL: sessionServiceURL)
+
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+            completion($0)
         }
     }
 

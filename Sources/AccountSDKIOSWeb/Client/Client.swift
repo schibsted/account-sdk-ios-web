@@ -59,6 +59,7 @@ public class Client: CustomStringConvertible {
         let newSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
         
         let legacyClientConfiguration = ClientConfiguration(serverURL: configuration.serverURL,
+                                                            sessionServiceURL: configuration.sessionServiceURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
                                                             redirectURI: URL(string: "http://")!) // TODO: Handle url
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
@@ -93,7 +94,7 @@ public class Client: CustomStringConvertible {
         self.stateStorage = stateStorage
         self.httpClient = httpClient
         self.tokenHandler = tokenHandler
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
     }
 
