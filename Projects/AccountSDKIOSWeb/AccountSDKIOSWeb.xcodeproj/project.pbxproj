@@ -85,6 +85,7 @@
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
 		CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */; };
 		CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */; };
+		CEB631F92747C4B2009CE3B3 /* Bundle+AccountSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */; };
 		CEC8D35D27329F830002145D /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8D35C27329F830002145D /* KeychainStorage.swift */; };
 		CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */; };
 		CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B7A272C15D800572645 /* MockURLProtocol.swift */; };
@@ -213,6 +214,7 @@
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
 		CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSession.swift; sourceTree = "<group>"; };
 		CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSessionTests.swift; sourceTree = "<group>"; };
+		CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AccountSDK.swift"; sourceTree = "<group>"; };
 		CEC8D35C27329F830002145D /* KeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
 		CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseWithMockHTTPClient.swift; sourceTree = "<group>"; };
 		CED92B7A272C15D800572645 /* MockURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
@@ -276,8 +278,7 @@
 		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
 			isa = PBXGroup;
 			children = (
-				24BC39ED273572CE0089A585 /* Localization */,
-				24C2F26F273191700010C21D /* Assets.xcassets */,
+				CEB631F72747C3D7009CE3B3 /* Resources */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */,
@@ -342,6 +343,7 @@
 				2489C97F26733A0900AA0A4C /* TokenHandler.swift */,
 				2489C98726733A0900AA0A4C /* Version.swift */,
 				CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */,
+				CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -549,6 +551,15 @@
 				CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		CEB631F72747C3D7009CE3B3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				24BC39ED273572CE0089A585 /* Localization */,
+				24C2F26F273191700010C21D /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		OBJ_172 /* Products */ = {
@@ -953,6 +964,7 @@
 				2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */,
 				2489C9AA26733A0900AA0A4C /* Cache.swift in Sources */,
 				2489C9AE26733A0900AA0A4C /* JOSEUtil.swift in Sources */,
+				CEB631F92747C4B2009CE3B3 /* Bundle+AccountSDK.swift in Sources */,
 				2489C9B726733A0900AA0A4C /* KeychainSessionStorage.swift in Sources */,
 				2489C9B126733A0900AA0A4C /* StateStorage.swift in Sources */,
 				2489C9A626733A0900AA0A4C /* Logging.swift in Sources */,
