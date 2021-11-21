@@ -5,6 +5,7 @@ enum KeychainStorageError: Error {
     case operationError
     case deleteError
     case itemEncodingError
+    case entitlementMissing
 }
 
 extension KeychainStorageError: LocalizedError {
@@ -18,6 +19,8 @@ extension KeychainStorageError: LocalizedError {
             return NSLocalizedString("Unable to delete the secret", comment: "")
         case .itemEncodingError:
             return NSLocalizedString("Failed to JSON encode user tokens for storage", comment: "")
+        case .entitlementMissing:
+            return NSLocalizedString("Entitlement missing for access group", comment: "")
         }
     }
 }
