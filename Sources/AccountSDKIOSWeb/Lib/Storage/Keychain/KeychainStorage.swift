@@ -74,6 +74,10 @@ class KeychainStorage: KeychainStoring {
             return nil
         }
 
+        if status == errSecMissingEntitlement {
+            throw KeychainStorageError.entitlementMissing
+        }
+        
         guard status == errSecSuccess else {
             throw KeychainStorageError.operationError
         }
