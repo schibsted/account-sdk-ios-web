@@ -1,9 +1,12 @@
 import Foundation
 
-#if !SPM
 public extension Bundle {
 
-    static func resourceBundle(for frameworkClass: AnyClass) -> Bundle {
+    static func accountSDK(for frameworkClass: AnyClass) -> Bundle {
+        #if SPM
+            return Bundle.module
+        #endif
+        
         guard let moduleName = String(reflecting: frameworkClass).components(separatedBy: ".").first else {
             fatalError("Couldn't determine module name from class \(frameworkClass)")
         }
@@ -16,9 +19,5 @@ public extension Bundle {
         }
         return resourceBundle
     }
-    
-//    static var module: Bundle {
-//        Bundle(for: SimplifiedLoginViewController.self)
-//    }
 }
-#endif
+ 
