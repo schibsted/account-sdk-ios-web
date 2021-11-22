@@ -2,7 +2,7 @@ import AuthenticationServices
 import SwiftUI
 import UIKit
 
-public class SimplifiedLoginViewController: UIViewController {
+class SimplifiedLoginViewController: UIViewController {
     
     private var viewModel: SimplifiedLoginViewModel
     

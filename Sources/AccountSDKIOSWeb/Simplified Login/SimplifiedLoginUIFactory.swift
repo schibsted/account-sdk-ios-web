@@ -1,9 +1,9 @@
 import UIKit
 
-public struct SimplifiedLoginUIFactory {
+struct SimplifiedLoginUIFactory {
 
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
-    public static func buildViewController(client: Client,
+    static func buildViewController(client: Client,
                                            env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                                            withMFA: MFAType? = nil,
                                            loginHint: String? = nil,
@@ -23,7 +23,7 @@ public struct SimplifiedLoginUIFactory {
     }
     
     @available(iOS 13.0, *)
-    public static func buildViewController(client: Client,
+    static func buildViewController(client: Client,
                                            env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                                            withMFA: MFAType? = nil,
                                            loginHint: String? = nil,
