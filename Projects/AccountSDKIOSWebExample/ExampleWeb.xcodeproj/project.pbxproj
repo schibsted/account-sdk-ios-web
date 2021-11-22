@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2412D140274AB1F6001F71A5 /* AnotherSharedKeychainAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2412D13F274AB1F6001F71A5 /* AnotherSharedKeychainAppApp.swift */; };
+		2412D142274AB1F6001F71A5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2412D141274AB1F6001F71A5 /* ContentView.swift */; };
+		2412D144274AB1F8001F71A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2412D143274AB1F8001F71A5 /* Assets.xcassets */; };
+		2412D147274AB1F8001F71A5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2412D146274AB1F8001F71A5 /* Preview Assets.xcassets */; };
 		2421BF5B266F97FA0043E620 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */; };
 		2421BF5C266F97FA0043E620 /* AccountSDKIOSWeb.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		249F9FAE266A52AF00F166CB /* ExampleWebApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */; };
@@ -75,6 +79,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2412D13D274AB1F6001F71A5 /* AnotherSharedKeychainApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnotherSharedKeychainApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2412D13F274AB1F6001F71A5 /* AnotherSharedKeychainAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherSharedKeychainAppApp.swift; sourceTree = "<group>"; };
+		2412D141274AB1F6001F71A5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2412D143274AB1F8001F71A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2412D146274AB1F8001F71A5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2412D14B274ABC56001F71A5 /* ExampleWeb.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExampleWeb.entitlements; sourceTree = "<group>"; };
+		2412D14C274AC1FF001F71A5 /* AnotherSharedKeychainApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnotherSharedKeychainApp.entitlements; sourceTree = "<group>"; };
 		2421BF5A266F97FA0043E620 /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		249F9FAA266A52AF00F166CB /* ExampleWeb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleWeb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleWebApp.swift; sourceTree = "<group>"; };
@@ -88,6 +99,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2412D13A274AB1F6001F71A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		249F9FA7266A52AF00F166CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -122,10 +140,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2412D13E274AB1F6001F71A5 /* AnotherSharedKeychainApp */ = {
+			isa = PBXGroup;
+			children = (
+				2412D14C274AC1FF001F71A5 /* AnotherSharedKeychainApp.entitlements */,
+				2412D13F274AB1F6001F71A5 /* AnotherSharedKeychainAppApp.swift */,
+				2412D141274AB1F6001F71A5 /* ContentView.swift */,
+				2412D143274AB1F8001F71A5 /* Assets.xcassets */,
+				2412D145274AB1F8001F71A5 /* Preview Content */,
+			);
+			path = AnotherSharedKeychainApp;
+			sourceTree = "<group>";
+		};
+		2412D145274AB1F8001F71A5 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2412D146274AB1F8001F71A5 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		249F9FA1266A52AF00F166CB = {
 			isa = PBXGroup;
 			children = (
 				249F9FAC266A52AF00F166CB /* ExampleWeb */,
+				2412D13E274AB1F6001F71A5 /* AnotherSharedKeychainApp */,
 				249F9FAB266A52AF00F166CB /* Products */,
 				240AC599266A551B00E4C3D3 /* Frameworks */,
 			);
@@ -137,6 +176,7 @@
 				249F9FAA266A52AF00F166CB /* ExampleWeb.app */,
 				249F9FBB266A52B000F166CB /* ExampleWebTests.xctest */,
 				249F9FC6266A52B000F166CB /* ExampleWebUITests.xctest */,
+				2412D13D274AB1F6001F71A5 /* AnotherSharedKeychainApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -144,6 +184,7 @@
 		249F9FAC266A52AF00F166CB /* ExampleWeb */ = {
 			isa = PBXGroup;
 			children = (
+				2412D14B274ABC56001F71A5 /* ExampleWeb.entitlements */,
 				249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */,
 				249F9FAF266A52AF00F166CB /* ContentView.swift */,
 				249F9FB1266A52B000F166CB /* Assets.xcassets */,
@@ -175,6 +216,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2412D13C274AB1F6001F71A5 /* AnotherSharedKeychainApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2412D148274AB1F8001F71A5 /* Build configuration list for PBXNativeTarget "AnotherSharedKeychainApp" */;
+			buildPhases = (
+				2412D139274AB1F6001F71A5 /* Sources */,
+				2412D13A274AB1F6001F71A5 /* Frameworks */,
+				2412D13B274AB1F6001F71A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AnotherSharedKeychainApp;
+			productName = AnotherSharedKeychainApp;
+			productReference = 2412D13D274AB1F6001F71A5 /* AnotherSharedKeychainApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 		249F9FA9266A52AF00F166CB /* ExampleWeb */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 249F9FCF266A52B000F166CB /* Build configuration list for PBXNativeTarget "ExampleWeb" */;
@@ -235,9 +293,12 @@
 		249F9FA2266A52AF00F166CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
+					2412D13C274AB1F6001F71A5 = {
+						CreatedOnToolsVersion = 13.1;
+					};
 					249F9FA9266A52AF00F166CB = {
 						CreatedOnToolsVersion = 12.4;
 					};
@@ -273,6 +334,7 @@
 				249F9FA9266A52AF00F166CB /* ExampleWeb */,
 				249F9FBA266A52B000F166CB /* ExampleWebTests */,
 				249F9FC5266A52B000F166CB /* ExampleWebUITests */,
+				2412D13C274AB1F6001F71A5 /* AnotherSharedKeychainApp */,
 			);
 		};
 /* End PBXProject section */
@@ -309,6 +371,15 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2412D13B274AB1F6001F71A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2412D147274AB1F8001F71A5 /* Preview Assets.xcassets in Resources */,
+				2412D144274AB1F8001F71A5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		249F9FA8266A52AF00F166CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -335,6 +406,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2412D139274AB1F6001F71A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2412D142274AB1F6001F71A5 /* ContentView.swift in Sources */,
+				2412D140274AB1F6001F71A5 /* AnotherSharedKeychainAppApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		249F9FA6266A52AF00F166CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -374,6 +454,70 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2412D149274AB1F8001F71A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = AnotherSharedKeychainApp/AnotherSharedKeychainApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AnotherSharedKeychainApp/Preview Content\"";
+				DEVELOPMENT_TEAM = GS8T83EM2X;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.testing.AnotherSharedKeychainApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2412D14A274AB1F8001F71A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = AnotherSharedKeychainApp/AnotherSharedKeychainApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AnotherSharedKeychainApp/Preview Content\"";
+				DEVELOPMENT_TEAM = GS8T83EM2X;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.testing.AnotherSharedKeychainApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		249F9FCD266A52B000F166CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -495,8 +639,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
+				DEVELOPMENT_TEAM = GS8T83EM2X;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExampleWeb/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -516,8 +662,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
+				DEVELOPMENT_TEAM = GS8T83EM2X;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExampleWeb/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -615,6 +763,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2412D148274AB1F8001F71A5 /* Build configuration list for PBXNativeTarget "AnotherSharedKeychainApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2412D149274AB1F8001F71A5 /* Debug */,
+				2412D14A274AB1F8001F71A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		249F9FA5266A52AF00F166CB /* Build configuration list for PBXProject "ExampleWeb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

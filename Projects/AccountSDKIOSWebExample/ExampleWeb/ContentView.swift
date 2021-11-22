@@ -42,6 +42,8 @@ struct ContentView: View {
                         Text(String(describing: client))
                         Text("Logged-in as \(user?.uuid ?? "unknown")")
                     }
+                    Button(action: fetchFromSharedKeychain, label: { Text("fetch from Shared keychain") } )
+                    Button(action: storeToSharedKeychain, label: { Text("Store To Shared keychain") } )
                     Button(action: resumeUser, label: { Text("Resume user") } )
                     Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)") } )
                     Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)") } )
@@ -65,6 +67,33 @@ struct ContentView: View {
             }
         }.sheet(isPresented: $isPresentedSimplifiedLogin, content: { SimplifiedLoginSwiftUIView() })
     }
+    
+    func storeToSharedKeychain() {
+        let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client)
+        manager.storeInSharedKeychain(clientId: "AppOne", aStringValue: "THIS IS APP ONE STORING :D") { result in
+            switch result {
+            case .success:
+                print("Stored to SHARED KEYCHAIN. BOOYA!")
+            case .failure(let error):
+                print("FAILED TO STORE, error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func fetchFromSharedKeychain() {
+        let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client)
+        do {
+            try manager.fetchSimplifiedLogin { result in
+                print("her")
+            }
+        } catch  {
+            print(error)
+        }
+    }
+    
+    
     
     func resumeUser() {
         client.resumeLastLoggedInUser() { user in
