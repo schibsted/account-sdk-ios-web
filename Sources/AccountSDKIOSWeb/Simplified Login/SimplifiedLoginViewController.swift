@@ -87,6 +87,23 @@ class SimplifiedLoginViewController: UIViewController {
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
+        
+        setupNavigationBar()
+    }
+    
+    func setupNavigationBar(){
+        let navigationBar = navigationController?.navigationBar
+        navigationBar?.topItem?.title = "Continue to log in" // TODO: Need to be localised
+        
+        if #available(iOS 13.0, *) {
+            
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.shadowColor = .gray
+            navigationBarAppearance.backgroundColor = .white
+            navigationBar?.scrollEdgeAppearance = navigationBarAppearance
+        }  else {
+            navigationBar?.barTintColor = .white
+        }
     }
     
     init(viewModel: SimplifiedLoginViewModel) {
