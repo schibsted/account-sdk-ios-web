@@ -43,7 +43,7 @@ class SimplifiedLoginViewModel {
         }
         
         let decoder = JSONDecoder()
-        guard let url = Bundle.module.url(forResource: resourceName, withExtension: "json"),
+        guard let url = Bundle.resourceBundle(for: SimplifiedLoginViewModel.self).url(forResource: resourceName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let localisation = try? decoder.decode(Localisation.self, from: data)
         else {

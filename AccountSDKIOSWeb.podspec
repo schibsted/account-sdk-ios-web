@@ -8,7 +8,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/schibsted/account-sdk-ios-web.git', :tag => s.version.to_s }
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
-  s.source_files = 'Sources/AccountSDKIOSWeb/**/*.{h,m,swift}' # assets need to be included in next release
+  s.source_files = 'Sources/AccountSDKIOSWeb/**/*.{h,m,swift}'
+  s.resource_bundles = {'AccountSDKIOSWeb' => 'Sources/AccountSDKIOSWeb/Resources/**/*.{xcassets,json}'}
   s.dependency 'JOSESwift', '~> 2.3.0'
   s.dependency 'Logging', '~> 1.4.0'
 end
