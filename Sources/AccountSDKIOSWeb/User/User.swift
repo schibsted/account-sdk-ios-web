@@ -19,7 +19,7 @@ public protocol UserProtocol {
 
 /// Representation of logged-in user.
 public class User: UserProtocol {
-    private let client: Client
+    let client: Client
     internal var tokens: UserTokens?
 
     /// Delegates listening to User events such as logout
