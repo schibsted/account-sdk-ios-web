@@ -70,8 +70,11 @@ struct ContentView: View {
     
     func storeToSharedKeychain() {
         let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
-        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client)
-        manager.storeInSharedKeychain(clientId: "AppOne", aStringValue: "THIS IS APP ONE STORING :D") { result in
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: handleResult)
+        
+        
+        manager.storeRealUser(user: self.user!) { result in
+//        manager.storeInSharedKeychain(clientId: "AppOne", aStringValue: "THIS IS APP ONE STORING :D") { result in
             switch result {
             case .success:
                 print("Stored to SHARED KEYCHAIN. BOOYA!")
@@ -83,9 +86,9 @@ struct ContentView: View {
     
     func fetchFromSharedKeychain() {
         let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
-        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client)
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ExampleWebApp.client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: handleResult)
         do {
-            try manager.fetchSimplifiedLogin { result in
+            try manager.getSimplifiedLogin { result in
                 print("her")
             }
         } catch  {

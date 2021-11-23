@@ -57,6 +57,25 @@ public final class SimplifiedLoginManager {
     
     // MARK: -
     
+    // TODO: THIS IS JUST FOR TESTING.
+    public func storeRealUser(user:User, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let tokens = user.tokens else {
+            completion(.failure(NSError(domain: "UserTokens is nil", code: 1, userInfo: [:])))
+            return
+        }
+        let sessionToStore = UserSession(clientId: user.client.configuration.clientId, userTokens: tokens, updatedAt: Date())
+        keychainSessionStorage?.store(sessionToStore, completion: completion)
+    }
+    
+    // TODO: THIS IS JUST FOR TESTING.
+    public func storeInSharedKeychain(clientId: String, aStringValue: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let idTokenClaims = IdTokenClaims(iss: "sas", sub: "userUuid", userId: "12345", aud: ["client1"], exp: Date().timeIntervalSince1970 + 3600, nonce: "testNonce", amr: nil)
+        
+        let userTokens = UserTokens(accessToken: aStringValue , refreshToken: aStringValue, idToken: aStringValue, idTokenClaims: idTokenClaims)
+        let sessionToStore = UserSession(clientId: clientId, userTokens: userTokens, updatedAt: Date())
+        keychainSessionStorage?.store(sessionToStore, completion: completion)
+    }
+    
     public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) throws {
         let latestUserSession = self.keychainSessionStorage?.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }
@@ -85,25 +104,27 @@ public final class SimplifiedLoginManager {
         user.fetchProfileData { result in
             switch result {
             case .success(_): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
-                let simplifiedLoginViewController: UIViewController
-                if #available(iOS 13.0, *) {
-                    simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
-                                                                                                 withMFA: self.withMFA,
-                                                                                                 loginHint: self.loginHint,
-                                                                                                 extraScopeValues: self.extraScopeValues,
-                                                                                                 withSSO: self.withSSO,
-                                                                                                 completion: self.completion)
-                } else {
-                    simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
-                                                                                                 withMFA: self.withMFA,
-                                                                                                 loginHint: self.loginHint,
-                                                                                                 extraScopeValues: self.extraScopeValues,
-                                                                                                 completion: self.completion)
+                DispatchQueue.main.async {
+                    let simplifiedLoginViewController: UIViewController
+                    if #available(iOS 13.0, *) {
+                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                                     env: self.env,
+                                                                                                     withMFA: self.withMFA,
+                                                                                                     loginHint: self.loginHint,
+                                                                                                     extraScopeValues: self.extraScopeValues,
+                                                                                                     withSSO: self.withSSO,
+                                                                                                     completion: self.completion)
+                    } else {
+                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                                     env: self.env,
+                                                                                                     withMFA: self.withMFA,
+                                                                                                     loginHint: self.loginHint,
+                                                                                                     extraScopeValues: self.extraScopeValues,
+                                                                                                     completion: self.completion)
+                    }
+                    
+                    completion(.success(simplifiedLoginViewController))
                 }
-                
-                completion(.success(simplifiedLoginViewController))
             case .failure(let error):
                 print("Some error happened \(error)")
                 completion(.failure(error))

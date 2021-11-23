@@ -29,7 +29,7 @@ struct ContentView: View {
     
     func storeToSharedKeychain() {
         let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
-        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ContentView.client)
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ContentView.client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: handleResult)
         manager.storeInSharedKeychain(clientId: "AppOne", aStringValue: "THIS IS APP ONE STORING :D") { result in
             switch result {
             case .success:
@@ -42,13 +42,28 @@ struct ContentView: View {
     
     func fetchFromSharedKeychain() {
         let myAccessGroup = "GS8T83EM2X.com.testing.SharingExample"
-        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ContentView.client)
+        let manager = SimplifiedLoginManager(accessGroup: myAccessGroup, client: ContentView.client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: handleResult)
         do {
-            try manager.fetchSimplifiedLogin { result in
-                print("her")
+            try manager.getSimplifiedLogin { result in
+                switch result {
+                case .success(let simplifiedLoginViewController):
+                    print("Success I got the viewController: \(simplifiedLoginViewController) ")
+                case .failure(let error):
+                    print(error)
+                }
             }
         } catch  {
             print(error)
+        }
+    }
+    
+    func handleResult(_ result: Result<User, LoginError>) {
+        switch result {
+        case .success(let user):
+            print("Success - logged in as \(user.uuid ?? "")")
+        case .failure(let error):
+            print(error)
+            
         }
     }
 }
