@@ -62,11 +62,11 @@ public final class SimplifiedLoginManager {
             .sorted { $0.updatedAt > $1.updatedAt }
             .first
         
-        guard let latestUserSession = latestUserSession else {
+        guard let sLatestUserSession = latestUserSession else {
             throw SimplifiedLoginError.noLoggedInSessionInSharedKeychain
         }
         
-        let user = User(client: client, tokens: latestUserSession.userTokens)
+        let user = User(client: client, tokens: sLatestUserSession.userTokens)
         self.user = user
         
         user.userContextFromToken { result in
