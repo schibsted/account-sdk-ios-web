@@ -66,10 +66,10 @@ public final class SimplifiedLoginManager {
             throw SimplifiedLoginError.noOtherLoggedInSession // TODO: This  could also be a missing entitlement error.
         }
         
-        self.user = User(client: client, tokens: latestUserSession.userTokens)
+        let user = User(client: client, tokens: latestUserSession.userTokens)
+        self.user = user
         
-        
-        self.user?.userContextFromToken { result in
+        user.userContextFromToken { result in
             switch result {
             case .success(let userContextResponse):
                 self.fetchProfile( userContext: userContextResponse, completion: completion)
@@ -111,15 +111,3 @@ public final class SimplifiedLoginManager {
     }
 }
 
-extension User {
-    func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
-        self.client.schibstedAccountAPI.userContextFromToken(for: self) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-}
