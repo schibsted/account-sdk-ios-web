@@ -26,7 +26,7 @@ class FooterView: UIStackView {
     
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: viewModel.schibstedLogoName, in: Bundle.module, compatibleWith: nil) ?? UIImage()
+        let image: UIImage = UIImage(named: viewModel.schibstedLogoName, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
         
         view.image = image
         view.contentMode = .center
@@ -110,7 +110,7 @@ class FooterView: UIStackView {
         
         view.layer.cornerRadius = 13
         view.clipsToBounds = true
-        let image  = UIImage(named: name, in: Bundle.module, compatibleWith: nil) ?? UIImage()
+        let image  = UIImage(named: name, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
         view.image = image
         
         return view
