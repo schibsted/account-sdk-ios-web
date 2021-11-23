@@ -84,7 +84,7 @@ public final class SimplifiedLoginManager {
         
         user.fetchProfileData { result in
             switch result {
-            case .success(let profileResponse): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
+            case .success(_): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
                 let simplifiedLoginViewController: UIViewController
                 if #available(iOS 13.0, *) {
                     simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
