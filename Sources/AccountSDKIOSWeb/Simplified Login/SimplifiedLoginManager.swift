@@ -55,7 +55,7 @@ public final class SimplifiedLoginManager {
         self.withSSO = withSSO
     }
     
-    // MARK:
+    // MARK: -
     
     public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) throws {
         let latestUserSession = self.keychainSessionStorage?.getAll()
@@ -72,7 +72,7 @@ public final class SimplifiedLoginManager {
         user.userContextFromToken { result in
             switch result {
             case .success(let userContextResponse):
-                self.fetchProfile( userContext: userContextResponse, completion: completion)
+                self.fetchProfile(user: user, userContext: userContextResponse, completion: completion)
             case .failure(let error):
                 print("Some error happened \(error)")
                 completion(.failure(error))
@@ -80,8 +80,9 @@ public final class SimplifiedLoginManager {
         }
     }
     
-    private func fetchProfile(userContext: UserContextFromTokenResponse, completion: @escaping (Result<UIViewController, Error>) -> Void) {
-        self.user?.fetchProfileData { result in
+    private func fetchProfile(user: User, userContext: UserContextFromTokenResponse, completion: @escaping (Result<UIViewController, Error>) -> Void) {
+        
+        user.fetchProfileData { result in
             switch result {
             case .success(let profileResponse): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
                 let simplifiedLoginViewController: UIViewController
@@ -110,4 +111,3 @@ public final class SimplifiedLoginManager {
         }
     }
 }
-
