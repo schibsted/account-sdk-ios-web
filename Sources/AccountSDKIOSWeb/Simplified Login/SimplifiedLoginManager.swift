@@ -2,7 +2,7 @@ import UIKit
 
 public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
-        case noOtherLoggedInSession
+        case noLoggedInSessionInSharedKeychain
     }
     
     var keychainSessionStorage: KeychainSessionStorage?
@@ -63,7 +63,7 @@ public final class SimplifiedLoginManager {
             .first
         
         guard let latestUserSession = latestUserSession else {
-            throw SimplifiedLoginError.noOtherLoggedInSession // TODO: This  could also be a missing entitlement error.
+            throw SimplifiedLoginError.noLoggedInSessionInSharedKeychain
         }
         
         let user = User(client: client, tokens: latestUserSession.userTokens)
