@@ -74,7 +74,7 @@ public final class SimplifiedLoginManager {
             case .success(let userContextResponse):
                 self.fetchProfile(user: user, userContext: userContextResponse, completion: completion)
             case .failure(let error):
-                print("Some error happened \(error)")
+                SchibstedAccountLogger.instance.error("Failed to fetch userContextFromToken: \(String(describing: error))")
                 completion(.failure(error))
             }
         }
@@ -105,7 +105,7 @@ public final class SimplifiedLoginManager {
                 
                 completion(.success(simplifiedLoginViewController))
             case .failure(let error):
-                print("Some error happened \(error)")
+                SchibstedAccountLogger.instance.error("Failed to fetch profileData: \(String(describing: error))")
                 completion(.failure(error))
             }
         }
