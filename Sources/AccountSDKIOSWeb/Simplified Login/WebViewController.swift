@@ -35,7 +35,6 @@ class WebViewController: UIViewController {
     private func addLoadingViews() {
         guard let navigationBar = navigationController?.navigationBar else {
             return
-            
         }
         progressView.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.addSubview(progressView)
@@ -49,10 +48,8 @@ class WebViewController: UIViewController {
         ])
         
         activityIndicatorView.hidesWhenStopped = true
-        
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
-        activityIndicatorView.center = CGPoint(x: w/2, y: h/2)
+        activityIndicatorView.center = CGPoint(x: UIScreen.main.bounds.width/2,
+                                               y: UIScreen.main.bounds.height/2)
         activityIndicatorView.style = .gray
         self.view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()

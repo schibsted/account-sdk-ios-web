@@ -60,7 +60,7 @@ public struct SimplifiedLoginUIFactory {
             nc.dismiss(animated: true, completion: nil)
         }
         
-        viewModel.onClickedPrivacyPolicy = { // TODO: Connect so that the text is a button or something else actionable
+        viewModel.onClickedPrivacyPolicy = {
             webVC.loadURL(url)
             nc.pushViewController(webVC, animated: true)
         }
