@@ -18,26 +18,27 @@ class SimplifiedLoginViewModel {
     let client: Client
     var asWebAuthenticationSession: ASWebAuthenticationSession?
     
-    init?(client: Client, env: ClientConfiguration.Environment) {
+    init?(client: Client, locale: String?) {
         
         self.client = client
         
         let resourceName: String
         let orderedIconNames: [String]
-        switch env {
-        case .proCom:
+        
+        switch SupportedLanguage.getSupportedLanguage(from: locale) {
+        case .sv:
             resourceName = "for_use_simplified-widget_translations_sv"
             orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
-        case .proNo:
+        case .nb:
             resourceName = "for_use_simplified-widget_translations_nb"
             orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
-        case .proFi:
+        case .fi:
             resourceName = "for_use_simplified-widget_translations_fi"
             orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
-        case .proDk:
+        case .da:
             resourceName = "for_use_simplified-widget_translations_da"
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"] //TODO: NEED DK 5 brands with icons
-        case .pre:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] //TODO: Swedish logos used as default
+        case .en:
             resourceName = "simplified-widget_translations_en"
             orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Using SV icons
         }
@@ -64,6 +65,29 @@ class SimplifiedLoginViewModel {
             self.onClickedContinueWithoutLogin?()
         case .clickedClickPrivacyPolicy:
             self.onClickedPrivacyPolicy?()
+        }
+    }
+    
+   
+}
+
+extension SimplifiedLoginViewModel {
+    enum SupportedLanguage: String {
+        case sv = "sv"
+        case nb = "nb"
+        case da = "da"
+        case en = "en"
+        case fi = "fi"
+        
+        static var defaultLanguage = Self.en
+        
+        static func getSupportedLanguage(from locale: String?) -> Self {
+            guard let sLocale = locale,
+                  let languageIdentifier = sLocale.components(separatedBy: "_").first,
+                  let supportedLanguage = SupportedLanguage(rawValue: languageIdentifier) else {
+                      return Self.defaultLanguage
+                  }
+            return supportedLanguage
         }
     }
     

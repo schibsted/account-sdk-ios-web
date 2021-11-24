@@ -11,7 +11,7 @@ struct SimplifiedLoginUIFactory {
                                     profileResponse: UserProfileResponse,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         
-        let viewModel = SimplifiedLoginViewModel(client: client, env: .pre)! // TODO: throw error
+        let viewModel = SimplifiedLoginViewModel(client: client, locale: profileResponse.locale)! // TODO: throw error
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
@@ -32,7 +32,8 @@ struct SimplifiedLoginUIFactory {
                                     userContext: UserContextFromTokenResponse,
                                     profileResponse: UserProfileResponse,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewModel = SimplifiedLoginViewModel(client: client, env: .pre)! // TODO: throw error
+        
+        let viewModel = SimplifiedLoginViewModel(client: client, locale: profileResponse.locale)! // TODO: throw error
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,

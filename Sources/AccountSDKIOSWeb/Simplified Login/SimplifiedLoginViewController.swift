@@ -195,7 +195,7 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
         }
         
         let context = UserContextFromTokenResponse(identifier: "An identifier", display_text: "a display text", client_name: "A client name")
-        let profile = UserProfileResponse()
+        let profile = UserProfileResponse(locale: "sv_SE")
         
         let s = SimplifiedLoginUIFactory.buildViewController(client: client, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, userContext: context, profileResponse: profile, completion: completion) as! UINavigationController
         
