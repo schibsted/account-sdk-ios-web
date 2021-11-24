@@ -52,7 +52,6 @@ public struct SimplifiedLoginUIFactory {
         
         let url = URL(string: viewModel.localisation.privacyPolicyURL)!
         let webVC = WebViewController()
-        webVC.loadURL(url)
         
         viewModel.onClickedContinueAsUser = {} // TODO:
         

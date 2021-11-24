@@ -33,6 +33,13 @@ class WebViewController: UIViewController {
     }
     
     private func addLoadingViews() {
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.center = CGPoint(x: UIScreen.main.bounds.width/2,
+                                               y: UIScreen.main.bounds.height/2)
+        activityIndicatorView.style = .gray
+        self.view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
+        
         guard let navigationBar = navigationController?.navigationBar else {
             return
         }
@@ -46,13 +53,6 @@ class WebViewController: UIViewController {
             progressView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 2.0)
         ])
-        
-        activityIndicatorView.hidesWhenStopped = true
-        activityIndicatorView.center = CGPoint(x: UIScreen.main.bounds.width/2,
-                                               y: UIScreen.main.bounds.height/2)
-        activityIndicatorView.style = .gray
-        self.view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
     }
     
     private func setupEstimatedProgressObserver() {
