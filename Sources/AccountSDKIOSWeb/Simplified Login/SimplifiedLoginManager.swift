@@ -10,7 +10,6 @@ public final class SimplifiedLoginManager {
     var user: User?
     
     // Properties for building SimplifiedLoginViewController
-    let env: ClientConfiguration.Environment
     let withMFA: MFAType?
     let loginHint: String?
     let extraScopeValues: Set<String>
@@ -20,7 +19,6 @@ public final class SimplifiedLoginManager {
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     public init(accessGroup: String,
                 client: Client,
-                env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
@@ -28,7 +26,6 @@ public final class SimplifiedLoginManager {
         self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
         self.client = client
         
-        self.env = env
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -38,7 +35,6 @@ public final class SimplifiedLoginManager {
     @available(iOS 13.0, *)
     public init(accessGroup: String,
                 client: Client,
-                env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
@@ -47,7 +43,6 @@ public final class SimplifiedLoginManager {
         self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
         self.client = client
         
-        self.env = env
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -84,22 +79,24 @@ public final class SimplifiedLoginManager {
         
         user.fetchProfileData { result in
             switch result {
-            case .success(_): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
+            case .success(let response): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
                 let simplifiedLoginViewController: UIViewController
                 if #available(iOS 13.0, *) {
                     simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
                                                                                                  withMFA: self.withMFA,
                                                                                                  loginHint: self.loginHint,
                                                                                                  extraScopeValues: self.extraScopeValues,
                                                                                                  withSSO: self.withSSO,
+                                                                                                 userContext: userContext,
+                                                                                                 profileResponse: response,
                                                                                                  completion: self.completion)
                 } else {
                     simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
                                                                                                  withMFA: self.withMFA,
                                                                                                  loginHint: self.loginHint,
                                                                                                  extraScopeValues: self.extraScopeValues,
+                                                                                                 userContext: userContext,
+                                                                                                 profileResponse: response,
                                                                                                  completion: self.completion)
                 }
                 
