@@ -19,7 +19,7 @@ public protocol UserProtocol {
 
 /// Representation of logged-in user.
 public class User: UserProtocol {
-    private let client: Client
+    let client: Client
     internal var tokens: UserTokens?
 
     /// Delegates listening to User events such as logout
@@ -113,6 +113,18 @@ public class User: UserProtocol {
 }
 
 extension User {
+    
+    func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
+        self.client.schibstedAccountAPI.userContextFromToken(for: self) { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     static func shouldLogout(tokenResponseBody: String?) -> Bool {
         if let errorJSON = tokenResponseBody,
            let oauthError = OAuthError.fromJSON(errorJSON),

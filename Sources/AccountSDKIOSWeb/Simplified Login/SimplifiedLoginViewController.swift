@@ -2,7 +2,7 @@ import AuthenticationServices
 import SwiftUI
 import UIKit
 
-public class SimplifiedLoginViewController: UIViewController {
+class SimplifiedLoginViewController: UIViewController {
     
     private var viewModel: SimplifiedLoginViewModel
     
@@ -71,11 +71,8 @@ public class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    init(viewModel: SimplifiedLoginViewModel) {
-        
-        self.viewModel = viewModel
-        
-        super.init(nibName: nil, bundle: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         view.backgroundColor = .white
         
@@ -90,6 +87,11 @@ public class SimplifiedLoginViewController: UIViewController {
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
+    }
+    
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {

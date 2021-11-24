@@ -101,13 +101,7 @@ public class Client: CustomStringConvertible {
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
     }
-    
-    private func getMostRecentSession() -> UserSession? {
-        sessionStorage.getAll()
-            .sorted { $0.updatedAt > $1.updatedAt }
-            .first
-    }
-
+       
     /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
     private func storeAuthState(withMFA: MFAType?) -> AuthState {
         let authState = AuthState(mfa: withMFA)

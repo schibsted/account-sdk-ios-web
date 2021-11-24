@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2412D14F274BB714001F71A5 /* SimplifiedLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */; };
 		24209496273D025E004CF03D /* SimplifiedLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */; };
 		24209497273D0266004CF03D /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0E273D00EA007C63A6 /* UserInformationView.swift */; };
 		24209498273D0269004CF03D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD12273D0120007C63A6 /* FooterView.swift */; };
@@ -136,6 +137,7 @@
 		2401AD0E273D00EA007C63A6 /* UserInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformationView.swift; sourceTree = "<group>"; };
 		2401AD10273D010B007C63A6 /* LinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksView.swift; sourceTree = "<group>"; };
 		2401AD12273D0120007C63A6 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
+		2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManager.swift; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
@@ -279,8 +281,9 @@
 			isa = PBXGroup;
 			children = (
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
-				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
+				2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */,
 				CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */,
+				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CEDC45DD27463C200060EDA2 /* WebViewController.swift */,
 				CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */,
 			);
@@ -938,6 +941,7 @@
 				CEC8D35D27329F830002145D /* KeychainStorage.swift in Sources */,
 				2489C9B026733A0900AA0A4C /* Storage.swift in Sources */,
 				2489C9B926733A0900AA0A4C /* URLExtensions.swift in Sources */,
+				2412D14F274BB714001F71A5 /* SimplifiedLoginManager.swift in Sources */,
 				24EB14702679D8C8002D9628 /* MFAType.swift in Sources */,
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
 				CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */,
