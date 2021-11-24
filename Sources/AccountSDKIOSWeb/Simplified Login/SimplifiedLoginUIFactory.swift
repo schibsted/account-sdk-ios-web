@@ -50,16 +50,18 @@ struct SimplifiedLoginUIFactory {
         let nc = UINavigationController()
         nc.pushViewController(s, animated: false)
         
+        let url = URL(string: viewModel.localisation.privacyPolicyURL)!
+        let webVC = WebViewController()
+        
         viewModel.onClickedContinueAsUser = {} // TODO:
         
         viewModel.onClickedContinueWithoutLogin = {
             nc.dismiss(animated: true, completion: nil)
         }
         
-        viewModel.onClickedPrivacyPolicy = { // TODO: Connect so that the text is a button or something else actionable
-            let url = URL(string: viewModel.localisation.privacyPolicyURL)!
-            let webVC = WebViewController(url: url)
-            nc.pushViewController(webVC, animated: false)
+        viewModel.onClickedPrivacyPolicy = {
+            webVC.loadURL(url)
+            nc.pushViewController(webVC, animated: true)
         }
         
         return nc
