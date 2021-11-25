@@ -57,13 +57,14 @@ public final class SimplifiedLoginManager {
     
     // MARK: -
     
-    public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) throws {
+    public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) {
         let latestUserSession = self.keychainSessionStorage?.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }
             .first
         
         guard let sLatestUserSession = latestUserSession else {
-            throw SimplifiedLoginError.noLoggedInSessionInSharedKeychain
+            completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
+            return
         }
         
         let user = User(client: client, tokens: sLatestUserSession.userTokens)
