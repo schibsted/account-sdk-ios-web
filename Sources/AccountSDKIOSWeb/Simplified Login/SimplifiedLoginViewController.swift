@@ -92,6 +92,10 @@ class SimplifiedLoginViewController: UIViewController {
     }
     
     func setupNavigationBar(){
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
+            return
+        }
+        
         let navigationBar = navigationController?.navigationBar
         navigationBar?.topItem?.title = "Continue to log in" // TODO: Need to be localised
         
