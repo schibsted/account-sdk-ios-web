@@ -84,26 +84,28 @@ public final class SimplifiedLoginManager {
         
         user.fetchProfileData { result in
             switch result {
+
             case .success(_): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
-                let simplifiedLoginViewController: UIViewController
-                if #available(iOS 13.0, *) {
-                    simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
-                                                                                                 withMFA: self.withMFA,
-                                                                                                 loginHint: self.loginHint,
-                                                                                                 extraScopeValues: self.extraScopeValues,
-                                                                                                 withSSO: self.withSSO,
-                                                                                                 completion: self.completion)
-                } else {
-                    simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                 env: self.env,
-                                                                                                 withMFA: self.withMFA,
-                                                                                                 loginHint: self.loginHint,
-                                                                                                 extraScopeValues: self.extraScopeValues,
-                                                                                                 completion: self.completion)
+                DispatchQueue.main.async {
+                    let simplifiedLoginViewController: UIViewController
+                    if #available(iOS 13.0, *) {
+                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                                     env: self.env,
+                                                                                                     withMFA: self.withMFA,
+                                                                                                     loginHint: self.loginHint,
+                                                                                                     extraScopeValues: self.extraScopeValues,
+                                                                                                     withSSO: self.withSSO,
+                                                                                                     completion: self.completion)
+                    } else {
+                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                                     env: self.env,
+                                                                                                     withMFA: self.withMFA,
+                                                                                                     loginHint: self.loginHint,
+                                                                                                     extraScopeValues: self.extraScopeValues,
+                                                                                                     completion: self.completion)
+                    }
+                    completion(.success(simplifiedLoginViewController))
                 }
-                
-                completion(.success(simplifiedLoginViewController))
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to fetch profileData: \(String(describing: error))")
                 completion(.failure(error))

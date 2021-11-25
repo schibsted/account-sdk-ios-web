@@ -17,7 +17,7 @@ class LinksView: UIStackView {
     private lazy var notYouLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 1
-        view.text = "Not you?" // TODO: Move
+        view.text = viewModel.localisation.notYouTitle
         view.font = UIFont.systemFont(ofSize: 14)
         view.textAlignment = .center
         
