@@ -61,7 +61,7 @@ class FooterView: UIStackView {
         let view = UILabel()
         view.numberOfLines = -1
         
-        view.text = viewModel.localisation.explanationText// TODO: Insert client_name
+        view.text = viewModel.explanationText// TODO: Insert client_name
         view.font = UIFont.systemFont(ofSize: 12)
         view.textAlignment = .center
         
@@ -77,7 +77,7 @@ class FooterView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 12),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: viewModel.localisation.privacyPolicyTitle,
+        let attributedText = NSAttributedString(string: viewModel.privacyPolicyTitle,
                                                  attributes: attributes)
                                                  
         view.translatesAutoresizingMaskIntoConstraints = false
