@@ -18,6 +18,7 @@
 		243BFACC2750D68400382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFACA2750D68300382494 /* Localizable.strings */; };
 		243BFAD52750D75A00382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAD02750D75A00382494 /* Localizable.strings */; };
 		243BFAD62750D75A00382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAD32750D75A00382494 /* Localizable.strings */; };
+		243BFAD82750F20700382494 /* String+Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243BFAD72750F20700382494 /* String+Localization.swift */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
@@ -148,6 +149,7 @@
 		243BFACB2750D68300382494 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFAD12750D75A00382494 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFAD42750D75A00382494 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = Localizable.strings; sourceTree = "<group>"; };
+		243BFAD72750F20700382494 /* String+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localization.swift"; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
@@ -350,6 +352,16 @@
 			path = da.lproj;
 			sourceTree = "<group>";
 		};
+		243BFAD92750F21B00382494 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */,
+				CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */,
+				243BFAD72750F20700382494 /* String+Localization.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,6 +393,7 @@
 		2461669C267B41A000F77C5A /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				243BFAD92750F21B00382494 /* Extensions */,
 				24EB151D267A1209002D9628 /* Errors */,
 				24EB14F72679F70E002D9628 /* HTTP */,
 				2489C9A126733A0900AA0A4C /* API */,
@@ -394,8 +407,6 @@
 				2489C98926733A0900AA0A4C /* AuthState.swift */,
 				2489C97F26733A0900AA0A4C /* TokenHandler.swift */,
 				2489C98726733A0900AA0A4C /* Version.swift */,
-				CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */,
-				CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -999,6 +1010,7 @@
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
 				CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */,
 				2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */,
+				243BFAD82750F20700382494 /* String+Localization.swift in Sources */,
 				2489C9BA26733A0900AA0A4C /* Client.swift in Sources */,
 				24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */,
 				24EB14F92679F882002D9628 /* NoRetries.swift in Sources */,
