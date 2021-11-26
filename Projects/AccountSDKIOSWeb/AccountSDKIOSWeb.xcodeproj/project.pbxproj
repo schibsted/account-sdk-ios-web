@@ -79,11 +79,6 @@
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
-		CE5225D52747D6CC009E015E /* for_use_simplified-widget_translations_nb.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225D02747D69A009E015E /* for_use_simplified-widget_translations_nb.json */; };
-		CE5225D62747D6CF009E015E /* for_use_simplified-widget_translations_sv.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CF2747D69A009E015E /* for_use_simplified-widget_translations_sv.json */; };
-		CE5225D72747D6D3009E015E /* for_use_simplified-widget_translations_da.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225D12747D69A009E015E /* for_use_simplified-widget_translations_da.json */; };
-		CE5225D82747D6D6009E015E /* simplified-widget_translations_en.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225D22747D69A009E015E /* simplified-widget_translations_en.json */; };
-		CE5225D92747D6D9009E015E /* for_use_simplified-widget_translations_fi.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225D32747D69A009E015E /* for_use_simplified-widget_translations_fi.json */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
 		CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
@@ -217,11 +212,6 @@
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CE5225CF2747D69A009E015E /* for_use_simplified-widget_translations_sv.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_sv.json"; sourceTree = "<group>"; };
-		CE5225D02747D69A009E015E /* for_use_simplified-widget_translations_nb.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_nb.json"; sourceTree = "<group>"; };
-		CE5225D12747D69A009E015E /* for_use_simplified-widget_translations_da.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_da.json"; sourceTree = "<group>"; };
-		CE5225D22747D69A009E015E /* simplified-widget_translations_en.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "simplified-widget_translations_en.json"; sourceTree = "<group>"; };
-		CE5225D32747D69A009E015E /* for_use_simplified-widget_translations_fi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_fi.json"; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
@@ -605,21 +595,8 @@
 				243BFAC42750C63A00382494 /* en.lproj */,
 				243BFABA274FD6CD00382494 /* sv.lproj */,
 				CE5225CD2747D69A009E015E /* Assets.xcassets */,
-				CE5225CE2747D69A009E015E /* Localization */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		CE5225CE2747D69A009E015E /* Localization */ = {
-			isa = PBXGroup;
-			children = (
-				CE5225CF2747D69A009E015E /* for_use_simplified-widget_translations_sv.json */,
-				CE5225D02747D69A009E015E /* for_use_simplified-widget_translations_nb.json */,
-				CE5225D12747D69A009E015E /* for_use_simplified-widget_translations_da.json */,
-				CE5225D22747D69A009E015E /* simplified-widget_translations_en.json */,
-				CE5225D32747D69A009E015E /* for_use_simplified-widget_translations_fi.json */,
-			);
-			path = Localization;
 			sourceTree = "<group>";
 		};
 		CE699DCC2732A26A009EE30D /* Mocks */ = {
@@ -897,17 +874,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE5225D72747D6D3009E015E /* for_use_simplified-widget_translations_da.json in Resources */,
 				CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */,
 				243BFAD62750D75A00382494 /* Localizable.strings in Resources */,
-				CE5225D52747D6CC009E015E /* for_use_simplified-widget_translations_nb.json in Resources */,
 				243BFAC32750C62500382494 /* Localizable.strings in Resources */,
 				243BFACC2750D68400382494 /* Localizable.strings in Resources */,
 				243BFAD52750D75A00382494 /* Localizable.strings in Resources */,
-				CE5225D62747D6CF009E015E /* for_use_simplified-widget_translations_sv.json in Resources */,
 				243BFAC72750C67000382494 /* Localizable.strings in Resources */,
-				CE5225D92747D6D9009E015E /* for_use_simplified-widget_translations_fi.json in Resources */,
-				CE5225D82747D6D6009E015E /* simplified-widget_translations_en.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
