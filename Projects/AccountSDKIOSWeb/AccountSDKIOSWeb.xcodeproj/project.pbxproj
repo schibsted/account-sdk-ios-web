@@ -13,6 +13,11 @@
 		24209498273D0269004CF03D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD12273D0120007C63A6 /* FooterView.swift */; };
 		24209499273D026C004CF03D /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD10273D010B007C63A6 /* LinksView.swift */; };
 		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
+		243BFAC32750C62500382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC12750C62500382494 /* Localizable.strings */; };
+		243BFAC72750C67000382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC52750C67000382494 /* Localizable.strings */; };
+		243BFACC2750D68400382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFACA2750D68300382494 /* Localizable.strings */; };
+		243BFAD52750D75A00382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAD02750D75A00382494 /* Localizable.strings */; };
+		243BFAD62750D75A00382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAD32750D75A00382494 /* Localizable.strings */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
@@ -138,6 +143,11 @@
 		2401AD10273D010B007C63A6 /* LinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksView.swift; sourceTree = "<group>"; };
 		2401AD12273D0120007C63A6 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManager.swift; sourceTree = "<group>"; };
+		243BFAC22750C62500382494 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
+		243BFAC62750C67000382494 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		243BFACB2750D68300382494 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = Localizable.strings; sourceTree = "<group>"; };
+		243BFAD12750D75A00382494 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = Localizable.strings; sourceTree = "<group>"; };
+		243BFAD42750D75A00382494 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = Localizable.strings; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
@@ -298,6 +308,46 @@
 				2401AD12273D0120007C63A6 /* FooterView.swift */,
 			);
 			path = "Sub Views";
+			sourceTree = "<group>";
+		};
+		243BFABA274FD6CD00382494 /* sv.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				243BFAC12750C62500382494 /* Localizable.strings */,
+			);
+			path = sv.lproj;
+			sourceTree = "<group>";
+		};
+		243BFAC42750C63A00382494 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				243BFAC52750C67000382494 /* Localizable.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		243BFAC92750D68300382494 /* nb.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				243BFACA2750D68300382494 /* Localizable.strings */,
+			);
+			path = nb.lproj;
+			sourceTree = "<group>";
+		};
+		243BFACF2750D75A00382494 /* fi.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				243BFAD02750D75A00382494 /* Localizable.strings */,
+			);
+			path = fi.lproj;
+			sourceTree = "<group>";
+		};
+		243BFAD22750D75A00382494 /* da.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				243BFAD32750D75A00382494 /* Localizable.strings */,
+			);
+			path = da.lproj;
 			sourceTree = "<group>";
 		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
@@ -538,6 +588,11 @@
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				243BFAD22750D75A00382494 /* da.lproj */,
+				243BFACF2750D75A00382494 /* fi.lproj */,
+				243BFAC92750D68300382494 /* nb.lproj */,
+				243BFAC42750C63A00382494 /* en.lproj */,
+				243BFABA274FD6CD00382494 /* sv.lproj */,
 				CE5225CD2747D69A009E015E /* Assets.xcassets */,
 				CE5225CE2747D69A009E015E /* Localization */,
 			);
@@ -801,6 +856,11 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				sv,
+				Base,
+				nb,
+				fi,
+				da,
 			);
 			mainGroup = OBJ_5;
 			packageReferences = (
@@ -828,8 +888,13 @@
 			files = (
 				CE5225D72747D6D3009E015E /* for_use_simplified-widget_translations_da.json in Resources */,
 				CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */,
+				243BFAD62750D75A00382494 /* Localizable.strings in Resources */,
 				CE5225D52747D6CC009E015E /* for_use_simplified-widget_translations_nb.json in Resources */,
+				243BFAC32750C62500382494 /* Localizable.strings in Resources */,
+				243BFACC2750D68400382494 /* Localizable.strings in Resources */,
+				243BFAD52750D75A00382494 /* Localizable.strings in Resources */,
 				CE5225D62747D6CF009E015E /* for_use_simplified-widget_translations_sv.json in Resources */,
+				243BFAC72750C67000382494 /* Localizable.strings in Resources */,
 				CE5225D92747D6D9009E015E /* for_use_simplified-widget_translations_fi.json in Resources */,
 				CE5225D82747D6D6009E015E /* simplified-widget_translations_en.json in Resources */,
 			);
@@ -1034,6 +1099,49 @@
 			targetProxy = A9941F37257503F700513EED /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		243BFAC12750C62500382494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				243BFAC22750C62500382494 /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		243BFAC52750C67000382494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				243BFAC62750C67000382494 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		243BFACA2750D68300382494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				243BFACB2750D68300382494 /* nb */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		243BFAD02750D75A00382494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				243BFAD12750D75A00382494 /* fi */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		243BFAD32750D75A00382494 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				243BFAD42750D75A00382494 /* da */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A9941FE2257523C800513EED /* Debug */ = {
@@ -1375,6 +1483,7 @@
 		OBJ_3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1402,6 +1511,7 @@
 		OBJ_4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
