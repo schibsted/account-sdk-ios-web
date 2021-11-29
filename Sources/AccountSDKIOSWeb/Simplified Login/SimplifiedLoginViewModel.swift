@@ -2,22 +2,30 @@ import Foundation
 import AuthenticationServices
 
 class SimplifiedLoginViewModel {
-    
-    var onClickedContinueWithoutLogin: (() -> Void)?
-    var onClickedSwitchAccount: (() -> Void)?
-    var onClickedPrivacyPolicy: (() -> Void)?
-    var onClickedContinueAsUser: (() -> Void)? // TODO:
-    
     let env: ClientConfiguration.Environment
     let userContext: UserContextFromTokenResponse
     let userProfileResponse: UserProfileResponse
-    
-    var iconNames: [String]
     let schibstedLogoName = "sch-logo"
+    
+    var iconNames: [String] {
+        let orderedIconNames: [String]
+        switch env {
+        case .proCom:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
+        case .proNo:
+            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
+        case .proFi:
+            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
+        case .proDk, .pre:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
+        }
+        return orderedIconNames
+    }
     
     var displayName: String {
         return userContext.display_text
     }
+    
     var initials: String {
         let firstName  = userProfileResponse.name?.givenName ?? ""
         let lastName = userProfileResponse.name?.familyName ?? ""
@@ -33,23 +41,14 @@ class SimplifiedLoginViewModel {
         self.env = env
         self.userContext = userContext
         self.userProfileResponse = userProfileResponse
-        
-        let orderedIconNames: [String]
-        switch env {
-        case .proCom:
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
-        case .proNo:
-            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
-        case .proFi:
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
-        case .proDk:
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"] //TODO: NEED DK 5 brands with icons
-        case .pre:
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Using SV icons
-        }
-        
-        self.iconNames = orderedIconNames
     }
+    
+    // MARK: Simplified Login User Actions
+    
+    var onClickedContinueWithoutLogin: (() -> Void)?
+    var onClickedSwitchAccount: (() -> Void)?
+    var onClickedPrivacyPolicy: (() -> Void)?
+    var onClickedContinueAsUser: (() -> Void)? // TODO:
     
     func send(action: SimplifiedLoginViewController.UserAction){
         switch action {
