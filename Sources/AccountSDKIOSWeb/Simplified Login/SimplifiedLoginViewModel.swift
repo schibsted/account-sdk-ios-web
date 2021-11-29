@@ -8,18 +8,32 @@ class SimplifiedLoginViewModel {
     var onClickedPrivacyPolicy: (() -> Void)?
     var onClickedContinueAsUser: (() -> Void)? // TODO:
     
+    let userContext: UserContextFromTokenResponse
+    let userProfileResponse: UserProfileResponse
+    
     var iconNames: [String]
     let schibstedLogoName = "sch-logo"
     
-    let displayName = "Daniel.User" // TODO: Need to be fetched
+    var displayName: String {
+        return userContext.display_text
+    }
+    var initials: String {
+        let firstName  = userProfileResponse.name?.givenName ?? ""
+        let lastName = userProfileResponse.name?.familyName ?? ""
+        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
+        return initials
+    }
+    
     let clientName = "Finn" // TODO: Need to be fetched
     
     let client: Client
     var asWebAuthenticationSession: ASWebAuthenticationSession?
     
-    init(client: Client, env: ClientConfiguration.Environment) {
+    init(client: Client, env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
         
         self.client = client
+        self.userContext = userContext
+        self.userProfileResponse = userProfileResponse
         
         let orderedIconNames: [String]
         switch env {

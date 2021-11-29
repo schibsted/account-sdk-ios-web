@@ -86,12 +86,14 @@ public final class SimplifiedLoginManager {
         user.fetchProfileData { result in
             switch result {
 
-            case .success(_): // TODO: profileResponse and userContext need to be passed to factory when building SimplifiedLogin ViewController
+            case .success(let profileResponse):
                 DispatchQueue.main.async {
                     let simplifiedLoginViewController: UIViewController
                     if #available(iOS 13.0, *) {
                         simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                                      env: self.env,
+                                                                                                     userContext: userContext,
+                                                                                                     userProfileResponse: profileResponse,
                                                                                                      withMFA: self.withMFA,
                                                                                                      loginHint: self.loginHint,
                                                                                                      extraScopeValues: self.extraScopeValues,
@@ -100,6 +102,8 @@ public final class SimplifiedLoginManager {
                     } else {
                         simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                                      env: self.env,
+                                                                                                     userContext: userContext,
+                                                                                                     userProfileResponse: profileResponse,
                                                                                                      withMFA: self.withMFA,
                                                                                                      loginHint: self.loginHint,
                                                                                                      extraScopeValues: self.extraScopeValues,

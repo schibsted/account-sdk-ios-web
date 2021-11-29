@@ -24,7 +24,7 @@ class UserInformationView: UIStackView {
     
     private lazy var initialsLabel: UILabel = {
         let view = UILabel()
-        view.text = "DE" // TODO: How do we get Initials
+        view.text = viewModel.initials
         view.font = UIFont.boldSystemFont(ofSize: 17)
         view.textAlignment = .center
         view.textColor = UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
