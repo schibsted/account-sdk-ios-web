@@ -12,7 +12,7 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         
-        let viewModel = SimplifiedLoginViewModel(client: client, env: env, userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(env: env, userContext: userContext, userProfileResponse: userProfileResponse)
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
@@ -34,7 +34,7 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewModel = SimplifiedLoginViewModel(client: client, env: env, userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(env: env, userContext: userContext, userProfileResponse: userProfileResponse)
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,

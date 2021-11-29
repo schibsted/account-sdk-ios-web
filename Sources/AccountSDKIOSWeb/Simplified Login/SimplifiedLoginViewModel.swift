@@ -8,6 +8,7 @@ class SimplifiedLoginViewModel {
     var onClickedPrivacyPolicy: (() -> Void)?
     var onClickedContinueAsUser: (() -> Void)? // TODO:
     
+    let env: ClientConfiguration.Environment
     let userContext: UserContextFromTokenResponse
     let userProfileResponse: UserProfileResponse
     
@@ -25,13 +26,11 @@ class SimplifiedLoginViewModel {
     }
     
     let clientName = "Finn" // TODO: Need to be fetched
-    
-    let client: Client
+
     var asWebAuthenticationSession: ASWebAuthenticationSession?
     
-    init(client: Client, env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
-        
-        self.client = client
+    init(env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
+        self.env = env
         self.userContext = userContext
         self.userProfileResponse = userProfileResponse
         
