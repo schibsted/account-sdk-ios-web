@@ -5,8 +5,8 @@ class FooterView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
-        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 27) }
-        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 27) }
+        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 32) }
+        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 32) }
         return popularBrandsWidths + popularBrandsHeights + [schibstedIconImageView.heightAnchor.constraint(equalToConstant: 16),
          schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)]
     }()
@@ -40,7 +40,7 @@ class FooterView: UIStackView {
         view.alignment = .center
         view.axis = .horizontal
         view.distribution = .fill
-        view.spacing = 5
+        view.spacing = -6
         view.translatesAutoresizingMaskIntoConstraints = false
 
         return view
@@ -92,8 +92,10 @@ class FooterView: UIStackView {
 
         ////  Ecosystem
         for iv in popularBrandsImageViews {
-            popularBrandsStackView.addArrangedSubview(iv) // TODO> make brand icons overlapping
+            popularBrandsStackView.addArrangedSubview(iv)
         }
+        popularBrandsStackView.reverseSubviewsZIndex()
+        
         ecoSystemBarStackView.addArrangedSubview(popularBrandsStackView)
         ecoSystemBarStackView.addArrangedSubview(schibstedIconImageView)
         self.addArrangedSubview(ecoSystemBarStackView)
@@ -115,4 +117,20 @@ class FooterView: UIStackView {
         
         return view
     }
+}
+
+private extension UIStackView {
+  func reverseSubviewsZIndex(setNeedsLayout: Bool = true) {
+    let stackedViews = self.arrangedSubviews
+    stackedViews.forEach {
+      self.removeArrangedSubview($0)
+      $0.removeFromSuperview()
+    }
+    stackedViews.reversed().forEach(addSubview(_:))
+    stackedViews.forEach(addArrangedSubview(_:))
+
+    if setNeedsLayout {
+      stackedViews.forEach { $0.setNeedsLayout() }
+    }
+  }
 }
