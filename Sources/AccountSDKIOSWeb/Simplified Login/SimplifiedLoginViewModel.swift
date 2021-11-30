@@ -2,25 +2,12 @@ import Foundation
 import AuthenticationServices
 
 class SimplifiedLoginViewModel {
-    
-    var onClickedContinueWithoutLogin: (() -> Void)?
-    var onClickedSwitchAccount: (() -> Void)?
-    var onClickedPrivacyPolicy: (() -> Void)?
-    var onClickedContinueAsUser: (() -> Void)? // TODO:
-    
-    var iconNames: [String]
+    let env: ClientConfiguration.Environment
+    let userContext: UserContextFromTokenResponse
+    let userProfileResponse: UserProfileResponse
     let schibstedLogoName = "sch-logo"
     
-    let displayName = "Daniel.User" // TODO: Need to be fetched
-    let clientName = "Finn" // TODO: Need to be fetched
-    
-    let client: Client
-    var asWebAuthenticationSession: ASWebAuthenticationSession?
-    
-    init(client: Client, env: ClientConfiguration.Environment) {
-        
-        self.client = client
-        
+    var iconNames: [String] {
         let orderedIconNames: [String]
         switch env {
         case .proCom:
@@ -29,14 +16,39 @@ class SimplifiedLoginViewModel {
             orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
         case .proFi:
             orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
-        case .proDk:
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"] //TODO: NEED DK 5 brands with icons
-        case .pre:
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Using SV icons
+        case .proDk, .pre:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
         }
-        
-        self.iconNames = orderedIconNames
+        return orderedIconNames
     }
+    
+    var displayName: String {
+        return userContext.display_text
+    }
+    
+    var initials: String {
+        let firstName  = userProfileResponse.name?.givenName ?? ""
+        let lastName = userProfileResponse.name?.familyName ?? ""
+        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
+        return initials
+    }
+    
+    let clientName = "Finn" // TODO: Need to be fetched
+
+    var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    init(env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
+        self.env = env
+        self.userContext = userContext
+        self.userProfileResponse = userProfileResponse
+    }
+    
+    // MARK: Simplified Login User Actions
+    
+    var onClickedContinueWithoutLogin: (() -> Void)?
+    var onClickedSwitchAccount: (() -> Void)?
+    var onClickedPrivacyPolicy: (() -> Void)?
+    var onClickedContinueAsUser: (() -> Void)? // TODO:
     
     func send(action: SimplifiedLoginViewController.UserAction){
         switch action {
