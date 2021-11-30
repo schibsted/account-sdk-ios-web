@@ -72,6 +72,7 @@
 		A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDE257523C800513EED /* Preview Assets.xcassets */; };
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
+		CE134B372756590300053BC7 /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE134B362756590300053BC7 /* FormSheet.swift */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5225D52747D6CC009E015E /* for_use_simplified-widget_translations_nb.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225D02747D69A009E015E /* for_use_simplified-widget_translations_nb.json */; };
 		CE5225D62747D6CF009E015E /* for_use_simplified-widget_translations_sv.json in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CF2747D69A009E015E /* for_use_simplified-widget_translations_sv.json */; };
@@ -204,6 +205,7 @@
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE134B362756590300053BC7 /* FormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSheet.swift; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE5225CF2747D69A009E015E /* for_use_simplified-widget_translations_sv.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_sv.json"; sourceTree = "<group>"; };
 		CE5225D02747D69A009E015E /* for_use_simplified-widget_translations_nb.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "for_use_simplified-widget_translations_nb.json"; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CEDC45DD27463C200060EDA2 /* WebViewController.swift */,
 				CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */,
+				CE134B362756590300053BC7 /* FormSheet.swift */,
 			);
 			path = "Simplified Login";
 			sourceTree = "<group>";
@@ -955,6 +958,7 @@
 				248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */,
 				2489C9B326733A0900AA0A4C /* LegacyKeychainSessionStorage.swift in Sources */,
 				24EB1512267A10C7002D9628 /* InternalSchibstedAccountAPIResponses.swift in Sources */,
+				CE134B372756590300053BC7 /* FormSheet.swift in Sources */,
 				2489C9A526733A0900AA0A4C /* TokenHandler.swift in Sources */,
 				CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */,
 				2489C9AC26733A0900AA0A4C /* User.swift in Sources */,

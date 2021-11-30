@@ -63,7 +63,11 @@ struct ContentView: View {
                 
                 NavigationLink("", destination: webView, isActive: $showAccountPages)
             }
-        }.sheet(isPresented: $isPresentedSimplifiedLogin, content: { SimplifiedLoginSwiftUIView() })
+        }
+        // Please use .formSheet modifier defined in SDK to show Simplified Login UI. It takes care of showing it in the right size
+        .formSheet(isPresented: $isPresentedSimplifiedLogin) {
+            SimplifiedLoginSwiftUIView()
+        }
     }
     
     func resumeUser() {
