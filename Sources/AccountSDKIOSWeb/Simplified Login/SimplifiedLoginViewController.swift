@@ -138,8 +138,6 @@ class SimplifiedLoginViewController: UIViewController {
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             primaryButton.heightAnchor.constraint(equalToConstant: 48),
             primaryButton.widthAnchor.constraint(equalToConstant: 343),
-            primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
