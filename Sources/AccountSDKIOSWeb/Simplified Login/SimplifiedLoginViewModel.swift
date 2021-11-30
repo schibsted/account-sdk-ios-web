@@ -54,6 +54,7 @@ class SimplifiedLoginViewModel {
 
 extension SimplifiedLoginViewModel {
     enum Localization: String {
+        case continueToLogIn = "SimplifiedWidget.continueToLogIn"
         case schibstedTitle = "SimplifiedWidget.schibstedAccount"
         case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
         case explanationText = "SimplifiedWidget.footer"
@@ -66,6 +67,10 @@ extension SimplifiedLoginViewModel {
         var localizedString: String{
             return self.rawValue.localized()
         }
+    }
+    
+    var continueToLogIn: String {
+        return Localization.continueToLogIn.localizedString
     }
     
     var schibstedTitle: String {
