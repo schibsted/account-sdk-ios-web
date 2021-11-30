@@ -24,7 +24,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     private lazy var primaryButton: UIButton = {
         let button = UIButton()
-        let title = "\(viewModel.localisation.continuAsButtonTitle) \(viewModel.displayName)"
+        let title = "\(viewModel.continuAsButtonTitle) \(viewModel.displayName)"
         
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
