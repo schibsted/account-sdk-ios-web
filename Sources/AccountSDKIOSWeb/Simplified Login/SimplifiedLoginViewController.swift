@@ -5,6 +5,7 @@ import UIKit
 class SimplifiedLoginViewController: UIViewController {
     
     private var viewModel: SimplifiedLoginViewModel
+    private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
     
     private lazy var userInformationView: UserInformationView = {
         let view = UserInformationView(viewModel: viewModel)
@@ -43,11 +44,11 @@ class SimplifiedLoginViewController: UIViewController {
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
-        view.spacing = 20
+        view.spacing = isPhone ? 20 : 0
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
+        view.layoutMargins = UIEdgeInsets(top: isPhone ? 8 : 0, left: 0, bottom: 16, right: 0)
         view.isLayoutMarginsRelativeArrangement = true
         return view
     }()
@@ -81,18 +82,22 @@ class SimplifiedLoginViewController: UIViewController {
         view.addSubview(primaryButton)
         view.addSubview(linksView)
         view.addSubview(footerStackView)
-        setupConstraints()
         
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
         
-        setupNavigationBar()
+        if isPhone {
+            setupConstraints()
+            setupNavigationBar()
+        } else {
+            setupiPadConstraints()
+        }
     }
     
     func setupNavigationBar(){
-        guard UIDevice.current.userInterfaceIdiom == .phone else {
+        guard isPhone else {
             return
         }
         
@@ -133,8 +138,6 @@ class SimplifiedLoginViewController: UIViewController {
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             primaryButton.heightAnchor.constraint(equalToConstant: 48),
             primaryButton.widthAnchor.constraint(equalToConstant: 343),
-            primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
@@ -147,6 +150,34 @@ class SimplifiedLoginViewController: UIViewController {
 
         ]
         
+        NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    func setupiPadConstraints() {
+        
+        let margin = view.layoutMarginsGuide
+        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
+            // UserInformation
+            userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
+            userInformationView.topAnchor.constraint(equalTo: margin.topAnchor, constant: -90),
+
+            // Primary button
+            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 10),
+            primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
+            primaryButton.heightAnchor.constraint(equalToConstant: 48),
+            primaryButton.widthAnchor.constraint(equalToConstant: 343),
+            
+            // Links View
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 20),
+            linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
+            
+            // Footer
+            footerStackView.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
+            footerStackView.heightAnchor.constraint(equalToConstant: 156),
+            footerStackView.widthAnchor.constraint(equalToConstant: 394),
+            footerStackView.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -30),
+        ]
         NSLayoutConstraint.activate(allConstraints)
     }
 }

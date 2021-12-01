@@ -5,6 +5,8 @@ public final class SimplifiedLoginManager {
         case noLoggedInSessionInSharedKeychain
     }
     
+    private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+    
     var keychainSessionStorage: KeychainSessionStorage?
     let client: Client
     var user: User?
@@ -108,6 +110,10 @@ public final class SimplifiedLoginManager {
                                                                                                      loginHint: self.loginHint,
                                                                                                      extraScopeValues: self.extraScopeValues,
                                                                                                      completion: self.completion)
+                    }
+                    if self.isPad {
+                        simplifiedLoginViewController.modalPresentationStyle = .formSheet
+                        simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
                     }
                     completion(.success(simplifiedLoginViewController))
                 }
