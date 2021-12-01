@@ -102,7 +102,7 @@ class SimplifiedLoginViewController: UIViewController {
         }
         
         let navigationBar = navigationController?.navigationBar
-        navigationBar?.topItem?.title = "Continue to log in" // TODO: Need to be localised
+        navigationBar?.topItem?.title = viewModel.continueToLogIn
         
         if #available(iOS 13.0, *) {
             
