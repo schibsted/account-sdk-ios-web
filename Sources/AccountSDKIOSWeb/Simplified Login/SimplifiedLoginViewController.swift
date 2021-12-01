@@ -25,7 +25,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     private lazy var primaryButton: UIButton = {
         let button = UIButton()
-        let title = "\(viewModel.localisation.continuAsButtonTitle) \(viewModel.displayName)"
+        let title = "\(viewModel.continuAsButtonTitle) \(viewModel.displayName)"
         
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -102,7 +102,7 @@ class SimplifiedLoginViewController: UIViewController {
         }
         
         let navigationBar = navigationController?.navigationBar
-        navigationBar?.topItem?.title = "Continue to log in" // TODO: Need to be localised
+        navigationBar?.topItem?.title = viewModel.continueToLogIn
         
         if #available(iOS 13.0, *) {
             
@@ -228,8 +228,9 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
                 print(error)
             }
         }
-        
-        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
+        let userContext = UserContextFromTokenResponse(identifier: "Demo identifier", display_text: "Display.Text", client_name: "demo client name")
+        let userProfileResponse = UserProfileResponse(uuid: "", userId: "", status: nil, email: "demo@email.com", emailVerified: nil, emails: nil, phoneNumber: nil, phoneNumberVerified: nil, phoneNumbers: nil, displayName: "display.name", name: Name(givenName: "firstName", familyName: "lastName", formatted: nil), addresses: nil, gender: nil, birthday: nil, accounts: nil, merchants: nil, published: nil, verified: nil, updated: nil, passwordChanged: nil, lastAuthenticated: nil, lastLoggedIn: nil, locale: nil, utcOffset: nil)
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre, userContext: userContext, userProfileResponse: userProfileResponse, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
         
         return s
     }

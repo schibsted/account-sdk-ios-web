@@ -1,0 +1,9 @@
+"SimplifiedWidget.continueToLogIn" = "Fortsæt med at logge ind";
+"SimplifiedWidget.schibstedAccount" = "Schibsted-konto";
+"SimplifiedWidget.continueAs" = "Fortsæt som";
+"SimplifiedWidget.continueWithoutLogin" = "Fortsæt uden at logge ind";
+"SimplifiedWidget.footer" = "Du er logget ind på en tjeneste med Schibsted og kan fortsætte på {0} med et klik";
+"SimplifiedWidget.privacyPolicy" = "Fortrolighedserklæring";
+"SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/no/schibsted-norge-personverkerklaering/";
+"SimplifiedWidget.notYou" = "Ikke dig?";
+"SimplifiedWidget.loginWithDifferentAccount" = "Skift konto";

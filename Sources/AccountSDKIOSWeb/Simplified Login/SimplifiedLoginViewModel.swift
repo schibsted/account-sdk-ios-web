@@ -2,57 +2,53 @@ import Foundation
 import AuthenticationServices
 
 class SimplifiedLoginViewModel {
+    let env: ClientConfiguration.Environment
+    let userContext: UserContextFromTokenResponse
+    let userProfileResponse: UserProfileResponse
+    let schibstedLogoName = "sch-logo"
+    
+    var iconNames: [String] {
+        let orderedIconNames: [String]
+        switch env {
+        case .proCom:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
+        case .proNo:
+            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
+        case .proFi:
+            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
+        case .proDk, .pre:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
+        }
+        return orderedIconNames
+    }
+    
+    var displayName: String {
+        return userContext.display_text
+    }
+    
+    var initials: String {
+        let firstName  = userProfileResponse.name?.givenName ?? ""
+        let lastName = userProfileResponse.name?.familyName ?? ""
+        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
+        return initials
+    }
+    
+    let clientName = "Finn" // TODO: Need to be fetched
+
+    var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    init(env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
+        self.env = env
+        self.userContext = userContext
+        self.userProfileResponse = userProfileResponse
+    }
+    
+    // MARK: Simplified Login User Actions
     
     var onClickedContinueWithoutLogin: (() -> Void)?
     var onClickedSwitchAccount: (() -> Void)?
     var onClickedPrivacyPolicy: (() -> Void)?
     var onClickedContinueAsUser: (() -> Void)? // TODO:
-    
-    var localisation: Localisation
-    var iconNames: [String]
-    let schibstedLogoName = "sch-logo"
-    
-    let displayName = "Daniel.User" // TODO: Need to be fetched
-    let clientName = "Finn" // TODO: Need to be fetched
-    
-    let client: Client
-    var asWebAuthenticationSession: ASWebAuthenticationSession?
-    
-    init?(client: Client, env: ClientConfiguration.Environment) {
-        
-        self.client = client
-        
-        let resourceName: String
-        let orderedIconNames: [String]
-        switch env {
-        case .proCom:
-            resourceName = "for_use_simplified-widget_translations_sv"
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
-        case .proNo:
-            resourceName = "for_use_simplified-widget_translations_nb"
-            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
-        case .proFi:
-            resourceName = "for_use_simplified-widget_translations_fi"
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
-        case .proDk:
-            resourceName = "for_use_simplified-widget_translations_da"
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"] //TODO: NEED DK 5 brands with icons
-        case .pre:
-            resourceName = "simplified-widget_translations_en"
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Using SV icons
-        }
-        
-        let decoder = JSONDecoder()
-        guard let url = Bundle.accountSDK(for: SimplifiedLoginViewModel.self).url(forResource: resourceName, withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let localisation = try? decoder.decode(Localisation.self, from: data)
-        else {
-            return nil
-        }
-        
-        self.localisation = localisation
-        self.iconNames = orderedIconNames
-    }
     
     func send(action: SimplifiedLoginViewController.UserAction){
         switch action {
@@ -66,26 +62,58 @@ class SimplifiedLoginViewModel {
             self.onClickedPrivacyPolicy?()
         }
     }
-    
-    struct Localisation: Codable {
-        var schibstedTitle: String
-        var continueWithoutLogin: String
-        var explanationText: String
-        var privacyPolicyTitle: String
-        var privacyPolicyURL: String
-        var switchAccount: String
-        var notYouTitle: String
-        var continuAsButtonTitle: String
+}
+
+extension SimplifiedLoginViewModel {
+    enum Localization: String {
+        case continueToLogIn = "SimplifiedWidget.continueToLogIn"
+        case schibstedTitle = "SimplifiedWidget.schibstedAccount"
+        case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
+        case explanationText = "SimplifiedWidget.footer"
+        case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
+        case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
+        case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
+        case notYouTitle = "SimplifiedWidget.notYou"
+        case continuAsButtonTitle = "SimplifiedWidget.continueAs"
         
-        enum CodingKeys: String, CodingKey {
-            case schibstedTitle = "SimplifiedWidget.schibstedAccount"
-            case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
-            case explanationText = "SimplifiedWidget.footer"
-            case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
-            case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
-            case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
-            case notYouTitle = "SimplifiedWidget.notYou"
-            case continuAsButtonTitle = "SimplifiedWidget.continueAs"
+        var localizedString: String{
+            return self.rawValue.localized()
         }
+    }
+    
+    var continueToLogIn: String {
+        return Localization.continueToLogIn.localizedString
+    }
+    
+    var schibstedTitle: String {
+        return Localization.schibstedTitle.localizedString
+    }
+    
+    var continueWithoutLogin: String {
+        return Localization.continueWithoutLogin.localizedString
+    }
+    
+    var explanationText: String {
+        return Localization.explanationText.localizedString
+    }
+    
+    var privacyPolicyTitle: String {
+        return Localization.privacyPolicyTitle.localizedString
+    }
+    
+    var privacyPolicyURL: String {
+        return Localization.privacyPolicyURL.localizedString
+    }
+    
+    var switchAccount: String {
+        return Localization.switchAccount.localizedString
+    }
+    
+    var notYouTitle: String {
+        return Localization.notYouTitle.localizedString
+    }
+    
+    var continuAsButtonTitle: String {
+        return Localization.continuAsButtonTitle.localizedString
     }
 }
