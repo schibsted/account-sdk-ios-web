@@ -5,10 +5,10 @@ class FooterView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
-        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 27) }
-        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 27) }
+        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 32) }
+        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 32) }
         return popularBrandsWidths + popularBrandsHeights + [schibstedIconImageView.heightAnchor.constraint(equalToConstant: 16),
-         schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)]
+            schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)]
     }()
     
     // Eco system
@@ -20,7 +20,7 @@ class FooterView: UIStackView {
         view.distribution = .fill
         view.spacing = 15
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return view
     }()
     
@@ -31,7 +31,7 @@ class FooterView: UIStackView {
         view.image = image
         view.contentMode = .center
         view.contentMode = .scaleAspectFit
-
+        
         return view
     }()
     
@@ -40,9 +40,9 @@ class FooterView: UIStackView {
         view.alignment = .center
         view.axis = .horizontal
         view.distribution = .fill
-        view.spacing = 5
+        view.spacing = -6
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return view
     }()
     
@@ -79,7 +79,7 @@ class FooterView: UIStackView {
         ]
         let attributedText = NSAttributedString(string: viewModel.privacyPolicyTitle,
                                                  attributes: attributes)
-                                                 
+
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setAttributedTitle(attributedText, for: .normal)
         
@@ -89,11 +89,13 @@ class FooterView: UIStackView {
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-
+        
         ////  Ecosystem
         for iv in popularBrandsImageViews {
-            popularBrandsStackView.addArrangedSubview(iv) // TODO> make brand icons overlapping
+            popularBrandsStackView.addArrangedSubview(iv)
         }
+        popularBrandsStackView.reverseSubviewsZIndex()
+        
         ecoSystemBarStackView.addArrangedSubview(popularBrandsStackView)
         ecoSystemBarStackView.addArrangedSubview(schibstedIconImageView)
         self.addArrangedSubview(ecoSystemBarStackView)
@@ -101,7 +103,7 @@ class FooterView: UIStackView {
         ////  Privacy and Explanation
         self.addArrangedSubview(explanationLabel)
         self.addArrangedSubview(privacyURLButton)
-
+        
     }
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
@@ -114,5 +116,21 @@ class FooterView: UIStackView {
         view.image = image
         
         return view
+    }
+}
+
+private extension UIStackView {
+    func reverseSubviewsZIndex(setNeedsLayout: Bool = true) {
+        let stackedViews = self.arrangedSubviews
+        stackedViews.forEach {
+            self.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        stackedViews.reversed().forEach(addSubview(_:))
+        stackedViews.forEach(addArrangedSubview(_:))
+        
+        if setNeedsLayout {
+            stackedViews.forEach { $0.setNeedsLayout() }
+        }
     }
 }
