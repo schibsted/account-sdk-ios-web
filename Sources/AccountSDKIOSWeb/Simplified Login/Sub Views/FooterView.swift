@@ -109,9 +109,12 @@ class FooterView: UIStackView {
     
     private func getRoundedImageView(name: String) -> UIImageView {
         let view = UIImageView()
-        
+        view.layer.masksToBounds = true
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 16
         view.clipsToBounds = true
+        
         let image  = UIImage(named: name, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
         view.image = image
         
