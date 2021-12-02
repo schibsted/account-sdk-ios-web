@@ -30,7 +30,7 @@ class FooterView: UIStackView {
         
         view.image = image
         view.contentMode = .center
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         
         return view
     }()
@@ -110,7 +110,7 @@ class FooterView: UIStackView {
     private func getRoundedImageView(name: String) -> UIImageView {
         let view = UIImageView()
         
-        view.layer.cornerRadius = 13
+        view.layer.cornerRadius = 16
         view.clipsToBounds = true
         let image  = UIImage(named: name, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
         view.image = image
