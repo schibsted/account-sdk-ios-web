@@ -22,6 +22,8 @@
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
 		244EAACA275A26DA008A1285 /* SimplifiedLoginDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */; };
+		244EAACC275A2E96008A1285 /* SessionStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244EAACB275A2E96008A1285 /* SessionStorageTests.swift */; };
+		244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B035927071E6E0041F15A /* Client+AppTransfer.swift */; };
 		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
@@ -150,6 +152,8 @@
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
 		244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginDataFetcher.swift; sourceTree = "<group>"; };
+		244EAACB275A2E96008A1285 /* SessionStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStorageTests.swift; sourceTree = "<group>"; };
+		244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionStorageProtocol.swift; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		246B035927071E6E0041F15A /* Client+AppTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Client+AppTransfer.swift"; sourceTree = "<group>"; };
 		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
@@ -618,6 +622,7 @@
 			children = (
 				CED92B7A272C15D800572645 /* MockURLProtocol.swift */,
 				CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */,
+				244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -715,6 +720,7 @@
 			children = (
 				OBJ_54 /* Compat */,
 				OBJ_57 /* StateStorageTests.swift */,
+				244EAACB275A2E96008A1285 /* SessionStorageTests.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -1052,6 +1058,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				244EAACC275A2E96008A1285 /* SessionStorageTests.swift in Sources */,
 				243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */,
 				CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */,
 				OBJ_245 /* Await.swift in Sources */,
@@ -1063,6 +1070,7 @@
 				OBJ_251 /* JOSEUtilTests.swift in Sources */,
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
+				244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */,
 				CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */,
 				A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */,
 				24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */,

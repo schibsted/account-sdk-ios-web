@@ -7,7 +7,7 @@ public final class SimplifiedLoginManager {
     
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
-    var keychainSessionStorage: KeychainSessionStorage?
+    var keychainSessionStorage: SessionStorage?
     let client: Client
     var dataFetcher: SimplifiedLoginDataFetching?
     
@@ -60,16 +60,12 @@ public final class SimplifiedLoginManager {
 
 extension SimplifiedLoginManager {
     public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) {
-        let latestUserSession = self.keychainSessionStorage?.getAll()
-            .sorted { $0.updatedAt > $1.updatedAt }
-            .first
-        
-        guard let sLatestUserSession = latestUserSession else {
+        guard let latestUserSession = self.keychainSessionStorage?.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
         }
         
-        let user = User(client: client, tokens: sLatestUserSession.userTokens)
+        let user = User(client: client, tokens: latestUserSession.userTokens)
         self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
         self.dataFetcher?.fetch { result in
             switch result {
