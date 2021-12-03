@@ -9,7 +9,7 @@ public final class SimplifiedLoginManager {
     
     var keychainSessionStorage: KeychainSessionStorage?
     let client: Client
-    var user: User?
+    var dataFetcher: SimplifiedLoginDataFetching?
     
     // Properties for building SimplifiedLoginViewController
     let env: ClientConfiguration.Environment
@@ -56,9 +56,9 @@ public final class SimplifiedLoginManager {
         self.completion = completion
         self.withSSO = withSSO
     }
-    
-    // MARK: -
-    
+}
+
+extension SimplifiedLoginManager {
     public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) {
         let latestUserSession = self.keychainSessionStorage?.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }
@@ -70,57 +70,47 @@ public final class SimplifiedLoginManager {
         }
         
         let user = User(client: client, tokens: sLatestUserSession.userTokens)
-        self.user = user
-        
-        user.userContextFromToken { result in
+        self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
+        self.dataFetcher?.fetch { result in
             switch result {
-            case .success(let userContextResponse):
-                self.fetchProfile(user: user, userContext: userContextResponse, completion: completion)
+            case .success(let fetchedData):
+                DispatchQueue.main.async {
+                    let simplifiedLoginViewController = self.makeViewController(fetchedData)
+                    completion(.success(simplifiedLoginViewController))
+                }
             case .failure(let error):
-                SchibstedAccountLogger.instance.error("Failed to fetch userContextFromToken: \(String(describing: error))")
                 completion(.failure(error))
             }
         }
     }
     
-    private func fetchProfile(user: User, userContext: UserContextFromTokenResponse, completion: @escaping (Result<UIViewController, Error>) -> Void) {
-        
-        user.fetchProfileData { result in
-            switch result {
-
-            case .success(let profileResponse):
-                DispatchQueue.main.async {
-                    let simplifiedLoginViewController: UIViewController
-                    if #available(iOS 13.0, *) {
-                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                     env: self.env,
-                                                                                                     userContext: userContext,
-                                                                                                     userProfileResponse: profileResponse,
-                                                                                                     withMFA: self.withMFA,
-                                                                                                     loginHint: self.loginHint,
-                                                                                                     extraScopeValues: self.extraScopeValues,
-                                                                                                     withSSO: self.withSSO,
-                                                                                                     completion: self.completion)
-                    } else {
-                        simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                                     env: self.env,
-                                                                                                     userContext: userContext,
-                                                                                                     userProfileResponse: profileResponse,
-                                                                                                     withMFA: self.withMFA,
-                                                                                                     loginHint: self.loginHint,
-                                                                                                     extraScopeValues: self.extraScopeValues,
-                                                                                                     completion: self.completion)
-                    }
-                    if self.isPad {
-                        simplifiedLoginViewController.modalPresentationStyle = .formSheet
-                        simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
-                    }
-                    completion(.success(simplifiedLoginViewController))
-                }
-            case .failure(let error):
-                SchibstedAccountLogger.instance.error("Failed to fetch profileData: \(String(describing: error))")
-                completion(.failure(error))
-            }
+    func makeViewController(_ simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+        let simplifiedLoginViewController: UIViewController
+        if #available(iOS 13.0, *) {
+            simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                         env: self.env,
+                                                                                         userContext: simplifiedLoginData.context,
+                                                                                         userProfileResponse: simplifiedLoginData.profile,
+                                                                                         withMFA: self.withMFA,
+                                                                                         loginHint: self.loginHint,
+                                                                                         extraScopeValues: self.extraScopeValues,
+                                                                                         withSSO: self.withSSO,
+                                                                                         completion: self.completion)
+        } else {
+            simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                         env: self.env,
+                                                                                         userContext: simplifiedLoginData.context,
+                                                                                         userProfileResponse: simplifiedLoginData.profile,
+                                                                                         withMFA: self.withMFA,
+                                                                                         loginHint: self.loginHint,
+                                                                                         extraScopeValues: self.extraScopeValues,
+                                                                                         completion: self.completion)
         }
+        if self.isPad {
+            simplifiedLoginViewController.modalPresentationStyle = .formSheet
+            simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
+        }
+        
+        return simplifiedLoginViewController
     }
 }
