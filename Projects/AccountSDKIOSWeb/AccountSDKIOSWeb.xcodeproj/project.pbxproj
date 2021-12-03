@@ -21,6 +21,7 @@
 		243BFAD82750F20700382494 /* String+Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243BFAD72750F20700382494 /* String+Localization.swift */; };
 		2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */; };
 		2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2449DCAB2673633C00FE7197 /* URLBuilder.swift */; };
+		244EAACA275A26DA008A1285 /* SimplifiedLoginDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B035927071E6E0041F15A /* Client+AppTransfer.swift */; };
 		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
@@ -148,6 +149,7 @@
 		243BFAD72750F20700382494 /* String+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localization.swift"; sourceTree = "<group>"; };
 		2449DCAB2673633C00FE7197 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		2449DD302677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+AuthorizationRequest.swift"; sourceTree = "<group>"; };
+		244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginDataFetcher.swift; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		246B035927071E6E0041F15A /* Client+AppTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Client+AppTransfer.swift"; sourceTree = "<group>"; };
 		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
 			isa = PBXGroup;
 			children = (
+				244EAAC7275A2671008A1285 /* Fetcher */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
 				2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */,
 				CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */,
@@ -353,6 +356,14 @@
 				243BFAD72750F20700382494 /* String+Localization.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		244EAAC7275A2671008A1285 /* Fetcher */ = {
+			isa = PBXGroup;
+			children = (
+				244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */,
+			);
+			path = Fetcher;
 			sourceTree = "<group>";
 		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
@@ -982,6 +993,7 @@
 				CEDC45DE27463C200060EDA2 /* WebViewController.swift in Sources */,
 				2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */,
 				2489C9AD26733A0900AA0A4C /* AuthState.swift in Sources */,
+				244EAACA275A26DA008A1285 /* SimplifiedLoginDataFetcher.swift in Sources */,
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
 				CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */,
 				2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */,
