@@ -12,7 +12,6 @@ public final class SimplifiedLoginManager {
     var dataFetcher: SimplifiedLoginDataFetching?
     
     // Properties for building SimplifiedLoginViewController
-    let env: ClientConfiguration.Environment
     let withMFA: MFAType?
     let loginHint: String?
     let extraScopeValues: Set<String>
@@ -22,7 +21,6 @@ public final class SimplifiedLoginManager {
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     public init(accessGroup: String,
                 client: Client,
-                env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
@@ -30,7 +28,6 @@ public final class SimplifiedLoginManager {
         self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
         self.client = client
         
-        self.env = env
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -49,7 +46,6 @@ public final class SimplifiedLoginManager {
         self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
         self.client = client
         
-        self.env = env
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -84,7 +80,6 @@ extension SimplifiedLoginManager {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                         env: self.env,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          withMFA: self.withMFA,
@@ -94,7 +89,6 @@ extension SimplifiedLoginManager {
                                                                                          completion: self.completion)
         } else {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
-                                                                                         env: self.env,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          withMFA: self.withMFA,

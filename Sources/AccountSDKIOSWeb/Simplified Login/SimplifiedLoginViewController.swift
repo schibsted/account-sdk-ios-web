@@ -230,7 +230,7 @@ public struct SimplifiedLoginViewControllerRepresentable: UIViewControllerRepres
         }
         let userContext = UserContextFromTokenResponse(identifier: "Demo identifier", display_text: "Display.Text", client_name: "demo client name")
         let userProfileResponse = UserProfileResponse(uuid: "", userId: "", status: nil, email: "demo@email.com", emailVerified: nil, emails: nil, phoneNumber: nil, phoneNumberVerified: nil, phoneNumbers: nil, displayName: "display.name", name: Name(givenName: "firstName", familyName: "lastName", formatted: nil), addresses: nil, gender: nil, birthday: nil, accounts: nil, merchants: nil, published: nil, verified: nil, updated: nil, passwordChanged: nil, lastAuthenticated: nil, lastLoggedIn: nil, locale: nil, utcOffset: nil)
-        let s = SimplifiedLoginUIFactory.buildViewController(client: client, env: .pre, userContext: userContext, userProfileResponse: userProfileResponse, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
+        let s = SimplifiedLoginUIFactory.buildViewController(client: client, userContext: userContext, userProfileResponse: userProfileResponse, withMFA: .password, loginHint: nil, extraScopeValues: [], withSSO: true, completion: completion) as! UINavigationController
         
         return s
     }
