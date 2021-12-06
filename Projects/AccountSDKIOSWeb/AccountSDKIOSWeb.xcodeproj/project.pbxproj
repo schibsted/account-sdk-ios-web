@@ -26,6 +26,7 @@
 		244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */; };
 		2459C7A126735C41007A373B /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2459C7A026735C39007A373B /* Package.swift */; };
 		246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B035927071E6E0041F15A /* Client+AppTransfer.swift */; };
+		2472EA2C275E057A0037433D /* LocalizationAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2472EA2B275E057A0037433D /* LocalizationAssets.swift */; };
 		2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2473CB9F2678AED60001B861 /* URLBuilderTests.swift */; };
 		248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440162692E97700CE88F2 /* ClientConfiguration.swift */; };
 		24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24844038269347C500CE88F2 /* MulticastDelegate.swift */; };
@@ -156,6 +157,7 @@
 		244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionStorageProtocol.swift; sourceTree = "<group>"; };
 		2459C7A026735C39007A373B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../../Package.swift; sourceTree = "<group>"; };
 		246B035927071E6E0041F15A /* Client+AppTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Client+AppTransfer.swift"; sourceTree = "<group>"; };
+		2472EA2B275E057A0037433D /* LocalizationAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationAssets.swift; sourceTree = "<group>"; };
 		2473CB9F2678AED60001B861 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBuilderTests.swift; sourceTree = "<group>"; };
 		248440162692E97700CE88F2 /* ClientConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientConfiguration.swift; sourceTree = "<group>"; };
 		24844038269347C500CE88F2 /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
@@ -615,6 +617,7 @@
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2472EA2B275E057A0037433D /* LocalizationAssets.swift */,
 				243BFAD22750D75A00382494 /* da.lproj */,
 				243BFACF2750D75A00382494 /* fi.lproj */,
 				243BFAC92750D68300382494 /* nb.lproj */,
@@ -1027,6 +1030,7 @@
 				CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */,
 				246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */,
 				2489C9B826733A0900AA0A4C /* SessionStorage.swift in Sources */,
+				2472EA2C275E057A0037433D /* LocalizationAssets.swift in Sources */,
 				24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */,
 				24209496273D025E004CF03D /* SimplifiedLoginViewController.swift in Sources */,
 				24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */,

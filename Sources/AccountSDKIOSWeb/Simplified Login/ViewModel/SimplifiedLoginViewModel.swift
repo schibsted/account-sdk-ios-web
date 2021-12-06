@@ -58,7 +58,7 @@ extension SimplifiedLoginUserActionable {
     }
 }
 
-class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelUserData, SimplifiedLoginNamedImageData, SimplifiedLoginViewModelAuthenticator{
+class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelUserData, SimplifiedLoginNamedImageData, SimplifiedLoginViewModelAuthenticator {
     
     let clientName = "Finn" // TODO: Need to be fetched
     
@@ -100,55 +100,40 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
 }
 
 extension SimplifiedLoginViewModel {
-    enum Localization: String {
-        case continueToLogIn = "SimplifiedWidget.continueToLogIn"
-        case schibstedTitle = "SimplifiedWidget.schibstedAccount"
-        case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
-        case explanationText = "SimplifiedWidget.footer"
-        case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
-        case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
-        case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
-        case notYouTitle = "SimplifiedWidget.notYou"
-        case continuAsButtonTitle = "SimplifiedWidget.continueAs"
-        
-        var localizedString: String{
-            return self.rawValue.localized()
-        }
-    }
     
     var continueToLogIn: String {
-        return Localization.continueToLogIn.localizedString
+        return Localization.SimplifiedLogin.continueToLogIn.localizedString
     }
     
     var schibstedTitle: String {
-        return Localization.schibstedTitle.localizedString
+        return Localization.SimplifiedLogin.schibstedTitle.localizedString
     }
     
     var continueWithoutLogin: String {
-        return Localization.continueWithoutLogin.localizedString
+        return Localization.SimplifiedLogin.continueWithoutLogin.localizedString
     }
     
     var explanationText: String {
-        return Localization.explanationText.localizedString
+        return Localization.SimplifiedLogin.explanationText.localizedString
     }
     
     var privacyPolicyTitle: String {
-        return Localization.privacyPolicyTitle.localizedString
+        return Localization.SimplifiedLogin.privacyPolicyTitle.localizedString
     }
     
     var privacyPolicyURL: String {
-        return Localization.privacyPolicyURL.localizedString
+        return Localization.SimplifiedLogin.privacyPolicyURL.localizedString
     }
     
     var switchAccount: String {
-        return Localization.switchAccount.localizedString
+        return Localization.SimplifiedLogin.switchAccount.localizedString
     }
     
     var notYouTitle: String {
-        return Localization.notYouTitle.localizedString
+        return Localization.SimplifiedLogin.notYouTitle.localizedString
     }
     
     var continuAsButtonTitle: String {
-        return Localization.continuAsButtonTitle.localizedString
+        return Localization.SimplifiedLogin.continuAsButtonTitle.localizedString
     }
 }
