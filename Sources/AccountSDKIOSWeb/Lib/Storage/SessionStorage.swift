@@ -27,4 +27,14 @@ internal protocol SessionStorage {
     func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  
     func getAll() -> [UserSession]
     func remove(forClientId: String)
+    func getLatestSession() -> UserSession?
+}
+
+extension SessionStorage {
+    func getLatestSession() -> UserSession? {
+        let latestUserSession = self.getAll()
+            .sorted { $0.updatedAt > $1.updatedAt }
+            .first
+        return latestUserSession
+    }
 }
