@@ -1,12 +1,20 @@
 import Foundation
 import AuthenticationServices
 
-class SimplifiedLoginViewModel {
-    let env: ClientConfiguration.Environment
-    let userContext: UserContextFromTokenResponse
-    let userProfileResponse: UserProfileResponse
-    let schibstedLogoName = "sch-logo"
-    
+protocol SimplifiedLoginViewModelUserData {
+    var userContext: UserContextFromTokenResponse { get }
+    var userProfileResponse: UserProfileResponse { get }
+    var displayName: String { get }
+    var initials: String { get }
+}
+
+protocol SimplifiedLoginNamedImageData {
+    var env: ClientConfiguration.Environment { get }
+    var iconNames: [String] { get }
+    var schibstedLogoName: String { get }
+}
+
+extension SimplifiedLoginNamedImageData {
     var iconNames: [String] {
         let orderedIconNames: [String]
         switch env {
@@ -21,35 +29,21 @@ class SimplifiedLoginViewModel {
         }
         return orderedIconNames
     }
-    
-    var displayName: String {
-        return userContext.display_text
-    }
-    
-    var initials: String {
-        let firstName  = userProfileResponse.name?.givenName ?? ""
-        let lastName = userProfileResponse.name?.familyName ?? ""
-        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
-        return initials
-    }
-    
-    let clientName = "Finn" // TODO: Need to be fetched
+}
 
-    var asWebAuthenticationSession: ASWebAuthenticationSession?
-    
-    init(env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
-        self.env = env
-        self.userContext = userContext
-        self.userProfileResponse = userProfileResponse
-    }
-    
-    // MARK: Simplified Login User Actions
-    
-    var onClickedContinueWithoutLogin: (() -> Void)?
-    var onClickedSwitchAccount: (() -> Void)?
-    var onClickedPrivacyPolicy: (() -> Void)?
-    var onClickedContinueAsUser: (() -> Void)? // TODO:
-    
+protocol SimplifiedLoginViewModelAuthenticator {
+    var asWebAuthenticationSession: ASWebAuthenticationSession? { get set }
+}
+
+protocol SimplifiedLoginUserActionable {
+    var onClickedContinueWithoutLogin: (() -> Void)? { get set}
+    var onClickedSwitchAccount: (() -> Void)? { get set}
+    var onClickedPrivacyPolicy: (() -> Void)?  { get set }
+    var onClickedContinueAsUser: (() -> Void)? { get set} // TODO:
+    func send(action: SimplifiedLoginViewController.UserAction)
+}
+
+extension SimplifiedLoginUserActionable {
     func send(action: SimplifiedLoginViewController.UserAction){
         switch action {
         case .clickedContinueAsUser:
@@ -62,6 +56,47 @@ class SimplifiedLoginViewModel {
             self.onClickedPrivacyPolicy?()
         }
     }
+}
+
+class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelUserData, SimplifiedLoginNamedImageData, SimplifiedLoginViewModelAuthenticator{
+    
+    let clientName = "Finn" // TODO: Need to be fetched
+    
+    init(env: ClientConfiguration.Environment, userContext: UserContextFromTokenResponse, userProfileResponse: UserProfileResponse) {
+        self.env = env
+        self.userContext = userContext
+        self.userProfileResponse = userProfileResponse
+    }
+    
+    // MARK: SimplifiedLoginViewModelAuthenticator
+    
+    var asWebAuthenticationSession: ASWebAuthenticationSession?
+    
+    // MARK: SimplifiedLoginNamedImageData
+    
+    var env: ClientConfiguration.Environment
+    var schibstedLogoName: String = "sch-logo"
+    
+    // MARK: SimplifiedLoginViewModelUserData
+    
+    let userContext: UserContextFromTokenResponse
+    let userProfileResponse: UserProfileResponse
+    var displayName: String {
+        return userContext.display_text
+    }
+    var initials: String {
+        let firstName  = userProfileResponse.name?.givenName ?? ""
+        let lastName = userProfileResponse.name?.familyName ?? ""
+        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
+        return initials
+    }
+
+    // MARK: SimplifiedLoginUserActionableSimplified Login User Actions
+    
+    var onClickedContinueWithoutLogin: (() -> Void)?
+    var onClickedSwitchAccount: (() -> Void)?
+    var onClickedPrivacyPolicy: (() -> Void)?
+    var onClickedContinueAsUser: (() -> Void)? // TODO:
 }
 
 extension SimplifiedLoginViewModel {

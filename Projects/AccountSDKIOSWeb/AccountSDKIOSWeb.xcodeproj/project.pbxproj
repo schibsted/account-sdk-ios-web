@@ -290,13 +290,13 @@
 		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
 			isa = PBXGroup;
 			children = (
+				244EAAD1275A6CEA008A1285 /* ViewModel */,
 				244EAAC7275A2671008A1285 /* Fetcher */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
 				2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */,
 				CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */,
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CEDC45DD27463C200060EDA2 /* WebViewController.swift */,
-				CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */,
 				CE134B362756590300053BC7 /* FormSheet.swift */,
 			);
 			path = "Simplified Login";
@@ -368,6 +368,14 @@
 				244EAAC8275A2688008A1285 /* SimplifiedLoginDataFetcher.swift */,
 			);
 			path = Fetcher;
+			sourceTree = "<group>";
+		};
+		244EAAD1275A6CEA008A1285 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		2461668E267B3FFE00F77C5A /* Client */ = {
