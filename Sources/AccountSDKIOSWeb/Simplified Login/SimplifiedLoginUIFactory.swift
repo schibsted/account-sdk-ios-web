@@ -4,7 +4,6 @@ struct SimplifiedLoginUIFactory {
 
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     static func buildViewController(client: Client,
-                                    env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     withMFA: MFAType? = nil,
@@ -12,7 +11,7 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         
-        let viewModel = SimplifiedLoginViewModel(env: env, userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(env: client.configuration.env, userContext: userContext, userProfileResponse: userProfileResponse)
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
@@ -26,7 +25,6 @@ struct SimplifiedLoginUIFactory {
     
     @available(iOS 13.0, *)
     static func buildViewController(client: Client,
-                                    env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     withMFA: MFAType? = nil,
@@ -34,7 +32,7 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewModel = SimplifiedLoginViewModel(env: env, userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(env: client.configuration.env, userContext: userContext, userProfileResponse: userProfileResponse)
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
