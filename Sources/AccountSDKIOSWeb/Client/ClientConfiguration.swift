@@ -13,6 +13,8 @@ public struct ClientConfiguration {
     /// Registered redirect URI
     public var redirectURI: URL
     
+    public var env: Environment
+    
     public enum Environment: String {
         case proCom = "https://login.schibsted.com"
         case proFi = "https://login.schibsted.fi"
@@ -47,13 +49,15 @@ public struct ClientConfiguration {
     }
     
     public init(environment: Environment, clientId: String, redirectURI: URL) {
-        self.init(serverURL: URL(string: environment.rawValue)!,
+        self.init(env: environment,
+                  serverURL: URL(string: environment.rawValue)!,
                   sessionServiceURL: URL(string: environment.sessionService)!,
                   clientId: clientId,
                   redirectURI: redirectURI)
     }
     
-    init(serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
+    init(env: Environment,serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
+        self.env = env
         self.serverURL = serverURL
         self.sessionServiceURL = sessionServiceURL
         self.issuer = serverURL.absoluteString

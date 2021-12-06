@@ -58,7 +58,8 @@ public class Client: CustomStringConvertible {
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let newSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
         
-        let legacyClientConfiguration = ClientConfiguration(serverURL: configuration.serverURL,
+        let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
+                                                            serverURL: configuration.serverURL,
                                                             sessionServiceURL: configuration.sessionServiceURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
                                                             redirectURI: URL(string: "http://")!) // TODO: Handle url
