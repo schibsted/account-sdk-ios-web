@@ -13,7 +13,8 @@ struct SimplifiedLoginUIFactory {
         
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel)
+        let localizationModel = SimplifiedLoginLocalizationModel()
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel)
         
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
@@ -38,7 +39,8 @@ struct SimplifiedLoginUIFactory {
        
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel)
+        let localizationModel = SimplifiedLoginLocalizationModel()
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel)
         
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
@@ -59,7 +61,7 @@ struct SimplifiedLoginUIFactory {
         let nc = UINavigationController()
         nc.pushViewController(s, animated: false)
         
-        let url = URL(string: viewModel.privacyPolicyURL)!
+        let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
         let webVC = WebViewController()
         
         viewModel.onClickedContinueAsUser = {} // TODO:

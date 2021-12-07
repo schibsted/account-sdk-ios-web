@@ -17,3 +17,41 @@ enum Localization {
         }
     }
 }
+
+struct SimplifiedLoginLocalizationModel {
+    var continueToLogIn: String {
+        return Localization.SimplifiedLogin.continueToLogIn.localizedString
+    }
+    
+    var schibstedTitle: String {
+        return Localization.SimplifiedLogin.schibstedTitle.localizedString
+    }
+    
+    var continueWithoutLogin: String {
+        return Localization.SimplifiedLogin.continueWithoutLogin.localizedString
+    }
+    
+    var explanationText: String {
+        return Localization.SimplifiedLogin.explanationText.localizedString
+    }
+    
+    var privacyPolicyTitle: String {
+        return Localization.SimplifiedLogin.privacyPolicyTitle.localizedString
+    }
+    
+    var privacyPolicyURL: String {
+        return Localization.SimplifiedLogin.privacyPolicyURL.localizedString
+    }
+    
+    var switchAccount: String {
+        return Localization.SimplifiedLogin.switchAccount.localizedString
+    }
+    
+    var notYouTitle: String {
+        return Localization.SimplifiedLogin.notYouTitle.localizedString
+    }
+    
+    var continuAsButtonTitle: String {
+        return Localization.SimplifiedLogin.continuAsButtonTitle.localizedString
+    }
+}
