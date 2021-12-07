@@ -11,7 +11,10 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         
-        let viewModel = SimplifiedLoginViewModel(env: client.configuration.env, userContext: userContext, userProfileResponse: userProfileResponse)
+        let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
+        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel)
+        
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
@@ -32,7 +35,11 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewModel = SimplifiedLoginViewModel(env: client.configuration.env, userContext: userContext, userProfileResponse: userProfileResponse)
+       
+        let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
+        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel)
+        
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
