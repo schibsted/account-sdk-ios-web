@@ -1,19 +1,19 @@
 import Foundation
 
-typealias SimplifiedLoginFetchedData = (context: UserContextFromTokenResponse, profile: UserProfileResponse)
+typealias SimplifiedLoginFetchedData = (context: UserContextFromTokenResponse, profile: UserProfileResponse, visibleClientName: String?)
 
 protocol SimplifiedLoginDataFetching {
-    func fetch(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void)
+    func fetch(_ visibleClientName: String?, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void)
 }
 
 struct SimplifiedLoginDataFetcher: SimplifiedLoginDataFetching {
     let user: User
     
-    func fetch(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
+    func fetch(_ visibleClientName: String? = nil, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
         user.userContextFromToken { result in
             switch result {
             case .success(let userContextResponse):
-                self.fetchProfile(userContext: userContextResponse, completion: completion)
+                self.fetchProfile(visibleClientName, userContext: userContextResponse, completion: completion)
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to fetch userContextFromToken: \(String(describing: error))")
                 completion(.failure(error))
@@ -21,11 +21,11 @@ struct SimplifiedLoginDataFetcher: SimplifiedLoginDataFetching {
         }
     }
     
-    func fetchProfile(userContext: UserContextFromTokenResponse, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
+    func fetchProfile(_ visibleClientName: String?, userContext: UserContextFromTokenResponse, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
         user.fetchProfileData { result in
             switch result {
             case .success(let profileResponse):
-                completion(.success((userContext, profileResponse)))
+                completion(.success((userContext, profileResponse, visibleClientName)))
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to fetch profileData: \(String(describing: error))")
                 completion(.failure(error))

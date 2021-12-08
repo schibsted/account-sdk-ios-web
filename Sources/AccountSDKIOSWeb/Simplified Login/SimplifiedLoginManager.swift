@@ -55,7 +55,13 @@ public final class SimplifiedLoginManager {
 }
 
 extension SimplifiedLoginManager {
-    public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) {
+    /**
+     Prepere and configure Simplified Login View Controller which should be shown modaly
+
+     - parameter visibleClientName: optional client name visibile in footer view of Simplified Login. Bundle application name is used by default
+     - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
+     */
+    public func getSimplifiedLogin(_ visibleClientName: String? = nil, completion: @escaping (Result<UIViewController, Error>) -> Void) {
         guard let latestUserSession = self.keychainSessionStorage?.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
@@ -63,7 +69,7 @@ extension SimplifiedLoginManager {
         
         let user = User(client: client, tokens: latestUserSession.userTokens)
         self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
-        self.dataFetcher?.fetch { result in
+        self.dataFetcher?.fetch(visibleClientName) { result in
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
@@ -82,6 +88,7 @@ extension SimplifiedLoginManager {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
+                                                                                         visibleClientName: simplifiedLoginData.visibleClientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
@@ -91,6 +98,7 @@ extension SimplifiedLoginManager {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
+                                                                                         visibleClientName: simplifiedLoginData.visibleClientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,

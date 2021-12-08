@@ -19,5 +19,9 @@ public extension Bundle {
         }
         return resourceBundle
     }
+    
+    static func applicationName() -> String {
+        return (Bundle.main.infoDictionary?["CFBundleName"] as? String) ?? ""
+    }
 }
  

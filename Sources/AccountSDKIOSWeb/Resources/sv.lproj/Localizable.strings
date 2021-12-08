@@ -2,7 +2,7 @@
 "SimplifiedWidget.schibstedAccount" = "Schibstedkonto";
 "SimplifiedWidget.continueAs" = "Fortsätt som";
 "SimplifiedWidget.continueWithoutLogin" = "Fortsätt utan att logga in";
-"SimplifiedWidget.footer" = "Du är inloggad på en tjänst hos Schibsted och\nkan fortsätta till {0} med ett klick";
+"SimplifiedWidget.footer" = "Du är inloggad på en tjänst hos Schibsted och\nkan fortsätta till %@ med ett klick";
 "SimplifiedWidget.privacyPolicy" = "Integritetspolicy";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/se/schibsted-sverige-personuppgiftspolicy/";
 "SimplifiedWidget.notYou" = "Inte du?";
