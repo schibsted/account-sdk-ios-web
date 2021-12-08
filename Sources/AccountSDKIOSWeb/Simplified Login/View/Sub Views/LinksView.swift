@@ -17,7 +17,7 @@ class LinksView: UIStackView {
     private lazy var notYouLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 1
-        view.text = viewModel.notYouTitle
+        view.text = viewModel.localizationModel.notYouTitle
         view.font = UIFont.systemFont(ofSize: 14)
         view.textAlignment = .center
         
@@ -33,7 +33,7 @@ class LinksView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 14),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: viewModel.continueWithoutLogin,
+        let attributedText = NSAttributedString(string: viewModel.localizationModel.continueWithoutLogin,
                                                  attributes: attributes)
         button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +46,7 @@ class LinksView: UIStackView {
                                                            .font: UIFont.systemFont(ofSize: 14),
                                                            .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
         ]
-        let attributedText = NSAttributedString(string: viewModel.switchAccount, // TODO: Need localisation "Log in with different account"
+        let attributedText = NSAttributedString(string: viewModel.localizationModel.switchAccount, // TODO: Need localisation "Log in with different account"
                                                  attributes: attributes)
         button.setAttributedTitle(attributedText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

@@ -47,7 +47,7 @@ class UserInformationView: UIStackView {
 
     private lazy var schibstedTitleLabel: UILabel = {
         let view = UILabel()
-        view.text = viewModel.schibstedTitle
+        view.text = viewModel.localizationModel.schibstedTitle
         view.textAlignment = .center
         view.font = UIFont.systemFont(ofSize: 15)
 
