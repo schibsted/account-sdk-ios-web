@@ -15,7 +15,11 @@ struct SimplifiedLoginUIFactory {
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
+        
         let clientName: String = (visibleClientName != nil) ? visibleClientName! : Bundle.applicationName()
+        if clientName.isEmpty {
+            SchibstedAccountLogger.instance.error("Please configure application display name or pass visibleClientName parameter")
+        }
         
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         
@@ -23,7 +27,7 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
-                                                                          completion: completion) //
+                                                                          completion: completion)
             viewModel.asWebAuthenticationSession?.start()
         }
         
@@ -44,7 +48,11 @@ struct SimplifiedLoginUIFactory {
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
+        
         let clientName: String = (visibleClientName != nil) ? visibleClientName! : Bundle.applicationName()
+        if clientName.isEmpty {
+            SchibstedAccountLogger.instance.error("Please configure application display name or pass visibleClientName parameter")
+        }
         
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         

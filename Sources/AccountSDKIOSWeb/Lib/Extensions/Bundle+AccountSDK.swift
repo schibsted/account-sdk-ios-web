@@ -21,7 +21,7 @@ public extension Bundle {
     }
     
     static func applicationName() -> String {
-        return (Bundle.main.infoDictionary?["CFBundleName"] as? String) ?? ""
+        return (Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String) ?? ""
     }
 }
  

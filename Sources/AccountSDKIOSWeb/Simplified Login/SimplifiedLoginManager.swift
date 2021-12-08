@@ -69,11 +69,11 @@ extension SimplifiedLoginManager {
         
         let user = User(client: client, tokens: latestUserSession.userTokens)
         self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
-        self.dataFetcher?.fetch(visibleClientName) { result in
+        self.dataFetcher?.fetch() { result in
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
-                    let simplifiedLoginViewController = self.makeViewController(fetchedData)
+                    let simplifiedLoginViewController = self.makeViewController(visibleClientName, simplifiedLoginData: fetchedData)
                     completion(.success(simplifiedLoginViewController))
                 }
             case .failure(let error):
@@ -82,13 +82,13 @@ extension SimplifiedLoginManager {
         }
     }
     
-    func makeViewController(_ simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+    func makeViewController(_ visibleClientName: String?, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
-                                                                                         visibleClientName: simplifiedLoginData.visibleClientName,
+                                                                                         visibleClientName: visibleClientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
@@ -98,7 +98,7 @@ extension SimplifiedLoginManager {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
-                                                                                         visibleClientName: simplifiedLoginData.visibleClientName,
+                                                                                         visibleClientName: visibleClientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
