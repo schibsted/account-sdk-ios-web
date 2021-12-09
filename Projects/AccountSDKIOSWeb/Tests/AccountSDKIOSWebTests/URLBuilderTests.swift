@@ -15,7 +15,7 @@ final class URLBuilderTests: XCTestCase {
 
     func testLoginURL() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: [])
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -41,7 +41,7 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURLWithExtraScopes() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
 
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: ["scope1", "scope2"])
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: ["scope1", "scope2"])
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -66,7 +66,7 @@ final class URLBuilderTests: XCTestCase {
     
     func testLoginURLWithMFAIncludesACRValues() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", extraScopeValues: [])
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: .otp))
         
         XCTAssertEqual(loginURL?.scheme, "https")
