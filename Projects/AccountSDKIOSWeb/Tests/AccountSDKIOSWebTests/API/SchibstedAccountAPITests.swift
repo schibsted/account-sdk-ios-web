@@ -14,7 +14,7 @@ final class SchibstedAccountAPITests: XCTestCase {
         stub(mockHTTPClient) {mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
-                    completion(.success(response))
+                    completion(.success(SchibstedAccountAPIResponse(data: response)))
                 }
         }
         
@@ -26,7 +26,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 switch result {
                 case .success:
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
-                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SimplifiedLoginAssertionResponse>> = anyClosure()
+                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<SimplifiedLoginAssertionResponse>>> = anyClosure()
                     verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
                     let requestUrl = argumentCaptor.value!.url
                     
@@ -47,7 +47,7 @@ final class SchibstedAccountAPITests: XCTestCase {
         stub(mockHTTPClient) {mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
-                    completion(.success(response))
+                    completion(.success(SchibstedAccountAPIResponse(data: response)))
                 }
         }
         
