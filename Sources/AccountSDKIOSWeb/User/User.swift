@@ -34,7 +34,11 @@ public class User: UserProtocol {
         }
     }
 
-    /// User integer id (as string)
+    /**
+     User integer id (as string). Equivalent of legacyID in old AccountSDK
+
+     A user_id used by some Schibsted account APIs
+     */
     public var userId: String? {
         get {
             tokens?.idTokenClaims.userId
