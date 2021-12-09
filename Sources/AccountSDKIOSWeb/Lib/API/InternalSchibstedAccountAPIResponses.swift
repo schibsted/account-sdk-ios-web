@@ -71,3 +71,7 @@ struct UserContextFromTokenResponse: Codable, Equatable {
     let display_text: String
     let client_name: String
 }
+
+struct SimplifiedLoginAssertionResponse: Codable, Equatable {
+    let assertion: String
+}
