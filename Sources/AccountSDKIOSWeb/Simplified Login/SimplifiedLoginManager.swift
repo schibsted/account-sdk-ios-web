@@ -3,7 +3,7 @@ import UIKit
 public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
         case noLoggedInSessionInSharedKeychain
-        case noClientNameProvided
+        case noClientNameFound
     }
     
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
@@ -69,7 +69,7 @@ extension SimplifiedLoginManager {
         }
         guard let clientName = (clientName != nil) ? clientName! : Bundle.applicationName() else {
             SchibstedAccountLogger.instance.error("Please configure application display name or pass visibleClientName parameter")
-            completion(.failure(SimplifiedLoginError.noClientNameProvided))
+            completion(.failure(SimplifiedLoginError.noClientNameFound))
             return
         }
         
