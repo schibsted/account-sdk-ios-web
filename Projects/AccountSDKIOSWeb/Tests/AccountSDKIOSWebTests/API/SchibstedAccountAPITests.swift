@@ -285,11 +285,11 @@ final class RequestBuilderTests: XCTestCase {
     
     func testUserContextFromTokensRequestWrongURL() throws {
         let sessionURL = URL("https://example.com")
-        let expectedURL = sessionURL.appendingPathComponent("/user-context-from-path")
+        let expectedURL = sessionURL.appendingPathComponent("/bad/path")
 
         let sut = RequestBuilder.userContextFromToken
         let request = sut.asRequest(baseURL: sessionURL)
-        XCTAssertNotEqual(request.url, expectedURL, "expexted url should be \(sessionURL.absoluteString)/user-context-from-path")
+        XCTAssertNotEqual(request.url, expectedURL)
     }
     
     // MARK: CodeExchange tests

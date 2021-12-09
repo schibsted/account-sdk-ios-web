@@ -128,7 +128,7 @@ class SchibstedAccountAPI {
     }
     
     func userContextFromToken(for user: User, completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
-        let request = RequestBuilder.userContextFromToken.buildUserContextFromTokenRequest(baseURL: sessionServiceURL)
+        let request = RequestBuilder.userContextFromToken.asRequest(baseURL: sessionServiceURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion($0)
