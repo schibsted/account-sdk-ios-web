@@ -125,6 +125,17 @@ extension User {
         }
     }
     
+    func assertionForSimplifiedLogin(completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
+        self.client.schibstedAccountAPI.assertionForSimplifiedLogin(for: self) { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     static func shouldLogout(tokenResponseBody: String?) -> Bool {
         if let errorJSON = tokenResponseBody,
            let oauthError = OAuthError.fromJSON(errorJSON),
