@@ -15,9 +15,13 @@ public extension Bundle {
 
         guard let resourceBundleURL = frameworkBundle.url(forResource: moduleName, withExtension: "bundle"),
               let resourceBundle = Bundle(url: resourceBundleURL) else {
-            return Bundle(for: SimplifiedLoginViewController.self)
-        }
+                  return Bundle(for: SimplifiedLoginViewController.self)
+              }
         return resourceBundle
+    }
+    
+    static func applicationName() -> String? {
+        return Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
     }
 }
  

@@ -61,7 +61,7 @@ class FooterView: UIStackView {
         let view = UILabel()
         view.numberOfLines = -1
         
-        view.text = viewModel.localizationModel.explanationText// TODO: Insert client_name
+        view.text = String.localizedStringWithFormat(viewModel.localizationModel.explanationText, viewModel.clientName)
         view.font = UIFont.systemFont(ofSize: 12)
         view.textAlignment = .center
         

@@ -6,6 +6,7 @@ struct SimplifiedLoginUIFactory {
     static func buildViewController(client: Client,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
+                                    clientName: String,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
@@ -14,13 +15,14 @@ struct SimplifiedLoginUIFactory {
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel)
+        
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
-                                                                          completion: completion) //
+                                                                          completion: completion)
             viewModel.asWebAuthenticationSession?.start()
         }
         
@@ -31,6 +33,7 @@ struct SimplifiedLoginUIFactory {
     static func buildViewController(client: Client,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
+                                    clientName: String,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
@@ -40,7 +43,7 @@ struct SimplifiedLoginUIFactory {
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel)
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()

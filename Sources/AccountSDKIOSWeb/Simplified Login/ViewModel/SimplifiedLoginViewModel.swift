@@ -30,7 +30,7 @@ extension SimplifiedLoginUserActionable {
 
 class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelAuthenticator {
     
-    let clientName = "Finn" // TODO: Need to be fetched
+    let clientName: String
     
     let localizationModel: SimplifiedLoginLocalizationModel
     
@@ -47,10 +47,11 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
         return initials
     }
     
-    init(imageDataModel: SimplifiedLoginNamedImageData, userDataModel: SimplifiedLoginViewModelUserData, localizationModel: SimplifiedLoginLocalizationModel) {
+    init(imageDataModel: SimplifiedLoginNamedImageData, userDataModel: SimplifiedLoginViewModelUserData, localizationModel: SimplifiedLoginLocalizationModel, visibleClientName: String) {
         self.localizationModel = localizationModel
         self.imageDataModel = imageDataModel
         self.userData = userDataModel
+        self.clientName = visibleClientName
     }
     
     // MARK: SimplifiedLoginViewModelAuthenticator

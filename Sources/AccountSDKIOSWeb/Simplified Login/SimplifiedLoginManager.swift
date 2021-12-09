@@ -3,6 +3,7 @@ import UIKit
 public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
         case noLoggedInSessionInSharedKeychain
+        case noClientNameFound
     }
     
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
@@ -55,19 +56,30 @@ public final class SimplifiedLoginManager {
 }
 
 extension SimplifiedLoginManager {
-    public func getSimplifiedLogin(completion: @escaping (Result<UIViewController, Error>) -> Void) {
+    /**
+     Prepere and configure Simplified Login View Controller which should be shown modaly
+
+     - parameter clientName: optional client name visible in footer view of Simplified Login. If not provided CFBundleDisplayName is used by default
+     - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
+     */
+    public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<UIViewController, Error>) -> Void) {
         guard let latestUserSession = self.keychainSessionStorage?.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
+            return
+        }
+        guard let clientName = (clientName != nil) ? clientName! : Bundle.applicationName() else {
+            SchibstedAccountLogger.instance.error("Please configure application display name or pass visibleClientName parameter")
+            completion(.failure(SimplifiedLoginError.noClientNameFound))
             return
         }
         
         let user = User(client: client, tokens: latestUserSession.userTokens)
         self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
-        self.dataFetcher?.fetch { result in
+        self.dataFetcher?.fetch() { result in
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
-                    let simplifiedLoginViewController = self.makeViewController(fetchedData)
+                    let simplifiedLoginViewController = self.makeViewController(clientName, simplifiedLoginData: fetchedData)
                     completion(.success(simplifiedLoginViewController))
                 }
             case .failure(let error):
@@ -76,12 +88,13 @@ extension SimplifiedLoginManager {
         }
     }
     
-    func makeViewController(_ simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+    func makeViewController(_ clientName: String, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
+                                                                                         clientName: clientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
@@ -91,6 +104,7 @@ extension SimplifiedLoginManager {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
+                                                                                         clientName: clientName,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
