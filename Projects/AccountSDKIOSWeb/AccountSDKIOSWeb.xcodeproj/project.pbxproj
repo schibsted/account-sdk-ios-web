@@ -294,6 +294,7 @@
 		2401AD0A273D009C007C63A6 /* Simplified Login */ = {
 			isa = PBXGroup;
 			children = (
+				2472EA2B275E057A0037433D /* LocalizationAssets.swift */,
 				2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */,
 				CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */,
 				2472EA2D275E98330037433D /* Model */,
@@ -636,7 +637,6 @@
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2472EA2B275E057A0037433D /* LocalizationAssets.swift */,
 				243BFAD22750D75A00382494 /* da.lproj */,
 				243BFACF2750D75A00382494 /* fi.lproj */,
 				243BFAC92750D68300382494 /* nb.lproj */,
