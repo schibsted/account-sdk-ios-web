@@ -10,7 +10,7 @@ public final class SimplifiedLoginManager {
     
     var keychainSessionStorage: SessionStorage?
     let client: Client
-    var dataFetcher: SimplifiedLoginDataFetching?
+    var fetcher: SimplifiedLoginFetching?
     
     // Properties for building SimplifiedLoginViewController
     let withMFA: MFAType?
@@ -74,12 +74,14 @@ extension SimplifiedLoginManager {
         }
         
         let user = User(client: client, tokens: latestUserSession.userTokens)
-        self.dataFetcher = SimplifiedLoginDataFetcher(user: user)
-        self.dataFetcher?.fetch() { result in
+        let fetcher = SimplifiedLoginFetcher(user: user)
+        self.fetcher = fetcher
+        
+        self.fetcher?.fetchData() { result in
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
-                    let simplifiedLoginViewController = self.makeViewController(clientName, simplifiedLoginData: fetchedData)
+                    let simplifiedLoginViewController = self.makeViewController(clientName, assertionFetcher: fetcher, simplifiedLoginData: fetchedData)
                     completion(.success(simplifiedLoginViewController))
                 }
             case .failure(let error):
@@ -88,10 +90,11 @@ extension SimplifiedLoginManager {
         }
     }
     
-    func makeViewController(_ clientName: String, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+    func makeViewController(_ clientName: String, assertionFetcher: SimplifiedLoginFetching, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                         assertionFetcher: assertionFetcher,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          clientName: clientName,
@@ -102,6 +105,7 @@ extension SimplifiedLoginManager {
                                                                                          completion: self.completion)
         } else {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                         assertionFetcher: assertionFetcher,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          clientName: clientName,

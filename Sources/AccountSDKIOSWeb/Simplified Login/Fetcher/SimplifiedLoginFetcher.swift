@@ -1,15 +1,17 @@
 import Foundation
 
 typealias SimplifiedLoginFetchedData = (context: UserContextFromTokenResponse, profile: UserProfileResponse)
+typealias SimplifiedLoginAssertionResult = Result<SimplifiedLoginAssertionResponse, Error>
 
-protocol SimplifiedLoginDataFetching {
-    func fetch(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void)
+protocol SimplifiedLoginFetching {
+    func fetchData(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void)
+    func fetchAssertion(completion: @escaping (Result<SimplifiedLoginAssertionResponse, Error>) -> Void)
 }
 
-struct SimplifiedLoginDataFetcher: SimplifiedLoginDataFetching {
+struct SimplifiedLoginFetcher: SimplifiedLoginFetching {
     let user: User
     
-    func fetch(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
+    func fetchData(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
         user.userContextFromToken { result in
             switch result {
             case .success(let userContextResponse):
@@ -28,6 +30,18 @@ struct SimplifiedLoginDataFetcher: SimplifiedLoginDataFetching {
                 completion(.success((userContext, profileResponse)))
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to fetch profileData: \(String(describing: error))")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchAssertion(completion: @escaping (SimplifiedLoginAssertionResult) -> Void) {
+        user.assertionForSimplifiedLogin { result in
+            switch result {
+            case .success(let assertionResponse):
+                completion(.success(assertionResponse))
+            case .failure(let error):
+                SchibstedAccountLogger.instance.error("Failed to fetch Simplified Login assertion: \(String(describing: error))")
                 completion(.failure(error))
             }
         }
