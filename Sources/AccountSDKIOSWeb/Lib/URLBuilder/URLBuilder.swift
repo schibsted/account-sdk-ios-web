@@ -22,8 +22,9 @@ struct URLBuilder {
             URLQueryItem(name: "code_challenge_method", value: authState.codeChallengeMethod()),
         ]
         
-        if let loginHint = authRequest.loginHint { authRequestParams.append(URLQueryItem(name: "login_hint", value: loginHint)) }
-        
+        authRequest.loginHint.map { authRequestParams.append(URLQueryItem(name: "login_hint", value: $0)) }
+        authRequest.assertion.map { authRequestParams.append(URLQueryItem(name: "assertion", value: $0)) }
+                                                             
         if let mfa = authState.mfa {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
         } else {

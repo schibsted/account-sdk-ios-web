@@ -115,14 +115,15 @@ public class Client: CustomStringConvertible {
         return authState
     }
     
-    private func createWebAuthenticationSession(withMFA: MFAType? = nil,
-                                                loginHint: String?,
-                                                extraScopeValues: Set<String> = [],
-                                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+    func createWebAuthenticationSession(withMFA: MFAType? = nil,
+                                        loginHint: String? = nil,
+                                        assertion: String? = nil,
+                                        extraScopeValues: Set<String> = [],
+                                        completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, extraScopeValues: extraScopeValues)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, assertion: assertion, extraScopeValues: extraScopeValues)
         
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
