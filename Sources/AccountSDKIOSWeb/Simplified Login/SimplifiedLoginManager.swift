@@ -6,6 +6,8 @@ public final class SimplifiedLoginManager {
         case noClientNameFound
     }
     
+    static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
+    
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
     var keychainSessionStorage: SessionStorage?
@@ -20,13 +22,14 @@ public final class SimplifiedLoginManager {
     var withSSO: Bool = true
     
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
-    public init(accessGroup: String,
+    public init(appleTeamId: String,
                 client: Client,
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
                 completion: @escaping LoginResultHandler) {
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
+        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName,
+                                                             accessGroup: "\(appleTeamId).\(Self.sharedKeychainGroup)")
         self.client = client
         
         self.withMFA = withMFA
@@ -36,7 +39,7 @@ public final class SimplifiedLoginManager {
     }
     
     @available(iOS 13.0, *)
-    public init(accessGroup: String,
+    public init(appleTeamId: String,
                 client: Client,
                 env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
@@ -44,7 +47,8 @@ public final class SimplifiedLoginManager {
                 extraScopeValues: Set<String> = [],
                 withSSO: Bool = true,
                 completion: @escaping LoginResultHandler) {
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
+        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName,
+                                                             accessGroup: "\(appleTeamId).\(Self.sharedKeychainGroup)")
         self.client = client
         
         self.withMFA = withMFA

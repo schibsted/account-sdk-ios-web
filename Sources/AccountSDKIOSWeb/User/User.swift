@@ -41,6 +41,8 @@ public class User: UserProtocol {
         }
     }
     
+    private var sharedKeychain: KeychainSessionStorage?
+    
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
         self.tokens = tokens
@@ -327,4 +329,24 @@ extension User {
         
     }
 
+}
+
+// MARK: Shared Keychain
+
+extension User {
+    public func storeSessionInSharedKeychain(appleTeamId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard isLoggedIn(), let tokens = self.tokens else {
+            SchibstedAccountLogger.instance.error("Failed to store user session. User is logged out")
+            return
+        }
+        
+        //can we somehow check if tokens are valid before saving them in shared keychain??
+        let session = UserSession(clientId: self.client.configuration.clientId, userTokens: tokens, updatedAt: Date())
+        let accessGroupString = "\(appleTeamId).\(SimplifiedLoginManager.sharedKeychainGroup)"
+        
+        if sharedKeychain == nil {
+            self.sharedKeychain = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroupString)
+        }
+        sharedKeychain?.store(session, completion: completion)
+    }
 }
