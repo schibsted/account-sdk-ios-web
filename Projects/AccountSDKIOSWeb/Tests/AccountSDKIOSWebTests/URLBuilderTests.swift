@@ -13,6 +13,33 @@ final class URLBuilderTests: XCTestCase {
         }
     }
 
+    func testLoginURLWithAssertion() {
+        let sut = URLBuilder(configuration: Fixtures.clientConfig)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "assertion string", extraScopeValues: [])
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
+        
+        XCTAssertEqual(loginURL?.scheme, "https")
+        XCTAssertEqual(loginURL?.host, "issuer.example.com")
+        XCTAssertEqual(loginURL?.path, "/oauth/authorize")
+        
+        let components = URLComponents(url: loginURL!, resolvingAgainstBaseURL: true)
+        let queryParams = components?.queryItems?.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
+        }
+        
+        XCTAssertEqual(queryParams!["client_id"], Fixtures.clientConfig.clientId)
+        XCTAssertEqual(queryParams!["redirect_uri"], Fixtures.clientConfig.redirectURI.absoluteString)
+        XCTAssertEqual(queryParams!["response_type"], "code")
+        XCTAssertEqual(queryParams!["prompt"], "select_account")
+        compareScope(queryParams!["scope"]!, Set(["openid", "offline_access"]))
+        XCTAssertNotNil(queryParams!["state"])
+        XCTAssertNotNil(queryParams!["nonce"])
+        XCTAssertNotNil(queryParams!["code_challenge"])
+        XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
+        
+        XCTAssertEqual(queryParams!["assertion"], "assertion string")
+    }
+    
     func testLoginURL() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
