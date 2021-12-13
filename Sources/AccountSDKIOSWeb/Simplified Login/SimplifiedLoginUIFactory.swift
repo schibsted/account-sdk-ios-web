@@ -4,6 +4,7 @@ struct SimplifiedLoginUIFactory {
 
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     static func buildViewController(client: Client,
+                                    assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     clientName: String,
@@ -26,11 +27,12 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession?.start()
         }
         
-        return commonSetup(viewModel: viewModel)
+        return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
     }
     
     @available(iOS 13.0, *)
     static func buildViewController(client: Client,
+                                    assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     clientName: String,
@@ -56,10 +58,10 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession?.start()
         }
         
-        return commonSetup(viewModel: viewModel)
+        return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
     }
     
-    private static func commonSetup(viewModel: SimplifiedLoginViewModel) -> UIViewController {
+    private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
         let s = SimplifiedLoginViewController(viewModel: viewModel )
         let nc = UINavigationController()
         nc.pushViewController(s, animated: false)
