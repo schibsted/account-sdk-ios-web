@@ -95,8 +95,8 @@ struct SimplifiedLoginUIFactory {
                         session.start()
                     }
                 case .failure(let error):
-                    // TODO: How should we fail gracefully here
                     SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
+                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
                 }
             }
         }
