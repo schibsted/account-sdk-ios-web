@@ -30,6 +30,7 @@ public class Client: CustomStringConvertible {
     
     static let authStateKey = "AuthState"
     static let keychainServiceName = "com.schibsted.account"
+    static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
 
     let httpClient: HTTPClient
     let schibstedAccountAPI: SchibstedAccountAPI
@@ -224,21 +225,66 @@ public class Client: CustomStringConvertible {
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
+    
+    func switchToSharedKeychain(appIdentifierPrefix: String?, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appIdentifierPrefix = appIdentifierPrefix, !appIdentifierPrefix.isEmpty else {
+            completion(.failure(SimplifiedLoginManager.SimplifiedLoginError.appIdentifierPrefixNotProvided))
+            return
+        }
+        
+        let sharedAccessGroup = "\(appIdentifierPrefix).\(Self.sharedKeychainGroup)"
+        let sharedKeychain = KeychainSessionStorage(service: Self.keychainServiceName, accessGroup: sharedAccessGroup)
+        
+        let userSessionArray = sessionStorage.getAll() //get all or get for clientID ?
+        migrateToSharedKeychain(userSessionArray: userSessionArray, sharedKeychain: sharedKeychain) { result in
+            switch (result) {
+            case .success(_):
+                let oldKeychain = self.sessionStorage
+                self.sessionStorage = sharedKeychain
+                oldKeychain.remove(forClientId: self.configuration.clientId)
+                completion(.success())
+            case .failure(let error):
+                SchibstedAccountLogger.instance.error("Cannot switch to shared Keychain with error: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func migrateToSharedKeychain(userSessionArray: [UserSession], sharedKeychain: KeychainSessionStorage, completion: @escaping (Result<Void, Error>) -> Void) {
+        for item in userSessionArray {
+            sharedKeychain.store(item) { result in
+                switch (result) {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }
+        }
+        completion(.success())
+    }
 }
 
 extension Client {
     
     // MARK: - Public
     
-    /// Resume any previously logged-in user session
-    public func resumeLastLoggedInUser(completion: @escaping (User?) -> Void) {
-        sessionStorage.get(forClientId: configuration.clientId) { storedSession in
-            guard let session = storedSession else {
-                completion(nil)
-                return
+    /**
+     Resume any previously logged-in user session
+     
+     - parameter appIdentifierPrefix: Optional MFA verification to prompt the user with
+     - parameter completion: callback that receives User object
+     */
+    public func resumeLastLoggedInUser(_ appIdentifierPrefix: String? = nil, completion: @escaping (User?) -> Void) {
+        switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
+            self.sessionStorage.get(forClientId: self.configuration.clientId) { storedSession in
+                guard let session = storedSession else {
+                    completion(nil)
+                    return
+                }
+                completion(User(client: self, tokens: session.userTokens))
             }
-            
-            completion(User(client: self, tokens: session.userTokens))
         }
     }
  

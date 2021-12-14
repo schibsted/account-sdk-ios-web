@@ -85,6 +85,7 @@
 		249F9FBB266A52B000F166CB /* ExampleWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		249F9FC6266A52B000F166CB /* ExampleWebUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleWebUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F86495266A65000006A2C7 /* AccountSDKIOSWeb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AccountSDKIOSWeb.xcodeproj; path = ../../AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj; sourceTree = "<group>"; };
+		CE2757EA2767935400055CE9 /* ExampleWeb.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExampleWeb.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +145,7 @@
 		249F9FAC266A52AF00F166CB /* ExampleWeb */ = {
 			isa = PBXGroup;
 			children = (
+				CE2757EA2767935400055CE9 /* ExampleWeb.entitlements */,
 				249F9FAD266A52AF00F166CB /* ExampleWebApp.swift */,
 				249F9FAF266A52AF00F166CB /* ContentView.swift */,
 				249F9FB1266A52B000F166CB /* Assets.xcassets */,
@@ -495,6 +497,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
@@ -516,6 +519,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
 				ENABLE_PREVIEWS = YES;

@@ -4,6 +4,7 @@ public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
         case noLoggedInSessionInSharedKeychain
         case noClientNameFound
+        case appIdentifierPrefixNotProvided
     }
     
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
