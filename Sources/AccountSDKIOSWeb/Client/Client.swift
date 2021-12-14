@@ -227,12 +227,19 @@ public class Client: CustomStringConvertible {
     }
     
     func switchToSharedKeychain(appIdentifierPrefix: String?, completion: @escaping (Result<Void, Error>) -> Void) {
+        
         guard let appIdentifierPrefix = appIdentifierPrefix, !appIdentifierPrefix.isEmpty else {
             completion(.failure(SimplifiedLoginManager.SimplifiedLoginError.appIdentifierPrefixNotProvided))
             return
         }
         
         let sharedAccessGroup = "\(appIdentifierPrefix).\(Self.sharedKeychainGroup)"
+        
+        guard self.sessionStorage.getAccessGroup() != sharedAccessGroup else {
+            completion(.success())
+            return
+        }
+        
         let sharedKeychain = KeychainSessionStorage(service: Self.keychainServiceName, accessGroup: sharedAccessGroup)
         
         let userSessionArray = sessionStorage.getAll() //get all or get for clientID ?

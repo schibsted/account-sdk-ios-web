@@ -1,10 +1,12 @@
 import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
-    
+
     private let keychain: KeychainStorage
+    public let accessGroup: String?
     
     init(service: String, accessGroup: String? = nil) {
+        self.accessGroup = accessGroup
         self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
     
@@ -48,5 +50,9 @@ internal class KeychainSessionStorage: SessionStorage {
         } catch {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
         }
+    }
+    
+    func getAccessGroup() -> String? {
+        return accessGroup
     }
 }

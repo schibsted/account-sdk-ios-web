@@ -86,6 +86,10 @@ class MigratingKeychainCompatStorage: SessionStorage {
         // only delegate to new storage; data should have already been removed from legacy storage during migration
         newStorage.remove(forClientId: forClientId)
     }
+    
+    func getAccessGroup() -> String? {
+        return nil
+    }
 }
 
 ///  OldSDKClient is responsible for exchanging Old SDK Token to an Authorization code.
