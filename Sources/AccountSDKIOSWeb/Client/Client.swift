@@ -242,13 +242,11 @@ public class Client: CustomStringConvertible {
         
         let sharedKeychain = KeychainSessionStorage(service: Self.keychainServiceName, accessGroup: sharedAccessGroup)
         
-        let userSessionArray = sessionStorage.getAll() //get all or get for clientID ?
+        let userSessionArray = sessionStorage.getAll()
         migrateToSharedKeychain(userSessionArray: userSessionArray, sharedKeychain: sharedKeychain) { result in
             switch (result) {
             case .success(_):
-                let oldKeychain = self.sessionStorage
                 self.sessionStorage = sharedKeychain
-                oldKeychain.remove(forClientId: self.configuration.clientId)
                 completion(.success())
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Cannot switch to shared Keychain with error: \(error.localizedDescription)")
@@ -284,14 +282,24 @@ extension Client {
      - parameter completion: callback that receives User object
      */
     public func resumeLastLoggedInUser(_ appIdentifierPrefix: String? = nil, completion: @escaping (User?) -> Void) {
+        
+        let group = DispatchGroup()
+        group.enter()
+        
         switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
-            self.sessionStorage.get(forClientId: self.configuration.clientId) { storedSession in
-                guard let session = storedSession else {
-                    completion(nil)
-                    return
-                }
-                completion(User(client: self, tokens: session.userTokens))
+            group.leave()
+        }
+
+        group.enter()
+        self.sessionStorage.get(forClientId: self.configuration.clientId) { storedSession in
+            guard let session = storedSession else {
+                completion(nil)
+                group.leave()
+                return
             }
+            completion(User(client: self, tokens: session.userTokens))
+            group.leave()
+            return
         }
     }
  
