@@ -49,4 +49,8 @@ internal class KeychainSessionStorage: SessionStorage {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
         }
     }
+    
+    func checkEntitlements() throws -> Data? {
+        try keychain.getValue(forAccount: "test_string")
+    }
 }

@@ -38,13 +38,22 @@ public class Client: CustomStringConvertible {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
-    
-    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
+
+    /**
+     Initializes the Client with given configuration
+     
+     - parameter configuration: Client configuration object
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter httpClient: Optional custom HTTPClient
+     */
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
+        let sessionKeychainStorage = SharedKeychainSessionStorageFactory.getKeychain(service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
+
         self.init(configuration: configuration,
-                  sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
+                  sessionStorage: sessionKeychainStorage,
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
                   jwks: jwks,

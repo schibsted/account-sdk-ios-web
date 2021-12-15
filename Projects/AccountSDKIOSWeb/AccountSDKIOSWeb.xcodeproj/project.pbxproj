@@ -88,6 +88,7 @@
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
 		CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
+		CE6AB47D276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */; };
 		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
 		CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */; };
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
@@ -225,6 +226,7 @@
 		CE134B362756590300053BC7 /* FormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSheet.swift; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
+		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				2489C99226733A0900AA0A4C /* Compat */,
 				2489C99726733A0900AA0A4C /* KeychainSessionStorage.swift */,
 				CEC8D35C27329F830002145D /* KeychainStorage.swift */,
+				CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */,
 			);
 			path = Keychain;
 			sourceTree = "<group>";
@@ -1049,6 +1052,7 @@
 				2489C9B426733A0900AA0A4C /* MigratingKeychainCompatStorage.swift in Sources */,
 				CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */,
 				246B035A27071E6E0041F15A /* Client+AppTransfer.swift in Sources */,
+				CE6AB47D276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift in Sources */,
 				2489C9B826733A0900AA0A4C /* SessionStorage.swift in Sources */,
 				2472EA2C275E057A0037433D /* LocalizationAssets.swift in Sources */,
 				24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */,
