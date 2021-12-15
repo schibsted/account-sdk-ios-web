@@ -306,7 +306,7 @@ extension Client {
      - parameter withMFA: Optional MFA verification to prompt the user with
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
-     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain, migrate session data and enable Simplified Login feature
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
@@ -335,7 +335,7 @@ extension Client {
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
-     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain, migrate session data and enable Simplified Login feature
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
