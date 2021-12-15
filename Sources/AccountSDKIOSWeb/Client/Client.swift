@@ -324,12 +324,7 @@ extension Client {
                                 appIdentifierPrefix: String? = nil,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         
-        let semaphore = DispatchSemaphore(value: 0)
-        self.switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
-            semaphore.signal()
-        }
-        
-        let _ = semaphore.wait(timeout: .now() + 2.0)
+        switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in }
         
         return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
     }
@@ -356,12 +351,7 @@ extension Client {
                                 appIdentifierPrefix: String? = nil,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         
-        let semaphore = DispatchSemaphore(value: 0)
-        self.switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
-            semaphore.signal()
-        }
-        
-        let _ = semaphore.wait(timeout: .now() + 2.0)
+        switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in }
         
         let session = self.createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
