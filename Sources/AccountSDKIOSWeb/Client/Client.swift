@@ -40,6 +40,7 @@ public class Client: CustomStringConvertible {
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
     
+    /// Initializes the Client with given configuration
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
@@ -241,6 +242,13 @@ public class Client: CustomStringConvertible {
         }
         
         let sharedKeychain = KeychainSessionStorage(service: Self.keychainServiceName, accessGroup: sharedAccessGroup)
+        
+        guard sharedKeychain.getAll().count == 0 else {
+            SchibstedAccountLogger.instance.debug("There is no reason to migrate data. Shared keychain already contains user session. Switching client to shared keychain...")
+            self.sessionStorage = sharedKeychain
+            completion(.success())
+            return
+        }
         
         let userSessionArray = sessionStorage.getAll()
         migrateToSharedKeychain(userSessionArray: userSessionArray, sharedKeychain: sharedKeychain) { result in
