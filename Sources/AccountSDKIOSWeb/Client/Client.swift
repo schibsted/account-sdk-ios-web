@@ -278,27 +278,24 @@ extension Client {
     /**
      Resume any previously logged-in user session
      
-     - parameter appIdentifierPrefix: Optional MFA verification to prompt the user with
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain and Simplified Login feature can be used
      - parameter completion: callback that receives User object
      */
     public func resumeLastLoggedInUser(_ appIdentifierPrefix: String? = nil, completion: @escaping (User?) -> Void) {
         
-        let group = DispatchGroup()
-        group.enter()
-        
-        switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
-            group.leave()
+        let semaphore = DispatchSemaphore(value: 0)
+        self.switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
+            semaphore.signal()
         }
-
-        group.enter()
-        self.sessionStorage.get(forClientId: self.configuration.clientId) { storedSession in
+        
+        let _ = semaphore.wait(timeout: .now() + 2.0)
+        
+        sessionStorage.get(forClientId: self.configuration.clientId) { storedSession in
             guard let session = storedSession else {
                 completion(nil)
-                group.leave()
                 return
             }
             completion(User(client: self, tokens: session.userTokens))
-            group.leave()
             return
         }
     }
@@ -309,13 +306,23 @@ extension Client {
      - parameter withMFA: Optional MFA verification to prompt the user with
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain and Simplified Login feature can be used
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
     public func getLoginSession(withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
+                                appIdentifierPrefix: String? = nil,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        self.switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
+            semaphore.signal()
+        }
+        
+        let _ = semaphore.wait(timeout: .now() + 2.0)
+        
         return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
     }
     
@@ -328,6 +335,7 @@ extension Client {
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided SDK switches to shared keychain and Simplified Login feature can be used
      - parameter completion: callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
@@ -336,11 +344,20 @@ extension Client {
                                 withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
-                                withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
+                                withSSO: Bool = true,
+                                appIdentifierPrefix: String? = nil,
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        self.switchToSharedKeychain(appIdentifierPrefix: appIdentifierPrefix) { _ in
+            semaphore.signal()
+        }
+        
+        let _ = semaphore.wait(timeout: .now() + 2.0)
+        
+        let session = self.createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
-        
         return session
     }
     
