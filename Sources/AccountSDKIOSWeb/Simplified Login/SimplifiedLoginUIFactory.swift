@@ -1,4 +1,5 @@
 import UIKit
+import AuthenticationServices
 
 struct SimplifiedLoginUIFactory {
 
@@ -27,11 +28,27 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession?.start()
         }
         
+        viewModel.onClickedContinueAsUser = {
+            assertionFetcher.fetchAssertion { result in
+                switch result {
+                case .success(let assertion):
+                    DispatchQueue.main.async {
+                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
+                        session.start()
+                    }
+                case .failure(let error):
+                    SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
+                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
+                }
+            }
+        }
+        
         return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
     }
     
     @available(iOS 13.0, *)
     static func buildViewController(client: Client,
+                                    contextProvider: ASWebAuthenticationPresentationContextProviding,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
@@ -58,6 +75,24 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession?.start()
         }
         
+        viewModel.onClickedContinueAsUser = {
+            assertionFetcher.fetchAssertion { result in
+                switch result {
+                case .success(let assertion):
+                    DispatchQueue.main.async {
+                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
+                        viewModel.asWebAuthenticationSession = session
+                        session.presentationContextProvider = contextProvider
+                        session.prefersEphemeralWebBrowserSession = true
+                        session.start()
+                    }
+                case .failure(let error):
+                    SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
+                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
+                }
+            }
+        }
+        
         return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
     }
     
@@ -76,29 +111,6 @@ struct SimplifiedLoginUIFactory {
         viewModel.onClickedPrivacyPolicy = {
             webVC.loadURL(url)
             nc.pushViewController(webVC, animated: true)
-        }
-        
-        viewModel.onClickedContinueAsUser = {
-            assertionFetcher.fetchAssertion { result in
-                switch result {
-                case .success(let assertion):
-                    DispatchQueue.main.async {
-                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
-                        viewModel.asWebAuthenticationSession = session
-                        
-                        if #available(iOS 13.0, *) {
-                            let context = ASWebAuthSessionContextProvider()
-                            session.presentationContextProvider = context //TODO: Perhaps should be passed in
-                            session.prefersEphemeralWebBrowserSession = true
-                        }
-                        
-                        session.start()
-                    }
-                case .failure(let error):
-                    SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
-                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
-                }
-            }
         }
         
         return nc
