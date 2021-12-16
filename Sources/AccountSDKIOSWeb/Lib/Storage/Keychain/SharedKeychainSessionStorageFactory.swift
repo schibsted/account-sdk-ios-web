@@ -4,7 +4,7 @@ struct SharedKeychainSessionStorageFactory {
     
     static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
     
-    static func getKeychain(service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
+    static func getKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
         
         let keychain = KeychainSessionStorage(service: service, accessGroup: accessGroup)
         
@@ -27,28 +27,20 @@ struct SharedKeychainSessionStorageFactory {
             }
         }
         
-        // return shared keychain when regular one is empty
-        guard let latestUserSession = keychain.getLatestSession() else {
-            return sharedKeychain
-        }
-        
-        //update accessGroup
-        let semaphore = DispatchSemaphore(value: 0)
-
-        //update accessGroup
-        sharedKeychain.store(latestUserSession, accessGroup: sharedKeychainAccessGroup) { result in
-            switch (result) {
-            case .success():
-                break
-            case .failure(let error):
-                SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
-                break
-                //or we should return regular keychain here? (rather very rare situation)
+        // update accessGroup for clientId entry
+        keychain.get(forClientId: clientId) { userSession in
+            if let userSession = userSession {
+                sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup) { result in
+                    switch (result) {
+                    case .success():
+                        break
+                    case .failure(let error):
+                        SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
+                        break
+                    }
+                }
             }
-            semaphore.signal()
         }
-
-        let _ = semaphore.wait(timeout: .now() + 2.0)
         return sharedKeychain
     }
 }

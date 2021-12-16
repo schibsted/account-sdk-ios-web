@@ -4,7 +4,7 @@ import XCTest
 class SessionStorageTests: XCTestCase {
     func testGetLatestSession_emptyArray () {
         let sut = MockSessionStorageProtocol(sessions: [])
-        let maybeSession = sut.getLatestSession()
+        let maybeSession = sut.getLatestSharedSession()
         XCTAssertNil(maybeSession, "getLatestSession should return nil if sessions array is empty")
     }
     
@@ -12,7 +12,7 @@ class SessionStorageTests: XCTestCase {
         let session = UserSession(clientId: "Any string", userTokens: Fixtures.userTokens, updatedAt: Date())
         let sut = MockSessionStorageProtocol(sessions: [session]
         )
-        let maybeSession = sut.getLatestSession()
+        let maybeSession = sut.getLatestSharedSession()
         XCTAssertEqual(maybeSession, session, "getLatestSession should return the only session in array")
     }
     
@@ -29,7 +29,7 @@ class SessionStorageTests: XCTestCase {
         
         let sut = MockSessionStorageProtocol(sessions: sessions.shuffled())
         
-        XCTAssertEqual(sut.getLatestSession(), latestSession, "getLatestSession should return the latest session")
-        XCTAssertEqual(sut.getLatestSession()?.updatedAt, currentDate, "session.updatedAt should be currentDate ")
+        XCTAssertEqual(sut.getLatestSharedSession(), latestSession, "getLatestSession should return the latest session")
+        XCTAssertEqual(sut.getLatestSharedSession()?.updatedAt, currentDate, "session.updatedAt should be currentDate ")
     }
 }
