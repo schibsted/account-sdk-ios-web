@@ -1,4 +1,5 @@
 import UIKit
+import AuthenticationServices
 
 public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
@@ -19,6 +20,15 @@ public final class SimplifiedLoginManager {
     let completion: LoginResultHandler
     var withSSO: Bool = true
     
+    private var _contextProvider: Any? = nil
+    @available(iOS 13.0, *)
+    fileprivate var context: ASWebAuthenticationPresentationContextProviding {
+        if _contextProvider == nil {
+            _contextProvider = ASWebAuthSessionContextProvider()
+        }
+        return _contextProvider as! ASWebAuthSessionContextProvider
+    }
+    
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     public init(accessGroup: String,
                 client: Client,
@@ -38,6 +48,7 @@ public final class SimplifiedLoginManager {
     @available(iOS 13.0, *)
     public init(accessGroup: String,
                 client: Client,
+                contextProvider: ASWebAuthenticationPresentationContextProviding,
                 env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
@@ -52,6 +63,8 @@ public final class SimplifiedLoginManager {
         self.extraScopeValues = extraScopeValues
         self.completion = completion
         self.withSSO = withSSO
+        self._contextProvider = contextProvider
+
     }
 }
 
@@ -94,6 +107,7 @@ extension SimplifiedLoginManager {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
+                                                                                         contextProvider: self.context,
                                                                                          assertionFetcher: assertionFetcher,
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
