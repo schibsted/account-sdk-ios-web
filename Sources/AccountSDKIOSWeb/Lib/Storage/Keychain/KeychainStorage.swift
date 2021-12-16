@@ -2,7 +2,7 @@ import Foundation
 import Security
 
 protocol KeychainStoring {
-    func setValue(_ value: Data, forAccount: String?) throws
+    func setValue(_ value: Data, forAccount: String?, accessGroup: String?) throws
     func getValue(forAccount: String?) throws -> Data?
     func getAll() -> [Data]
     func removeValue(forAccount: String?) throws
@@ -17,7 +17,7 @@ class KeychainStorage: KeychainStoring {
         self.accessGroup = accessGroup
     }
 
-    func setValue(_ value: Data, forAccount: String?) throws {
+    func setValue(_ value: Data, forAccount: String?, accessGroup: String? = nil) throws {
         let status: OSStatus
         
         if try getValue(forAccount: forAccount) == nil {
@@ -26,7 +26,10 @@ class KeychainStorage: KeychainStoring {
             status = SecItemAdd(query as CFDictionary, nil)
         } else {
             let searchQuery = itemQuery(forAccount: forAccount, returnData: false)
-            let updateQuery: [String: Any] = [kSecValueData as String: value]
+            var updateQuery: [String: Any] = [kSecValueData as String: value]
+            if let accessGroup = accessGroup {
+                updateQuery[kSecAttrAccessGroup as String] = accessGroup
+            }
             status = SecItemUpdate(searchQuery as CFDictionary, updateQuery as CFDictionary)
         }
         

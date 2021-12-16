@@ -23,7 +23,7 @@ internal struct UserTokens: Codable, Equatable, CustomStringConvertible {
 }
 
 internal protocol SessionStorage {
-    func store(_ value: UserSession, completion: @escaping (Result<Void, Error>) -> Void)
+    func store(_ value: UserSession, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void)
     func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  
     func getAll() -> [UserSession]
     func remove(forClientId: String)

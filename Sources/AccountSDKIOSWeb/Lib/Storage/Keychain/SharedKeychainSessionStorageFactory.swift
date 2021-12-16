@@ -32,21 +32,22 @@ struct SharedKeychainSessionStorageFactory {
             return sharedKeychain
         }
         
+        //update accessGroup
         let semaphore = DispatchSemaphore(value: 0)
-        
-        sharedKeychain.store(latestUserSession) { result in
+
+        //update accessGroup
+        sharedKeychain.store(latestUserSession, accessGroup: sharedKeychainAccessGroup) { result in
             switch (result) {
             case .success():
                 break
-                //keychain.remove(forClientId: latestUserSession.clientId)
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
                 break
-                //or we should return regular keychain here?
+                //or we should return regular keychain here? (rather very rare situation)
             }
             semaphore.signal()
         }
-        
+
         let _ = semaphore.wait(timeout: .now() + 2.0)
         return sharedKeychain
     }

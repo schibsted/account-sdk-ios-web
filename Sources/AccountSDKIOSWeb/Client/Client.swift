@@ -182,7 +182,7 @@ public class Client: CustomStringConvertible {
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
-                self.sessionStorage.store(userSession) { result in
+                self.sessionStorage.store(userSession, accessGroup: nil) { result in
                     switch result {
                     case .success():
                         completion(.success(userTokens))
@@ -203,7 +203,7 @@ public class Client: CustomStringConvertible {
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
-            sessionStorage.store(userSession) { output in
+            sessionStorage.store(userSession, accessGroup: nil) { output in
                 switch output {
                 case .success():
                     let user = User(client: self, tokens: tokenResult.userTokens)
