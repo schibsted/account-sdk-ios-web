@@ -65,7 +65,7 @@ extension SimplifiedLoginManager {
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
     public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<UIViewController, Error>) -> Void) {
-        guard let latestUserSession = self.keychainSessionStorage?.getLatestSharedSession() else {
+        guard let latestUserSession = self.keychainSessionStorage?.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
         }

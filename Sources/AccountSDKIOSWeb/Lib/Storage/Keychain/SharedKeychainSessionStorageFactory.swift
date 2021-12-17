@@ -4,7 +4,7 @@ struct SharedKeychainSessionStorageFactory {
     
     static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
     
-    static func getKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
+    static func makeKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
         
         let keychain = KeychainSessionStorage(service: service, accessGroup: accessGroup)
         
