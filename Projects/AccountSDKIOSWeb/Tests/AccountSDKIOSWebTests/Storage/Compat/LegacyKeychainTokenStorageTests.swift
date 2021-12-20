@@ -17,7 +17,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
 
     func testIncorrectlySerialisedData() {
         let testData = "invalid_data".data(using: .utf8)
-        try? self.keychainMock!.setValue(testData!, forAccount: nil)
+        try? self.keychainMock!.setValue(testData!, forAccount: nil, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         let keychainStorage = LegacyKeychainTokenStorage(keychain: keychainMock!)
@@ -26,7 +26,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
     
     func testSerialisedInvalidData() {
         let testData = try? NSKeyedArchiver.archivedData(withRootObject: ["key": "value"], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(testData!, forAccount: nil)
+        try? self.keychainMock!.setValue(testData!, forAccount: nil, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
         
         let keychainStorage = LegacyKeychainTokenStorage(keychain: keychainMock!)
@@ -45,7 +45,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             ]
         ]
         let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(data!, forAccount: accountString)
+        try? self.keychainMock!.setValue(data!, forAccount: accountString, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         let tokenDataArray = LegacyKeychainTokenStorage(keychain: keychainMock!).get()
@@ -65,7 +65,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             ]
         ]
         let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(data!, forAccount: accountString)
+        try? self.keychainMock!.setValue(data!, forAccount: accountString, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         XCTAssertEqual(LegacyKeychainTokenStorage(keychain: keychainMock!).get(), [
@@ -84,7 +84,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             ]
         ]
         let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(data!, forAccount: accountString)
+        try? self.keychainMock!.setValue(data!, forAccount: accountString, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         XCTAssertEqual(LegacyKeychainTokenStorage(keychain: keychainMock!).get(), [
@@ -100,7 +100,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             ]
         ]
         let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(data!, forAccount: accountString)
+        try? self.keychainMock!.setValue(data!, forAccount: accountString, accessGroup: nil)
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         let keychainStorage = LegacyKeychainTokenStorage(keychain: keychainMock!)

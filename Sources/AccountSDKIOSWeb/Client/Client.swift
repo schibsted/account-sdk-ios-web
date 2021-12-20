@@ -38,13 +38,22 @@ public class Client: CustomStringConvertible {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
-    
-    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
+
+    /**
+     Initializes the Client with given configuration
+     
+     - parameter configuration: Client configuration object
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter httpClient: Optional custom HTTPClient
+     */
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
+        let sessionKeychainStorage = SharedKeychainSessionStorageFactory.makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
+
         self.init(configuration: configuration,
-                  sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
+                  sessionStorage: sessionKeychainStorage,
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
                   jwks: jwks,
@@ -173,7 +182,7 @@ public class Client: CustomStringConvertible {
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
-                self.sessionStorage.store(userSession) { result in
+                self.sessionStorage.store(userSession, accessGroup: nil) { result in
                     switch result {
                     case .success():
                         completion(.success(userTokens))
@@ -194,7 +203,7 @@ public class Client: CustomStringConvertible {
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
-            sessionStorage.store(userSession) { output in
+            sessionStorage.store(userSession, accessGroup: nil) { output in
                 switch output {
                 case .success():
                     let user = User(client: self, tokens: tokenResult.userTokens)

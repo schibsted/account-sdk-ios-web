@@ -30,13 +30,14 @@ public final class SimplifiedLoginManager {
     }
     
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
-    public init(accessGroup: String,
+    public init(appIdentifierPrefix: String,
                 client: Client,
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
                 completion: @escaping LoginResultHandler) {
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
+        let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(SharedKeychainSessionStorageFactory.sharedKeychainGroup)"
+        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sharedKeychainAccessGroup)
         self.client = client
         
         self.withMFA = withMFA
@@ -46,7 +47,7 @@ public final class SimplifiedLoginManager {
     }
     
     @available(iOS 13.0, *)
-    public init(accessGroup: String,
+    public init(appIdentifierPrefix: String,
                 client: Client,
                 contextProvider: ASWebAuthenticationPresentationContextProviding,
                 env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
@@ -55,7 +56,8 @@ public final class SimplifiedLoginManager {
                 extraScopeValues: Set<String> = [],
                 withSSO: Bool = true,
                 completion: @escaping LoginResultHandler) {
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
+        let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(SharedKeychainSessionStorageFactory.sharedKeychainGroup)"
+        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sharedKeychainAccessGroup)
         self.client = client
         
         self.withMFA = withMFA
