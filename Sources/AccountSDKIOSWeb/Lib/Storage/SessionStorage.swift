@@ -7,13 +7,13 @@ internal struct UserSession: Codable, Equatable {
     let updatedAt: Date
 }
 
-internal struct UserTokens: Codable, Equatable, CustomStringConvertible {
+public struct UserTokens: Codable, Equatable, CustomStringConvertible {
     let accessToken: String
     let refreshToken: String?
     let idToken: String
     let idTokenClaims: IdTokenClaims
     
-    var description: String {
+    public var description: String {
         return "UserTokens("
             + "accessToken: \(removeSignature(fromToken: accessToken)),\n"
             + "refreshToken: \(removeSignature(fromToken: refreshToken)),\n"
