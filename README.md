@@ -112,6 +112,38 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
     }
     ```
     
+### Obtaining tokens externally
+
+Tokens can be obtained externally and injected into SDK for the already created users. This can be useful in the case of a test scenario.
+To do this, first you need to start the web login flow with the request as follow:
+
+```sh
+GET "${BASE_URL}/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid%20offline_access&state=${state}&nonce=${nonce}&code_challenge=${CODE_CHALLENGE}&code_challenge_method=S256&prompt=select_account"
+```
+where: 
+`BASE_URL` - base URL of Schibsted Account environment
+`client_id` - public mobile client id
+`redirect_uri` - redirect URI for given client
+`state` - randomly generated string of 10 characters (letters and numbers)
+`nonce` - randomly generated string of 10 characters (letters and numbers)
+`code_challenge` - [`PKCE`](https://www.oauth.com/oauth2-servers/pkce/) calculated from code_verifier
+
+On the finish, web flow returns URL with query parameters `state` and `code`. 
+Tokens can be obtained with the following request:
+
+```sh
+curl {BASE_URL}/oauth/token \
+   -X POST \
+   -H "X-OIDC: v1" \
+   -d "client_id={client_id}" \
+   -d "grant_type=authorization_code" \
+   -d "code={code_from_login_flow}" \
+   -d "code_verifier={code_verifier}" \
+   -d "redirect_uri={redirect_uri}"
+```
+   where `code_verifier` is the same which was used for calculating `code_challenge`
+
+
 ### Configuring logging
 This SDK uses [`SwiftLog`](https://github.com/apple/swift-log), allowing you to easily customise the logging.
 The logger can be modified, for example to change the log level, via the following code:
