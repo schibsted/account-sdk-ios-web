@@ -124,9 +124,9 @@ where:
 `BASE_URL` - base URL of Schibsted Account environment
 `client_id` - public mobile client id
 `redirect_uri` - redirect URI for given client
-`state` - randomly generated string of 10 characters (letters and numbers)
-`nonce` - randomly generated string of 10 characters (letters and numbers)
-`code_challenge` - [`PKCE`](https://www.oauth.com/oauth2-servers/pkce/) calculated from code_verifier
+`state` -  A string value sent by the client that protects end user from CSRF attacks. It's a randomly generated string of 10 characters (both letters and numbers)
+`nonce` - A string value sent by the client that is included in the resulting ID token as a claim. The client must then verify this value to mitigate token replay attacks. It's a randomly generated string of 10 characters (both letters and numbers)
+`code_challenge` - [`PKCE`](https://www.oauth.com/oauth2-servers/pkce/) calculated from `code_verifier`
 
 On the finish, web flow returns URL with query parameters `state` and `code`. 
 Tokens can be obtained with the following request:
@@ -141,7 +141,7 @@ curl {BASE_URL}/oauth/token \
    -d "code_verifier={code_verifier}" \
    -d "redirect_uri={redirect_uri}"
 ```
-   where `code_verifier` is the same which was used for calculating `code_challenge`
+   where `code_verifier` is the same which was used for calculating `code_challenge`. It can be a randomly generated string of 60 characters (both letters and numbers)
 
 
 ### Configuring logging
