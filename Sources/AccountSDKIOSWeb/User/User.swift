@@ -20,7 +20,14 @@ public protocol UserProtocol {
 /// Representation of logged-in user.
 public class User: UserProtocol {
     private let client: Client
-    internal var tokens: UserTokens?
+    var tokens: UserTokens?
+    
+    /**
+     Sets the tokens. Should only be used when  testing.
+     */
+    public func setTokens(_ tokens: UserTokens) {
+        self.tokens = tokens
+    }
 
     /// Delegates listening to User events such as logout
     public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
