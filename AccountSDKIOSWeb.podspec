@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'AccountSDKIOSWeb'
-  s.version          = '2.2.0'
+  s.version          = '2.2.2'
   s.summary          = 'New implementation of the Schibsted account iOS SDK using the web flows via ASWebAuthenticationSession.'
   s.homepage         = 'https://schibsted.github.io/account-sdk-ios-web/'
   s.license          = { :type => "MIT" }
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/schibsted/account-sdk-ios-web.git', :tag => s.version.to_s }
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
-  s.source_files = 'Sources/AccountSDKIOSWeb/**/*.{h,m,swift}' # assets need to be included in next release
+  s.source_files = 'Sources/AccountSDKIOSWeb/**/*.{h,m,swift}'
   s.dependency 'JOSESwift', '~> 2.3.0'
   s.dependency 'Logging', '~> 1.4.0'
 end
