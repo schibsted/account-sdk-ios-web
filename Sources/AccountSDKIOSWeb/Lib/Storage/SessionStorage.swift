@@ -13,6 +13,13 @@ public struct UserTokens: Codable, Equatable, CustomStringConvertible {
     let idToken: String
     let idTokenClaims: IdTokenClaims
     
+    public init(accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+        self.idToken = idToken
+        self.idTokenClaims = idTokenClaims
+    }
+    
     public var description: String {
         return "UserTokens("
             + "accessToken: \(removeSignature(fromToken: accessToken)),\n"
