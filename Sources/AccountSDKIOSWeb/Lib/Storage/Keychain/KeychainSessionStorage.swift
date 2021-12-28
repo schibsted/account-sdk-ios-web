@@ -1,9 +1,11 @@
 import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
+    private(set) var accessGroup: String?
     private let keychain: KeychainStorage
     
     init(service: String, accessGroup: String? = nil) {
+        self.accessGroup = accessGroup
         self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
     

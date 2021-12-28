@@ -9,7 +9,6 @@ public final class SimplifiedLoginManager {
     
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
-    var keychainSessionStorage: SessionStorage?
     let client: Client
     var fetcher: SimplifiedLoginFetching?
     
@@ -30,16 +29,12 @@ public final class SimplifiedLoginManager {
     }
     
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
-    public init(appIdentifierPrefix: String,
-                client: Client,
+    public init(client: Client,
                 withMFA: MFAType? = nil,
                 loginHint: String? = nil,
                 extraScopeValues: Set<String> = [],
                 completion: @escaping LoginResultHandler) {
-        let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(SharedKeychainSessionStorageFactory.sharedKeychainGroup)"
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sharedKeychainAccessGroup)
         self.client = client
-        
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -47,8 +42,7 @@ public final class SimplifiedLoginManager {
     }
     
     @available(iOS 13.0, *)
-    public init(appIdentifierPrefix: String,
-                client: Client,
+    public init(client: Client,
                 contextProvider: ASWebAuthenticationPresentationContextProviding,
                 env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                 withMFA: MFAType? = nil,
@@ -56,10 +50,7 @@ public final class SimplifiedLoginManager {
                 extraScopeValues: Set<String> = [],
                 withSSO: Bool = true,
                 completion: @escaping LoginResultHandler) {
-        let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(SharedKeychainSessionStorageFactory.sharedKeychainGroup)"
-        self.keychainSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sharedKeychainAccessGroup)
         self.client = client
-        
         self.withMFA = withMFA
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
@@ -78,7 +69,7 @@ extension SimplifiedLoginManager {
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
     public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<UIViewController, Error>) -> Void) {
-        guard let latestUserSession = self.keychainSessionStorage?.getLatestSession() else {
+        guard let latestUserSession = client.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
         }
