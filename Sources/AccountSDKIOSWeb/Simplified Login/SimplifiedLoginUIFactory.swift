@@ -1,5 +1,6 @@
 import UIKit
 import AuthenticationServices
+import SafariServices
 
 struct SimplifiedLoginUIFactory {
 
@@ -80,6 +81,7 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
+                        //if we hardcode mfa with nil value, what is the reason to have it as a buildViewController method argument?
                         let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
                         viewModel.asWebAuthenticationSession = session
                         session.presentationContextProvider = contextProvider
@@ -109,8 +111,13 @@ struct SimplifiedLoginUIFactory {
         }
         
         viewModel.onClickedPrivacyPolicy = {
-            webVC.loadURL(url)
-            nc.pushViewController(webVC, animated: true)
+            if SimplifiedLoginManager.isPad {
+                let svc = SFSafariViewController(url: url)
+                nc.present(svc, animated: true, completion: nil)
+            } else {
+                webVC.loadURL(url)
+                nc.pushViewController(webVC, animated: true)
+            }
         }
         
         return nc

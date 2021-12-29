@@ -7,7 +7,7 @@ public final class SimplifiedLoginManager {
         case noClientNameFound
     }
     
-    private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+    static let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     
     let client: Client
     var fetcher: SimplifiedLoginFetching?
@@ -121,7 +121,7 @@ extension SimplifiedLoginManager {
                                                                                          extraScopeValues: self.extraScopeValues,
                                                                                          completion: self.completion)
         }
-        if self.isPad {
+        if Self.isPad {
             simplifiedLoginViewController.modalPresentationStyle = .formSheet
             simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
         }
