@@ -25,7 +25,6 @@ struct ContentView: View {
     @State private var accountPagesURL: URL?
     @State private var showAccountPages = false
     @State private var asWebAuthSession: ASWebAuthenticationSession?
-    @State var isPresentedSimplifiedLogin = false
     
     init(client: Client, clientConfiguration: ClientConfiguration) {
         self.client = client
@@ -42,11 +41,11 @@ struct ContentView: View {
                         Text(String(describing: client))
                         Text("Logged-in as \(user?.uuid ?? "unknown")")
                     }
-                    Button(action: resumeUser, label: { Text("Resume user") } )
-                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)") } )
-                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)") } )
-                    Button(action: { self.isPresentedSimplifiedLogin.toggle() }){ Text("Simplified Login view")}
-
+                    Button(action: resumeUser, label: { Text("Resume user")})
+                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
+                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
+                    Button(action: triggerSimplifiedLogin, label: { Text("Simplified Login view")})
+                    
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
@@ -63,10 +62,6 @@ struct ContentView: View {
                 
                 NavigationLink("", destination: webView, isActive: $showAccountPages)
             }
-        }
-        // Please use .formSheet modifier defined in SDK to show Simplified Login UI. It takes care of showing it in the right size
-        .formSheet(isPresented: $isPresentedSimplifiedLogin) {
-            SimplifiedLoginSwiftUIView()
         }
     }
     
@@ -187,6 +182,21 @@ struct ContentView: View {
             
         }
     }
+    
+    func triggerSimplifiedLogin() {
+            let context = ASWebAuthSessionContextProvider()
+        let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
+                print("login result handler \(result)")
+            }
+            manager.getSimplifiedLogin("tadam") { result in
+                switch (result) {
+                case .success():
+                    print("success")
+                case .failure(let error):
+                    print("error \(error)")
+                }
+            }
+        }
 }
 
 struct WebView : UIViewRepresentable {
@@ -210,11 +220,5 @@ class MyUserDelegate: UserDelegate {
     
     func userDidLogout() {
         onLogout?()
-    }
-}
-
-struct SimplifiedLoginSwiftUIView: View {
-    var body: some View {
-        SimplifiedLoginViewControllerRepresentable()
     }
 }
