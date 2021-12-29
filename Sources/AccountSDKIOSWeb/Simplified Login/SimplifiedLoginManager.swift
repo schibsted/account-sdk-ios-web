@@ -68,7 +68,7 @@ extension SimplifiedLoginManager {
      - parameter clientName: optional client name visible in footer view of Simplified Login. If not provided CFBundleDisplayName is used by default
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
-    public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<UIViewController, Error>) -> Void) {
+    public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let latestUserSession = client.getLatestSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
@@ -88,7 +88,10 @@ extension SimplifiedLoginManager {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
                     let simplifiedLoginViewController = self.makeViewController(clientName, assertionFetcher: fetcher, simplifiedLoginData: fetchedData)
-                    completion(.success(simplifiedLoginViewController))
+                    if let visibleVC = self.getVisibleViewController() {
+                        visibleVC.present(simplifiedLoginViewController, animated: true, completion: nil)
+                    }
+                    completion(.success())
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -127,5 +130,18 @@ extension SimplifiedLoginManager {
         }
         
         return simplifiedLoginViewController
+    }
+    
+    private func getVisibleViewController() -> UIViewController? {
+        if #available(iOS 13.0, *) {
+            return UIApplication
+                .shared
+                .connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }?.visibleViewController
+        } else {
+            return UIApplication.shared.keyWindow?.visibleViewController
+        }
     }
 }

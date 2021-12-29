@@ -84,6 +84,7 @@
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
 		CE134B372756590300053BC7 /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE134B362756590300053BC7 /* FormSheet.swift */; };
+		CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
@@ -224,6 +225,7 @@
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE134B362756590300053BC7 /* FormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSheet.swift; sourceTree = "<group>"; };
+		CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVC.swift"; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 				CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */,
 				CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */,
 				243BFAD72750F20700382494 /* String+Localization.swift */,
+				CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1028,6 +1031,7 @@
 				24EB151F267A17A0002D9628 /* LoginStateError.swift in Sources */,
 				2489C9BE26733A0900AA0A4C /* HTTPClient.swift in Sources */,
 				24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */,
+				CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */,
 				2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */,
 				CEDC45DE27463C200060EDA2 /* WebViewController.swift in Sources */,
 				2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */,
