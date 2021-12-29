@@ -3,12 +3,22 @@ import Foundation
 
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
+/// The configuration struct is used for supporting migration from the old to the new SDK.
 public struct SessionStorageConfig {
     let legacyClientId: String
     let legacyClientSecret: String
     let accessGroup: String?
     let legacyAccessGroup: String?
     
+    /**
+     Initializes the SessionStorageConfig struct for given client IDs and access groups
+
+     - parameter legacyClientID: The clientID from old SDK.
+     - parameter legacyClientSecret: The client secret used in old SDK.
+     - parameter accessGroup: Optional Prefered access group name in new SDK.
+     - parameter legacyAccessGroup: Optional The name of access group from old SDK.
+     
+     */
     public init(legacyClientID: String, legacyClientSecret: String, accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
         self.legacyClientId = legacyClientID
         self.accessGroup = accessGroup
@@ -17,7 +27,7 @@ public struct SessionStorageConfig {
     }
 }
 
-// Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
+/// Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
 public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return ASPresentationAnchor()
@@ -39,6 +49,13 @@ public class Client: CustomStringConvertible {
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
     
+    /**
+     Initializes the Client
+
+     - parameter configuration: The ClientConfiguration instance.
+     - parameter httpClient: Optional instance perfomorms to HTTPClient protocol. If not provied a default implementation is used.
+     
+     */
     public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
@@ -51,7 +68,14 @@ public class Client: CustomStringConvertible {
                   tokenHandler: tokenHandler)
     }
     
-    /// Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
+    /**
+     Initializes the Client to support migration from Legacy SchibstedAccount SDK to new Schibsted account keychain storage using UserSession
+
+     - parameter configuration: The ClientConfiguration instance.
+     - parameter sessionStorageConfig: The configuration struct used in migration process
+     - parameter httpClient: Optional instance performs to HTTPClient protocol. If not provided a default implementation is used.
+     
+     */
     public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         
@@ -234,7 +258,11 @@ extension Client {
     
     // MARK: - Public
     
-    /// Resume any previously logged-in user session
+    /**
+     Resume any previously logged-in user session
+     
+     - parameter completion: The completion handler to call when the resume request is complete.
+     */
     public func resumeLastLoggedInUser(completion: @escaping (User?) -> Void) {
         sessionStorage.get(forClientId: configuration.clientId) { storedSession in
             guard let session = storedSession else {
@@ -250,9 +278,10 @@ extension Client {
      Get web authentication session
      
      - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter loginHint: Optional login hint string
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
-     - parameter completion: callback that receives the login result
+     - parameter completion: The callback that receives the login result
      - returns Web authentication session to start for the login flows
      */
     public func getLoginSession(withMFA: MFAType? = nil,
@@ -268,6 +297,7 @@ extension Client {
      This method must be used for devices with iOS 13 and up.
      - parameter contextProvider: Delegate to provide presentation context for the `ASWebAuthenticationSession`
      - parameter withMFA: Optional MFA verification to prompt the user with
+     - parameter loginHint: Optional login hint string
      - parameter extraScopeValues: Any additional scope values to request
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true)
@@ -321,6 +351,7 @@ extension Client {
         }
     }
     
+    /// Client description containing clientId value
     public var description: String {
         return "Client(\(configuration.clientId))"
     }
