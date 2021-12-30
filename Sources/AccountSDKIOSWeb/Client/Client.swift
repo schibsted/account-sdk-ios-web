@@ -150,7 +150,14 @@ public class Client: CustomStringConvertible {
                 return
             }
 
-            self.handleAuthenticationResponse(url: url, completion: completion)
+            self.handleAuthenticationResponse(url: url) { result in
+                DispatchQueue.main.async {
+                    if let vc = KeyWindow.get()?.rootViewController {
+                        vc.dismiss(animated: true, completion: nil)
+                    }
+                }
+                completion(result)
+            }
         }
         return session
     }

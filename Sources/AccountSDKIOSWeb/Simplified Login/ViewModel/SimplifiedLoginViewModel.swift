@@ -63,5 +63,5 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     var onClickedContinueWithoutLogin: (() -> Void)?
     var onClickedSwitchAccount: (() -> Void)?
     var onClickedPrivacyPolicy: (() -> Void)?
-    var onClickedContinueAsUser: (() -> Void)? // TODO:
+    var onClickedContinueAsUser: (() -> Void)?
 }
