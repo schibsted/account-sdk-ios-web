@@ -91,6 +91,7 @@
 		CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
 		CE6AB47D276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */; };
 		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
+		CE8D1B0827832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */; };
 		CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */; };
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
 		CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */; };
@@ -230,6 +231,7 @@
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
+		CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactoryTests.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
 		CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSession.swift; sourceTree = "<group>"; };
@@ -640,6 +642,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		CE3E98972782F05100B2F403 /* SimplifiedLogin */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */,
+			);
+			path = SimplifiedLogin;
+			sourceTree = "<group>";
+		};
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -697,6 +707,7 @@
 		OBJ_41 /* AccountSDKIOSWebTests */ = {
 			isa = PBXGroup;
 			children = (
+				CE3E98972782F05100B2F403 /* SimplifiedLogin */,
 				A93EFCD2263012FC008200D1 /* API */,
 				OBJ_42 /* Await.swift */,
 				OBJ_43 /* ClientTests.swift */,
@@ -1108,6 +1119,7 @@
 				CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */,
 				CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */,
 				OBJ_251 /* JOSEUtilTests.swift in Sources */,
+				CE8D1B0827832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift in Sources */,
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
 				244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */,

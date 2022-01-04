@@ -115,25 +115,11 @@ public class User: UserProtocol {
 extension User {
     
     func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
-        self.client.schibstedAccountAPI.userContextFromToken(for: self) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        client.schibstedAccountAPI.userContextFromToken(for: self, completion: completion)
     }
     
     func assertionForSimplifiedLogin(completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
-        self.client.schibstedAccountAPI.assertionForSimplifiedLogin(for: self) { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        self.client.schibstedAccountAPI.assertionForSimplifiedLogin(for: self, completion: completion)
     }
     
     static func shouldLogout(tokenResponseBody: String?) -> Bool {

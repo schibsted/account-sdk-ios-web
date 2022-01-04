@@ -3,10 +3,17 @@ import Foundation
 struct SharedKeychainSessionStorageFactory {
     
     static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
+    private var keychain: KeychainSessionStorage?
+    private var sharedKeychain: KeychainSessionStorage?
     
-    static func makeKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
+    init(keychain: KeychainSessionStorage? = nil, sharedKeychain: KeychainSessionStorage? = nil) {
+        self.keychain = keychain
+        self.sharedKeychain = sharedKeychain
+    }
+
+    func makeKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
         
-        let keychain = KeychainSessionStorage(service: service, accessGroup: accessGroup)
+        let keychain = self.keychain ?? KeychainSessionStorage(service: service, accessGroup: accessGroup)
         
         // return regular keychain when appIdentifierPrefix is not provided
         guard let appIdentifierPrefix = appIdentifierPrefix else {
@@ -15,7 +22,7 @@ struct SharedKeychainSessionStorageFactory {
         
         let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(Self.sharedKeychainGroup)"
         
-        let sharedKeychain = KeychainSessionStorage(service: service, accessGroup: sharedKeychainAccessGroup)
+        let sharedKeychain = self.sharedKeychain ?? KeychainSessionStorage(service: service, accessGroup: sharedKeychainAccessGroup)
         
         // check if correct entitlements are added to the app
         do {
