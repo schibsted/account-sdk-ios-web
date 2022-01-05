@@ -98,6 +98,8 @@
 		CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */; };
 		CEB631F92747C4B2009CE3B3 /* Bundle+AccountSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */; };
 		CEC8D35D27329F830002145D /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8D35C27329F830002145D /* KeychainStorage.swift */; };
+		CED185E42785A492001FB0F6 /* UIWindow+VisibleVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */; };
+		CED185E82785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */; };
 		CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */; };
 		CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B7A272C15D800572645 /* MockURLProtocol.swift */; };
 		CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */; };
@@ -238,6 +240,8 @@
 		CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSessionTests.swift; sourceTree = "<group>"; };
 		CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AccountSDK.swift"; sourceTree = "<group>"; };
 		CEC8D35C27329F830002145D /* KeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
+		CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVCTests.swift"; sourceTree = "<group>"; };
+		CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModelTests.swift; sourceTree = "<group>"; };
 		CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseWithMockHTTPClient.swift; sourceTree = "<group>"; };
 		CED92B7A272C15D800572645 /* MockURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIFactory.swift; sourceTree = "<group>"; };
@@ -468,6 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				248440412693482900CE88F2 /* MulticastDelegateTests.swift */,
+				CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */,
 			);
 			name = Util;
 			path = Tests/Util;
@@ -646,6 +651,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */,
+				CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */,
 			);
 			path = SimplifiedLogin;
 			sourceTree = "<group>";
@@ -1123,8 +1129,10 @@
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
 				244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */,
+				CED185E42785A492001FB0F6 /* UIWindow+VisibleVCTests.swift in Sources */,
 				CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */,
 				A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */,
+				CED185E82785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift in Sources */,
 				24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */,
 				CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */,
 				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
