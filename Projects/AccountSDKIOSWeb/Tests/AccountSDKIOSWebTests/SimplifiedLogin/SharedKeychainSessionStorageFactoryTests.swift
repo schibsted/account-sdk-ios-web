@@ -25,12 +25,42 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
             when(mock.checkEntitlements()).then { _ in
                 return Data()
             }
+            when(mock.getAll()).then { _ in
+                return []
+            }
         }
         
         let keychain = SharedKeychainSessionStorageFactory(keychain: nil, sharedKeychain: keychainSessionStorageMock).makeKeychain(clientId: "client_id", service: "service_name", accessGroup: accessGroup, appIdentifierPrefix: "AZWSDFGHIJ")
         
         XCTAssertIdentical(keychain, keychainSessionStorageMock)
         verify(keychainSessionStorageMock).checkEntitlements()
+    }
+    
+    func testReturnsSharedKeychainWithoutMigrationWhenNonEmpty() {
+        let userSession = UserSession(clientId: "client_id", userTokens: Fixtures.userTokens, updatedAt: Date())
+        let sharedKeychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: sharedAccessGroup)
+        stub(sharedKeychainSessionStorageMock) { mock in
+            when(mock.checkEntitlements()).then { _ in
+                return Data()
+            }
+            when(mock.getAll()).then { _ in
+                return [userSession]
+            }
+        }
+        let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
+        stub(keychainSessionStorageMock) { mock in
+            when(mock.get(forClientId: "client_id", completion: anyClosure()))
+                .then { _, completion in
+                    completion(userSession)
+                }
+        }
+        
+        let keychain = SharedKeychainSessionStorageFactory(keychain: keychainSessionStorageMock, sharedKeychain: sharedKeychainSessionStorageMock).makeKeychain(clientId: "client_id", service: "service_name", accessGroup: accessGroup, appIdentifierPrefix: "AZWSDFGHIJ")
+        
+        XCTAssertIdentical(keychain, sharedKeychainSessionStorageMock)
+        verify(sharedKeychainSessionStorageMock).checkEntitlements()
+        verify(sharedKeychainSessionStorageMock).getAll()
+        verify(sharedKeychainSessionStorageMock, never()).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
     }
     
     func testReturnsSharedKeychainWithUpdatedAccessGroupForItem() {
@@ -44,6 +74,9 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
                 .then { _, _, completion in
                     completion(.success())
                 }
+            when(mock.getAll()).then { _ in
+                return []
+            }
         }
         let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
         stub(keychainSessionStorageMock) { mock in
