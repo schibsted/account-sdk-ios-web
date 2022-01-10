@@ -1,5 +1,6 @@
 import UIKit
 import AuthenticationServices
+import SafariServices
 
 struct SimplifiedLoginUIFactory {
 
@@ -109,8 +110,13 @@ struct SimplifiedLoginUIFactory {
         }
         
         viewModel.onClickedPrivacyPolicy = {
-            webVC.loadURL(url)
-            nc.pushViewController(webVC, animated: true)
+            if SimplifiedLoginManager.isPad {
+                let svc = SFSafariViewController(url: url)
+                nc.present(svc, animated: true, completion: nil)
+            } else {
+                webVC.loadURL(url)
+                nc.pushViewController(webVC, animated: true)
+            }
         }
         
         return nc
