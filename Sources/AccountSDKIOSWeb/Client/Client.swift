@@ -233,6 +233,14 @@ public class Client: CustomStringConvertible {
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
+    
+    // used only for getting latest session from shared keychain
+    func getLatestSharedSession() -> UserSession? {
+        guard sessionStorage.accessGroup != nil else {
+            return nil
+        }
+        return sessionStorage.getLatestSession()
+    }
 }
 
 extension Client {

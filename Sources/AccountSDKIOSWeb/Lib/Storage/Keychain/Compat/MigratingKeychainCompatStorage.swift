@@ -1,6 +1,7 @@
 import Foundation
 
 class MigratingKeychainCompatStorage: SessionStorage {
+    var accessGroup: String? //unused in this context
     private let newStorage: KeychainSessionStorage
     private let legacyStorage: LegacyKeychainSessionStorage
     private let legacyClient: Client

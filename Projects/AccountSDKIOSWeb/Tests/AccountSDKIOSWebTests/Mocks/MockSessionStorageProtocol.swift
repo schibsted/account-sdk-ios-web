@@ -2,6 +2,7 @@ import Foundation
 @testable import AccountSDKIOSWeb
 
 struct MockSessionStorageProtocol: SessionStorage {
+    var accessGroup: String?
     
     let sessions: [UserSession]
     func getAll() -> [UserSession] {

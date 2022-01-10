@@ -1,6 +1,12 @@
 import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
+    var accessGroup: String? {
+        get {
+            keychain.accessGroup
+        }
+    }
+    
     private let keychain: KeychainStorage
     
     init(service: String, accessGroup: String? = nil) {
