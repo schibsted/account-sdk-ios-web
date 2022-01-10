@@ -81,7 +81,6 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        //if we hardcode mfa with nil value, what is the reason to have it as a buildViewController method argument?
                         let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
                         viewModel.asWebAuthenticationSession = session
                         session.presentationContextProvider = contextProvider
