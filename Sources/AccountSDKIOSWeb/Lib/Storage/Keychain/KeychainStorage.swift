@@ -10,7 +10,7 @@ protocol KeychainStoring {
 
 class KeychainStorage: KeychainStoring {
     private let service: String
-    private let accessGroup: String?
+    let accessGroup: String?
 
     init(forService: String, accessGroup: String? = nil) {
         self.service = forService
