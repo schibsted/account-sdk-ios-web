@@ -6,6 +6,7 @@ internal class KeychainSessionStorage: SessionStorage {
             keychain.accessGroup
         }
     }
+    
     private let keychain: KeychainStorage
     
     init(service: String, accessGroup: String? = nil) {
