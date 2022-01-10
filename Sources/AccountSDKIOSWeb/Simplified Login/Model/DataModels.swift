@@ -32,7 +32,7 @@ extension SimplifiedLoginNamedImageData {
         case .proFi:
             orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
         case .proDk:
-            orderedIconNames = ["Dba", "Bilbasen"]
+            orderedIconNames = ["dba", "Bilbasen"]
         case .pre:
             orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
         }
