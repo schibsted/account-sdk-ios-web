@@ -94,6 +94,7 @@ extension SimplifiedLoginManager {
                     if let visibleVC = keyWindow?.visibleViewController {
                         visibleVC.present(simplifiedLoginViewController, animated: true, completion: nil)
                         completion(.success())
+                        return
                     }
                     completion(.failure(SimplifiedLoginError.noVisibleViewControllerFound))
                 }
