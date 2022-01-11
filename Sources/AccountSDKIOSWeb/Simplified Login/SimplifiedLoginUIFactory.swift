@@ -10,6 +10,7 @@ struct SimplifiedLoginUIFactory {
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     clientName: String,
+                                    window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
@@ -24,6 +25,7 @@ struct SimplifiedLoginUIFactory {
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
+                                                                          window: window,
                                                                           extraScopeValues: extraScopeValues,
                                                                           completion: completion)
             viewModel.asWebAuthenticationSession?.start()
@@ -54,6 +56,7 @@ struct SimplifiedLoginUIFactory {
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
                                     clientName: String,
+                                    window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
@@ -70,6 +73,7 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
                                                                           withMFA: withMFA,
                                                                           loginHint: loginHint,
+                                                                          window: window,
                                                                           extraScopeValues: extraScopeValues,
                                                                           withSSO: withSSO,
                                                                           completion: completion)
@@ -81,7 +85,6 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        //if we hardcode mfa with nil value, what is the reason to have it as a buildViewController method argument?
                         let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
                         viewModel.asWebAuthenticationSession = session
                         session.presentationContextProvider = contextProvider

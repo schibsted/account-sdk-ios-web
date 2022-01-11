@@ -188,7 +188,7 @@ struct ContentView: View {
         let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
                 print("login result handler \(result)")
             }
-            manager.getSimplifiedLogin("tadam") { result in
+        manager.requestSimplifiedLogin("My product name") { result in
                 switch (result) {
                 case .success():
                     print("success")

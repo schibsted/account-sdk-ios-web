@@ -126,6 +126,7 @@ public class Client: CustomStringConvertible {
     
     func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                         loginHint: String? = nil,
+                                        window: UIWindow? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
                                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
@@ -152,7 +153,7 @@ public class Client: CustomStringConvertible {
 
             self.handleAuthenticationResponse(url: url) { result in
                 DispatchQueue.main.async {
-                    if let vc = KeyWindow.get()?.rootViewController {
+                    if let vc = window?.rootViewController {
                         vc.dismiss(animated: true, completion: nil)
                     }
                 }
@@ -237,6 +238,30 @@ public class Client: CustomStringConvertible {
         }
     }
     
+    // Used only for Simplified Login feature with additional parameter window
+    func getLoginSession(withMFA: MFAType? = nil,
+                         loginHint: String? = nil,
+                         window: UIWindow? = nil,
+                         extraScopeValues: Set<String> = [],
+                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
+    }
+    
+    // Used only for Simplified Login feature with additional parameter window
+    @available(iOS 13.0, *)
+    func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
+                         withMFA: MFAType? = nil,
+                         loginHint: String? = nil,
+                         window: UIWindow? = nil,
+                         extraScopeValues: Set<String> = [],
+                         withSSO: Bool = true,
+                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
+        session.presentationContextProvider = contextProvider
+        session.prefersEphemeralWebBrowserSession = !withSSO
+        return session
+    }
+    
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
@@ -299,7 +324,8 @@ extension Client {
                                 withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
-                                withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                withSSO: Bool = true,
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO
