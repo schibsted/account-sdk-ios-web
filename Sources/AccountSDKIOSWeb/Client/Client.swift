@@ -242,7 +242,7 @@ public class Client: CustomStringConvertible {
     }
     
     // used only for getting latest session from shared keychain
-    func getLatestSession() -> UserSession? {
+    func getLatestSharedSession() -> UserSession? {
         guard sessionStorage.accessGroup != nil else {
             return nil
         }
