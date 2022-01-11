@@ -500,7 +500,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z9DH9VRKR2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExampleWeb/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -523,7 +523,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExampleWeb/ExampleWeb.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExampleWeb/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z9DH9VRKR2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExampleWeb/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
