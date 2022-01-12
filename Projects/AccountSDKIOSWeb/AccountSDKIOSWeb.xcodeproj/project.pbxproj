@@ -12,6 +12,7 @@
 		24209497273D0266004CF03D /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0E273D00EA007C63A6 /* UserInformationView.swift */; };
 		24209498273D0269004CF03D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD12273D0120007C63A6 /* FooterView.swift */; };
 		24209499273D026C004CF03D /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD10273D010B007C63A6 /* LinksView.swift */; };
+		24240CA9278EDF9500544153 /* SimplifiedLoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */; };
 		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		243BFAC32750C62500382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC12750C62500382494 /* Localizable.strings */; };
 		243BFAC72750C67000382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC52750C67000382494 /* Localizable.strings */; };
@@ -150,6 +151,7 @@
 		2401AD10273D010B007C63A6 /* LinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksView.swift; sourceTree = "<group>"; };
 		2401AD12273D0120007C63A6 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManager.swift; sourceTree = "<group>"; };
+		24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManagerTests.swift; sourceTree = "<group>"; };
 		243BFAC22750C62500382494 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFAC62750C67000382494 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFACB2750D68300382494 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = Localizable.strings; sourceTree = "<group>"; };
@@ -652,6 +654,7 @@
 			children = (
 				CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */,
 				CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */,
+				24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */,
 			);
 			path = SimplifiedLogin;
 			sourceTree = "<group>";
@@ -1135,6 +1138,7 @@
 				CED185E82785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift in Sources */,
 				24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */,
 				CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */,
+				24240CA9278EDF9500544153 /* SimplifiedLoginManagerTests.swift in Sources */,
 				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
 				CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */,
 				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
