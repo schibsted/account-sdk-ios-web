@@ -109,6 +109,8 @@ class SimplifiedLoginViewController: UIViewController {
             let navigationBarAppearance = UINavigationBarAppearance()
             navigationBarAppearance.shadowColor = .gray
             navigationBarAppearance.backgroundColor = .white
+            navigationBarAppearance.titleTextAttributes =
+            [NSAttributedString.Key.foregroundColor: UIColor.black]
             navigationBar?.scrollEdgeAppearance = navigationBarAppearance
         }  else {
             navigationBar?.barTintColor = .white
