@@ -158,7 +158,7 @@ let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xx
     let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
             print("Catch login result \(result)")
     }
-    manager.getSimplifiedLogin("Your brand name visible on UI") { result in
+    manager.requestSimplifiedLogin("Your brand name visible on UI") { result in
         switch (result) {
         case .success():
             print("success")
@@ -167,6 +167,7 @@ let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xx
         }
     }
 ```
+If you want to present Simplified Login UI on a specific UIWindow, you need to pass the optional parameter `window` calling `requestSimplifiedLogin` method.
 
 #### Localization
 
