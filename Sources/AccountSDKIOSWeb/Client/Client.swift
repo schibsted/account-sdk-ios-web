@@ -149,7 +149,6 @@ public class Client: CustomStringConvertible {
                 }
                 return
             }
-
             self.handleAuthenticationResponse(url: url, completion: completion)
         }
         return session
@@ -292,7 +291,8 @@ extension Client {
                                 withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
-                                withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                withSSO: Bool = true,
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO

@@ -27,6 +27,10 @@ struct SharedKeychainSessionStorageFactory {
             }
         }
         
+        guard sharedKeychain.getLatestSession() == nil else {
+            return sharedKeychain
+        }
+        
         // update accessGroup for clientId entry
         keychain.get(forClientId: clientId) { userSession in
             if let userSession = userSession {

@@ -31,7 +31,7 @@ internal protocol SessionStorage {
     func getLatestSession() -> UserSession?
 }
 
-extension SessionStorage {
+extension SessionStorage {    
     func getLatestSession() -> UserSession? {
         let latestUserSession = self.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }
