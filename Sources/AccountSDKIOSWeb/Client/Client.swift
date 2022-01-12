@@ -126,7 +126,6 @@ public class Client: CustomStringConvertible {
     
     func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                         loginHint: String? = nil,
-                                        window: UIWindow? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
                                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
@@ -150,15 +149,7 @@ public class Client: CustomStringConvertible {
                 }
                 return
             }
-
-            self.handleAuthenticationResponse(url: url) { result in
-                DispatchQueue.main.async {
-                    if let vc = window?.rootViewController {
-                        vc.dismiss(animated: true, completion: nil)
-                    }
-                }
-                completion(result)
-            }
+            self.handleAuthenticationResponse(url: url, completion: completion)
         }
         return session
     }
@@ -236,30 +227,6 @@ public class Client: CustomStringConvertible {
             SchibstedAccountLogger.instance.error("Failed to obtain user tokens: \(error)")
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         }
-    }
-    
-    // Used only for Simplified Login feature with additional parameter window
-    func getLoginSession(withMFA: MFAType? = nil,
-                         loginHint: String? = nil,
-                         window: UIWindow? = nil,
-                         extraScopeValues: Set<String> = [],
-                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
-    }
-    
-    // Used only for Simplified Login feature with additional parameter window
-    @available(iOS 13.0, *)
-    func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
-                         withMFA: MFAType? = nil,
-                         loginHint: String? = nil,
-                         window: UIWindow? = nil,
-                         extraScopeValues: Set<String> = [],
-                         withSSO: Bool = true,
-                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
-        session.presentationContextProvider = contextProvider
-        session.prefersEphemeralWebBrowserSession = !withSSO
-        return session
     }
     
     func destroySession() {
