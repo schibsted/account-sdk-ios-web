@@ -50,7 +50,7 @@ public class Client: CustomStringConvertible {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
-        let sessionKeychainStorage = SharedKeychainSessionStorageFactory.makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
+        let sessionKeychainStorage = SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
 
         self.init(configuration: configuration,
                   sessionStorage: sessionKeychainStorage,
@@ -150,15 +150,7 @@ public class Client: CustomStringConvertible {
                 }
                 return
             }
-
-            self.handleAuthenticationResponse(url: url) { result in
-                DispatchQueue.main.async {
-                    if let vc = window?.rootViewController {
-                        vc.dismiss(animated: true, completion: nil)
-                    }
-                }
-                completion(result)
-            }
+            self.handleAuthenticationResponse(url: url, completion: completion)
         }
         return session
     }

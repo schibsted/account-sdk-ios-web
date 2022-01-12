@@ -184,19 +184,17 @@ struct ContentView: View {
     }
     
     func triggerSimplifiedLogin() {
-            let context = ASWebAuthSessionContextProvider()
-        let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
-                print("login result handler \(result)")
-            }
+        let context = ASWebAuthSessionContextProvider()
+        let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
         manager.requestSimplifiedLogin("My product name") { result in
-                switch (result) {
-                case .success():
-                    print("success")
-                case .failure(let error):
-                    print("error \(error)")
-                }
+            switch (result) {
+            case .success():
+                print("success")
+            case .failure(let error):
+                print("error \(error)")
             }
         }
+    }
 }
 
 struct WebView : UIViewRepresentable {
