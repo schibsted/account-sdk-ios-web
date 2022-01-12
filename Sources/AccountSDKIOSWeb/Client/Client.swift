@@ -149,15 +149,7 @@ public class Client: CustomStringConvertible {
                 }
                 return
             }
-
-            self.handleAuthenticationResponse(url: url) { result in
-                DispatchQueue.main.async {
-                    if let vc = KeyWindow.get()?.rootViewController {
-                        vc.dismiss(animated: true, completion: nil)
-                    }
-                }
-                completion(result)
-            }
+            self.handleAuthenticationResponse(url: url, completion: completion)
         }
         return session
     }
@@ -242,7 +234,7 @@ public class Client: CustomStringConvertible {
     }
     
     // used only for getting latest session from shared keychain
-    func getLatestSession() -> UserSession? {
+    func getLatestSharedSession() -> UserSession? {
         guard sessionStorage.accessGroup != nil else {
             return nil
         }
@@ -299,7 +291,8 @@ extension Client {
                                 withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
-                                withSSO: Bool = true, completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                withSSO: Bool = true,
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session.presentationContextProvider = contextProvider
         session.prefersEphemeralWebBrowserSession = !withSSO

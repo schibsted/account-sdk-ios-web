@@ -5,6 +5,7 @@ public final class SimplifiedLoginManager {
     public enum SimplifiedLoginError: Error {
         case noLoggedInSessionInSharedKeychain
         case noClientNameFound
+        case noVisibleViewControllerFound
     }
     
     static let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
@@ -68,8 +69,8 @@ extension SimplifiedLoginManager {
      - parameter clientName: optional client name visible in footer view of Simplified Login. If not provided CFBundleDisplayName is used by default
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
-    public func getSimplifiedLogin(_ clientName: String? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let latestUserSession = client.getLatestSession() else {
+    public func requestSimplifiedLogin(_ clientName: String? = nil, window: UIWindow? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let latestUserSession = client.getLatestSharedSession() else {
             completion(.failure(SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
         }
@@ -87,11 +88,15 @@ extension SimplifiedLoginManager {
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
-                    let simplifiedLoginViewController = self.makeViewController(clientName, assertionFetcher: fetcher, simplifiedLoginData: fetchedData)
-                    if let visibleVC = KeyWindow.get()?.visibleViewController {
+                    let keyWindow = (window != nil) ? window : KeyWindow.get()
+                    let simplifiedLoginViewController = self.makeViewController(clientName, window: keyWindow, assertionFetcher: fetcher, simplifiedLoginData: fetchedData)
+
+                    if let visibleVC = keyWindow?.visibleViewController {
                         visibleVC.present(simplifiedLoginViewController, animated: true, completion: nil)
+                        completion(.success())
+                        return
                     }
-                    completion(.success())
+                    completion(.failure(SimplifiedLoginError.noVisibleViewControllerFound))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -99,7 +104,7 @@ extension SimplifiedLoginManager {
         }
     }
     
-    func makeViewController(_ clientName: String, assertionFetcher: SimplifiedLoginFetching, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+    func makeViewController(_ clientName: String, window: UIWindow? = nil, assertionFetcher: SimplifiedLoginFetching, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
@@ -108,6 +113,7 @@ extension SimplifiedLoginManager {
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          clientName: clientName,
+                                                                                         window: window,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
@@ -119,6 +125,7 @@ extension SimplifiedLoginManager {
                                                                                          userContext: simplifiedLoginData.context,
                                                                                          userProfileResponse: simplifiedLoginData.profile,
                                                                                          clientName: clientName,
+                                                                                         window: window,
                                                                                          withMFA: self.withMFA,
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
