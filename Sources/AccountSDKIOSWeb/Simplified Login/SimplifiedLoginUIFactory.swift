@@ -33,7 +33,6 @@ struct SimplifiedLoginUIFactory {
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
-                                                                          window: window,
                                                                           extraScopeValues: extraScopeValues,
                                                                           completion: extendedCompletion)
             viewModel.asWebAuthenticationSession?.start()
@@ -89,7 +88,6 @@ struct SimplifiedLoginUIFactory {
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
                                                                           withMFA: withMFA,
                                                                           loginHint: loginHint,
-                                                                          window: window,
                                                                           extraScopeValues: extraScopeValues,
                                                                           withSSO: withSSO,
                                                                           completion: extendedCompletion)

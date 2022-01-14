@@ -230,30 +230,6 @@ public class Client: CustomStringConvertible {
         }
     }
     
-    // Used only for Simplified Login feature with additional parameter window
-    func getLoginSession(withMFA: MFAType? = nil,
-                         loginHint: String? = nil,
-                         window: UIWindow? = nil,
-                         extraScopeValues: Set<String> = [],
-                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
-    }
-    
-    // Used only for Simplified Login feature with additional parameter window
-    @available(iOS 13.0, *)
-    func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
-                         withMFA: MFAType? = nil,
-                         loginHint: String? = nil,
-                         window: UIWindow? = nil,
-                         extraScopeValues: Set<String> = [],
-                         withSSO: Bool = true,
-                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
-        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, window: window, extraScopeValues: extraScopeValues, completion: completion)
-        session.presentationContextProvider = contextProvider
-        session.prefersEphemeralWebBrowserSession = !withSSO
-        return session
-    }
-    
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
