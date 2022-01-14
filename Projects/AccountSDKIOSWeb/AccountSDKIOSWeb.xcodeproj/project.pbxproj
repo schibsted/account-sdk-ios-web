@@ -12,6 +12,7 @@
 		24209497273D0266004CF03D /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD0E273D00EA007C63A6 /* UserInformationView.swift */; };
 		24209498273D0269004CF03D /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD12273D0120007C63A6 /* FooterView.swift */; };
 		24209499273D026C004CF03D /* LinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2401AD10273D010B007C63A6 /* LinksView.swift */; };
+		24240CA9278EDF9500544153 /* SimplifiedLoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */; };
 		243BA45F26982B7E00969355 /* MulticastDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248440412693482900CE88F2 /* MulticastDelegateTests.swift */; };
 		243BFAC32750C62500382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC12750C62500382494 /* Localizable.strings */; };
 		243BFAC72750C67000382494 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 243BFAC52750C67000382494 /* Localizable.strings */; };
@@ -91,12 +92,15 @@
 		CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
 		CE6AB47D276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */; };
 		CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE754A5627103071000F2EA9 /* GeneratedMocks.swift */; };
+		CE8D1B0827832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */; };
 		CE99896A270EFE0800CB9E95 /* KeychainStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */; };
 		CE99896C270EFEE200CB9E95 /* Result+VoidSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */; };
 		CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */; };
 		CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */; };
 		CEB631F92747C4B2009CE3B3 /* Bundle+AccountSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */; };
 		CEC8D35D27329F830002145D /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC8D35C27329F830002145D /* KeychainStorage.swift */; };
+		CED185E42785A492001FB0F6 /* UIWindow+VisibleVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */; };
+		CED185E82785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */; };
 		CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */; };
 		CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B7A272C15D800572645 /* MockURLProtocol.swift */; };
 		CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */; };
@@ -147,6 +151,7 @@
 		2401AD10273D010B007C63A6 /* LinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksView.swift; sourceTree = "<group>"; };
 		2401AD12273D0120007C63A6 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		2412D14E274BB713001F71A5 /* SimplifiedLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManager.swift; sourceTree = "<group>"; };
+		24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginManagerTests.swift; sourceTree = "<group>"; };
 		243BFAC22750C62500382494 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFAC62750C67000382494 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		243BFACB2750D68300382494 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = Localizable.strings; sourceTree = "<group>"; };
@@ -230,12 +235,15 @@
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
+		CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactoryTests.swift; sourceTree = "<group>"; };
 		CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageError.swift; sourceTree = "<group>"; };
 		CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+VoidSuccess.swift"; sourceTree = "<group>"; };
 		CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSession.swift; sourceTree = "<group>"; };
 		CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSessionTests.swift; sourceTree = "<group>"; };
 		CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AccountSDK.swift"; sourceTree = "<group>"; };
 		CEC8D35C27329F830002145D /* KeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
+		CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVCTests.swift"; sourceTree = "<group>"; };
+		CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModelTests.swift; sourceTree = "<group>"; };
 		CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseWithMockHTTPClient.swift; sourceTree = "<group>"; };
 		CED92B7A272C15D800572645 /* MockURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIFactory.swift; sourceTree = "<group>"; };
@@ -466,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				248440412693482900CE88F2 /* MulticastDelegateTests.swift */,
+				CED185E32785A492001FB0F6 /* UIWindow+VisibleVCTests.swift */,
 			);
 			name = Util;
 			path = Tests/Util;
@@ -640,6 +649,16 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		CE3E98972782F05100B2F403 /* SimplifiedLogin */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D1B0727832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift */,
+				CED185E72785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift */,
+				24240CA8278EDF9500544153 /* SimplifiedLoginManagerTests.swift */,
+			);
+			path = SimplifiedLogin;
+			sourceTree = "<group>";
+		};
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -697,6 +716,7 @@
 		OBJ_41 /* AccountSDKIOSWebTests */ = {
 			isa = PBXGroup;
 			children = (
+				CE3E98972782F05100B2F403 /* SimplifiedLogin */,
 				A93EFCD2263012FC008200D1 /* API */,
 				OBJ_42 /* Await.swift */,
 				OBJ_43 /* ClientTests.swift */,
@@ -1108,13 +1128,17 @@
 				CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */,
 				CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */,
 				OBJ_251 /* JOSEUtilTests.swift in Sources */,
+				CE8D1B0827832E6C00EDFC04 /* SharedKeychainSessionStorageFactoryTests.swift in Sources */,
 				OBJ_252 /* JWKSTests.swift in Sources */,
 				OBJ_253 /* JOSEUtil.swift in Sources */,
 				244EAAD0275A39A7008A1285 /* MockSessionStorageProtocol.swift in Sources */,
+				CED185E42785A492001FB0F6 /* UIWindow+VisibleVCTests.swift in Sources */,
 				CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */,
 				A95F1A0025826A59000D19F5 /* HTTPClientWithURLSessionTests.swift in Sources */,
+				CED185E82785AD5A001FB0F6 /* SimplifiedLoginViewModelTests.swift in Sources */,
 				24BF4C9E27282333008F11F3 /* TokenRefreshRequestHandlerTests.swift in Sources */,
 				CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */,
+				24240CA9278EDF9500544153 /* SimplifiedLoginManagerTests.swift in Sources */,
 				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
 				CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */,
 				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,

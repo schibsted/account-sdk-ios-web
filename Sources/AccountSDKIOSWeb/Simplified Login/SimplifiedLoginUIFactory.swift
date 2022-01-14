@@ -22,12 +22,20 @@ struct SimplifiedLoginUIFactory {
         
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         
+        let vc = window?.visibleViewController
+        let extendedCompletion: LoginResultHandler = { result in
+            DispatchQueue.main.async {
+                vc?.dismiss(animated: true, completion: nil)
+            }
+            completion(result)
+        }
+        
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
                                                                           window: window,
                                                                           extraScopeValues: extraScopeValues,
-                                                                          completion: completion)
+                                                                          completion: extendedCompletion)
             viewModel.asWebAuthenticationSession?.start()
         }
         
@@ -36,7 +44,7 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
+                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion)
                         session.start()
                     }
                 case .failure(let error):
@@ -68,6 +76,14 @@ struct SimplifiedLoginUIFactory {
         let localizationModel = SimplifiedLoginLocalizationModel()
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
         
+        let vc = window?.visibleViewController
+        let extendedCompletion: LoginResultHandler = { result in
+            DispatchQueue.main.async {
+                vc?.dismiss(animated: true, completion: nil)
+            }
+            completion(result)
+        }
+        
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
@@ -76,7 +92,7 @@ struct SimplifiedLoginUIFactory {
                                                                           window: window,
                                                                           extraScopeValues: extraScopeValues,
                                                                           withSSO: withSSO,
-                                                                          completion: completion)
+                                                                          completion: extendedCompletion)
             viewModel.asWebAuthenticationSession?.start()
         }
         
@@ -85,7 +101,7 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: completion)
+                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion)
                         viewModel.asWebAuthenticationSession = session
                         session.presentationContextProvider = contextProvider
                         session.prefersEphemeralWebBrowserSession = true
