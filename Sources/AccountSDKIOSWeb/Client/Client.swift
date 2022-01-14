@@ -126,7 +126,6 @@ public class Client: CustomStringConvertible {
     
     func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                         loginHint: String? = nil,
-                                        window: UIWindow? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
                                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
