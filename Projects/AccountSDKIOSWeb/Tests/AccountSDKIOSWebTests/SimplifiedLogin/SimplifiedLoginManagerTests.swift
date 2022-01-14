@@ -6,7 +6,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
  
     // MARK: -
     
-    func testRequestSimplifiedLogin_noLoggedInSessionInSharedKeychain (){
+    func testRequestSimplifiedLogin_noLoggedInSessionInSharedKeychain () {
         let mockHTTPClient = MockHTTPClient()
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
         let sut = SimplifiedLoginManager(client: client, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
@@ -45,6 +45,86 @@ final class SimplifiedLoginManagerTests: XCTestCase {
                 expectation.fulfill()
             default:
                 XCTFail("Should fail with SimplifiedLoginError.noClientNameFound when clientName is nil")
+            }
+        })
+        
+        self.wait(for: [expectation], timeout: 2)
+    }
+    
+    func testRequestSimplifiedLogin_failingFetcher() {
+        //Mock Client
+        let mockHTTPClient = MockHTTPClient()
+        let jwks = RemoteJWKS(jwksURI: Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: mockHTTPClient)
+        let tokenHandler = TokenHandler(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient, jwks: jwks)
+        let mockClient = MockClient(configuration: Fixtures.clientConfig,
+                                      sessionStorage: MockSessionStorage(),
+                                      stateStorage: StateStorage(storage: MockStorage()),
+                                      httpClient: mockHTTPClient,
+                                      jwks: jwks,
+                                      tokenHandler: tokenHandler)
+        let returnedUserSession = UserSession(clientId: "aClientId", userTokens: Fixtures.userTokens, updatedAt: Date())
+        mockClient.userSessionToReturn = returnedUserSession
+        
+        // Mock Fetcher
+        let mockFetcher = MockSimplifiedLoginFetcher()
+        mockFetcher.fetchDataToReturn = .failure(LoginError.canceled)
+        
+        // Visible Window
+        let vc = UIViewController()
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in }, fetcher: mockFetcher)
+        let expectation = self.expectation(description: "Should fail when fetchData fails")
+        sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
+            switch result {
+            case .failure(LoginError.canceled):
+                expectation.fulfill()
+            default:
+                XCTFail("Should fail when fetchData fails. With erro: \(String(describing: mockFetcher.fetchDataToReturn))")
+            }
+        })
+        
+        self.wait(for: [expectation], timeout: 2)
+    }
+    
+    func testRequestSimplifiedLogin_success() {
+        //Mock Client
+        let mockHTTPClient = MockHTTPClient()
+        let jwks = RemoteJWKS(jwksURI: Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: mockHTTPClient)
+        let tokenHandler = TokenHandler(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient, jwks: jwks)
+        let mockClient = MockClient(configuration: Fixtures.clientConfig,
+                                      sessionStorage: MockSessionStorage(),
+                                      stateStorage: StateStorage(storage: MockStorage()),
+                                      httpClient: mockHTTPClient,
+                                      jwks: jwks,
+                                      tokenHandler: tokenHandler)
+        let returnedUserSession = UserSession(clientId: "aClientId", userTokens: Fixtures.userTokens, updatedAt: Date())
+        mockClient.userSessionToReturn = returnedUserSession
+        
+        // Mock Fetcher
+        let mockFetcher = MockSimplifiedLoginFetcher()
+        let contextResponse = UserContextFromTokenResponse(identifier: "23", display_text: "32", client_name: "32")
+        let userProfileResponse = Fixtures.userProfileResponse
+        mockFetcher.fetchDataToReturn = .success(SimplifiedLoginFetchedData(contextResponse, userProfileResponse))
+        
+        // Visible Window
+        let vc = UIViewController()
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        
+        
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in }, fetcher: mockFetcher)
+        let expectation = self.expectation(description: "Should be a sucessfull flow")
+        sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
+            switch result {
+            case .success():
+                XCTAssertTrue(window.visibleViewController is SimplifiedLoginViewController, "A ViewController of type SimplifiedLoginViewController, should be visible")
+                expectation.fulfill()
+            default:
+                XCTFail("Should be a sucessfull flow")
             }
         })
         
@@ -137,7 +217,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 2)
     }
 
-    func testRequestSimplifiedLogin_success() {
+    func testRequestSimplifiedLogin_integrationSuccess() {
         // MockHTTPClient
         let contextResponse = UserContextFromTokenResponse(identifier: "23", display_text: "32", client_name: "32")
         let userProfileResponse = Fixtures.userProfileResponse
@@ -179,7 +259,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
                 XCTAssertTrue(window.visibleViewController is SimplifiedLoginViewController, "A ViewController of type SimplifiedLoginViewController, should be visible")
                 expectation.fulfill()
             default:
-                XCTFail("Should fail with SimplifiedLoginError.noVisibleViewControllerFound")
+                XCTFail("Should be a sucessfull flow")
             }
         })
         
@@ -191,5 +271,24 @@ class MockClient: Client {
     var userSessionToReturn: UserSession?
     override func getLatestSharedSession() -> UserSession? {
         return userSessionToReturn
+    }
+}
+
+class MockSimplifiedLoginFetcher: SimplifiedLoginFetching {
+    var fetchDataToReturn: (Result<SimplifiedLoginFetchedData, Error>)?
+    func fetchData(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
+        guard let retData = fetchDataToReturn else {
+            XCTFail("Mock not set up properly")
+            return
+        }
+        completion(retData)
+    }
+    var fetchAssertiontoReturn: (Result<SimplifiedLoginAssertionResponse, Error>)?
+    func fetchAssertion(completion: @escaping (Result<SimplifiedLoginAssertionResponse, Error>) -> Void) {
+        guard let retData = fetchAssertiontoReturn else {
+            XCTFail("Mock not set up properly")
+            return
+        }
+        completion(retData)
     }
 }
