@@ -92,9 +92,10 @@ public final class SimplifiedLoginManager {
 extension SimplifiedLoginManager {
     
     /**
-     Prepare and configure Simplified Login View Controller which should be shown modally
+     Prepares and presents the Simplified Login View Controller modally. If a shared user session is found in the shared keychain this function will present a viewcontroller and then retains that shared user until requestSimplifiedLogin(...) is called again
 
      - parameter clientName: optional client name visible in footer view of Simplified Login. If not provided CFBundleDisplayName is used by default
+     - parameter window: window used to present SimplifiedLoginViewController
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
     public func requestSimplifiedLogin(_ clientName: String? = nil, window: UIWindow? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
