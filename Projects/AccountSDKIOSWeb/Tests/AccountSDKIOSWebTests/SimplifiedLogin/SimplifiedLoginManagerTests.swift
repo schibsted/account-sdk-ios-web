@@ -75,7 +75,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         window.rootViewController = vc
         window.makeKeyAndVisible()
         
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in }, fetcher: mockFetcher)
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, fetcher: mockFetcher, completion: { result in })
         let expectation = self.expectation(description: "Should fail when fetchData fails")
         sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
             switch result {
@@ -116,7 +116,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         window.makeKeyAndVisible()
         
         
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in }, fetcher: mockFetcher)
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, fetcher: mockFetcher, completion: { result in })
         let expectation = self.expectation(description: "Should be a sucessfull flow")
         sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
             switch result {
