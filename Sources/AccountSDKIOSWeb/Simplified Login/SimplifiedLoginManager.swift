@@ -31,22 +31,22 @@ public final class SimplifiedLoginManager {
     
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     convenience public init(client: Client,
-                withMFA: MFAType? = nil,
-                loginHint: String? = nil,
-                extraScopeValues: Set<String> = [],
-                completion: @escaping LoginResultHandler) {
+                            withMFA: MFAType? = nil,
+                            loginHint: String? = nil,
+                            extraScopeValues: Set<String> = [],
+                            completion: @escaping LoginResultHandler) {
         
         let fetcher = SimplifiedLoginFetcher(client: client)
-        self.init(client: client, withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion, fetcher: fetcher)
+        self.init(client: client, withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, fetcher: fetcher, completion: completion)
     }
     
     @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
     init(client: Client,
-                     withMFA: MFAType? = nil,
-                     loginHint: String? = nil,
-                     extraScopeValues: Set<String> = [],
-                     completion: @escaping LoginResultHandler,
-                     fetcher: SimplifiedLoginFetching) {
+         withMFA: MFAType? = nil,
+         loginHint: String? = nil,
+         extraScopeValues: Set<String> = [],
+         fetcher: SimplifiedLoginFetching,
+         completion: @escaping LoginResultHandler) {
         self.client = client
         self.withMFA = withMFA
         self.loginHint = loginHint
@@ -57,27 +57,27 @@ public final class SimplifiedLoginManager {
     
     @available(iOS 13.0, *)
     convenience public init(client: Client,
-                contextProvider: ASWebAuthenticationPresentationContextProviding,
-                env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
-                withMFA: MFAType? = nil,
-                loginHint: String? = nil,
-                extraScopeValues: Set<String> = [],
-                withSSO: Bool = true,
-                completion: @escaping LoginResultHandler) {
+                            contextProvider: ASWebAuthenticationPresentationContextProviding,
+                            env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+                            withMFA: MFAType? = nil,
+                            loginHint: String? = nil,
+                            extraScopeValues: Set<String> = [],
+                            withSSO: Bool = true,
+                            completion: @escaping LoginResultHandler) {
         let fetcher = SimplifiedLoginFetcher(client: client)
-        self.init(client: client, contextProvider: contextProvider, env: env, withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, withSSO: withSSO, completion: completion, fetcher: fetcher)
+        self.init(client: client, contextProvider: contextProvider, env: env, withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, withSSO: withSSO, fetcher: fetcher, completion: completion)
     }
     
     @available(iOS 13.0, *)
     init(client: Client,
-                contextProvider: ASWebAuthenticationPresentationContextProviding,
-                env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
-                withMFA: MFAType? = nil,
-                loginHint: String? = nil,
-                extraScopeValues: Set<String> = [],
-                withSSO: Bool = true,
-                completion: @escaping LoginResultHandler,
-                fetcher: SimplifiedLoginFetching) {
+         contextProvider: ASWebAuthenticationPresentationContextProviding,
+         env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
+         withMFA: MFAType? = nil,
+         loginHint: String? = nil,
+         extraScopeValues: Set<String> = [],
+         withSSO: Bool = true,
+         fetcher: SimplifiedLoginFetching,
+         completion: @escaping LoginResultHandler) {
         self.client = client
         self.withMFA = withMFA
         self.loginHint = loginHint
