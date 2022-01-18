@@ -48,20 +48,22 @@ public class Client: CustomStringConvertible {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
-    
-    /**
-     Initialize the Client.
 
-     - parameter configuration: The ClientConfiguration instance.
-     - parameter httpClient: Optional object performs to HTTPClient protocol. If not provied a default implementation is used.
+    /**
+     Initializes the Client with given configuration
      
+     - parameter configuration: Client configuration object
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter httpClient: Optional custom HTTPClient
      */
-    public convenience init(configuration: ClientConfiguration, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
+        let sessionKeychainStorage = SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
+
         self.init(configuration: configuration,
-                  sessionStorage: KeychainSessionStorage(service: Client.keychainServiceName),
+                  sessionStorage: sessionKeychainStorage,
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
                   jwks: jwks,
@@ -82,7 +84,8 @@ public class Client: CustomStringConvertible {
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let newSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
         
-        let legacyClientConfiguration = ClientConfiguration(serverURL: configuration.serverURL,
+        let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
+                                                            serverURL: configuration.serverURL,
                                                             sessionServiceURL: configuration.sessionServiceURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
                                                             redirectURI: URL(string: "http://")!) // TODO: Handle url
@@ -125,13 +128,7 @@ public class Client: CustomStringConvertible {
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
     }
-    
-    private func getMostRecentSession() -> UserSession? {
-        sessionStorage.getAll()
-            .sorted { $0.updatedAt > $1.updatedAt }
-            .first
-    }
-
+       
     /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
     private func storeAuthState(withMFA: MFAType?) -> AuthState {
         let authState = AuthState(mfa: withMFA)
@@ -144,14 +141,15 @@ public class Client: CustomStringConvertible {
         return authState
     }
     
-    private func createWebAuthenticationSession(withMFA: MFAType? = nil,
-                                                loginHint: String?,
-                                                extraScopeValues: Set<String> = [],
-                                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+    func createWebAuthenticationSession(withMFA: MFAType? = nil,
+                                        loginHint: String? = nil,
+                                        assertion: String? = nil,
+                                        extraScopeValues: Set<String> = [],
+                                        completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
         
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, extraScopeValues: extraScopeValues)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, assertion: assertion, extraScopeValues: extraScopeValues)
         
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
@@ -168,7 +166,6 @@ public class Client: CustomStringConvertible {
                 }
                 return
             }
-
             self.handleAuthenticationResponse(url: url, completion: completion)
         }
         return session
@@ -201,7 +198,7 @@ public class Client: CustomStringConvertible {
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
-                self.sessionStorage.store(userSession) { result in
+                self.sessionStorage.store(userSession, accessGroup: nil) { result in
                     switch result {
                     case .success():
                         completion(.success(userTokens))
@@ -222,7 +219,7 @@ public class Client: CustomStringConvertible {
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
-            sessionStorage.store(userSession) { output in
+            sessionStorage.store(userSession, accessGroup: nil) { output in
                 switch output {
                 case .success():
                     let user = User(client: self, tokens: tokenResult.userTokens)
@@ -251,6 +248,14 @@ public class Client: CustomStringConvertible {
     
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
+    }
+    
+    // used only for getting latest session from shared keychain
+    func getLatestSharedSession() -> UserSession? {
+        guard sessionStorage.accessGroup != nil else {
+            return nil
+        }
+        return sessionStorage.getLatestSession()
     }
 }
 

@@ -19,7 +19,7 @@ public protocol UserProtocol {
 
 /// Representation of logged-in user.
 public class User: UserProtocol {
-    private let client: Client
+    let client: Client
     var tokens: UserTokens?
     
     /**
@@ -34,6 +34,13 @@ public class User: UserProtocol {
     
     let refreshHandler = TokenRefreshRequestHandler()
 
+    /// user idToken
+    public var idToken: String? {
+        get {
+            tokens?.idToken
+        }
+    }
+    
     /// User UUID
     public var uuid: String? {
         get {
@@ -124,6 +131,15 @@ public class User: UserProtocol {
 }
 
 extension User {
+    
+    func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
+        client.schibstedAccountAPI.userContextFromToken(for: self, completion: completion)
+    }
+    
+    func assertionForSimplifiedLogin(completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
+        self.client.schibstedAccountAPI.assertionForSimplifiedLogin(for: self, completion: completion)
+    }
+    
     static func shouldLogout(tokenResponseBody: String?) -> Bool {
         if let errorJSON = tokenResponseBody,
            let oauthError = OAuthError.fromJSON(errorJSON),

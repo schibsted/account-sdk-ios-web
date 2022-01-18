@@ -95,7 +95,7 @@ final class UserTests: XCTestCase {
         }
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), completion: anyClosure())).then { _, completion in
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then { _, _, completion in
                 completion(.success())
             }
         }
@@ -120,11 +120,10 @@ final class UserTests: XCTestCase {
                     verify(mockSessionStorage).store(ParameterMatcher<UserSession>{
                         $0.userTokens.accessToken == "newAccessToken" &&
                         $0.userTokens.refreshToken == "newRefreshToken"
-                    }, completion: anyClosure())
+                    }, accessGroup: any(), completion: anyClosure())
                 default:
                     XCTFail("Unexpected result \(result)")
                 }
-
                 done()
             }
         }
@@ -299,6 +298,55 @@ final class UserTests: XCTestCase {
         XCTAssertFalse(user.isLoggedIn())
         
         verify(mockSessionStorage).remove(forClientId: Fixtures.clientConfig.clientId)
+    }
+    
+    func testAssertionReturnsCorrectValue() {
+        let mockHTTPClient = MockHTTPClient()
+        let expectedResponse = SimplifiedLoginAssertionResponse(assertion: "for-whom-the-bell-tolls")
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(SchibstedAccountAPIResponse(data: expectedResponse)))
+                }
+        }
+        
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        Await.until { done in
+            user.assertionForSimplifiedLogin { result in
+                switch result {
+                case .success(let assertion):
+                    XCTAssertEqual(assertion, expectedResponse)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
+    }
+    
+    func testUserContextReturnsCorrectValue() {
+        let mockHTTPClient = MockHTTPClient()
+        let expectedResponse = UserContextFromTokenResponse(identifier: "identifier", display_text: "master-of-puppets", client_name: "metallica")
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(expectedResponse))
+                }
+        }
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        Await.until { done in
+            user.userContextFromToken { result in
+                switch result {
+                case .success(let context):
+                    XCTAssertEqual(context, expectedResponse)
+                default:
+                    XCTFail("Unexpected result \(result)")
+                }
+                done()
+            }
+        }
     }
 }
 

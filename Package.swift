@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "AccountSDKIOSWeb",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v12),
     ],
@@ -19,7 +20,9 @@ let package = Package(
     targets: [
         .target(
             name: "AccountSDKIOSWeb",
-            dependencies: ["JOSESwift", .product(name: "Logging", package: "swift-log")]
+            dependencies: ["JOSESwift", .product(name: "Logging", package: "swift-log")],
+            resources: [.process("Resources")],
+            swiftSettings: [.define("SPM")]
         )
     ]
 )

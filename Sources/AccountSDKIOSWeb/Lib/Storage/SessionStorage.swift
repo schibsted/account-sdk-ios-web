@@ -30,8 +30,19 @@ public struct UserTokens: Codable, Equatable, CustomStringConvertible {
 }
 
 internal protocol SessionStorage {
-    func store(_ value: UserSession, completion: @escaping (Result<Void, Error>) -> Void)
+    var accessGroup: String? { get }
+    func store(_ value: UserSession, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void)
     func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  
     func getAll() -> [UserSession]
     func remove(forClientId: String)
+    func getLatestSession() -> UserSession?
+}
+
+extension SessionStorage {    
+    func getLatestSession() -> UserSession? {
+        let latestUserSession = self.getAll()
+            .sorted { $0.updatedAt > $1.updatedAt }
+            .first
+        return latestUserSession
+    }
 }

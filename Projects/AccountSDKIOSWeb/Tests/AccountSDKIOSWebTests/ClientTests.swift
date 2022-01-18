@@ -65,23 +65,23 @@ final class ClientTests: XCTestCase {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
         let mockHTTPClient = MockHTTPClient()
-        
+
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
-            
+
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
         }
-        
+
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), completion: anyClosure())).then {_, completion in
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
                 completion(.success())
             }
         }
@@ -106,7 +106,7 @@ final class ClientTests: XCTestCase {
     func testHandleAuthenticationResponseHandlesTokenErrorResponse() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), completion: anyClosure())).thenDoNothing()
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).thenDoNothing()
         }
         let state = "testState"
         let mockStorage = MockStorage()

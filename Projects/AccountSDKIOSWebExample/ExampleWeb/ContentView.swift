@@ -41,9 +41,10 @@ struct ContentView: View {
                         Text(String(describing: client))
                         Text("Logged-in as \(user?.uuid ?? "unknown")")
                     }
-                    Button(action: resumeUser, label: { Text("Resume user") } )
-                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)") } )
-                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)") } )
+                    Button(action: resumeUser, label: { Text("Resume user")})
+                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
+                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
+                    Button(action: triggerSimplifiedLogin, label: { Text("Simplified Login view")})
                     
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
@@ -179,6 +180,19 @@ struct ContentView: View {
         case .failure(let error):
             print(error)
             
+        }
+    }
+    
+    func triggerSimplifiedLogin() {
+        let context = ASWebAuthSessionContextProvider()
+        let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
+        manager.requestSimplifiedLogin("My product name") { result in
+            switch (result) {
+            case .success():
+                print("success")
+            case .failure(let error):
+                print("error \(error)")
+            }
         }
     }
 }

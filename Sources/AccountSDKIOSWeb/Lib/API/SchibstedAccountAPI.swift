@@ -5,7 +5,8 @@ enum RequestBuilder {
     case codeExchange(clientId: String)
     case oldSDKRefreshToken(oldSDKRefreshToken: String)
     case userContextFromToken
-
+    case assertionForSimplifiedLogin
+    
     func asRequest(baseURL: URL) -> URLRequest {
         switch self {
         case .codeExchange(clientId: let clientId):
@@ -14,6 +15,8 @@ enum RequestBuilder {
             return buildOldSDKRefreshTokenRequest(baseURL: baseURL, oldSDKRefreshToken: refreshToken)
         case .userContextFromToken:
             return buildUserContextFromTokenRequest(baseURL: baseURL)
+        case .assertionForSimplifiedLogin:
+            return buildAssertionForSimplifiedLoginRequest(baseURL: baseURL)
         }
     }
     
@@ -56,6 +59,14 @@ enum RequestBuilder {
         let url = baseURL.appendingPathComponent("/user-context-from-token")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
+        return request
+    }
+    
+    func buildAssertionForSimplifiedLoginRequest(baseURL: URL) -> URLRequest {
+        let url = baseURL.appendingPathComponent("/api/2/user/auth/token")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
         request.setValue(HTTPUtil.xWWWFormURLEncodedContentType, forHTTPHeaderField: "Content-Type")
         return request
     }
@@ -117,10 +128,18 @@ class SchibstedAccountAPI {
     }
     
     func userContextFromToken(for user: User, completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
-        let request = RequestBuilder.userContextFromToken.buildUserContextFromTokenRequest(baseURL: sessionServiceURL)
+        let request = RequestBuilder.userContextFromToken.asRequest(baseURL: sessionServiceURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
             completion($0)
+        }
+    }
+    
+    func assertionForSimplifiedLogin(for user: User, completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
+        let request = RequestBuilder.assertionForSimplifiedLogin.asRequest(baseURL: baseURL)
+
+        user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
+            completion(self.unpackResponse($0))
         }
     }
 

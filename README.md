@@ -173,3 +173,40 @@ This SDK implements the [best practices for user authentication via an OpenID Co
       **Note:** If the refresh token request fails, due to the refresh token itself having expired
       or been invalidated by the user, the SDK will log the user out.
 * Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage.
+
+## Simplified Login
+
+### Configuring Simplified Login
+Prerequisite: Applications need to be on the same Apple Development account in order to have access to the shared keychain. 
+
+1. In your application target, add Keychain Sharing capability with keychain group set to `com.schibsted.simplifiedLogin`.
+2. Creating client, pass additional parameter `appIdentifierPrefix`. It is usually the same as team identifier prefix - 10 characters combination of both numbers and letters assigned by Apple.
+```swift
+let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xxxxxxxxxx") 
+```
+3. Create `SimplifiedLoginManager` and call `getSimplifiedLogin` method anytime you want to present SL to user.
+```swift
+    let context = ASWebAuthSessionContextProvider()
+    let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
+            print("Catch login result \(result)")
+    }
+    manager.requestSimplifiedLogin("Your brand name visible on UI") { result in
+        switch (result) {
+        case .success():
+            print("success")
+        case .failure(let error):
+            print("Catch error from presenting SL \(error)")
+        }
+    }
+```
+If you want to present Simplified Login UI on a specific UIWindow, you need to pass the optional parameter `window` calling `requestSimplifiedLogin` method.
+
+#### Localization
+
+Simplified Login comes with the following localization support:
+
+1. 🇳🇴 Norwegian Bokmål
+1. 🇸🇪 Swedish
+1. 🇫🇮 Finnish
+1. 🇩🇰 Danish
+1. 🇬🇧 English (Default)

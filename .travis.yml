@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode12.2
+osx_image: xcode13.2
 cache:
   - bundler
 
@@ -9,7 +9,7 @@ env:
     - secure: "gSnMExJCw0I6ucbn4ZF7hGuF1PKYyhbxwRn0DA+cJylu85TdU6Pug68JiKtazF15CZiqNCPB2IcyfGE8FXsWg1yHBdX7+Guvr/3HRf3pG80nS7QOcykvYt97IdZqFAgOgMMx3/Xs8IbxTsU/hAiWG7EF3llx52o/ZlWN/C3FWQE4gdMJEoYHYsMZ/PHn8my4ZR23Op7tqAVRLEyYQVbuBa5EReF4xpXM78FzlnXqx35oQuhOWle/PjRbkQzUU5N67bjzUukfJqSl30U75NDNkUGLYxqrKmaocMovhDyYLM4JLuPcQVTlS0yrGjgleGOIXq6T5i2qugggv6GK1lvJiz74XdP6T6pCZMBwEHJYDfkxOjdpbhhh0XeRblRqO3NdlW33C3YhKQBPPqxjBNwAd1ZLn14MPcuwCI4FInK/C0qUMrs2g2zOTvJ1HfxZVvVJ4BtEoXcA1jkGzzt4IJEPbi3Uh6pSDsVmb98Y8b4YJbBjShsDdUfASTDFNlb+ThNNYEYzFoeYPM+upeVKPCSaZiMeS1lZgzeJyCjxFOJQlp37rggfPN89x0/csjFs6AMSF2eBpPSx4J4KPslRngdC0lktqGm3qNS9Pqpwf/fNID+oCiISbhIieaSaZwC73KTG7IW84N4Xs9i4VkHOr4HZLsgnEfJLpmgQyJQqwsh1Ypk="
 
 xcode_project: Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
-xcode_destination: platform=iOS Simulator,OS=14.2,name=iPhone 12
+xcode_destination: platform=iOS Simulator,OS=15.2,name=iPhone 13
 xcode_scheme: AccountSDKIOSWebTests
 
 before_script: xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj build
@@ -25,7 +25,7 @@ deploy:
   verbose: true
   local_dir: docs
   on:
-    repo: schibsted/AccountSDKIOSWeb
+    repo: schibsted/account-sdk-ios-web
     branch: master
 
 notifications:

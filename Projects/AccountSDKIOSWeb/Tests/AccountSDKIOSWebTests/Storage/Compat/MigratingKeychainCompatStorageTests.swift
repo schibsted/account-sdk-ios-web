@@ -5,11 +5,11 @@ import Cuckoo
 final class MigratingKeychainCompatStorageTests: XCTestCase {
     func testStoreOnlyWritesToNewStorage() {
         let userSession = UserSession(clientId: "client1", userTokens: Fixtures.userTokens, updatedAt: Date())
-        
+
         let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
-            when(mock.store(equal(to: userSession), completion: anyClosure())).then { _, completion in
+            when(mock.store(equal(to: userSession), accessGroup: any(), completion: anyClosure())).then { _, _, completion in
                 completion(.success())
             }
         }
@@ -19,9 +19,9 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                                                               legacyClient: Client(configuration: Fixtures.clientConfig),
                                                               legacyClientSecret: "",
                                                               makeTokenRequest: { _, _, _ in  })
-        migratingStorage.store(userSession) { _ in }
+        migratingStorage.store(userSession, accessGroup: nil) { _ in }
 
-        verify(newStorage).store(equal(to: userSession), completion: anyClosure())
+        verify(newStorage).store(equal(to: userSession), accessGroup: any(), completion: anyClosure())
         verifyNoMoreInteractions(legacyStorage)
     }
 
@@ -106,7 +106,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                 .then{ _, completion in
                     completion(nil)
                 }
-            when(mock.store(equal(to: legacyUserSession), completion: anyClosure())).thenDoNothing()
+            when(mock.store(equal(to: legacyUserSession), accessGroup: "", completion: anyClosure())).thenDoNothing()
         }
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,

@@ -2,7 +2,7 @@ import Foundation
 import Security
 
 protocol KeychainStoring {
-    func setValue(_ value: Data, forAccount: String?) throws
+    func setValue(_ value: Data, forAccount: String?, accessGroup: String?) throws
     func getValue(forAccount: String?) throws -> Data?
     func getAll() -> [Data]
     func removeValue(forAccount: String?) throws
@@ -10,14 +10,14 @@ protocol KeychainStoring {
 
 class KeychainStorage: KeychainStoring {
     private let service: String
-    private let accessGroup: String?
+    let accessGroup: String?
 
     init(forService: String, accessGroup: String? = nil) {
         self.service = forService
         self.accessGroup = accessGroup
     }
 
-    func setValue(_ value: Data, forAccount: String?) throws {
+    func setValue(_ value: Data, forAccount: String?, accessGroup: String? = nil) throws {
         let status: OSStatus
         
         if try getValue(forAccount: forAccount) == nil {
@@ -26,7 +26,10 @@ class KeychainStorage: KeychainStoring {
             status = SecItemAdd(query as CFDictionary, nil)
         } else {
             let searchQuery = itemQuery(forAccount: forAccount, returnData: false)
-            let updateQuery: [String: Any] = [kSecValueData as String: value]
+            var updateQuery: [String: Any] = [kSecValueData as String: value]
+            if let accessGroup = accessGroup {
+                updateQuery[kSecAttrAccessGroup as String] = accessGroup
+            }
             status = SecItemUpdate(searchQuery as CFDictionary, updateQuery as CFDictionary)
         }
         
@@ -74,7 +77,13 @@ class KeychainStorage: KeychainStoring {
             return nil
         }
 
+        if status == errSecMissingEntitlement {
+            SchibstedAccountLogger.instance.error("KeychainStorager error: \(KeychainStorageError.entitlementMissing.localizedDescription)")
+            throw KeychainStorageError.entitlementMissing
+        }
+        
         guard status == errSecSuccess else {
+            SchibstedAccountLogger.instance.error("KeychainStorage error: \(KeychainStorageError.operationError.localizedDescription)")
             throw KeychainStorageError.operationError
         }
 

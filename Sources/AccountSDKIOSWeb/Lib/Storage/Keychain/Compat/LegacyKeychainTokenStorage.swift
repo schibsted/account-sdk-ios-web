@@ -101,7 +101,7 @@ class LegacyKeychainTokenStorage {
         let keychainData = [Self.KeychainKey.loggedInUsers: loggedInUsers]
         
         let data = try NSKeyedArchiver.archivedData(withRootObject: keychainData, requiringSecureCoding: true)
-        try keychain.setValue(data, forAccount: account)
+        try keychain.setValue(data, forAccount: account, accessGroup: nil)
     }
     
     func remove() {

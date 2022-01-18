@@ -2,12 +2,15 @@ import Foundation
 @testable import AccountSDKIOSWeb
 
 struct Fixtures {
-    static let clientConfig = ClientConfiguration(serverURL: URL(string: "https://issuer.example.com")!, sessionServiceURL: URL(string: "https://another.issuer.example.com")!, clientId: "client1", redirectURI: URL("com.example.client1://login"))
+    static let clientConfig = ClientConfiguration(env: .pre, serverURL: URL(string: "https://issuer.example.com")!, sessionServiceURL: URL(string: "https://another.issuer.example.com")!, clientId: "client1", redirectURI: URL("com.example.client1://login"))
     static let idTokenClaims = IdTokenClaims(iss: clientConfig.issuer, sub: "userUuid", userId: "12345", aud: ["client1"], exp: Date().timeIntervalSince1970 + 3600, nonce: "testNonce", amr: nil)
     static let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
     
     static let jwsUtil = JWSUtil()
     static let schibstedAccountAPI = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
+    
+    static let userProfileResponse = UserProfileResponse(uuid: "uuid", userId: "12345", status: 0, email: nil, emailVerified: nil, emails: [], phoneNumber: "123456789", phoneNumberVerified: nil, phoneNumbers: [], displayName: "foo bar", name: Name(givenName: "John", familyName: "White", formatted: nil), addresses: [:], gender: nil, birthday: nil, accounts: [:], merchants: [], published: nil, verified: nil, updated: nil, passwordChanged: nil, lastAuthenticated: nil, lastLoggedIn: nil, locale: nil, utcOffset: nil)
+    static let userContext = UserContextFromTokenResponse(identifier: "foo", display_text: "foo bar", client_name: "bar")
 }
 
 extension IdTokenClaims {   

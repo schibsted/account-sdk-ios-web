@@ -6,7 +6,7 @@ class KeychainStorageMock: KeychainStoring {
     private var storedData: [String:Data] = [:]
     private var testKey = "test_key"
     
-    func setValue(_ value: Data, forAccount: String?) throws {
+    func setValue(_ value: Data, forAccount: String?, accessGroup: String?) throws {
         if let forAccount = forAccount {
             storedData[forAccount] = value
         } else {
