@@ -34,6 +34,13 @@ public class User: UserProtocol {
     
     let refreshHandler = TokenRefreshRequestHandler()
 
+    /// user idToken
+    public var idToken: String? {
+        get {
+            tokens?.idToken
+        }
+    }
+    
     /// User UUID
     public var uuid: String? {
         get {
