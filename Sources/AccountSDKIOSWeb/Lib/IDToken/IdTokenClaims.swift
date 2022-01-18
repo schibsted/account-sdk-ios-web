@@ -1,7 +1,6 @@
 import Foundation
 
-// DO NOT SEEM TO BE USED BY ANY PUBLIC FUNCITON. DOES IT NEED TO BE PUBLIC?
-struct IdTokenClaims: Codable, Equatable {
+public struct IdTokenClaims: Codable, Equatable {
     let iss: String
     let sub: String
     let userId: String
@@ -9,6 +8,16 @@ struct IdTokenClaims: Codable, Equatable {
     let exp: Double
     let nonce: String?
     let amr: [String]?
+    
+    public init(iss: String, sub: String, userId: String, aud: [String], exp: Double, nonce: String?, amr: [String]?) {
+        self.iss = iss
+        self.sub = sub
+        self.userId = userId
+        self.aud = aud
+        self.exp = exp
+        self.nonce = nonce
+        self.amr = amr
+    }
     
    enum CodingKeys: String, CodingKey {
         case iss
@@ -22,7 +31,7 @@ struct IdTokenClaims: Codable, Equatable {
 }
 
 extension IdTokenClaims {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
         self.iss = try values.decode(String.self, forKey: .iss)
@@ -46,7 +55,7 @@ extension IdTokenClaims {
 }
 
 extension IdTokenClaims {
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(iss, forKey: .iss)

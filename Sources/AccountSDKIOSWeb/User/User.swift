@@ -20,7 +20,14 @@ public protocol UserProtocol {
 /// Representation of logged-in user.
 public class User: UserProtocol {
     let client: Client
-    internal var tokens: UserTokens?
+    var tokens: UserTokens?
+    
+    /**
+     Sets the tokens. Should only be used when testing.
+     */
+    public func setTokens(_ tokens: UserTokens) {
+        self.tokens = tokens
+    }
 
     /// Delegates listening to User events such as logout
     public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
@@ -34,7 +41,11 @@ public class User: UserProtocol {
         }
     }
 
-    /// User integer id (as string)
+    /**
+     User integer id (as string). Equivalent of legacyID in old AccountSDK
+
+     A user_id used by some Schibsted account APIs
+     */
     public var userId: String? {
         get {
             tokens?.idTokenClaims.userId
@@ -72,8 +83,8 @@ public class User: UserProtocol {
 
      - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
      - parameter redirectURI: where to redirect the user after the session has been created
-     - parameter state: an opaque value used by the client to maintain state between
-     - parameter completion: callback that receives the URL or an error in case of failure
+     - parameter state: An opaque value used by the client to maintain state between
+     - parameter completion: The callback that receives the URL or an error in case of failure
      */
     public func webSessionURL(clientId: String, redirectURI: String, state: String? = nil, completion: @escaping HTTPResultHandler<URL>) {
         client.schibstedAccountAPI.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI, state: state) { result in
@@ -92,7 +103,7 @@ public class User: UserProtocol {
      The code is short-lived and one-time use only.
     
      - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
-     - parameter completion: callback callback that receives the one time code
+     - parameter completion: callback that receives the one time code
      */
     public func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>) {
         client.schibstedAccountAPI.codeExchange(for: self, clientId: clientId) { result in
