@@ -12,7 +12,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         let sut = SimplifiedLoginManager(client: client, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
         
         let expectation = self.expectation(description: "Should fail with SimplifiedLoginError.noLoggedInSessionInSharedKeychain")
-        sut.requestSimplifiedLogin(nil, completion: { result in
+        sut.requestSimplifiedLogin("A client name", completion: { result in
             switch result {
             case .failure(SimplifiedLoginManager.SimplifiedLoginError.noLoggedInSessionInSharedKeychain):
                 expectation.fulfill()
