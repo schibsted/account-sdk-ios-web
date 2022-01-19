@@ -87,9 +87,9 @@ public class User: UserProtocol {
     
     /**
      Generate URL with embedded one-time code for creating a web session for the current user.
-
-     - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application
-     - parameter redirectURI: where to redirect the user after the session has been created
+     
+     - parameter clientId: which client to get the code on behalf of, e.g. client id for associated web application. Needs to be from the same merchant.
+     - parameter redirectURI: where to redirect the user after the session has been created. The exact redirect URI must be registered for the given client in Self Service.
      - parameter state: An opaque value used by the client to maintain state between
      - parameter completion: The callback that receives the URL or an error in case of failure
      */
