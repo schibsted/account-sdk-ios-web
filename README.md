@@ -223,3 +223,4 @@ Simplified Login comes with the following localization support:
 1. Bump the version in [Podspec](SchibstedAccount.podspec)
 1. Commit Podspec changes to a new branch, push it to GitHub, and make PR from it and then merge to master.
 1. Publish the pod by running `pod trunk push AccountSDKIOSWeb.podspec`. 
+    1. To successfully call 'pod trunk' you need to first setup pod trunk on your machine and be added as a contributor to the library. See https://guides.cocoapods.org/making/getting-setup-with-trunk.html
