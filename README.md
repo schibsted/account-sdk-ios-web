@@ -181,10 +181,13 @@ Prerequisite: Applications need to be on the same Apple Development account in o
 
 1. In your application target, add Keychain Sharing capability with keychain group set to `com.schibsted.simplifiedLogin`.
 2. Creating client, pass additional parameter `appIdentifierPrefix`. It is usually the same as team identifier prefix - 10 characters combination of both numbers and letters assigned by Apple.
+
 ```swift
 let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xxxxxxxxxx") 
 ```
+
 3. Create `SimplifiedLoginManager` and call `getSimplifiedLogin` method anytime you want to present SL to user.
+
 ```swift
     let context = ASWebAuthSessionContextProvider()
     let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
@@ -199,6 +202,7 @@ let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xx
         }
     }
 ```
+
 If you want to present Simplified Login UI on a specific UIWindow, you need to pass the optional parameter `window` calling `requestSimplifiedLogin` method.
 
 #### Localization
