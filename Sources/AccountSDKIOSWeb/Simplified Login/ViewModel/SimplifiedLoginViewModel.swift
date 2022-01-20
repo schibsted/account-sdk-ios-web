@@ -43,8 +43,15 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     var initials: String {
         let firstName  = userData.userProfileResponse.name?.givenName ?? ""
         let lastName = userData.userProfileResponse.name?.familyName ?? ""
-        let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
-        return initials
+        
+        let shouldUseName = !firstName.isEmpty && !lastName.isEmpty
+        if shouldUseName {
+            let initials = "\(firstName.first?.uppercased() ?? "")\(lastName.first?.uppercased() ?? "")"
+            return initials
+        }
+        
+        let displayNameIntital = displayName.first?.uppercased() ?? ""
+        return displayNameIntital
     }
     
     init(imageDataModel: SimplifiedLoginNamedImageData, userDataModel: SimplifiedLoginViewModelUserData, localizationModel: SimplifiedLoginLocalizationModel, visibleClientName: String) {
