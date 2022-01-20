@@ -71,6 +71,18 @@ class SimplifiedLoginViewController: UIViewController {
         view.isLayoutMarginsRelativeArrangement = true
         return view
     }()
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .portrait
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        .portrait
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
