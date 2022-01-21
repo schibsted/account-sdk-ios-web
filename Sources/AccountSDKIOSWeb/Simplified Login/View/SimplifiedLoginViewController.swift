@@ -71,14 +71,6 @@ class SimplifiedLoginViewController: UIViewController {
         view.isLayoutMarginsRelativeArrangement = true
         return view
     }()
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        .portrait
-    }
-    
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        .portrait
-    }
     
     override var shouldAutorotate: Bool {
         return false
@@ -87,22 +79,29 @@ class SimplifiedLoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .black.withAlphaComponent(0.6)
         
         // Main view
-        view.addSubview(userInformationView)
-        view.addSubview(primaryButton)
-        view.addSubview(linksView)
-        view.addSubview(footerStackView)
         
+        let mainView = UIView(frame: CGRect(x: 0, y: 300, width: UIScreen.main.bounds.width, height: 570))
+        mainView.layer.cornerRadius = 10
+        mainView.backgroundColor = .white
+        
+        mainView.addSubview(userInformationView)
+        mainView.addSubview(primaryButton)
+        mainView.addSubview(linksView)
+        mainView.addSubview(footerStackView)
+        
+        view.addSubview(mainView)
+
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
-        
+
         if isPhone {
             setupConstraints()
-            setupNavigationBar()
+            //setupNavigationBar()
         } else {
             setupiPadConstraints()
         }
@@ -150,7 +149,7 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: margin.topAnchor, constant: 57),
+            userInformationView.topAnchor.constraint(lessThanOrEqualTo: margin.topAnchor, constant: 230),
             
             // Primary button
             primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
@@ -162,7 +161,7 @@ class SimplifiedLoginViewController: UIViewController {
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
-            
+
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
@@ -189,7 +188,7 @@ class SimplifiedLoginViewController: UIViewController {
             primaryButton.widthAnchor.constraint(equalToConstant: 343),
             
             // Links View
-            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 20),
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: -30),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             
             // Footer
@@ -214,5 +213,35 @@ extension SimplifiedLoginViewController {
         case clickedLoginWithDifferentAccount
         case clickedContinueWithoutLogin
         case clickedClickPrivacyPolicy
+    }
+}
+
+extension UINavigationController {
+    
+    override open var shouldAutorotate: Bool {
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.shouldAutorotate
+            }
+            return super.shouldAutorotate
+        }
+    }
+    
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.preferredInterfaceOrientationForPresentation
+            }
+            return super.preferredInterfaceOrientationForPresentation
+        }
+    }
+    
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.supportedInterfaceOrientations
+            }
+            return super.supportedInterfaceOrientations
+        }
     }
 }

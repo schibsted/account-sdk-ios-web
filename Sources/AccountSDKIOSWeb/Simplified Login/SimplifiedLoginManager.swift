@@ -156,6 +156,8 @@ extension SimplifiedLoginManager {
         if Self.isPad {
             simplifiedLoginViewController.modalPresentationStyle = .formSheet
             simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
+        } else {
+            simplifiedLoginViewController.modalPresentationStyle = .overFullScreen
         }
         
         return simplifiedLoginViewController

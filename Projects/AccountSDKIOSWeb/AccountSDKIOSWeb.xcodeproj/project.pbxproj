@@ -86,7 +86,6 @@
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
 		CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */; };
 		CE3E98962782E6C800B2F403 /* KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E98952782E6C800B2F403 /* KeyWindow.swift */; };
-		CE4CE607279833A5000DE094 /* UINavigationControllerWithLockedorientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CE606279833A5000DE094 /* UINavigationControllerWithLockedorientation.swift */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
@@ -232,7 +231,6 @@
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVC.swift"; sourceTree = "<group>"; };
 		CE3E98952782E6C800B2F403 /* KeyWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyWindow.swift; sourceTree = "<group>"; };
-		CE4CE606279833A5000DE094 /* UINavigationControllerWithLockedorientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationControllerWithLockedorientation.swift; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
@@ -315,7 +313,6 @@
 				244EAAD1275A6CEA008A1285 /* ViewModel */,
 				244EAAC7275A2671008A1285 /* Fetcher */,
 				2472EA30275F4C810037433D /* View */,
-				CE4CE606279833A5000DE094 /* UINavigationControllerWithLockedorientation.swift */,
 			);
 			path = "Simplified Login";
 			sourceTree = "<group>";
@@ -1099,7 +1096,6 @@
 				2489C9B226733A0900AA0A4C /* UserDefaultsStorage.swift in Sources */,
 				2449DD312677527F00FE7197 /* URLBuilder+AuthorizationRequest.swift in Sources */,
 				2489C9AB26733A0900AA0A4C /* Version.swift in Sources */,
-				CE4CE607279833A5000DE094 /* UINavigationControllerWithLockedorientation.swift in Sources */,
 				2489C9C126733A0900AA0A4C /* SchibstedAccountAPI.swift in Sources */,
 				2489C9AA26733A0900AA0A4C /* Cache.swift in Sources */,
 				2489C9AE26733A0900AA0A4C /* JOSEUtil.swift in Sources */,

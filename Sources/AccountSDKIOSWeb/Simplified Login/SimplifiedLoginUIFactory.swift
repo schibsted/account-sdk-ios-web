@@ -117,7 +117,8 @@ struct SimplifiedLoginUIFactory {
     
     private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
         let s = SimplifiedLoginViewController(viewModel: viewModel )
-        let nc = UINavigationControllerWithLockedOrientation()
+        let nc = UINavigationController()
+        nc.view.backgroundColor = .clear
         nc.pushViewController(s, animated: false)
         
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
