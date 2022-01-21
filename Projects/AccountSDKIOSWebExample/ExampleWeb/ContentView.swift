@@ -97,7 +97,6 @@ struct ContentView: View {
             }
         }
     }
-    }
     
     func resumeUser() {
         client.resumeLastLoggedInUser() { user in
