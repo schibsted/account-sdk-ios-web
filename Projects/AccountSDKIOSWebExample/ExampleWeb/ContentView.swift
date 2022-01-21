@@ -82,18 +82,17 @@ struct ContentView: View {
         let context = ASWebAuthSessionContextProvider()
         let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
         manager.requestSimplifiedLogin("A visble product name") { result in
-
             switch (result) {
             case .success():
-                print("success")
+                print("success: requestSimplifiedLogin")
             case .failure(SimplifiedLoginManager.SimplifiedLoginError.noLoggedInSessionInSharedKeychain):
-                print("failure:")
+                print("failure: noLoggedInSessionInSharedKeychain")
             case .failure(SimplifiedLoginManager.SimplifiedLoginError.noClientNameFound):
-                print("failure: User is not logged in")
+                print("failure: noClientNameFound")
             case .failure(HTTPError.unexpectedError(underlying: LoginStateError.notLoggedIn)):
                 print("failure: User is not logged in")
             case .failure(let error):
-                print("failure 2: \(error)")
+                print("failure: \(error)")
             }
         }
     }
