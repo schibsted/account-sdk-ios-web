@@ -7,6 +7,8 @@ struct ContentView: View {
     let client: Client
     let clientConfiguration: ClientConfiguration
     
+    let sharedKeychainClient: Client
+    
     @State var userDelegate: MyUserDelegate?
     @State private var user: User? {
         didSet {
@@ -29,6 +31,9 @@ struct ContentView: View {
     init(client: Client, clientConfiguration: ClientConfiguration) {
         self.client = client
         self.clientConfiguration = clientConfiguration
+        
+        let appIdentifierPrefix = "J5FN75WZ65"
+        self.sharedKeychainClient = Client(configuration: clientConfiguration, appIdentifierPrefix: appIdentifierPrefix)
     }
     
     var body: some View {
@@ -44,13 +49,20 @@ struct ContentView: View {
                     Button(action: resumeUser, label: { Text("Resume user")})
                     Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
                     Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
-                    Button(action: triggerSimplifiedLogin, label: { Text("Simplified Login view")})
-                    
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
                         }
                 }
+                
+                VStack(spacing: 20) {        
+                    Text("Simplified Login")
+                        .underline()
+                    Button(action: loginFromSharedKeychain, label: { Text("Login from shared keychain")})
+                    Button(action: triggerSimplifiedLogin, label: { Text("Trigger Simplified login")})
+                }
+                .padding()
+                .border(Color.black)
                 
                 VStack(spacing: 20) {
                     Button(action: fetchProfileData, label: { Text("Fetch profile data") } )
@@ -61,6 +73,26 @@ struct ContentView: View {
                 }.disabled(!userIsLoggedIn)
                 
                 NavigationLink("", destination: webView, isActive: $showAccountPages)
+            }
+        }
+        
+    }
+    
+    func triggerSimplifiedLogin() {
+        let context = ASWebAuthSessionContextProvider()
+        let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
+        manager.requestSimplifiedLogin("A visble product name") { result in
+            switch (result) {
+            case .success():
+                print("success: requestSimplifiedLogin")
+            case .failure(SimplifiedLoginManager.SimplifiedLoginError.noLoggedInSessionInSharedKeychain):
+                print("failure: noLoggedInSessionInSharedKeychain")
+            case .failure(SimplifiedLoginManager.SimplifiedLoginError.noClientNameFound):
+                print("failure: noClientNameFound")
+            case .failure(HTTPError.unexpectedError(underlying: LoginStateError.notLoggedIn)):
+                print("failure: User is not logged in")
+            case .failure(let error):
+                print("failure: \(error)")
             }
         }
     }
@@ -108,6 +140,14 @@ struct ContentView: View {
                 print(error)
             }
         }
+        asWebAuthSession?.start()
+    }
+    
+    func loginFromSharedKeychain(){
+        let context = ASWebAuthSessionContextProvider()
+        asWebAuthSession = sharedKeychainClient.getLoginSession(contextProvider: context,
+                                                  withSSO: true,
+                                                  completion: handleResult)
         asWebAuthSession?.start()
     }
     
@@ -180,19 +220,6 @@ struct ContentView: View {
         case .failure(let error):
             print(error)
             
-        }
-    }
-    
-    func triggerSimplifiedLogin() {
-        let context = ASWebAuthSessionContextProvider()
-        let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
-        manager.requestSimplifiedLogin("My product name") { result in
-            switch (result) {
-            case .success():
-                print("success")
-            case .failure(let error):
-                print("error \(error)")
-            }
         }
     }
 }
