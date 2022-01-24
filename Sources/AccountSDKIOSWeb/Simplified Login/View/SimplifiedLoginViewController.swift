@@ -129,6 +129,11 @@ class SimplifiedLoginViewController: UIViewController {
     func setupConstraints() {
         
         let margin = view.layoutMarginsGuide
+        
+        let buttonWidth = primaryButton.widthAnchor.constraint(equalToConstant: 343)
+        buttonWidth.priority = .defaultLow
+        let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor)
+        let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor)
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -139,8 +144,9 @@ class SimplifiedLoginViewController: UIViewController {
             primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             primaryButton.heightAnchor.constraint(equalToConstant: 48),
-            primaryButton.widthAnchor.constraint(equalToConstant: 343),
-            
+            buttonWidth,
+            buttonLead,
+            buttonTrail,
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
