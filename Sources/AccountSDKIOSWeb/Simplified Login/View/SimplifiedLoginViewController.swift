@@ -44,7 +44,7 @@ class SimplifiedLoginViewController: UIViewController {
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
-        view.spacing = isPhone ? 20 : 0
+        view.spacing = isPhone ? 15 : 0
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -79,7 +79,7 @@ class SimplifiedLoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .black.withAlphaComponent(0.6)
+        view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         // Main view
         
@@ -87,12 +87,18 @@ class SimplifiedLoginViewController: UIViewController {
         mainView.layer.cornerRadius = 10
         mainView.backgroundColor = .white
         
-        mainView.addSubview(userInformationView)
-        mainView.addSubview(primaryButton)
-        mainView.addSubview(linksView)
-        mainView.addSubview(footerStackView)
-        
-        view.addSubview(mainView)
+        if isPhone {
+            mainView.addSubview(userInformationView)
+            mainView.addSubview(primaryButton)
+            mainView.addSubview(linksView)
+            mainView.addSubview(footerStackView)
+            view.addSubview(mainView)
+        } else {
+            view.addSubview(userInformationView)
+            view.addSubview(primaryButton)
+            view.addSubview(linksView)
+            view.addSubview(footerStackView)
+        }
 
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
@@ -159,7 +165,7 @@ class SimplifiedLoginViewController: UIViewController {
             buttonLead,
             buttonTrail,
             // Links View
-            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 53),
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
 
             // Footer
@@ -188,7 +194,7 @@ class SimplifiedLoginViewController: UIViewController {
             primaryButton.widthAnchor.constraint(equalToConstant: 343),
             
             // Links View
-            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: -30),
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             
             // Footer
@@ -213,35 +219,5 @@ extension SimplifiedLoginViewController {
         case clickedLoginWithDifferentAccount
         case clickedContinueWithoutLogin
         case clickedClickPrivacyPolicy
-    }
-}
-
-extension UINavigationController {
-    
-    override open var shouldAutorotate: Bool {
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.shouldAutorotate
-            }
-            return super.shouldAutorotate
-        }
-    }
-    
-    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.preferredInterfaceOrientationForPresentation
-            }
-            return super.preferredInterfaceOrientationForPresentation
-        }
-    }
-    
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.supportedInterfaceOrientations
-            }
-            return super.supportedInterfaceOrientations
-        }
     }
 }
