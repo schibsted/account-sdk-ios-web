@@ -73,19 +73,40 @@ class SimplifiedLoginViewController: UIViewController {
     }()
     
     override var shouldAutorotate: Bool {
-        return false
+        (isPhone && UIDevice.current.orientation != .portrait) ? false : true
+    }
+
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+        get {
+            .portrait
+        }
+    }
+
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        get {
+            .portrait
+        }
     }
     
     private var mainView: UIView?
     private var originalTransform: CGAffineTransform?
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let deviceOrientation = UIDevice.current.orientation
+        if deviceOrientation != .portrait {
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            mainView = UIView(frame: CGRect(x: 0, y: 300, width: UIScreen.main.bounds.width, height: 570))
+            let y = (UIDevice.current.orientation == .portrait) ? UIScreen.main.bounds.height - 570 : 300
+            mainView = UIView(frame: CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570))
+
             originalTransform = mainView?.transform
             if let mainView = mainView {
                 mainView.layer.cornerRadius = 10
@@ -161,7 +182,7 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: margin.topAnchor, constant: 230),
+            userInformationView.topAnchor.constraint(lessThanOrEqualTo: mainView!.topAnchor, constant: 20),
             
             // Primary button
             primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
@@ -177,8 +198,7 @@ class SimplifiedLoginViewController: UIViewController {
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            footerStackView.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
-
+            footerStackView.bottomAnchor.constraint(equalTo: mainView!.bottomAnchor, constant: -20),
         ]
         
         NSLayoutConstraint.activate(allConstraints)
@@ -191,7 +211,7 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 25),
+            userInformationView.topAnchor.constraint(equalTo: view.topAnchor, constant: -30),
             
             // Primary button
             primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 10),
@@ -258,7 +278,7 @@ extension SimplifiedLoginViewController {
     }
 }
 
-extension UINavigationController {
+extension UINavigationController { //probably its better to subclass
     
     override open var shouldAutorotate: Bool {
         get {
