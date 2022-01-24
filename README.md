@@ -19,7 +19,7 @@ This will help you create a client and configure the necessary data.
 
 **Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see [getting started documentation](https://docs.schibsted.io/schibsted-account/gettingstarted/) for more help).
 
-**Note:** If you have implemented the [Old Schibsted SDK](https://github.com/schibsted/account-sdk-ios) in your app, and want these users to remain logged in, do not forget to add the SessionStorageConfig on instantiating your Client, `Client(configuration:sessionStorageConfig:httpClient:)`.   
+**Note:** If you have implemented the [Old Schibsted SDK](https://github.com/schibsted/account-sdk-ios) in your app, and want these users to remain logged in, do not forget to add the SessionStorageConfig on instantiating your Client, `Client(configuration:sessionStorageConfig:httpClient:)`. The function `Client.resumeLastLoggedInUser(completion: @escaping (User?) -> Void)` will then handle upgrading the user old SDK credentials.
   
 ### Requirements
 
@@ -172,7 +172,7 @@ This SDK implements the [best practices for user authentication via an OpenID Co
 
       **Note:** If the refresh token request fails, due to the refresh token itself having expired
       or been invalidated by the user, the SDK will log the user out.
-* Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage.
+* Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage. This will be handled by once invoking `Client.resumeLastLoggedInUser(completion: @escaping (User?) -> Void)` upon app start.
 
 ## Simplified Login
 
