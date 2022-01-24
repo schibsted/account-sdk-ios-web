@@ -76,35 +76,41 @@ class SimplifiedLoginViewController: UIViewController {
         return false
     }
     
+    private var mainView: UIView?
+    private var originalTransform: CGAffineTransform?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
-        // Main view
-        
-        let mainView = UIView(frame: CGRect(x: 0, y: 300, width: UIScreen.main.bounds.width, height: 570))
-        mainView.layer.cornerRadius = 10
-        mainView.backgroundColor = .white
-        
         if isPhone {
-            mainView.addSubview(userInformationView)
-            mainView.addSubview(primaryButton)
-            mainView.addSubview(linksView)
-            mainView.addSubview(footerStackView)
-            view.addSubview(mainView)
+            mainView = UIView(frame: CGRect(x: 0, y: 300, width: UIScreen.main.bounds.width, height: 570))
+            originalTransform = mainView?.transform
+            if let mainView = mainView {
+                mainView.layer.cornerRadius = 10
+                mainView.backgroundColor = .white
+                mainView.addSubview(userInformationView)
+                mainView.addSubview(primaryButton)
+                mainView.addSubview(linksView)
+                mainView.addSubview(footerStackView)
+                view.addSubview(mainView)
+                
+                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
+                mainView.addGestureRecognizer(panGestureRecognizer)
+            }
         } else {
             view.addSubview(userInformationView)
             view.addSubview(primaryButton)
             view.addSubview(linksView)
             view.addSubview(footerStackView)
         }
-
+        
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
         linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
-
+        
         if isPhone {
             setupConstraints()
             //setupNavigationBar()
@@ -185,8 +191,8 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(equalTo: margin.topAnchor, constant: -90),
-
+            userInformationView.topAnchor.constraint(equalTo: mainView!.topAnchor, constant: 25),
+            
             // Primary button
             primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 10),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
@@ -205,6 +211,33 @@ class SimplifiedLoginViewController: UIViewController {
         ]
         NSLayoutConstraint.activate(allConstraints)
     }
+    
+    @objc private func didPan(sender: UIPanGestureRecognizer) {
+        guard let mainView = mainView else {
+            return
+        }
+        
+        if sender.state == .ended {
+            let location = sender.location(in: view)
+            if location.y >= 0.75 * UIScreen.main.bounds.height {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    mainView.transform = self.originalTransform!
+                    sender.setTranslation(.zero, in: mainView)
+                }
+            }
+        }
+        
+        let translation = sender.translation(in: view)
+        
+        guard translation.y > 0 else {
+            return
+        }
+        
+        mainView.transform = mainView.transform.translatedBy(x: .zero, y: translation.y)
+        sender.setTranslation(.zero, in: mainView)
+    }
 }
 
 extension SimplifiedLoginViewController {
@@ -219,5 +252,35 @@ extension SimplifiedLoginViewController {
         case clickedLoginWithDifferentAccount
         case clickedContinueWithoutLogin
         case clickedClickPrivacyPolicy
+    }
+}
+
+extension UINavigationController {
+    
+    override open var shouldAutorotate: Bool {
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.shouldAutorotate
+            }
+            return super.shouldAutorotate
+        }
+    }
+    
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.preferredInterfaceOrientationForPresentation
+            }
+            return super.preferredInterfaceOrientationForPresentation
+        }
+    }
+    
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        get {
+            if let visibleVC = visibleViewController {
+                return visibleVC.supportedInterfaceOrientations
+            }
+            return super.supportedInterfaceOrientations
+        }
     }
 }
