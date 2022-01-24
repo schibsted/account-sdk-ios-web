@@ -219,10 +219,13 @@ class SimplifiedLoginViewController: UIViewController {
         
         if sender.state == .ended {
             let location = sender.location(in: view)
-            if location.y >= 0.75 * UIScreen.main.bounds.height {
+            if location.y >= 0.7 * UIScreen.main.bounds.height {
+                UIView.animate(withDuration: 0.3) {
+                    self.view.backgroundColor = .clear
+                }
                 self.dismiss(animated: true, completion: nil)
             } else {
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.3) {
                     mainView.transform = self.originalTransform!
                     sender.setTranslation(.zero, in: mainView)
                 }
