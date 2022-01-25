@@ -95,9 +95,17 @@ class SimplifiedLoginViewController: UIViewController {
     private var mainView: UIView?
     private var originalTransform: CGAffineTransform?
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //if we want this we need to save orientation before 
+        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
+        
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         
         if isPhone {
             let y = view.frame.height - 570
