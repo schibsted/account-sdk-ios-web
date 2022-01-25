@@ -74,6 +74,7 @@ public class Client: CustomStringConvertible {
      Initialize the Client to support migration from Legacy SchibstedAccount SDK to the new Schibsted account keychain storage using UserSession.
 
      - parameter configuration: The ClientConfiguration instance.
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used. This value will overule the value of sessionStorageConfig.accessGroup.
      - parameter sessionStorageConfig: The configuration struct used in migration process
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
