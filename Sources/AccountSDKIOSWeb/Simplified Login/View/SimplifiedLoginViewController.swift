@@ -73,7 +73,11 @@ class SimplifiedLoginViewController: UIViewController {
     }()
     
     override var shouldAutorotate: Bool {
-        return false
+        if #available(iOS 13.0, *) {
+            return (UIApplication.shared.windows.first?.windowScene?.interfaceOrientation == .portrait) ? false : true
+        } else {
+            return (UIDevice.current.orientation == .portrait) ? false : true
+        }
     }
 
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
@@ -96,10 +100,9 @@ class SimplifiedLoginViewController: UIViewController {
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-
-            let y = UIScreen.main.bounds.height - 570
-            
+            let y = view.frame.height - 570
             mainView = UIView(frame: CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570))
+            mainView?.translatesAutoresizingMaskIntoConstraints = false
 
             originalTransform = mainView?.transform
             if let mainView = mainView {
@@ -188,11 +191,19 @@ class SimplifiedLoginViewController: UIViewController {
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
+            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 20),
+            linksView.heightAnchor.constraint(equalToConstant: 150),
 
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             footerStackView.bottomAnchor.constraint(equalTo: mainView!.bottomAnchor, constant: -20),
+            mainView!.heightAnchor.constraint(equalToConstant: 570),
+            
+            mainView!.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mainView!.heightAnchor.constraint(equalToConstant: 570),
+            mainView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ]
         
         NSLayoutConstraint.activate(allConstraints)
