@@ -74,15 +74,19 @@ public class Client: CustomStringConvertible {
      Initialize the Client to support migration from Legacy SchibstedAccount SDK to the new Schibsted account keychain storage using UserSession.
 
      - parameter configuration: The ClientConfiguration instance.
+     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used. This value will overule the value of sessionStorageConfig.accessGroup.
      - parameter sessionStorageConfig: The configuration struct used in migration process
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
      */
-    public convenience init(configuration: ClientConfiguration, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
-        let newSessionStorage = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: sessionStorageConfig.accessGroup)
+        let newSessionStorage =  SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId,
+                                                                                    service: Client.keychainServiceName,
+                                                                                    accessGroup: sessionStorageConfig.accessGroup,
+                                                                                    appIdentifierPrefix: appIdentifierPrefix)
         
         let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
                                                             serverURL: configuration.serverURL,
