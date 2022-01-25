@@ -73,7 +73,7 @@ class SimplifiedLoginViewController: UIViewController {
     }()
     
     override var shouldAutorotate: Bool {
-        (isPhone && UIDevice.current.orientation != .portrait) ? false : true
+        return false
     }
 
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
@@ -91,20 +91,14 @@ class SimplifiedLoginViewController: UIViewController {
     private var mainView: UIView?
     private var originalTransform: CGAffineTransform?
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let deviceOrientation = UIDevice.current.orientation
-        if deviceOrientation != .portrait {
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            let y = (UIDevice.current.orientation == .portrait) ? UIScreen.main.bounds.height - 570 : 300
+
+            let y = UIScreen.main.bounds.height - 570
+            
             mainView = UIView(frame: CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570))
 
             originalTransform = mainView?.transform
