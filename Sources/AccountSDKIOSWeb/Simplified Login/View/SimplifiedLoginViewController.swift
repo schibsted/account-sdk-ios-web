@@ -6,6 +6,8 @@ class SimplifiedLoginViewController: UIViewController {
     
     private var viewModel: SimplifiedLoginViewModel
     private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
+    private var mainView = UIView()
+    private var originalTransform: CGAffineTransform?
     
     private lazy var userInformationView: UserInformationView = {
         let view = UserInformationView(viewModel: viewModel)
@@ -15,7 +17,7 @@ class SimplifiedLoginViewController: UIViewController {
         view.spacing = 8
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
         view.isLayoutMarginsRelativeArrangement = true
         return view
@@ -33,7 +35,7 @@ class SimplifiedLoginViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.backgroundColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return button
     }()
     
@@ -44,10 +46,10 @@ class SimplifiedLoginViewController: UIViewController {
         view.alignment = .center
         view.axis = .vertical
         view.distribution = .fill
-        view.spacing = isPhone ? 15 : 0
+        view.spacing =  0
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.layoutMargins = UIEdgeInsets(top: isPhone ? 8 : 0, left: 0, bottom: 16, right: 0)
         view.isLayoutMarginsRelativeArrangement = true
         return view
@@ -79,21 +81,27 @@ class SimplifiedLoginViewController: UIViewController {
             return (UIDevice.current.orientation == .portrait) ? false : true
         }
     }
-
+    
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
         get {
             .portrait
         }
     }
-
+    
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
         get {
             .portrait
         }
     }
     
-    private var mainView: UIView?
-    private var originalTransform: CGAffineTransform?
+    init(viewModel: SimplifiedLoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,22 +111,20 @@ class SimplifiedLoginViewController: UIViewController {
         
         if isPhone {
             let y = view.frame.height - 570
-            mainView = UIView(frame: CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570))
-            mainView?.translatesAutoresizingMaskIntoConstraints = false
-
-            originalTransform = mainView?.transform
-            if let mainView = mainView {
-                mainView.layer.cornerRadius = 10
-                mainView.backgroundColor = .white
-                mainView.addSubview(userInformationView)
-                mainView.addSubview(primaryButton)
-                mainView.addSubview(linksView)
-                mainView.addSubview(footerStackView)
-                view.addSubview(mainView)
-                
-                let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
-                mainView.addGestureRecognizer(panGestureRecognizer)
-            }
+            mainView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570)
+            mainView.translatesAutoresizingMaskIntoConstraints = false
+            
+            originalTransform = mainView.transform
+            mainView.layer.cornerRadius = 10
+            mainView.backgroundColor = .white
+            mainView.addSubview(userInformationView)
+            mainView.addSubview(primaryButton)
+            mainView.addSubview(linksView)
+            mainView.addSubview(footerStackView)
+            view.addSubview(mainView)
+            
+            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
+            mainView.addGestureRecognizer(panGestureRecognizer)
         } else {
             view.addSubview(userInformationView)
             view.addSubview(primaryButton)
@@ -160,15 +166,6 @@ class SimplifiedLoginViewController: UIViewController {
         }
     }
     
-    init(viewModel: SimplifiedLoginViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     func setupConstraints() {
         
         let margin = view.layoutMarginsGuide
@@ -181,7 +178,7 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: mainView!.topAnchor, constant: 20),
+            userInformationView.topAnchor.constraint(lessThanOrEqualTo: mainView.topAnchor, constant: 20),
             
             // Primary button
             primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
@@ -195,17 +192,17 @@ class SimplifiedLoginViewController: UIViewController {
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 20),
             linksView.heightAnchor.constraint(equalToConstant: 150),
-
+            
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            footerStackView.bottomAnchor.constraint(equalTo: mainView!.bottomAnchor, constant: -20),
-            mainView!.heightAnchor.constraint(equalToConstant: 570),
+            footerStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -20),
+            mainView.heightAnchor.constraint(equalToConstant: 570),
             
-            mainView!.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            mainView!.heightAnchor.constraint(equalToConstant: 570),
-            mainView!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainView!.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mainView.heightAnchor.constraint(equalToConstant: 570),
+            mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ]
         
         NSLayoutConstraint.activate(allConstraints)
@@ -240,10 +237,6 @@ class SimplifiedLoginViewController: UIViewController {
     }
     
     @objc private func didPan(sender: UIPanGestureRecognizer) {
-        guard let mainView = mainView else {
-            return
-        }
-        
         if sender.state == .ended {
             let location = sender.location(in: view)
             if location.y >= 0.7 * UIScreen.main.bounds.height {
@@ -251,10 +244,10 @@ class SimplifiedLoginViewController: UIViewController {
                     self.view.backgroundColor = .clear
                 }
                 self.dismiss(animated: true, completion: nil)
-            } else {
+            } else if let originalTransform = originalTransform {
                 UIView.animate(withDuration: 0.3) {
-                    mainView.transform = self.originalTransform!
-                    sender.setTranslation(.zero, in: mainView)
+                    self.mainView.transform = originalTransform
+                    sender.setTranslation(.zero, in: self.mainView)
                 }
             }
         }
@@ -282,35 +275,5 @@ extension SimplifiedLoginViewController {
         case clickedLoginWithDifferentAccount
         case clickedContinueWithoutLogin
         case clickedClickPrivacyPolicy
-    }
-}
-
-extension UINavigationController { //probably its better to subclass
-    
-    override open var shouldAutorotate: Bool {
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.shouldAutorotate
-            }
-            return super.shouldAutorotate
-        }
-    }
-    
-    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.preferredInterfaceOrientationForPresentation
-            }
-            return super.preferredInterfaceOrientationForPresentation
-        }
-    }
-    
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        get {
-            if let visibleVC = visibleViewController {
-                return visibleVC.supportedInterfaceOrientations
-            }
-            return super.supportedInterfaceOrientations
-        }
     }
 }
