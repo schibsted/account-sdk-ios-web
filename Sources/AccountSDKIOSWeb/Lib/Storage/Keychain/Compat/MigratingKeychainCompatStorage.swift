@@ -88,8 +88,8 @@ class MigratingKeychainCompatStorage: SessionStorage {
     }
     
     func remove(forClientId: String) {
-        // only delegate to new storage; data should have already been removed from legacy storage during migration
         newStorage.remove(forClientId: forClientId)
+        legacyStorage.remove() // data should have already been removed from legacy storage during migration. But could fail.
     }
 }
 
