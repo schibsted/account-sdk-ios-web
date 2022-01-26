@@ -74,26 +74,6 @@ class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    override var shouldAutorotate: Bool {
-        if #available(iOS 13.0, *) {
-            return (UIApplication.shared.windows.first?.windowScene?.interfaceOrientation == .portrait) ? false : true
-        } else {
-            return (UIDevice.current.orientation == .portrait) ? false : true
-        }
-    }
-    
-    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
-        get {
-            .portrait
-        }
-    }
-    
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        get {
-            .portrait
-        }
-    }
-    
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -106,8 +86,6 @@ class SimplifiedLoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
-        
-        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         
         if isPhone {
             let y = view.frame.height - 570
@@ -260,6 +238,22 @@ class SimplifiedLoginViewController: UIViewController {
         
         mainView.transform = mainView.transform.translatedBy(x: .zero, y: translation.y)
         sender.setTranslation(.zero, in: mainView)
+    }
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+        get {
+            .portrait
+        }
+    }
+    
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        get {
+            .portrait
+        }
     }
 }
 
