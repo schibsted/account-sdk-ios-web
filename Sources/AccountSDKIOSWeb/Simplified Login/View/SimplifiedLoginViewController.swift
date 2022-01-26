@@ -6,7 +6,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     private var viewModel: SimplifiedLoginViewModel
     private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
-    private var mainView = UIView()
+    private var containerView = UIView()
     private var originalTransform: CGAffineTransform?
     
     private lazy var userInformationView: UserInformationView = {
@@ -15,7 +15,6 @@ class SimplifiedLoginViewController: UIViewController {
         view.axis = .vertical
         view.distribution = .fill
         view.spacing = 8
-        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
@@ -45,7 +44,7 @@ class SimplifiedLoginViewController: UIViewController {
         let view = LinksView(viewModel: viewModel)
         view.alignment = .center
         view.axis = .vertical
-        view.distribution = .fill
+        view.distribution = .fillEqually
         view.spacing =  0
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +63,6 @@ class SimplifiedLoginViewController: UIViewController {
         view.distribution = .fill
         view.spacing = 12
         view.layer.cornerRadius = 12
-        
         
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 250/255, alpha: 1)
@@ -88,21 +86,23 @@ class SimplifiedLoginViewController: UIViewController {
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            let y = view.frame.height - 570
-            mainView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570)
-            mainView.translatesAutoresizingMaskIntoConstraints = false
+            let y = view.frame.height - 570 + 25
+            containerView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570)
+            containerView.translatesAutoresizingMaskIntoConstraints = false
             
-            originalTransform = mainView.transform
-            mainView.layer.cornerRadius = 10
-            mainView.backgroundColor = .white
-            mainView.addSubview(userInformationView)
-            mainView.addSubview(primaryButton)
-            mainView.addSubview(linksView)
-            mainView.addSubview(footerStackView)
-            view.addSubview(mainView)
+            originalTransform = containerView.transform
+            containerView.layer.cornerRadius = 10
+            containerView.backgroundColor = .white
+            containerView.addSubview(userInformationView)
+            containerView.addSubview(primaryButton)
+            containerView.addSubview(linksView)
+            containerView.addSubview(footerStackView)
+            view.addSubview(containerView)
             
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
-            mainView.addGestureRecognizer(panGestureRecognizer)
+            containerView.addGestureRecognizer(panGestureRecognizer)
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
+            view.addGestureRecognizer(tapGestureRecognizer)
         } else {
             view.addSubview(userInformationView)
             view.addSubview(primaryButton)
@@ -156,7 +156,8 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: mainView.topAnchor, constant: 20),
+            userInformationView.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor, constant: 60),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 30),
             
             // Primary button
             primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
@@ -174,13 +175,14 @@ class SimplifiedLoginViewController: UIViewController {
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            footerStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -20),
-            mainView.heightAnchor.constraint(equalToConstant: 570),
+            footerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -45),
+            containerView.heightAnchor.constraint(equalToConstant: 570),
             
-            mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            mainView.heightAnchor.constraint(equalToConstant: 570),
-            mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // Container View
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 25),
+            containerView.heightAnchor.constraint(equalToConstant: 570),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ]
         
         NSLayoutConstraint.activate(allConstraints)
@@ -214,7 +216,16 @@ class SimplifiedLoginViewController: UIViewController {
         NSLayoutConstraint.activate(allConstraints)
     }
     
-    @objc private func didPan(sender: UIPanGestureRecognizer) {
+    @objc
+    private func didTap(sender: UITapGestureRecognizer) {
+        let location = sender.location(in: containerView)
+        if location.y < 0 {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    @objc
+    private func didPan(sender: UIPanGestureRecognizer) {
         if sender.state == .ended {
             let location = sender.location(in: view)
             if location.y >= 0.7 * UIScreen.main.bounds.height {
@@ -224,8 +235,8 @@ class SimplifiedLoginViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             } else if let originalTransform = originalTransform {
                 UIView.animate(withDuration: 0.3) {
-                    self.mainView.transform = originalTransform
-                    sender.setTranslation(.zero, in: self.mainView)
+                    self.containerView.transform = originalTransform
+                    sender.setTranslation(.zero, in: self.containerView)
                 }
             }
         }
@@ -236,8 +247,8 @@ class SimplifiedLoginViewController: UIViewController {
             return
         }
         
-        mainView.transform = mainView.transform.translatedBy(x: .zero, y: translation.y)
-        sender.setTranslation(.zero, in: mainView)
+        containerView.transform = containerView.transform.translatedBy(x: .zero, y: translation.y)
+        sender.setTranslation(.zero, in: containerView)
     }
     
     override var shouldAutorotate: Bool {
