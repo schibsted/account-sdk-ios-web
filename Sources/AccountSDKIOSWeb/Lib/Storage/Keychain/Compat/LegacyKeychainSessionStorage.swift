@@ -14,7 +14,7 @@ class LegacyKeychainSessionStorage {
 
     func get(forClientId: String) -> LegacyUserSession? {
         let sessions = storage.get()
-            .compactMap(toUserSession(_:))
+            .compactMap(toLegacyUserSession(_:))
             .filter { $0.clientId == forClientId } // filter tokens only for the requested client
 
         // return the newest token, based on 'iat' claim in ID Token
@@ -25,7 +25,7 @@ class LegacyKeychainSessionStorage {
         storage.remove()
     }
     
-    private func toUserSession(_ legacyTokenData: LegacyTokenData) -> LegacyUserSession? {
+    private func toLegacyUserSession(_ legacyTokenData: LegacyTokenData) -> LegacyUserSession? {
         let validatedAccessToken = validateTokenFormat(legacyTokenData.accessToken)
         guard let accessTokenClaims = unverifiedClaims(from: validatedAccessToken),
               let clientId = accessTokenClaims["client_id"] as? String else {
