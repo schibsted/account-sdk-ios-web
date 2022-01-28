@@ -229,15 +229,15 @@ class SimplifiedLoginViewController: UIViewController {
         return true
     }
     
-    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         get {
             .portrait
         }
     }
     
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         get {
-            .portrait
+            isPhone ? .portrait : .all
         }
     }
 }
