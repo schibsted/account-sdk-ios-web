@@ -45,13 +45,16 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         verifyNoMoreInteractions(legacyStorage)
     }
     
-    func testRemoveOnlyRemovesFromNewStorage() {
+    func testRemoveFromBothStorages() {
         let clientId = "client1"
 
         let legacyStorage = MockLegacyKeychainSessionStorage()
         let newStorage = MockKeychainSessionStorage(service: "test")
         stub(newStorage) { mock in
             when(mock.remove(forClientId: equal(to: clientId))).thenDoNothing()
+        }
+        stub(legacyStorage) { mock in
+            when(mock.remove()).thenDoNothing()
         }
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
@@ -61,6 +64,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
         migratingStorage.remove(forClientId: clientId)
 
         verify(newStorage).remove(forClientId: equal(to: clientId))
+        verify(legacyStorage).remove()
         verifyNoMoreInteractions(legacyStorage)
     }
 
@@ -93,7 +97,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
 
     func testGetMigratesExistingLegacySession() {
         let clientId = "client1"
-        let legacyUserSession = UserSession(clientId: clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
+        let legacyUserSession = LegacyUserSession(clientId: clientId, accessToken: "access-token", refreshToken: "refresh-token", updatedAt: Date())
 
         let legacyStorage = MockLegacyKeychainSessionStorage()
         stub(legacyStorage) { mock in
@@ -106,7 +110,7 @@ final class MigratingKeychainCompatStorageTests: XCTestCase {
                 .then{ _, completion in
                     completion(nil)
                 }
-            when(mock.store(equal(to: legacyUserSession), accessGroup: "", completion: anyClosure())).thenDoNothing()
+            when(mock.store(any(), accessGroup: "", completion: anyClosure())).thenDoNothing()
         }
 
         let migratingStorage = MigratingKeychainCompatStorage(from: legacyStorage, to: newStorage,
@@ -185,7 +189,7 @@ final class OldSDKClientTests: XCTestCase {
         }
         
         
-        let sut = OldSDKClient(clientId: "", clientSecret: "", api: mockApi, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
+        let sut = OldSDKClient(clientId: "", clientSecret: "", api: mockApi, legacyAccessToken: "foo", legacyRefreshToken: "bar", httpClient: mockHTTPClient)
         Await.until { done in
             sut.oneTimeCodeWithOldSDKRefresh(newSDKClientId: "") { result in
                 switch result {
@@ -232,7 +236,7 @@ final class OldSDKClientTests: XCTestCase {
         }
         
         
-        let sut = OldSDKClient(clientId: "", clientSecret: "", api: mockApi, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
+        let sut = OldSDKClient(clientId: "", clientSecret: "", api: mockApi, legacyAccessToken: "foo", legacyRefreshToken: "bar", httpClient: mockHTTPClient)
         Await.until { done in
             sut.oneTimeCodeWithOldSDKRefresh(newSDKClientId: "") { result in
                 switch result {
@@ -264,13 +268,13 @@ final class OldSDKClientTests: XCTestCase {
         }
         
         let api = Fixtures.schibstedAccountAPI
-        let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
+        let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyAccessToken: "accessToken", legacyRefreshToken: "foo", httpClient: mockHTTPClient)
         
         Await.until { done in
             sut.oldSDKRefresh(refreshToken: "") { result in
                 switch result {
                 case .success(let refreshedToken):
-                    XCTAssertEqual(refreshedToken, Fixtures.userTokens.accessToken)
+                    XCTAssertEqual(refreshedToken, "accessToken")
                 default:
                     XCTFail("Unexpected result \(result)")
                 }
@@ -292,7 +296,7 @@ final class OldSDKClientTests: XCTestCase {
         }
         
         let api = Fixtures.schibstedAccountAPI
-        let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyTokens: Fixtures.userTokens, httpClient: mockHTTPClient)
+        let sut = OldSDKClient(clientId: "", clientSecret: "", api: api, legacyAccessToken: "access-token", legacyRefreshToken: "refresh-token", httpClient: mockHTTPClient)
         
         Await.until { done in
             sut.oneTimeCode(newSDKClientId: "", oldSDKAccessToken: "") { result in

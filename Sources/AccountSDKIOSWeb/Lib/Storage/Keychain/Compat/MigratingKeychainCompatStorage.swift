@@ -50,9 +50,9 @@ class MigratingKeychainCompatStorage: SessionStorage {
         }
     }
     
-    private func migrateLegacyUserSession(forClientId: String, legacySession: UserSession, completion: @escaping (UserSession?) -> Void) {
+    private func migrateLegacyUserSession(forClientId: String, legacySession: LegacyUserSession, completion: @escaping (UserSession?) -> Void) {
         
-        self.oldSDKClient = OldSDKClient(clientId: legacyClient.configuration.clientId, clientSecret: self.legacyClientSecret, api: legacyClient.schibstedAccountAPI, legacyTokens: legacySession.userTokens)
+        self.oldSDKClient = OldSDKClient(clientId: legacyClient.configuration.clientId, clientSecret: self.legacyClientSecret, api: legacyClient.schibstedAccountAPI, legacyAccessToken: legacySession.accessToken, legacyRefreshToken: legacySession.refreshToken)
         oldSDKClient?.oneTimeCodeWithOldSDKRefresh(newSDKClientId: forClientId) { result in
             switch result {
             case .success(let code):
@@ -98,29 +98,32 @@ class OldSDKClient {
     let clientId: String
     let clientSecret: String
     let api: SchibstedAccountAPI
-    let legacyTokens: UserTokens
+    let legacyAccessToken: String
+    let legacyRefreshToken: String
     var httpClient: HTTPClient
     
-    init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyTokens: UserTokens, httpClient: HTTPClient) {
+    init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyAccessToken: String, legacyRefreshToken: String, httpClient: HTTPClient) {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.api = api
-        self.legacyTokens = legacyTokens
+        self.legacyAccessToken = legacyAccessToken
+        self.legacyRefreshToken = legacyRefreshToken
         self.httpClient = httpClient
         
     }
     
-    convenience init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyTokens: UserTokens) {
+    convenience init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyAccessToken: String, legacyRefreshToken: String) {
         let httpClient = HTTPClientWithURLSession()
-        self.init(clientId: clientId, clientSecret: clientSecret, api: api, legacyTokens: legacyTokens, httpClient: httpClient)
+        self.init(clientId: clientId, clientSecret: clientSecret, api: api, legacyAccessToken: legacyAccessToken, legacyRefreshToken: legacyRefreshToken, httpClient: httpClient)
     }
     
     func oneTimeCodeWithOldSDKRefresh(newSDKClientId: String, completion: @escaping HTTPResultHandler<String>) {
-        api.oldSDKCodeExchange(with: httpClient, clientId: newSDKClientId, oldSDKAccessToken: legacyTokens.accessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in
+        api.oldSDKCodeExchange(with: httpClient, clientId: newSDKClientId, oldSDKAccessToken: legacyAccessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in
             switch requestResult {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
-                if code == 401 , let refreshToken = self.legacyTokens.refreshToken {
+                if code == 401 {
+                    let refreshToken = self.legacyRefreshToken
                     self.oldSDKRefresh(refreshToken: refreshToken) { result in
                         switch result {
                         case .success(let newToken): // retry the request with fresh tokens

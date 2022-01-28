@@ -50,8 +50,8 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
 
         let tokenDataArray = LegacyKeychainTokenStorage(keychain: keychainMock!).get()
         XCTAssertEqual(tokenDataArray.count, 2)
-        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken2", refreshToken: "refreshToken2", idToken: "idToken2")))
-        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1")))
+        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken2", refreshToken: "refreshToken2")))
+        XCTAssertTrue(tokenDataArray.contains(LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1")))
     }
     
     func testExistingLegacyDataWithoutRefreshTokenIsIgnored() {
@@ -69,26 +69,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
         XCTAssertEqual(self.keychainMock!.getAll().count, 1)
 
         XCTAssertEqual(LegacyKeychainTokenStorage(keychain: keychainMock!).get(), [
-            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1")
-        ])
-    }
-    
-    func testExistingLegacyDataWithoutIdTokenIsIgnored() {
-        let tokens = [
-            "accessToken1": [
-                "refresh_token": "refreshToken1",
-                "id_token": "idToken1"
-            ],
-            "accessToken2": [
-                "refresh_token": "refreshToken2"
-            ]
-        ]
-        let data = try? NSKeyedArchiver.archivedData(withRootObject: ["logged_in_users": tokens], requiringSecureCoding: false)
-        try? self.keychainMock!.setValue(data!, forAccount: accountString, accessGroup: nil)
-        XCTAssertEqual(self.keychainMock!.getAll().count, 1)
-
-        XCTAssertEqual(LegacyKeychainTokenStorage(keychain: keychainMock!).get(), [
-            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1")
+            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1")
         ])
     }
     
@@ -105,7 +86,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
 
         let keychainStorage = LegacyKeychainTokenStorage(keychain: keychainMock!)
         XCTAssertEqual(keychainStorage.get(), [
-            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1", idToken: "idToken1")
+            LegacyTokenData(accessToken: "accessToken1", refreshToken: "refreshToken1")
         ])
         keychainStorage.remove()
         XCTAssertEqual(keychainStorage.get(), [])
@@ -135,7 +116,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             }
             
             XCTAssertEqual(keychainStorage.get(), [
-                LegacyTokenData(accessToken: "foo", refreshToken: "bar", idToken: "foo-bar")
+                LegacyTokenData(accessToken: "foo", refreshToken: "bar")
             ])
         }
         
