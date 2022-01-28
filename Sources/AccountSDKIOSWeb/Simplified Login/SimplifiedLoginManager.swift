@@ -8,8 +8,6 @@ public final class SimplifiedLoginManager {
         case noVisibleViewControllerFound
     }
     
-    static let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
-    
     let client: Client
     var fetcher: SimplifiedLoginFetching
     
@@ -152,12 +150,6 @@ extension SimplifiedLoginManager {
                                                                                          loginHint: self.loginHint,
                                                                                          extraScopeValues: self.extraScopeValues,
                                                                                          completion: self.completion)
-        }
-        if Self.isPad {
-            simplifiedLoginViewController.modalPresentationStyle = .formSheet
-            simplifiedLoginViewController.preferredContentSize = .init(width: 450, height: 424)
-        } else {
-            simplifiedLoginViewController.modalPresentationStyle = .overFullScreen
         }
         
         return simplifiedLoginViewController

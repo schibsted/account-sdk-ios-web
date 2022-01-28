@@ -118,7 +118,6 @@ struct SimplifiedLoginUIFactory {
     private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
         let s = SimplifiedLoginViewController(viewModel: viewModel )
         let nc = SimplifiedLoginNavigationController()
-        nc.view.backgroundColor = .clear
         nc.pushViewController(s, animated: false)
         
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
@@ -129,7 +128,7 @@ struct SimplifiedLoginUIFactory {
         }
         
         viewModel.onClickedPrivacyPolicy = {
-            if SimplifiedLoginManager.isPad {
+            if SimplifiedLoginNavigationController.isPad {
                 let svc = SFSafariViewController(url: url)
                 nc.present(svc, animated: true, completion: nil)
             } else {

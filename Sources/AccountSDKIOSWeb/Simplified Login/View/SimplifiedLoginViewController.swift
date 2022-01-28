@@ -115,36 +115,10 @@ class SimplifiedLoginViewController: UIViewController {
         linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
         
-        if isPhone {
-            setupConstraints()
-            //setupNavigationBar()
-        } else {
-            setupiPadConstraints()
-        }
+        isPhone ? setupiPhoneConstraints() : setupiPadConstraints()
     }
     
-    func setupNavigationBar(){
-        guard isPhone else {
-            return
-        }
-        
-        let navigationBar = navigationController?.navigationBar
-        navigationBar?.topItem?.title = viewModel.localizationModel.continueToLogIn
-        
-        if #available(iOS 13.0, *) {
-            
-            let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.shadowColor = .gray
-            navigationBarAppearance.backgroundColor = .white
-            navigationBarAppearance.titleTextAttributes =
-            [NSAttributedString.Key.foregroundColor: UIColor.black]
-            navigationBar?.scrollEdgeAppearance = navigationBarAppearance
-        }  else {
-            navigationBar?.barTintColor = .white
-        }
-    }
-    
-    func setupConstraints() {
+    func setupiPhoneConstraints() {
         
         let margin = view.layoutMarginsGuide
         

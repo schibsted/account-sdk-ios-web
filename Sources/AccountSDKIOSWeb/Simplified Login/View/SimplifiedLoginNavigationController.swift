@@ -1,9 +1,18 @@
 import UIKit
 
 class SimplifiedLoginNavigationController: UINavigationController {
-
+    static let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .clear
+        
+        if Self.isPad {
+            modalPresentationStyle = .formSheet
+            preferredContentSize = .init(width: 450, height: 424)
+        } else {
+            modalPresentationStyle = .overFullScreen
+        }
     }
     
     override open var shouldAutorotate: Bool {
