@@ -24,8 +24,11 @@ struct SimplifiedLoginUIFactory {
         
         let vc = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
-            DispatchQueue.main.async {
-                vc?.dismiss(animated: true, completion: nil)
+            // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
+            if Result.failure(LoginError.canceled) != result {
+                DispatchQueue.main.async {
+                    vc?.dismiss(animated: true, completion: nil)
+                }
             }
             completion(result)
         }
@@ -77,8 +80,11 @@ struct SimplifiedLoginUIFactory {
         
         let vc = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
-            DispatchQueue.main.async {
-                vc?.dismiss(animated: true, completion: nil)
+            // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
+            if Result.failure(LoginError.canceled) != result {
+                DispatchQueue.main.async {
+                    vc?.dismiss(animated: true, completion: nil)
+                }
             }
             completion(result)
         }
