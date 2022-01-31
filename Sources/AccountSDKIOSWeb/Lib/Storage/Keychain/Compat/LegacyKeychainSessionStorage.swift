@@ -12,9 +12,9 @@ class LegacyKeychainSessionStorage {
         self.storage = storage
     }
 
-    func get(forClientId: String) -> UserSession? {
+    func get(forClientId: String) -> LegacyUserSession? {
         let sessions = storage.get()
-            .compactMap(toUserSession(_:))
+            .compactMap(toLegacyUserSession(_:))
             .filter { $0.clientId == forClientId } // filter tokens only for the requested client
 
         // return the newest token, based on 'iat' claim in ID Token
@@ -25,38 +25,13 @@ class LegacyKeychainSessionStorage {
         storage.remove()
     }
     
-    private func toUserSession(_ legacyTokenData: LegacyTokenData) -> UserSession? {
+    private func toLegacyUserSession(_ legacyTokenData: LegacyTokenData) -> LegacyUserSession? {
         let validatedAccessToken = validateTokenFormat(legacyTokenData.accessToken)
         guard let accessTokenClaims = unverifiedClaims(from: validatedAccessToken),
               let clientId = accessTokenClaims["client_id"] as? String else {
             return nil
         }
-
-        guard let unverifiedIdTokenClaims = unverifiedClaims(from: legacyTokenData.idToken),
-              let sub = unverifiedIdTokenClaims["sub"] as? String else {
-            return nil
-        }
-
-        let updatedAt: Date
-        if let issuedAt = unverifiedIdTokenClaims["iat"] as? Double {
-            updatedAt = Date(timeIntervalSince1970: issuedAt)
-        } else {
-            updatedAt = Date()
-        }
-
-        let legacyUserId = unverifiedIdTokenClaims["legacy_user_id"] as? String
-        let idTokenClaims = IdTokenClaims(iss: unverifiedIdTokenClaims["iss"] as! String,
-                                          sub: sub,
-                                          userId: legacyUserId ?? "",
-                                          aud: [],
-                                          exp: unverifiedIdTokenClaims["exp"] as! Double,
-                                          nonce: unverifiedIdTokenClaims["nonce"] as? String,
-                                          amr: nil)
-        let userTokens = UserTokens(accessToken: validatedAccessToken,
-                                    refreshToken: legacyTokenData.refreshToken,
-                                    idToken: legacyTokenData.idToken,
-                                    idTokenClaims: idTokenClaims)
-        return UserSession(clientId: clientId, userTokens: userTokens, updatedAt: updatedAt)
+        return LegacyUserSession(clientId: clientId, accessToken: validatedAccessToken, refreshToken: legacyTokenData.refreshToken, updatedAt: Date())
     }
     
     private func unverifiedClaims(from token: String) -> [String: Any]? {

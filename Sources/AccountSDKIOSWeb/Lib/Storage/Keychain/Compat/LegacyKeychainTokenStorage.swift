@@ -1,9 +1,15 @@
 import Foundation
 
-struct LegacyTokenData: Equatable {
+internal struct LegacyTokenData: Equatable, Codable {
     let accessToken: String
     let refreshToken: String
-    let idToken: String
+}
+
+internal struct LegacyUserSession: Codable, Equatable {
+    let clientId: String
+    let accessToken: String
+    let refreshToken: String
+    let updatedAt: Date
 }
 
 class LegacyKeychainTokenStorage {
@@ -60,11 +66,10 @@ class LegacyKeychainTokenStorage {
         }
         
         let storedTokens: [LegacyTokenData] = parsed.compactMap { (accessToken, data) in
-            guard let refreshToken = data[Self.KeychainKey.refreshToken] as? String,
-                  let idToken = data[Self.KeychainKey.idToken] as? String else {
-                      return nil
-                  }
-            return LegacyTokenData(accessToken: accessToken, refreshToken: refreshToken, idToken: idToken)
+            guard let refreshToken = data[Self.KeychainKey.refreshToken] as? String else {
+                return nil
+            }
+            return LegacyTokenData(accessToken: accessToken, refreshToken: refreshToken)
         }
         
         return storedTokens
