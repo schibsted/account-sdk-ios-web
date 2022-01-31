@@ -31,8 +31,8 @@ class SimplifiedLoginViewController: UIViewController {
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.backgroundColor = .black
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.backgroundColor = SchibstedColor.blue.value
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -65,7 +65,7 @@ class SimplifiedLoginViewController: UIViewController {
         view.layer.cornerRadius = 12
         
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 250/255, alpha: 1)
+        view.backgroundColor = SchibstedColor.lightGrey.value
         
         view.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 12, right: 16)
         view.isLayoutMarginsRelativeArrangement = true
@@ -124,9 +124,9 @@ class SimplifiedLoginViewController: UIViewController {
         
         let buttonWidth = primaryButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow
-        let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor)
-        let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor)
-        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
+        let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 4)
+        let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
+        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + [
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
@@ -150,7 +150,7 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             footerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -45),
-            containerView.heightAnchor.constraint(equalToConstant: 570),
+            footerStackView.heightAnchor.constraint(equalToConstant: 185),
             
             // Container View
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 25),
@@ -165,7 +165,7 @@ class SimplifiedLoginViewController: UIViewController {
     func setupiPadConstraints() {
         
         let margin = view.layoutMarginsGuide
-        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + [
+        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + [
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),

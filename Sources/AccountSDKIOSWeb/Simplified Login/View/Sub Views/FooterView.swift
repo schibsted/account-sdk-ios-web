@@ -61,12 +61,19 @@ class FooterView: UIStackView {
         let view = UILabel()
         view.numberOfLines = -1
         
-        view.text = String.localizedStringWithFormat(viewModel.localizationModel.explanationText, viewModel.clientName)
-        view.font = UIFont.systemFont(ofSize: 12)
-        view.textAlignment = .center
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4.0
+        paragraphStyle.alignment = .center
+        let attrString = NSMutableAttributedString(string: String.localizedStringWithFormat(viewModel.localizationModel.explanationText, viewModel.clientName))
         
+        attrString.addAttributes([
+            .paragraphStyle : paragraphStyle,
+            .font : UIFont.systemFont(ofSize: 14),
+            .foregroundColor : SchibstedColor.textLightGrey.value
+        ], range: NSMakeRange(0, attrString.length))
+        
+        view.attributedText = attrString
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.textColor = UIColor(red: 102/255, green: 101/255, blue: 108/255, alpha: 1)
         
         return view
     }()
@@ -74,8 +81,8 @@ class FooterView: UIStackView {
     lazy var privacyURLButton: UIButton = {
         let view = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
-                                                           .font: UIFont.systemFont(ofSize: 12),
-                                                           .foregroundColor: UIColor(red: 53/255, green: 52/255, blue: 58/255, alpha: 1)
+                                                           .font: UIFont.systemFont(ofSize: 14),
+                                                           .foregroundColor: SchibstedColor.textDarkGrey.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.privacyPolicyTitle,
                                                  attributes: attributes)
