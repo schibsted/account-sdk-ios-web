@@ -6,7 +6,8 @@ class UserInformationView: UIStackView {
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [avatarView.heightAnchor.constraint(equalToConstant: 48),
                 avatarView.widthAnchor.constraint(equalToConstant: 48),
-                avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 45),
+                avatarView.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: 45),
+                avatarView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 10),
                 initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
                 initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
                 nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
@@ -54,7 +55,7 @@ class UserInformationView: UIStackView {
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.email
-        view.font = UIFont.systemFont(ofSize: 15)
+        view.font = UIFont.systemFont(ofSize: 14)
         view.textAlignment = .left
         view.textColor = SchibstedColor.textLightGrey.value
         view.translatesAutoresizingMaskIntoConstraints = false

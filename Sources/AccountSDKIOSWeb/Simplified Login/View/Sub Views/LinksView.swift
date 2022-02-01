@@ -7,7 +7,7 @@ class LinksView: UIStackView {
         return [differentAccountStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
                 differentAccountStackView.topAnchor.constraint(equalTo: topAnchor),
                 continueWithoutLoginButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-                continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountStackView.bottomAnchor, constant: 20)
+                continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountStackView.bottomAnchor, constant: 16)
         ]
     }()
     
@@ -26,7 +26,7 @@ class LinksView: UIStackView {
         let view = UILabel()
         view.numberOfLines = 1
         view.text = viewModel.localizationModel.notYouTitle
-        view.font = UIFont.systemFont(ofSize: 14)
+        view.font = UIFont.systemFont(ofSize: 16)
         view.textAlignment = .center
         
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +38,7 @@ class LinksView: UIStackView {
     lazy var continueWithoutLoginButton: UIButton = {
         let button = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
-                                                           .font: UIFont.systemFont(ofSize: 14),
+                                                           .font: UIFont.systemFont(ofSize: 16),
                                                            .foregroundColor: SchibstedColor.blue.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.continueWithoutLogin,
@@ -51,7 +51,7 @@ class LinksView: UIStackView {
     lazy var loginWithDifferentAccountButton: UIButton = {
         let button = UIButton()
         let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
-                                                           .font: UIFont.systemFont(ofSize: 14),
+                                                           .font: UIFont.systemFont(ofSize: 16),
                                                            .foregroundColor: SchibstedColor.blue.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.switchAccount,

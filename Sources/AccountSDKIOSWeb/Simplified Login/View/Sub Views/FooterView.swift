@@ -5,10 +5,11 @@ class FooterView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
-        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 32) }
-        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 32) }
+        let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 36) }
+        let popularBrandsWidths = popularBrandsImageViews.map{ $0.widthAnchor.constraint(equalToConstant: 36) }
         return popularBrandsWidths + popularBrandsHeights + [schibstedIconImageView.heightAnchor.constraint(equalToConstant: 16),
-            schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)]
+            schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)
+        ]
     }()
     
     // Eco system
@@ -18,7 +19,7 @@ class FooterView: UIStackView {
         view.alignment = .center
         view.axis = .horizontal
         view.distribution = .fill
-        view.spacing = 15
+        view.spacing = 20
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -40,7 +41,7 @@ class FooterView: UIStackView {
         view.alignment = .center
         view.axis = .horizontal
         view.distribution = .fill
-        view.spacing = -6
+        view.spacing = -11
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -119,7 +120,7 @@ class FooterView: UIStackView {
         view.layer.masksToBounds = true
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.white.cgColor
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 18
         view.clipsToBounds = true
         
         let image  = UIImage(named: name, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()

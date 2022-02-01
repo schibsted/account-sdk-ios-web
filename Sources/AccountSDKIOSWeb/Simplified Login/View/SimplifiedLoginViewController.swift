@@ -86,8 +86,8 @@ class SimplifiedLoginViewController: UIViewController {
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            let y = view.frame.height - 570 + 25
-            containerView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 570)
+            let y = view.frame.height - 489 + 25
+            containerView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 489)
             containerView.translatesAutoresizingMaskIntoConstraints = false
             
             originalTransform = containerView.transform
@@ -130,21 +130,21 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor, constant: 60),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 30),
+            userInformationView.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor, constant: 35),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 10),
             
             // Primary button
-            primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: 45),
+            primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: -25),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             primaryButton.heightAnchor.constraint(equalToConstant: 48),
             buttonWidth,
             buttonLead,
             buttonTrail,
             // Links View
-            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 25),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
             linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 20),
-            linksView.heightAnchor.constraint(equalToConstant: 150),
+            linksView.heightAnchor.constraint(equalToConstant: 120),
             
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -154,7 +154,7 @@ class SimplifiedLoginViewController: UIViewController {
             
             // Container View
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 25),
-            containerView.heightAnchor.constraint(equalToConstant: 570),
+            containerView.heightAnchor.constraint(equalToConstant: 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ]
@@ -167,23 +167,24 @@ class SimplifiedLoginViewController: UIViewController {
         let margin = view.layoutMarginsGuide
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + [
             // UserInformation
-            userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(equalTo: view.topAnchor, constant: -30),
-            
+            userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 30),
+            userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -30),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 32),
+
             // Primary button
-            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 10),
+            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 80),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             primaryButton.heightAnchor.constraint(equalToConstant: 48),
-            primaryButton.widthAnchor.constraint(equalToConstant: 343),
+            primaryButton.widthAnchor.constraint(equalToConstant: 326),
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
+            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: -100),
             
             // Footer
             footerStackView.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
-            footerStackView.heightAnchor.constraint(equalToConstant: 156),
+            footerStackView.heightAnchor.constraint(equalToConstant: 162),
             footerStackView.widthAnchor.constraint(equalToConstant: 394),
             footerStackView.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -30),
         ]
