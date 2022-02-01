@@ -39,7 +39,17 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     var iconNames: [String] { return imageDataModel.iconNames }
     
     let userData: SimplifiedLoginViewModelUserData
-    var displayName: String { return userData.userContext.display_text }
+    var displayName: String {
+        if let firstName  = userData.userProfileResponse.name?.givenName,
+           let lastName = userData.userProfileResponse.name?.familyName {
+            return "\(firstName) \(lastName)"
+        } else {
+            return userData.userContext.display_text
+        }
+    }
+    
+    var email: String { userData.userProfileResponse.email ?? "" }
+    
     var initials: String {
         let firstName  = userData.userProfileResponse.name?.givenName ?? ""
         let lastName = userData.userProfileResponse.name?.familyName ?? ""

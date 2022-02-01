@@ -107,6 +107,7 @@
 		CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */; };
 		CEDC45DE27463C200060EDA2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DD27463C200060EDA2 /* WebViewController.swift */; };
 		CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */; };
+		CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE91D4827A8212500A71061 /* SchibstedColor.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
 		OBJ_246 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ClientTests.swift */; };
@@ -251,6 +252,7 @@
 		CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIFactory.swift; sourceTree = "<group>"; };
 		CEDC45DD27463C200060EDA2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModel.swift; sourceTree = "<group>"; };
+		CEE91D4827A8212500A71061 /* SchibstedColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedColor.swift; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CE8BCDEA27A14C5100DC8EF1 /* SimplifiedLoginNavigationController.swift */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
+				CEE91D4827A8212500A71061 /* SchibstedColor.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1058,6 +1061,7 @@
 				2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */,
 				CEDC45DE27463C200060EDA2 /* WebViewController.swift in Sources */,
 				2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */,
+				CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */,
 				2489C9AD26733A0900AA0A4C /* AuthState.swift in Sources */,
 				244EAACA275A26DA008A1285 /* SimplifiedLoginFetcher.swift in Sources */,
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
