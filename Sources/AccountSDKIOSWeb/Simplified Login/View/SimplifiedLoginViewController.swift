@@ -75,6 +75,13 @@ class SimplifiedLoginViewController: UIViewController {
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
+        if isPhone {
+            modalPresentationStyle = .overFullScreen
+        } else {
+            modalPresentationStyle = .formSheet
+            preferredContentSize = .init(width: 450, height: 474)
+        }
     }
     
     required init?(coder: NSCoder) {

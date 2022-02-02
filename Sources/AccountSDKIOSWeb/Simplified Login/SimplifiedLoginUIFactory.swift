@@ -122,27 +122,18 @@ struct SimplifiedLoginUIFactory {
     }
     
     private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
-        let s = SimplifiedLoginViewController(viewModel: viewModel )
-        let nc = SimplifiedLoginNavigationController()
-        nc.pushViewController(s, animated: false)
-        
+        let s = SimplifiedLoginViewController(viewModel: viewModel)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
-        let webVC = WebViewController()
         
         viewModel.onClickedContinueWithoutLogin = {
-            nc.dismiss(animated: true, completion: nil)
+            s.dismiss(animated: true, completion: nil)
         }
         
         viewModel.onClickedPrivacyPolicy = {
-            if SimplifiedLoginNavigationController.isPad {
-                let svc = SFSafariViewController(url: url)
-                nc.present(svc, animated: true, completion: nil)
-            } else {
-                webVC.loadURL(url)
-                nc.pushViewController(webVC, animated: true)
-            }
+            let svc = SFSafariViewController(url: url)
+            s.present(svc, animated: true, completion: nil)
         }
         
-        return nc
+        return s
     }
 }

@@ -5,9 +5,7 @@ class LinksView: UIStackView {
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [differentAccountStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                differentAccountStackView.topAnchor.constraint(equalTo: topAnchor),
-                continueWithoutLoginButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-                continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountStackView.bottomAnchor, constant: 16)
+                continueWithoutLoginButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ]
     }()
     
