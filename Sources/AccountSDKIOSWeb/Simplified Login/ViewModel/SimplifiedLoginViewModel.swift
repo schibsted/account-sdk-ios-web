@@ -41,7 +41,9 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     let userData: SimplifiedLoginViewModelUserData
     var displayName: String {
         if let firstName  = userData.userProfileResponse.name?.givenName,
-           let lastName = userData.userProfileResponse.name?.familyName {
+           let lastName = userData.userProfileResponse.name?.familyName,
+           !firstName.isEmpty,
+           !lastName.isEmpty {
             return "\(firstName) \(lastName)"
         } else {
             return userData.userContext.display_text

@@ -15,7 +15,7 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
                         .schibstedLogoName)
         XCTAssertEqual(viewModel.initials, "JW")
         XCTAssertEqual(viewModel.iconNames, imageData.iconNames)
-        XCTAssertEqual(viewModel.displayName, userData.userProfileResponse.displayName)
+        XCTAssertEqual(viewModel.displayName, "John White")
     }
     
     func testCallingLoginUserActions() {
