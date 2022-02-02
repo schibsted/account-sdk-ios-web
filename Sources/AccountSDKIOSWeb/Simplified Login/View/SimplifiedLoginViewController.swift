@@ -8,6 +8,8 @@ class SimplifiedLoginViewController: UIViewController {
     private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
     private var containerView = UIView()
     private var originalTransform: CGAffineTransform?
+    private var bottomConstraint: NSLayoutConstraint?
+
     
     private lazy var userInformationView: UserInformationView = {
         let view = UserInformationView(viewModel: viewModel)
@@ -78,6 +80,7 @@ class SimplifiedLoginViewController: UIViewController {
         
         if isPhone {
             modalPresentationStyle = .overFullScreen
+            modalTransitionStyle = .crossDissolve
         } else {
             modalPresentationStyle = .formSheet
             preferredContentSize = .init(width: 450, height: 474)
@@ -105,6 +108,7 @@ class SimplifiedLoginViewController: UIViewController {
             containerView.addSubview(linksView)
             containerView.addSubview(footerStackView)
             view.addSubview(containerView)
+            bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525)
             
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
             containerView.addGestureRecognizer(panGestureRecognizer)
@@ -123,6 +127,11 @@ class SimplifiedLoginViewController: UIViewController {
         footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
         
         isPhone ? setupiPhoneConstraints() : setupiPadConstraints()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        animateShowingOverlay()
     }
     
     func setupiPhoneConstraints() {
@@ -160,7 +169,7 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.heightAnchor.constraint(equalToConstant: 185),
             
             // Container View
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 25),
+            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525),
             containerView.heightAnchor.constraint(equalToConstant: 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -196,6 +205,21 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -30),
         ]
         NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    private func animateShowingOverlay() {
+        guard isPhone else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            if var bottomConstraint = self.bottomConstraint {
+                NSLayoutConstraint.deactivate([bottomConstraint])
+                bottomConstraint = self.containerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 25)
+                NSLayoutConstraint.activate([bottomConstraint])
+                self.view.layoutIfNeeded()
+            }
+        }
     }
     
     @objc
