@@ -68,8 +68,8 @@ class LinksView: UIStackView {
         differentAccountStackView.addArrangedSubview(notYouLabel)
         differentAccountStackView.addArrangedSubview(loginWithDifferentAccountButton)
         
-        addSubview(differentAccountStackView)
-        addSubview(continueWithoutLoginButton)
+        addArrangedSubview(differentAccountStackView)
+        addArrangedSubview(continueWithoutLoginButton)
     }
     
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }

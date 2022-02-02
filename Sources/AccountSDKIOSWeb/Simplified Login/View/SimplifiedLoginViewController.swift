@@ -141,9 +141,9 @@ class SimplifiedLoginViewController: UIViewController {
             buttonLead,
             buttonTrail,
             // Links View
-            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 25),
+            linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 15),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
-            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 20),
+            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor),
             linksView.heightAnchor.constraint(equalToConstant: 120),
             
             // Footer
@@ -169,7 +169,7 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 30),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -30),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 32),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 10),
 
             // Primary button
             primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 80),
@@ -180,7 +180,7 @@ class SimplifiedLoginViewController: UIViewController {
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
-            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: -100),
+            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 0),
             
             // Footer
             footerStackView.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
