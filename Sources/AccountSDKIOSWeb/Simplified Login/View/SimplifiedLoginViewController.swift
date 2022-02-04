@@ -117,10 +117,12 @@ class SimplifiedLoginViewController: UIViewController {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
             view.addGestureRecognizer(tapGestureRecognizer)
         } else {
-            view.addSubview(userInformationView)
-            view.addSubview(primaryButton)
-            view.addSubview(linksView)
-            view.addSubview(footerStackView)
+            scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: 474)
+            scrollView.addSubview(userInformationView)
+            scrollView.addSubview(primaryButton)
+            scrollView.addSubview(linksView)
+            scrollView.addSubview(footerStackView)
+            view.addSubview(scrollView)
         }
         
         primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
@@ -193,26 +195,35 @@ class SimplifiedLoginViewController: UIViewController {
         let margin = view.layoutMarginsGuide
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + [
             // UserInformation
-            userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 30),
-            userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -30),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 10),
+            userInformationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: scrollView.topAnchor, constant: 15),
+            userInformationView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
 
             // Primary button
-            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 80),
+            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 30),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
-            primaryButton.heightAnchor.constraint(equalToConstant: 48),
+            primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             primaryButton.widthAnchor.constraint(equalToConstant: 326),
             
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 10),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
-            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: 0),
+            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor, constant: -20),
+            linksView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
+            linksView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
+            linksView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
             
             // Footer
             footerStackView.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
-            footerStackView.heightAnchor.constraint(equalToConstant: 162),
+            footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 162),
             footerStackView.widthAnchor.constraint(equalToConstant: 394),
-            footerStackView.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -30),
+            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+            
+            // Scroll View
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         NSLayoutConstraint.activate(allConstraints)
     }
