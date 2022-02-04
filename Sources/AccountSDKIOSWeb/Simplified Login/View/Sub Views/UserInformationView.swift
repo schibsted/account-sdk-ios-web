@@ -1,6 +1,6 @@
 import UIKit
 
-class UserInformationView: UIStackView {
+class UserInformationView: UIView {
     let viewModel: SimplifiedLoginViewModel
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
@@ -12,9 +12,11 @@ class UserInformationView: UIStackView {
                 initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
                 nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
                 nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 16),
+                nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
                 emailLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 16),
+                emailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
                 emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
-                emailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
+                emailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
         ]
     }()
     
@@ -44,10 +46,14 @@ class UserInformationView: UIStackView {
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.displayName
-        view.font = UIFont.boldSystemFont(ofSize: 15)
+        view.font = UIFont.preferredFont(forTextStyle: .callout).bold()
         view.textAlignment = .left
+        view.lineBreakMode = .byWordWrapping
+        view.numberOfLines = 0
+        view.sizeToFit()
         view.textColor = SchibstedColor.textDarkGrey.value
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.adjustsFontForContentSizeCategory = true
 
         return view
     }()
@@ -55,18 +61,22 @@ class UserInformationView: UIStackView {
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.email
-        view.font = UIFont.systemFont(ofSize: 14)
+        view.font = UIFont.preferredFont(forTextStyle: .footnote)
         view.textAlignment = .left
+        view.lineBreakMode = .byCharWrapping
+        view.numberOfLines = 0
+        view.sizeToFit()
         view.textColor = SchibstedColor.textLightGrey.value
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.adjustsFontForContentSizeCategory = true
         
         return view
     }()
     
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
-        
         super.init(frame: .zero)
+        translatesAutoresizingMaskIntoConstraints = false
         avatarView.addSubview(initialsLabel)
         addSubview(avatarView)
         addSubview(nameLabel)

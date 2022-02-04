@@ -7,20 +7,15 @@ class SimplifiedLoginViewController: UIViewController {
     private var viewModel: SimplifiedLoginViewModel
     private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
     private var containerView = UIView()
+    private var scrollView = UIScrollView()
     private var originalTransform: CGAffineTransform?
     private var bottomConstraint: NSLayoutConstraint?
 
     
     private lazy var userInformationView: UserInformationView = {
         let view = UserInformationView(viewModel: viewModel)
-        view.alignment = .center
-        view.axis = .vertical
-        view.distribution = .fill
-        view.spacing = 8
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         view.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
-        view.isLayoutMarginsRelativeArrangement = true
         return view
     }()
     
@@ -33,7 +28,11 @@ class SimplifiedLoginViewController: UIViewController {
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = SchibstedColor.blue.value
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -44,15 +43,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     private lazy var linksView: LinksView = {
         let view = LinksView(viewModel: viewModel)
-        view.alignment = .center
-        view.axis = .vertical
-        view.distribution = .fillEqually
-        view.spacing =  0
         view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.layoutMargins = UIEdgeInsets(top: isPhone ? 8 : 0, left: 0, bottom: 16, right: 0)
-        view.isLayoutMarginsRelativeArrangement = true
         return view
     }()
     
@@ -103,15 +94,26 @@ class SimplifiedLoginViewController: UIViewController {
             originalTransform = containerView.transform
             containerView.layer.cornerRadius = 10
             containerView.backgroundColor = .white
-            containerView.addSubview(userInformationView)
-            containerView.addSubview(primaryButton)
-            containerView.addSubview(linksView)
-            containerView.addSubview(footerStackView)
+            
+            scrollView.frame = CGRect(x: 0, y: 20, width: containerView.frame.size.width, height: containerView.frame.size.height)
+            
+            if #available(iOS 13.0, *) {
+                scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+            } else {
+                scrollView.contentInsetAdjustmentBehavior = .never
+            }
+            
+            scrollView.addSubview(userInformationView)
+            scrollView.addSubview(primaryButton)
+            scrollView.addSubview(linksView)
+            scrollView.addSubview(footerStackView)
+            containerView.addSubview(scrollView)
+            
             view.addSubview(containerView)
             bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525)
             
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
-            containerView.addGestureRecognizer(panGestureRecognizer)
+            view.addGestureRecognizer(panGestureRecognizer)
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
             view.addGestureRecognizer(tapGestureRecognizer)
         } else {
@@ -146,33 +148,41 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(lessThanOrEqualTo: containerView.topAnchor, constant: 35),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 10),
-            
+//            userInformationView.topAnchor.constraint(lessThanOrEqualTo: scrollView.topAnchor, constant: 25),
+            userInformationView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
+            userInformationView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
+
             // Primary button
-            primaryButton.topAnchor.constraint(lessThanOrEqualTo: userInformationView.bottomAnchor, constant: -25),
+            primaryButton.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: 20),
             primaryButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
-            primaryButton.heightAnchor.constraint(equalToConstant: 48),
+            primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             buttonWidth,
             buttonLead,
             buttonTrail,
+            
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: primaryButton.bottomAnchor, constant: 15),
             linksView.centerXAnchor.constraint(equalTo: primaryButton.centerXAnchor),
-            linksView.bottomAnchor.constraint(equalTo: footerStackView.topAnchor),
-            linksView.heightAnchor.constraint(equalToConstant: 120),
+            linksView.bottomAnchor.constraint(greaterThanOrEqualTo: footerStackView.topAnchor, constant: -20),
+            linksView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            linksView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
             
             // Footer
             footerStackView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            footerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -45),
-            footerStackView.heightAnchor.constraint(equalToConstant: 185),
+            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25),
+            footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 185),
             
             // Container View
             (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525),
             containerView.heightAnchor.constraint(equalToConstant: 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            // Scroll View
+            scrollView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            scrollView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(allConstraints)

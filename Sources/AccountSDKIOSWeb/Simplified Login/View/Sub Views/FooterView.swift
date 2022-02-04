@@ -69,11 +69,12 @@ class FooterView: UIStackView {
         
         attrString.addAttributes([
             .paragraphStyle : paragraphStyle,
-            .font : UIFont.systemFont(ofSize: 14),
+            .font : UIFont.preferredFont(forTextStyle: .footnote),
             .foregroundColor : SchibstedColor.textLightGrey.value
         ], range: NSMakeRange(0, attrString.length))
         
         view.attributedText = attrString
+        view.adjustsFontForContentSizeCategory = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -81,14 +82,16 @@ class FooterView: UIStackView {
     
     lazy var privacyURLButton: UIButton = {
         let view = UIButton()
-        let attributes:  [NSAttributedString.Key: Any] = [ .underlineStyle : NSUnderlineStyle.single.rawValue,
-                                                           .font: UIFont.systemFont(ofSize: 14),
-                                                           .foregroundColor: SchibstedColor.textDarkGrey.value
+        let attributes:  [NSAttributedString.Key: Any] = [
+            .underlineStyle : NSUnderlineStyle.single.rawValue,
+            .font: UIFont.preferredFont(forTextStyle: .footnote),
+            .foregroundColor: SchibstedColor.textDarkGrey.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.privacyPolicyTitle,
                                                  attributes: attributes)
 
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.titleLabel?.adjustsFontForContentSizeCategory = true
         view.setAttributedTitle(attributedText, for: .normal)
         
         return view
