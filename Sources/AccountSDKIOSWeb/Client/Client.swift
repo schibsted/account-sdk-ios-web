@@ -261,6 +261,16 @@ public class Client: CustomStringConvertible {
         }
         return sessionStorage.getLatestSession()
     }
+    
+    func retrieveTokens(completion: @escaping (UserTokens?) -> Void) {
+        sessionStorage.get(forClientId: configuration.clientId) { storedSession in
+            guard let session = storedSession else {
+                completion(nil)
+                return
+            }
+            completion(session.userTokens)
+        }
+    }
 }
 
 extension Client {

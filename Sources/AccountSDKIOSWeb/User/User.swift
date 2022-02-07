@@ -153,15 +153,31 @@ extension User {
     func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
     }
+    
+    func retrieveTokens(completion: @escaping () -> Void) {
+        client.retrieveTokens { newTokens in
+            if let newTokens = newTokens {
+                self.tokens = newTokens
+                completion()
+            }
+        }
+    }
 
     func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-        guard let tokens = self.tokens else {
+        guard self.tokens != nil else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
             return
         }
-        var requestCopy = request
-        requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
-        client.httpClient.execute(request: requestCopy, completion: completion)
+        
+        retrieveTokens {
+            guard let accessToken = self.tokens?.accessToken else {
+                completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+                return
+            }
+            var requestCopy = request
+            requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            self.client.httpClient.execute(request: requestCopy, completion: completion)
+        }
     }
     
     /**
