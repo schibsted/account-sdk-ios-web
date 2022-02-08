@@ -50,6 +50,11 @@ class MigratingKeychainCompatStorage: SessionStorage {
         }
     }
     
+    
+    func get(forClientId: String) -> UserSession? {
+        return nil
+    }
+    
     private func migrateLegacyUserSession(forClientId: String, legacySession: LegacyUserSession, completion: @escaping (UserSession?) -> Void) {
         
         self.oldSDKClient = OldSDKClient(clientId: legacyClient.configuration.clientId, clientSecret: self.legacyClientSecret, api: legacyClient.schibstedAccountAPI, legacyAccessToken: legacySession.accessToken, legacyRefreshToken: legacySession.refreshToken)

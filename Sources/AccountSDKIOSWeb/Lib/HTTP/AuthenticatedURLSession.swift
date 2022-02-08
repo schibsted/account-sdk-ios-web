@@ -38,13 +38,7 @@ public final class AuthenticatedURLSession {
     public func dataTask(with request: URLRequest,
                          completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         let user = self.user
-        let group = DispatchGroup()
-        let queue = DispatchQueue(label: "dataTaskQueue", attributes: .concurrent)
-        group.enter()
-        queue.async {
-            user.retrieveTokens { group.leave() }
-        }
-        group.wait()
+        user.retrieveTokens()
         
         let request = authenticatedRequest(request, tokens: user.tokens)
         return urlSession.dataTask(with: request) { [weak self] data, response, error in

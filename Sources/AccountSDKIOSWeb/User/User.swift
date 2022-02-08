@@ -154,30 +154,27 @@ extension User {
         self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
     }
     
-    func retrieveTokens(completion: @escaping () -> Void) {
-        client.retrieveTokens { newTokens in
-            if let newTokens = newTokens {
-                self.tokens = newTokens
-                completion()
-            }
+    func retrieveTokens() {
+        if let newTokens = client.retrieveTokens() {
+            self.tokens = newTokens
         }
     }
 
+
     func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
+        retrieveTokens()
         guard self.tokens != nil else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
             return
         }
         
-        retrieveTokens {
-            guard let accessToken = self.tokens?.accessToken else {
-                completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
-                return
-            }
-            var requestCopy = request
-            requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-            self.client.httpClient.execute(request: requestCopy, completion: completion)
+        guard let accessToken = self.tokens?.accessToken else {
+            completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
+            return
         }
+        var requestCopy = request
+        requestCopy.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        self.client.httpClient.execute(request: requestCopy, completion: completion)
     }
     
     /**

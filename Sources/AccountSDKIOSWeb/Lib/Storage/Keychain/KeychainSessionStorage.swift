@@ -42,6 +42,20 @@ internal class KeychainSessionStorage: SessionStorage {
         }
     }
     
+    func get(forClientId: String) -> UserSession? {
+        do {
+            if let data = try keychain.getValue(forAccount: forClientId) {
+                let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
+                return tokenData
+            } else {
+                return nil
+            }
+        } catch {
+            SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     func getAll() -> [UserSession] {
         let data = keychain.getAll()
         return data.compactMap { try? JSONDecoder().decode(UserSession.self, from: $0) }
