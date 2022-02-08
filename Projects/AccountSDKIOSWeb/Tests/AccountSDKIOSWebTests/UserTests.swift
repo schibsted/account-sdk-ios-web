@@ -98,6 +98,7 @@ final class UserTests: XCTestCase {
             when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then { _, _, completion in
                 completion(.success())
             }
+            when(mock.get(forClientId: any())).thenReturn(nil)
         }
         
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
@@ -214,6 +215,7 @@ final class UserTests: XCTestCase {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
             when(mock.remove(forClientId: Fixtures.clientConfig.clientId)).thenDoNothing()
+            when(mock.get(forClientId: any())).thenReturn(nil)
         }
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()), httpClient: mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)

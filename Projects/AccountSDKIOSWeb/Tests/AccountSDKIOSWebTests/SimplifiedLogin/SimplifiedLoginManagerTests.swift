@@ -148,12 +148,16 @@ final class SimplifiedLoginManagerTests: XCTestCase {
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
         }
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.get(forClientId: any())).thenReturn(nil)
+        }
         
         // MockClient
         let jwks = RemoteJWKS(jwksURI: Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: mockHTTPClient)
         let tokenHandler = TokenHandler(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient, jwks: jwks)
         let mockClient = MockClient(configuration: Fixtures.clientConfig,
-                                      sessionStorage: MockSessionStorage(),
+                                      sessionStorage: mockSessionStorage,
                                       stateStorage: StateStorage(storage: MockStorage()),
                                       httpClient: mockHTTPClient,
                                       jwks: jwks,
@@ -190,12 +194,16 @@ final class SimplifiedLoginManagerTests: XCTestCase {
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
         }
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.get(forClientId: any())).thenReturn(nil)
+        }
         
         // MockClient
         let jwks = RemoteJWKS(jwksURI: Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: mockHTTPClient)
         let tokenHandler = TokenHandler(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient, jwks: jwks)
         let mockClient = MockClient(configuration: Fixtures.clientConfig,
-                                      sessionStorage: MockSessionStorage(),
+                                      sessionStorage: mockSessionStorage,
                                       stateStorage: StateStorage(storage: MockStorage()),
                                       httpClient: mockHTTPClient,
                                       jwks: jwks,
@@ -232,11 +240,15 @@ final class SimplifiedLoginManagerTests: XCTestCase {
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
         }
+        let mockSessionStorage = MockSessionStorage()
+        stub(mockSessionStorage) { mock in
+            when(mock.get(forClientId: any())).thenReturn(nil)
+        }
         // MockClient
         let jwks = RemoteJWKS(jwksURI: Fixtures.clientConfig.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: mockHTTPClient)
         let tokenHandler = TokenHandler(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient, jwks: jwks)
         let mockClient = MockClient(configuration: Fixtures.clientConfig,
-                                      sessionStorage: MockSessionStorage(),
+                                      sessionStorage: mockSessionStorage,
                                       stateStorage: StateStorage(storage: MockStorage()),
                                       httpClient: mockHTTPClient,
                                       jwks: jwks,

@@ -30,6 +30,9 @@ final class AccountSDKIOSWebTests: XCTestCaseWithMockHTTPClient {
         
         let mockSessionStorage = MockSessionStorage()
         self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
+        stub(mockSessionStorage) { mock in
+            when(mock.get(forClientId: any())).thenReturn(nil)
+        }
         
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
         let user = User(client: client, tokens: Fixtures.userTokens)
