@@ -35,6 +35,7 @@ class UserInformationView: UIView {
     private lazy var initialsLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.initials
+        view.isAccessibilityElement = false
         view.font = UIFont.boldSystemFont(ofSize: 17)
         view.textAlignment = .center
         view.textColor = .white
