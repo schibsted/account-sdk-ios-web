@@ -92,6 +92,8 @@ class FooterView: UIStackView {
 
         view.translatesAutoresizingMaskIntoConstraints = false
         view.titleLabel?.adjustsFontForContentSizeCategory = true
+        view.titleLabel?.numberOfLines = 0
+        view.titleLabel?.lineBreakMode = .byWordWrapping
         view.setAttributedTitle(attributedText, for: .normal)
         
         return view

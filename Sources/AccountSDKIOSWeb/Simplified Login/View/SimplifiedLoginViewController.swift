@@ -43,7 +43,6 @@ class SimplifiedLoginViewController: UIViewController {
     
     private lazy var linksView: LinksView = {
         let view = LinksView(viewModel: viewModel)
-        view.backgroundColor = .white
         return view
     }()
     
@@ -150,7 +149,6 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-//            userInformationView.topAnchor.constraint(lessThanOrEqualTo: scrollView.topAnchor, constant: 25),
             userInformationView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
             userInformationView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
 
@@ -192,11 +190,10 @@ class SimplifiedLoginViewController: UIViewController {
     
     func setupiPadConstraints() {
         
-        let margin = view.layoutMarginsGuide
         let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + [
             // UserInformation
             userInformationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: scrollView.topAnchor, constant: 15),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: scrollView.topAnchor, constant: 35),
             userInformationView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
 
             // Primary button

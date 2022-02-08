@@ -2,11 +2,12 @@ import UIKit
 
 class UserInformationView: UIView {
     let viewModel: SimplifiedLoginViewModel
+    private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [avatarView.heightAnchor.constraint(equalToConstant: 48),
                 avatarView.widthAnchor.constraint(equalToConstant: 48),
-                avatarView.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: 45),
+                avatarView.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: isPhone ? 45 : 15),
                 avatarView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 10),
                 initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
                 initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),

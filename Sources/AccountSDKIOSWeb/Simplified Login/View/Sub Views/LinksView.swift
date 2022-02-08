@@ -9,23 +9,29 @@ class LinksView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         
-        differentAccountStackView.addArrangedSubview(notYouLabel)
-        differentAccountStackView.addArrangedSubview(loginWithDifferentAccountButton)
-        differentAccountStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(differentAccountStackView)
+        addSubview(differentAccountView)
+        differentAccountView.addSubview(notYouLabel)
+        differentAccountView.addSubview(loginWithDifferentAccountButton)
         addSubview(continueWithoutLoginButton)
         translatesAutoresizingMaskIntoConstraints = false
     }
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [
-            differentAccountStackView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            differentAccountStackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            differentAccountStackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            differentAccountStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountStackView.bottomAnchor, constant: 6),
+            differentAccountView.topAnchor.constraint(equalTo: topAnchor),
+            differentAccountView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            differentAccountView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            differentAccountView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+            notYouLabel.leadingAnchor.constraint(greaterThanOrEqualTo: differentAccountView.leadingAnchor),
+            notYouLabel.topAnchor.constraint(equalTo: differentAccountView.topAnchor, constant: 2),
+            notYouLabel.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 2),
+            notYouLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
+            loginWithDifferentAccountButton.leadingAnchor.constraint(equalTo: notYouLabel.trailingAnchor, constant: 5),
+            loginWithDifferentAccountButton.topAnchor.constraint(equalTo: differentAccountView.topAnchor, constant: 2),
+            loginWithDifferentAccountButton.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 2),
+            loginWithDifferentAccountButton.centerYAnchor.constraint(equalTo: notYouLabel.centerYAnchor),
+            loginWithDifferentAccountButton.trailingAnchor.constraint(lessThanOrEqualTo: differentAccountView.trailingAnchor, constant: -10),
+            continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 10),
             continueWithoutLoginButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
             continueWithoutLoginButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             continueWithoutLoginButton.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -82,12 +88,8 @@ class LinksView: UIView {
         return view
     }()
     
-    private lazy var differentAccountStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.alignment = .center
-        view.distribution = .fill
-        view.spacing = 10
+    private lazy var differentAccountView: UIView = {
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
