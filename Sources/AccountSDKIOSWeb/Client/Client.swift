@@ -211,7 +211,7 @@ public class Client: CustomStringConvertible {
                     }
                 }
             case .failure(let error):
-                SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
+                SchibstedAccountLogger.instance.error("Failed to refresh user tokens with error \(error.localizedDescription)")
                 completion(.failure(.refreshRequestFailed(error: error)))
             }
         }
