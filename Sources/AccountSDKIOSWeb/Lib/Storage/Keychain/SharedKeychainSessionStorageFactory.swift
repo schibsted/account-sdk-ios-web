@@ -15,8 +15,8 @@ struct SharedKeychainSessionStorageFactory {
         
         let keychain = self.keychain ?? KeychainSessionStorage(service: service, accessGroup: accessGroup)
         
-        // return regular keychain when appIdentifierPrefix is not provided
         guard let appIdentifierPrefix = appIdentifierPrefix else {
+            SchibstedAccountLogger.instance.debug("Return regular keychain when appIdentifierPrefix is not provided")
             return keychain
         }
         
@@ -29,12 +29,16 @@ struct SharedKeychainSessionStorageFactory {
             let _ = try sharedKeychain.checkEntitlements()
         } catch (let error) {
             guard let keychainError = error as? KeychainStorageError, keychainError != .entitlementMissing else {
-                // return regular keychain for missing entitlements
+                SchibstedAccountLogger.instance.debug("Return regular keychain when entitlements are missing")
                 return keychain
             }
         }
         
-        guard sharedKeychain.getLatestSession() == nil else {
+        let clientSessionInSharedKeychain = sharedKeychain.getAll()
+            .filter { $0.clientId == clientId }
+        
+        guard clientSessionInSharedKeychain.isEmpty else {
+            SchibstedAccountLogger.instance.debug("Session for clientId already exists in shared keychain. Return shared keychain")
             return sharedKeychain
         }
         
@@ -44,6 +48,7 @@ struct SharedKeychainSessionStorageFactory {
                 sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup) { result in
                     switch (result) {
                     case .success():
+                        SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")
                         break
                     case .failure(let error):
                         SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
