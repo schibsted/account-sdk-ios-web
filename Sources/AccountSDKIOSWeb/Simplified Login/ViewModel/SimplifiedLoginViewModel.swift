@@ -9,7 +9,7 @@ protocol SimplifiedLoginUserActionable {
     var onClickedContinueWithoutLogin: (() -> Void)? { get set}
     var onClickedSwitchAccount: (() -> Void)? { get set}
     var onClickedPrivacyPolicy: (() -> Void)?  { get set }
-    var onClickedContinueAsUser: (() -> Void)? { get set} // TODO:
+    var onClickedContinueAsUser: (() -> Void)? { get set}
     func send(action: SimplifiedLoginViewController.UserAction)
 }
 
