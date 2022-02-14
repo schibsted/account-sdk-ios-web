@@ -26,6 +26,8 @@ public enum LoginError: Error, Equatable {
     case missingExpectedMFA
     /// The login flow was cancelled by the user
     case canceled
+    /// Previous session in progress
+    case previousSessionInProgress
     /// An unexpected error occurred
     case unexpectedError(message: String)
 }

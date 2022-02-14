@@ -222,6 +222,24 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
         XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
     }
+    
+    func testDidNotStartNewSessionBeforeFinishingOldOne() {
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
+        let firstSession = client.getLoginSession { result in
+            if result == .failure(.previousSessionInProgress) {
+                XCTFail("Failed to create first session. This should never happened")
+            }
+        }
+        let secondSession = client.getLoginSession { result in
+            XCTAssertEqual(result, .failure(LoginError.previousSessionInProgress))
+        }
+        let thirdSession = client.getLoginSession { result in
+            XCTAssertEqual(result, .failure(LoginError.previousSessionInProgress))
+        }
+        XCTAssertNotNil(firstSession)
+        XCTAssertNil(secondSession)
+        XCTAssertNil(thirdSession)
+    }
 }
 
 fileprivate extension Client {
