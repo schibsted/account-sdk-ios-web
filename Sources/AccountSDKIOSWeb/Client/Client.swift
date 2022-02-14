@@ -153,7 +153,7 @@ public class Client: CustomStringConvertible {
                                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
         
         if isSessionInProgress {
-            SchibstedAccountLogger.instance.error("Previous login flow still in progress")
+            SchibstedAccountLogger.instance.info("Previous login flow still in progress")
             completion(.failure(.previousSessionInProgress))
             return nil
         }
