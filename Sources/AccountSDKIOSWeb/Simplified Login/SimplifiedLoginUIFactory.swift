@@ -46,8 +46,12 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion)
-                        session.start()
+                        if let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion) {
+                                session.start()
+                        } else {
+                            SchibstedAccountLogger.instance.error("Could not start authentication session")
+                            completion(.failure(LoginError.previousSessionInProgress))
+                        }
                     }
                 case .failure(let error):
                     SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
@@ -105,11 +109,15 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion)
-                        viewModel.asWebAuthenticationSession = session
-                        session.presentationContextProvider = contextProvider
-                        session.prefersEphemeralWebBrowserSession = true
-                        session.start()
+                        if let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion) {
+                            viewModel.asWebAuthenticationSession = session
+                            session.presentationContextProvider = contextProvider
+                            session.prefersEphemeralWebBrowserSession = true
+                            session.start()
+                        } else {
+                            SchibstedAccountLogger.instance.error("Could not start authentication session")
+                            completion(.failure(LoginError.previousSessionInProgress))
+                        }
                     }
                 case .failure(let error):
                     SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")

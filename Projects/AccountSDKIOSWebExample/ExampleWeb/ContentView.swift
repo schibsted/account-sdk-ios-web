@@ -110,7 +110,7 @@ struct ContentView: View {
     
     func trigger2faOtpFlow() {
         let context = ASWebAuthSessionContextProvider()
-        asWebAuthSession = client.getLoginSession(contextProvider: context,
+        let session = client.getLoginSession(contextProvider: context,
                                                   withMFA: .otp,
                                                   withSSO: true,
                                                   completion: { result in
@@ -123,13 +123,16 @@ struct ContentView: View {
             }
         })
         
-        // This will trigger the web context asking the user to login
-        asWebAuthSession?.start()
+        if let session = session {
+            // This will trigger the web context asking the user to login
+            asWebAuthSession = session
+            asWebAuthSession?.start()
+        }
     }
     
     func trigger2faSmsFlow() {
         let context = ASWebAuthSessionContextProvider()
-        asWebAuthSession = client.getLoginSession(contextProvider: context,
+        let session = client.getLoginSession(contextProvider: context,
                                                   withMFA: .sms,
                                                   withSSO: true) { result in
             switch result {
@@ -140,23 +143,32 @@ struct ContentView: View {
                 print(error)
             }
         }
-        asWebAuthSession?.start()
+        if let session = session {
+            asWebAuthSession = session
+            asWebAuthSession?.start()
+        }
     }
     
     func loginFromSharedKeychain(){
         let context = ASWebAuthSessionContextProvider()
-        asWebAuthSession = sharedKeychainClient.getLoginSession(contextProvider: context,
+        let session = sharedKeychainClient.getLoginSession(contextProvider: context,
                                                   withSSO: true,
                                                   completion: handleResult)
-        asWebAuthSession?.start()
+        if let session = session {
+            asWebAuthSession = session
+            asWebAuthSession?.start()
+        }
     }
     
     func login() {
         let context = ASWebAuthSessionContextProvider()
-        asWebAuthSession = client.getLoginSession(contextProvider: context,
+        let session = client.getLoginSession(contextProvider: context,
                                                   withSSO: true,
                                                   completion: handleResult)
-        asWebAuthSession?.start()
+        if let session = session {
+            asWebAuthSession = session
+            asWebAuthSession?.start()
+        }
     }
     
     func handleOnOpenUrl(url: URL) {
@@ -219,7 +231,6 @@ struct ContentView: View {
             self.user = user
         case .failure(let error):
             print(error)
-            
         }
     }
 }

@@ -48,6 +48,7 @@ public class Client: CustomStringConvertible {
     private let tokenHandler: TokenHandler
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
+    private var isSessionInProgress: Bool = false
 
     /**
      Initializes the Client with given configuration
@@ -149,10 +150,18 @@ public class Client: CustomStringConvertible {
                                         loginHint: String? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
-                                        completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                        completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
+        
+        if isSessionInProgress {
+            SchibstedAccountLogger.instance.info("Previous login flow still in progress")
+            completion(.failure(.previousSessionInProgress))
+            return nil
+        }
+        isSessionInProgress = true
         
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
+        
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, assertion: assertion, extraScopeValues: extraScopeValues)
         
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
@@ -168,6 +177,7 @@ public class Client: CustomStringConvertible {
                     SchibstedAccountLogger.instance.error("Login flow error: \(String(describing: error))")
                     completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(String(describing: error))")))
                 }
+                self.isSessionInProgress = false
                 return
             }
             self.handleAuthenticationResponse(url: url, completion: completion)
@@ -296,7 +306,7 @@ extension Client {
     public func getLoginSession(withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
-                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
         return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
     }
     
@@ -319,10 +329,11 @@ extension Client {
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true,
-                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession {
+                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
+        
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
-        session.presentationContextProvider = contextProvider
-        session.prefersEphemeralWebBrowserSession = !withSSO
+        session?.presentationContextProvider = contextProvider
+        session?.prefersEphemeralWebBrowserSession = !withSSO
         
         return session
     }
@@ -341,10 +352,12 @@ extension Client {
         guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
-                completion(.failure(.unsolicitedResponse))
-                return
+               isSessionInProgress = false
+               completion(.failure(.unsolicitedResponse))
+               return
         }
         stateStorage.removeValue(forKey: type(of: self).authStateKey)
+        isSessionInProgress = false
 
         if let error = url.valueOf(queryParameter: "error") {
             completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
