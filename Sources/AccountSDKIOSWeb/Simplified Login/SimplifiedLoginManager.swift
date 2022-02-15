@@ -27,7 +27,7 @@ public final class SimplifiedLoginManager {
         return _contextProvider as! ASWebAuthSessionContextProvider
     }
     
-    @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
+    @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     convenience public init(client: Client,
                             withMFA: MFAType? = nil,
                             loginHint: String? = nil,
@@ -38,7 +38,7 @@ public final class SimplifiedLoginManager {
         self.init(client: client, withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, fetcher: fetcher, completion: completion)
     }
     
-    @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
+    @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     init(client: Client,
          withMFA: MFAType? = nil,
          loginHint: String? = nil,
