@@ -4,7 +4,7 @@ import SafariServices
 
 struct SimplifiedLoginUIFactory {
 
-    @available(iOS, obsoleted: 13, message: "This function should not be used in iOS version 13 and above")
+    @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     static func buildViewController(client: Client,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
