@@ -28,20 +28,25 @@ class HTTPClientWithURLSession: HTTPClient {
     }
 
     private func execute<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-        SchibstedAccountLogger.instance.trace("Requesting \(request.url) headers: \(request.allHTTPHeaderFields?.keys ?? [])")
-        SchibstedAccountLogger.instance.debug("headers and values: \(request.allHTTPHeaderFields ?? [:])")
+        let requestUrlString = request.url?.absoluteString ?? "<nil>"
+        let requestHeaders = request.allHTTPHeaderFields ?? [:]
+        SchibstedAccountLogger.instance.trace("Requesting \(requestUrlString) headers: \(requestHeaders)")
+
         let task = session.dataTask(with: request) { (data, response, error) in
-            let httpCode = (response as? HTTPURLResponse)?.statusCode
-            SchibstedAccountLogger.instance.debug("Response for: \(request.url), code \(httpCode ?? -1)")
+            let httpResponse = response as? HTTPURLResponse
+            let httpCode = httpResponse?.statusCode ?? -1
+            let responseHeaders = httpResponse?.allHeaderFields ?? [:]
+            SchibstedAccountLogger.instance.debug("Response for: \(requestUrlString), code \(httpCode), headers: \(responseHeaders)")
+
             if let requestError = error {
-                SchibstedAccountLogger.instance.error("Request \(request.url) failed, error: \(error)")
+                SchibstedAccountLogger.instance.error("Request \(requestUrlString) failed, error: \(error.debugDescription)")
                 completion(.failure(.unexpectedError(underlying: requestError)))
                 return
             }
             
             if let httpResponse = response as? HTTPURLResponse, httpResponse.isError {
                 let errorBody = data.map { String(decoding: $0, as: UTF8.self) }
-                SchibstedAccountLogger.instance.error("Request \(request.url) failed, error body \(errorBody)")
+                SchibstedAccountLogger.instance.error("Request \(requestUrlString) failed, error body \(errorBody ?? "")")
                 completion(.failure(.errorResponse(code: httpResponse.statusCode, body: errorBody)))
                 return
             }
