@@ -70,6 +70,7 @@ public class User: UserProtocol {
      Will remove stored session, including all user tokens.
      */
     public func logout() {
+        SchibstedAccountLogger.instance.info("User logout")
         tokens = nil
         client.destroySession()
         self.delegates.invokeDelegates({ $0.userDidLogout() })

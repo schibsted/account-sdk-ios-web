@@ -217,11 +217,12 @@ public class Client: CustomStringConvertible {
                     case .success():
                         completion(.success(userTokens))
                     case .failure(let error):
+                        SchibstedAccountLogger.instance.error("Failed to store user session \(error)")
                         completion(.failure(.unexpectedError(error: error)))
                     }
                 }
             case .failure(let error):
-                SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
+                SchibstedAccountLogger.instance.error("Failed to refresh user tokens \(error)")
                 completion(.failure(.refreshRequestFailed(error: error)))
             }
         }
