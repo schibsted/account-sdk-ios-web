@@ -30,13 +30,13 @@ class HTTPClientWithURLSession: HTTPClient {
     private func execute<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
         let requestUrlString = request.url?.absoluteString ?? "<nil>"
         let requestHeaders = request.allHTTPHeaderFields ?? [:]
-        SchibstedAccountLogger.instance.trace("Requesting \(requestUrlString) headers: \(requestHeaders)")
+        SchibstedAccountLogger.instance.info("Requesting \(requestUrlString) headers: \(requestHeaders)")
 
         let task = session.dataTask(with: request) { (data, response, error) in
             let httpResponse = response as? HTTPURLResponse
             let httpCode = httpResponse?.statusCode ?? -1
             let responseHeaders = httpResponse?.allHeaderFields ?? [:]
-            SchibstedAccountLogger.instance.debug("Response for: \(requestUrlString), code \(httpCode), headers: \(responseHeaders)")
+            SchibstedAccountLogger.instance.info("Response for: \(requestUrlString), code \(httpCode), headers: \(responseHeaders)")
 
             if let requestError = error {
                 SchibstedAccountLogger.instance.error("Request \(requestUrlString) failed, error: \(error.debugDescription)")
