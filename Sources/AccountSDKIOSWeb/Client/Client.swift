@@ -294,14 +294,14 @@ extension Client {
     }
  
     /**
-     Get web authentication session.
+     Gets an authentication web session. Only one session can be started at the time.
      
      - parameter withMFA: Optional MFA verification to prompt the user with.
      - parameter loginHint: Optional login hint string.
      - parameter extraScopeValues: Any additional scope values to request.
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter completion: The callback that receives the login result.
-     - returns Web authentication session to start for the login flows.
+     - returns Web authentication session to start the login flow, or `nil` if the session has already been started.
      */
     public func getLoginSession(withMFA: MFAType? = nil,
                                 loginHint: String? = nil,
@@ -311,7 +311,7 @@ extension Client {
     }
     
     /**
-     Get web authentication session.
+     Gets an authentication web session. Only one session can be started at the time.
      
      This method must be used for devices with iOS 13 and up.
      - parameter contextProvider: Delegate to provide presentation context for the `ASWebAuthenticationSession`.
@@ -321,7 +321,7 @@ extension Client {
         By default `openid` and `offline_access` will always be included as scope values.
      - parameter withSSO: whether cookies should be shared to enable single-sign on (defaults to true).
      - parameter completion: callback that receives the login result.
-     - returns Web authentication session to start for the login flows.
+     - returns Web authentication session to start the login flow, or `nil` if the session has already been started.
      */
     @available(iOS 13.0, *)
     public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
