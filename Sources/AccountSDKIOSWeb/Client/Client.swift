@@ -187,12 +187,13 @@ public class Client: CustomStringConvertible {
 
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
-            SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
+            SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refresh")
             completion(.failure(.noRefreshToken))
             return
         }
 
         // try to exchange refresh token for new token
+        SchibstedAccountLogger.instance.info("Trying to exchange refresh token for the new tokens")
         tokenHandler.makeTokenRequest(refreshToken: existingRefreshToken) { tokenRefreshResult in
             switch tokenRefreshResult {
             case .success(let tokenResponse):
@@ -208,15 +209,19 @@ public class Client: CustomStringConvertible {
                                             idToken: tokens.idToken,
                                             idTokenClaims: tokens.idTokenClaims)
                 user.tokens = userTokens
+                SchibstedAccountLogger.instance.info("Tokens updated in User instance")
                 
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
+                SchibstedAccountLogger.instance.info("Going to save user tokens")
                 self.sessionStorage.store(userSession, accessGroup: nil) { result in
                     switch result {
                     case .success():
+                        SchibstedAccountLogger.instance.info("Tokens were successfully stored in keychain")
                         completion(.success(userTokens))
                     case .failure(let error):
+                        SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
                         completion(.failure(.unexpectedError(error: error)))
                     }
                 }

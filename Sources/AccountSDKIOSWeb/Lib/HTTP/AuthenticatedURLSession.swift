@@ -51,6 +51,7 @@ public final class AuthenticatedURLSession {
                 return
             }
 
+            SchibstedAccountLogger.instance.info("The server returned 401 status code. Going to refresh user tokens")
             user.refreshTokens { result in
                 switch result {
                 case .success(let tokens):

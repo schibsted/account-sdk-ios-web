@@ -180,6 +180,7 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
+                    SchibstedAccountLogger.instance.info("The server returned 401 status code. Going to refresh user tokens")
                     self.refreshHandler.refreshWithRetry(user: self, requestResult: requestResult, request: request, completion: completion)
                 } else {
                     completion(.failure(.errorResponse(code: code, body: body)))
@@ -228,7 +229,10 @@ extension User {
             self.saveRequestOnRefreshFailure(initialRequestResult: requestResult, completion: completion)
             
             stateLock.lock()
-            defer { stateLock.unlock() }
+            SchibstedAccountLogger.instance.info("State has been locked for refreshing token")
+            defer { stateLock.unlock()
+                SchibstedAccountLogger.instance.info("State has been unlocked")
+            }
             switch self.isTokenRefreshing {
             case .notRefreshing:
                 self.isTokenRefreshing = .isRefreshing // Update state
@@ -242,7 +246,10 @@ extension User {
             self.saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
             
             stateLock.lock()
-            defer { stateLock.unlock() }
+            SchibstedAccountLogger.instance.info("State has been locked for refreshing token")
+            defer { stateLock.unlock()
+                SchibstedAccountLogger.instance.info("State has been unlocked")
+            }
             switch self.isTokenRefreshing {
             case .notRefreshing:
                 self.isTokenRefreshing = .isRefreshing // Update state

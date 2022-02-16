@@ -124,6 +124,7 @@ class OldSDKClient {
                 // 401 might indicate expired access token
                 if code == 401 {
                     let refreshToken = self.legacyRefreshToken
+                    SchibstedAccountLogger.instance.info("The server returned 401 status code. Going to refresh user tokens")
                     self.oldSDKRefresh(refreshToken: refreshToken) { result in
                         switch result {
                         case .success(let newToken): // retry the request with fresh tokens
