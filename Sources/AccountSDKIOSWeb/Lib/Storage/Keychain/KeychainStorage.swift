@@ -23,10 +23,12 @@ class KeychainStorage: KeychainStoring {
         if try getValue(forAccount: forAccount) == nil {
             var query = itemQuery(forAccount: forAccount)
             query[kSecValueData as String] = value
+            query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
             status = SecItemAdd(query as CFDictionary, nil)
         } else {
             let searchQuery = itemQuery(forAccount: forAccount, returnData: false)
             var updateQuery: [String: Any] = [kSecValueData as String: value]
+            updateQuery[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
             if let accessGroup = accessGroup {
                 updateQuery[kSecAttrAccessGroup as String] = accessGroup
             }
@@ -34,6 +36,7 @@ class KeychainStorage: KeychainStoring {
         }
         
         guard status == errSecSuccess else {
+            SchibstedAccountLogger.instance.error("KeychainStorage error: \(status)")
             throw KeychainStorageError.storeError
         }
     }
@@ -83,7 +86,7 @@ class KeychainStorage: KeychainStoring {
         }
         
         guard status == errSecSuccess else {
-            SchibstedAccountLogger.instance.error("KeychainStorage error: \(KeychainStorageError.operationError.localizedDescription)")
+            SchibstedAccountLogger.instance.error("KeychainStorage error: \(status)")
             throw KeychainStorageError.operationError
         }
 
@@ -93,6 +96,7 @@ class KeychainStorage: KeychainStoring {
     func removeValue(forAccount: String?) throws {
         let result = SecItemDelete(itemQuery(forAccount: forAccount, returnData: false) as CFDictionary)
         guard result == errSecSuccess || result == errSecItemNotFound else {
+            SchibstedAccountLogger.instance.error("KeychainStorage error: \(result)")
             throw KeychainStorageError.deleteError
         }
     }
