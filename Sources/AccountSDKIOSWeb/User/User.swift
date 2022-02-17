@@ -240,6 +240,7 @@ extension User {
         }
         
         func refreshWithoutRetry(user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+            SchibstedAccountLogger.instance.info("Refreshing tokens for \(String(describing: user.userId))")
             self.saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
             
             stateLock.lock()

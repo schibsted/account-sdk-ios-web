@@ -36,7 +36,8 @@ class HTTPClientWithURLSession: HTTPClient {
             let httpResponse = response as? HTTPURLResponse
             let httpCode = httpResponse?.statusCode ?? -1
             let responseHeaders = httpResponse?.allHeaderFields ?? [:]
-            SchibstedAccountLogger.instance.info("Response for: \(requestUrlString), code \(httpCode), headers: \(responseHeaders)")
+            let jsonBody = data.flatMap { String(data: $0, encoding: .utf8) }
+            SchibstedAccountLogger.instance.info("Response for: \(requestUrlString), code \(httpCode), headers: \(responseHeaders), bodyText: \(jsonBody ?? "<nil>")")
 
             if let requestError = error {
                 SchibstedAccountLogger.instance.error("Request \(requestUrlString) failed, error: \(error.debugDescription)")
@@ -55,7 +56,7 @@ class HTTPClientWithURLSession: HTTPClient {
                 completion(.failure(.noData))
                 return
             }
-            
+
             do {
                 let deserialised = try JSONDecoder().decode(T.self, from: responseBody)
                 completion(.success(deserialised))
