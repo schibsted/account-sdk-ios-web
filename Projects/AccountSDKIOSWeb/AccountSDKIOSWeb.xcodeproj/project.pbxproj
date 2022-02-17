@@ -71,6 +71,7 @@
 		24EB1526267A17CC002D9628 /* HTTPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1525267A17CC002D9628 /* HTTPError.swift */; };
 		24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1557267A2350002D9628 /* IdTokenClaims.swift */; };
 		24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB156E267A2482002D9628 /* IdTokenValidator.swift */; };
+		595EA45F27BE8BA400492390 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595EA45E27BE8BA400492390 /* Synchronized.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
 		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
 		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
@@ -211,6 +212,7 @@
 		24EB1525267A17CC002D9628 /* HTTPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPError.swift; sourceTree = "<group>"; };
 		24EB1557267A2350002D9628 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
 		24EB156E267A2482002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
+		595EA45E27BE8BA400492390 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
 		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
 		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
 		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 		24844037269347C500CE88F2 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				595EA45E27BE8BA400492390 /* Synchronized.swift */,
 				CE3E98952782E6C800B2F403 /* KeyWindow.swift */,
 				24844038269347C500CE88F2 /* MulticastDelegate.swift */,
 			);
@@ -1074,6 +1077,7 @@
 				2489C9B926733A0900AA0A4C /* URLExtensions.swift in Sources */,
 				2412D14F274BB714001F71A5 /* SimplifiedLoginManager.swift in Sources */,
 				24EB14702679D8C8002D9628 /* MFAType.swift in Sources */,
+				595EA45F27BE8BA400492390 /* Synchronized.swift in Sources */,
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
 				2472EA2F275E98C50037433D /* DataModels.swift in Sources */,
 				CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */,
