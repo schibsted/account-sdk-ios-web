@@ -2,7 +2,7 @@
 
 import Foundation
 
-public final class Synchronized<T> {
+final class Synchronized<T> {
     private var _value: T
     private let queue = DispatchQueue(label: "com.schibsted.synchronized.queue", attributes: [.concurrent])
 
