@@ -228,7 +228,7 @@ public class Client: CustomStringConvertible {
                     completion(.success(userSession.userTokens))
                 case .failure(let error):
                     if attempts > 0 {
-                        SchibstedAccountLogger.instance.debug("Failed to store refreshed tokens. Trying again...")
+                        SchibstedAccountLogger.instance.info("Failed to store refreshed tokens. Trying again...")
                         retry(attempts - 1)
                     } else {
                         SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
