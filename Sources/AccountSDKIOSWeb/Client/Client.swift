@@ -220,16 +220,16 @@ public class Client: CustomStringConvertible {
         }
     }
     
-    private func storeSession(userSession: UserSession, retries: Int = 1, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
-        func retry(_ retries: Int) {
+    private func storeSession(userSession: UserSession, attempts: Int = 1, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        func retry(_ attempts: Int) {
             self.sessionStorage.store(userSession, accessGroup: nil) { result in
                 switch result {
                 case .success():
                     completion(.success(userSession.userTokens))
                 case .failure(let error):
-                    if retries > 0 {
+                    if attempts > 0 {
                         SchibstedAccountLogger.instance.debug("Failed to store refreshed tokens. Trying again...")
-                        retry(retries - 1)
+                        retry(attempts - 1)
                     } else {
                         SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
                         completion(.failure(.unexpectedError(error: error)))
@@ -237,7 +237,7 @@ public class Client: CustomStringConvertible {
                 }
             }
         }
-        retry(retries)
+        retry(attempts)
     }
 
     private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: @escaping LoginResultHandler) {
