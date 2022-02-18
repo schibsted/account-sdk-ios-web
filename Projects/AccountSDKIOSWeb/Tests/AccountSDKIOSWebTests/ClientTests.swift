@@ -240,6 +240,122 @@ final class ClientTests: XCTestCase {
         XCTAssertNil(secondSession)
         XCTAssertNil(thirdSession)
     }
+    
+    func testDoNotRetryStoringToKeychainInCaseOfSuccess() {
+        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+        }
+        
+        let mockSessionStorage = MockSessionStorage()
+        
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
+                completion(.success())
+            }
+        }
+        let stateStorage = StateStorage(storage: MockStorage())
+        
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: stateStorage, httpClient: mockHTTPClient)
+        
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        
+        client.refreshTokens(for: user) { result in
+            switch result {
+            case .success(let tokens):
+                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                XCTAssertEqual(tokens, expectedTokens)
+            case .failure(let error):
+                XCTFail("Unexprected error \(error.localizedDescription)")
+            }
+        }
+        verify(mockSessionStorage, times(1)).store(any(), accessGroup: any(), completion: any())
+    }
+    
+    func testRetryStoringToKeychainInCaseOfFailure() {
+        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+        }
+        
+        let mockSessionStorage = MockSessionStorage()
+        
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
+                completion(.failure(KeychainStorageError.operationError))
+            }
+        }
+        let stateStorage = StateStorage(storage: MockStorage())
+        
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: stateStorage, httpClient: mockHTTPClient)
+        
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        
+        client.refreshTokens(for: user) { result in
+            switch result {
+            case .success(_):
+                XCTFail("Unexpected success")
+            case .failure(let error):
+                XCTAssertEqual(String(describing: error), "unexpectedError(error: AccountSDKIOSWeb.KeychainStorageError.operationError)")
+            }
+        }
+        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any(), completion: any())
+    }
+    
+    func testSuccessfullSecondAttemptToStoreSessionTokens() {
+        let idToken = createIdToken(claims: Fixtures.idTokenClaims)
+        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let mockHTTPClient = MockHTTPClient()
+        var isFirst = true
+
+        stub(mockHTTPClient) { mock in
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success(tokenResponse))
+                }
+        }
+        
+        let mockSessionStorage = MockSessionStorage()
+        
+        stub(mockSessionStorage) { mock in
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
+                if isFirst {
+                    isFirst = false
+                    completion(.failure(KeychainStorageError.operationError))
+                } else {
+                    completion(.success())
+                }
+            }
+        }
+        let stateStorage = StateStorage(storage: MockStorage())
+        
+        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: stateStorage, httpClient: mockHTTPClient)
+        
+        let user = User(client: client, tokens: Fixtures.userTokens)
+        
+        client.refreshTokens(for: user) { result in
+            switch result {
+            case .success(let tokens):
+                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                XCTAssertEqual(tokens, expectedTokens)
+            case .failure(let error):
+                XCTFail("Unexprected error \(error.localizedDescription)")
+            }
+        }
+        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any(), completion: any())
+    }
 }
 
 fileprivate extension Client {
