@@ -96,7 +96,7 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
         verify(keychainSessionStorageMock).remove(forClientId: "client_id")
     }
     
-    func testRollbackInCaseOfFailureInSavingToSharedKeychain() {
+    func testReturnsKeychainAndRollbackSaveInCaseOfFailureFromSharedKeychain() {
         let userSession = UserSession(clientId: "client_id", userTokens: Fixtures.userTokens, updatedAt: Date())
         let sharedKeychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: sharedAccessGroup)
         stub(sharedKeychainSessionStorageMock) { mock in
@@ -126,7 +126,7 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
 
         let keychain = SharedKeychainSessionStorageFactory(keychain: keychainSessionStorageMock, sharedKeychain: sharedKeychainSessionStorageMock).makeKeychain(clientId: "client_id", service: "service_name", accessGroup: accessGroup, appIdentifierPrefix: "AZWSDFGHIJ")
 
-        XCTAssertIdentical(keychain, sharedKeychainSessionStorageMock)
+        XCTAssertIdentical(keychain, keychainSessionStorageMock)
         verify(sharedKeychainSessionStorageMock).checkEntitlements()
         verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
         verify(keychainSessionStorageMock).get(forClientId: "client_id", completion: anyClosure())

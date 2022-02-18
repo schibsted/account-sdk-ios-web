@@ -47,6 +47,7 @@ struct SharedKeychainSessionStorageFactory {
         var didMigrateKeychainToShared = false
         keychain.get(forClientId: clientId) { userSession in
             guard let userSession = userSession else {
+                didMigrateKeychainToShared = true
                 dispatchSemaphore.signal()
                 return
             }
