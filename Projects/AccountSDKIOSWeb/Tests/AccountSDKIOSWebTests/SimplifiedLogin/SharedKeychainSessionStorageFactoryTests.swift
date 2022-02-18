@@ -84,14 +84,54 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
                 .then { _, completion in
                     completion(userSession)
                 }
+            when(mock.remove(forClientId: "client_id")).thenDoNothing()
         }
-        
+
         let keychain = SharedKeychainSessionStorageFactory(keychain: keychainSessionStorageMock, sharedKeychain: sharedKeychainSessionStorageMock).makeKeychain(clientId: "client_id", service: "service_name", accessGroup: accessGroup, appIdentifierPrefix: "AZWSDFGHIJ")
-        
+
         XCTAssertIdentical(keychain, sharedKeychainSessionStorageMock)
         verify(sharedKeychainSessionStorageMock).checkEntitlements()
         verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
         verify(keychainSessionStorageMock).get(forClientId: "client_id", completion: anyClosure())
+        verify(keychainSessionStorageMock).remove(forClientId: "client_id")
+    }
+    
+    func testReturnsKeychainAndRollbackSaveInCaseOfFailureFromSharedKeychain() {
+        let userSession = UserSession(clientId: "client_id", userTokens: Fixtures.userTokens, updatedAt: Date())
+        let sharedKeychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: sharedAccessGroup)
+        stub(sharedKeychainSessionStorageMock) { mock in
+            when(mock.checkEntitlements()).then { _ in
+                return Data()
+            }
+            when(mock.store(any(), accessGroup: sharedAccessGroup, completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.failure(KeychainStorageError.operationError))
+                }
+            when(mock.getAll()).then { _ in
+                return []
+            }
+        }
+        let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
+        stub(keychainSessionStorageMock) { mock in
+            when(mock.get(forClientId: "client_id", completion: anyClosure()))
+                .then { _, completion in
+                    completion(userSession)
+                }
+            when(mock.remove(forClientId: "client_id")).thenDoNothing()
+            when(mock.store(any(), accessGroup: any(), completion: anyClosure()))
+                .then { _, _, completion in
+                    completion(.success())
+                }
+        }
+
+        let keychain = SharedKeychainSessionStorageFactory(keychain: keychainSessionStorageMock, sharedKeychain: sharedKeychainSessionStorageMock).makeKeychain(clientId: "client_id", service: "service_name", accessGroup: accessGroup, appIdentifierPrefix: "AZWSDFGHIJ")
+
+        XCTAssertIdentical(keychain, keychainSessionStorageMock)
+        verify(sharedKeychainSessionStorageMock).checkEntitlements()
+        verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
+        verify(keychainSessionStorageMock).get(forClientId: "client_id", completion: anyClosure())
+        verify(keychainSessionStorageMock).remove(forClientId: "client_id")
+        verify(keychainSessionStorageMock).store(any(), accessGroup: any(), completion: anyClosure())
     }
     
 }
