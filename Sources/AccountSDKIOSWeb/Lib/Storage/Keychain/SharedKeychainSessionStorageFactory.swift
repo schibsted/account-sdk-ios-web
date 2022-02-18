@@ -45,12 +45,14 @@ struct SharedKeychainSessionStorageFactory {
         // update accessGroup for clientId entry
         keychain.get(forClientId: clientId) { userSession in
             if let userSession = userSession {
+                keychain.remove(forClientId: clientId)
                 sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup) { result in
                     switch (result) {
                     case .success():
                         SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")
                         break
                     case .failure(let error):
+                        keychain.store(userSession, accessGroup: nil) { _ in } // roll back
                         SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
                         break
                     }
