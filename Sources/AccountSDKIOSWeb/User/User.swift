@@ -204,61 +204,71 @@ extension User: Equatable {
 extension User {
     
     /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
-    class TokenRefreshRequestHandler {
-        
-        var isTokenRefreshing: State = .notRefreshing
-        var stateLock = NSLock()
-        
-        enum State {
+    final class TokenRefreshRequestHandler {
+
+        private enum State {
             case isRefreshing
             case notRefreshing
         }
-        
-        let queue = DispatchQueue(label: "NetworkRefreshRequestHandler", attributes: .concurrent)
-        private var requestsOnRefreshFailure: [(Result<UserTokens, RefreshTokenError>) -> Void] = []
-        private var requestsOnRefreshSuccess: [DispatchWorkItem] = []
-        private var completionsOnRefreshWithoutRetry: [(Result<UserTokens, RefreshTokenError>) -> Void] = []
-        
+
+        private let isTokenRefreshing: Synchronized<State> = .init(.notRefreshing)
+        private let requestsOnRefreshFailure: Synchronized<[(Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
+        private let requestsOnRefreshSuccess: Synchronized<[DispatchWorkItem]> = .init([])
+        private let completionsOnRefreshWithoutRetry: Synchronized<[(Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
+        private let tokenRefresher: UserTokensRefreshing
+        private let requestMaker: UserRequestMaking
+
+        init(
+            tokenRefresher: UserTokensRefreshing = DefaultUserTokensRefresher(),
+            requestMaker: UserRequestMaking = DefaultUserRequestMaker()
+        ) {
+            self.tokenRefresher = tokenRefresher
+            self.requestMaker = requestMaker
+        }
+
         // MARK: Refresh flows
         
-        func refreshWithRetry<T:Decodable>(user: User, requestResult: Result<T, HTTPError>, request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-            
+        func refreshWithRetry<T: Decodable>(
+            user: User,
+            requestResult: Result<T, HTTPError>,
+            request: URLRequest,
+            completion: @escaping HTTPResultHandler<T>
+        ) {
             // Save work to be executed on refresh success and failure
-            self.saveRequestOnRefreshSuccess { user.makeRequest(request: request, completion: completion)}
-            self.saveRequestOnRefreshFailure(initialRequestResult: requestResult, completion: completion)
-            
-            stateLock.lock()
-            defer { stateLock.unlock() }
-            switch self.isTokenRefreshing {
+            let requestMaker = self.requestMaker
+            saveRequestOnRefreshSuccess {
+                requestMaker.makeRequest(user: user, request: request, completion: completion)
+            }
+            saveRequestOnRefreshFailure(initialRequestResult: requestResult, completion: completion)
+
+            switch isTokenRefreshing.value {
             case .notRefreshing:
-                self.isTokenRefreshing = .isRefreshing // Update state
-                self.refreshAndExecute(user: user)
+                isTokenRefreshing.modify { _ in .isRefreshing }
+                refreshAndExecute(user: user)
             case .isRefreshing:
-                break;
+                break
             }
         }
         
         func refreshWithoutRetry(user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
-            self.saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
-            
-            stateLock.lock()
-            defer { stateLock.unlock() }
-            switch self.isTokenRefreshing {
+            saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
+
+            switch isTokenRefreshing.value {
             case .notRefreshing:
-                self.isTokenRefreshing = .isRefreshing // Update state
-                self.refreshAndExecute(user: user)
+                isTokenRefreshing.modify { _ in .isRefreshing }
+                refreshAndExecute(user: user)
             case .isRefreshing:
                 break
             }
         }
         
         private func refreshAndExecute(user: User) {
-            user.client.refreshTokens(for: user) { result in
-                self.isTokenRefreshing = .notRefreshing // Update state
+            tokenRefresher.refreshTokens(for: user) { result in
+                self.isTokenRefreshing.modify { _ in .notRefreshing }
                 self.executeAfterRefresh(with: result)
                 
                 switch result {
-                case .success(_):
+                case .success:
                     // On successfull refresh. Execute all waiting requests.
                     self.executeRequestOnRefreshSuccess()
                 case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
@@ -278,12 +288,23 @@ extension User {
         // MARK: Read and write request lists
         
         private func saveRefreshWithoutRetryCompletion(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
-            queue.sync(flags: .barrier) { self.completionsOnRefreshWithoutRetry.append(completion)}
+            completionsOnRefreshWithoutRetry.modify { currentValue in
+                var newValue = currentValue
+                newValue.append(completion)
+                return newValue
+            }
         }
         
         private func saveRequestOnRefreshSuccess(_ block: @escaping () -> Void) {
-            queue.sync(flags: .barrier) {
-                self.requestsOnRefreshSuccess.append( DispatchWorkItem { block() })
+            requestsOnRefreshSuccess.modify { currentValue in
+                var newValue = currentValue
+                let item = DispatchWorkItem {
+                    DispatchQueue.main.async {
+                        block()
+                    }
+                }
+                newValue.append(item)
+                return newValue
             }
         }
         
@@ -303,32 +324,54 @@ extension User {
                     completion(initialRequestResult)
                 }
             }
-            
-            queue.sync(flags: .barrier) { self.requestsOnRefreshFailure.append(failure) }
+
+            requestsOnRefreshFailure.modify { currentValue in
+                var newValue = currentValue
+                newValue.append(failure)
+                return newValue
+            }
         }
         
         private func removeAll() {
-            requestsOnRefreshSuccess.removeAll()
-            requestsOnRefreshFailure.removeAll()
+            requestsOnRefreshSuccess.modify { _ in [] }
+            requestsOnRefreshFailure.modify { _ in [] }
         }
         
         // MARK: Execute requests and completions
         
         private func executeRequestOnRefreshSuccess() {
-            requestsOnRefreshSuccess.forEach({ DispatchQueue.global().async(execute: $0) }) // Execute in FIFO order.
-            self.removeAll()
+            requestsOnRefreshSuccess.value.forEach({ DispatchQueue.global().async(execute: $0) }) // Execute in FIFO order.
+            removeAll()
         }
         
         private func executeOnRefreshFailure(with result: Result<UserTokens, RefreshTokenError>) {
-            requestsOnRefreshFailure.forEach { $0(result) }
-            self.removeAll()
+            requestsOnRefreshFailure.value.forEach { $0(result) }
+            removeAll()
         }
         
         private func executeAfterRefresh(with result: Result<UserTokens, RefreshTokenError>)  {
-            self.completionsOnRefreshWithoutRetry.forEach{ $0(result) }
-            self.completionsOnRefreshWithoutRetry.removeAll()
+            completionsOnRefreshWithoutRetry.value.forEach { $0(result) }
+            completionsOnRefreshWithoutRetry.modify { _ in [] }
         }
-        
     }
+}
 
+protocol UserTokensRefreshing: AnyObject {
+    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void)
+}
+
+final class DefaultUserTokensRefresher: UserTokensRefreshing {
+    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        user.client.refreshTokens(for: user, completion: completion)
+    }
+}
+
+protocol UserRequestMaking: AnyObject {
+    func makeRequest<T: Decodable>(user: User, request: URLRequest, completion: @escaping HTTPResultHandler<T>)
+}
+
+final class DefaultUserRequestMaker: UserRequestMaking {
+    func makeRequest<T>(user: User, request: URLRequest, completion: @escaping HTTPResultHandler<T>) where T : Decodable {
+        user.makeRequest(request: request, completion: completion)
+    }
 }
