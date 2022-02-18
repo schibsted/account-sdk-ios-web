@@ -212,19 +212,32 @@ public class Client: CustomStringConvertible {
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
-                self.sessionStorage.store(userSession, accessGroup: nil) { result in
-                    switch result {
-                    case .success():
-                        completion(.success(userTokens))
-                    case .failure(let error):
-                        completion(.failure(.unexpectedError(error: error)))
-                    }
-                }
+                self.storeSession(userSession: userSession, completion: completion)
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
                 completion(.failure(.refreshRequestFailed(error: error)))
             }
         }
+    }
+    
+    private func storeSession(userSession: UserSession, attempts: Int = 1, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        func retry(_ attempts: Int) {
+            self.sessionStorage.store(userSession, accessGroup: nil) { result in
+                switch result {
+                case .success():
+                    completion(.success(userSession.userTokens))
+                case .failure(let error):
+                    if attempts > 0 {
+                        SchibstedAccountLogger.instance.info("Failed to store refreshed tokens. Trying again...")
+                        retry(attempts - 1)
+                    } else {
+                        SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
+                        completion(.failure(.unexpectedError(error: error)))
+                    }
+                }
+            }
+        }
+        retry(attempts)
     }
 
     private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: @escaping LoginResultHandler) {
