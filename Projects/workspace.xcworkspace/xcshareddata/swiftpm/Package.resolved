@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "SchibstedTracking",
+        "repositoryURL": "https://github.schibsted.io/spt-dataanalytics/pulse-tracker-ios",
+        "state": {
+          "branch": null,
+          "revision": "f516e73853d618588234d2d4518412c6982a404a",
+          "version": "7.0.9"
+        }
+      },
+      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {

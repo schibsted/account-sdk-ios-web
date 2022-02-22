@@ -88,6 +88,7 @@
 		CE079FD827ABF7F9009CD898 /* UIFont+Bold.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */; };
 		CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */; };
 		CE3E98962782E6C800B2F403 /* KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E98952782E6C800B2F403 /* KeyWindow.swift */; };
+		CE45FDFC27C5095300DBD8FC /* SchibstedTracking in Frameworks */ = {isa = PBXBuildFile; productRef = CE45FDFB27C5095300DBD8FC /* SchibstedTracking */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
@@ -292,6 +293,7 @@
 			files = (
 				A908307B25D287490065D1D9 /* Logging in Frameworks */,
 				A994206E2575594300513EED /* JOSESwift in Frameworks */,
+				CE45FDFC27C5095300DBD8FC /* SchibstedTracking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,6 +862,7 @@
 			packageProductDependencies = (
 				A994206D2575594300513EED /* JOSESwift */,
 				A908307A25D287490065D1D9 /* Logging */,
+				CE45FDFB27C5095300DBD8FC /* SchibstedTracking */,
 			);
 			productName = AccountSDKIOSWeb;
 			productReference = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */;
@@ -937,6 +940,7 @@
 				A994206C2575594300513EED /* XCRemoteSwiftPackageReference "JOSESwift" */,
 				A99420812575597800513EED /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				A908307925D287490065D1D9 /* XCRemoteSwiftPackageReference "swift-log" */,
+				CE45FDFA27C5095300DBD8FC /* XCRemoteSwiftPackageReference "pulse-tracker-ios" */,
 			);
 			productRefGroup = OBJ_172 /* Products */;
 			projectDirPath = "";
@@ -1747,6 +1751,14 @@
 				minimumVersion = 1.4.1;
 			};
 		};
+		CE45FDFA27C5095300DBD8FC /* XCRemoteSwiftPackageReference "pulse-tracker-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.schibsted.io/spt-dataanalytics/pulse-tracker-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1764,6 +1776,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A99420812575597800513EED /* XCRemoteSwiftPackageReference "Cuckoo" */;
 			productName = Cuckoo;
+		};
+		CE45FDFB27C5095300DBD8FC /* SchibstedTracking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE45FDFA27C5095300DBD8FC /* XCRemoteSwiftPackageReference "pulse-tracker-ios" */;
+			productName = SchibstedTracking;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

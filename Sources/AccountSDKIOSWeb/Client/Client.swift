@@ -1,5 +1,6 @@
 import AuthenticationServices
 import Foundation
+import SchibstedTracking
 
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
@@ -43,6 +44,7 @@ public class Client: CustomStringConvertible {
 
     let httpClient: HTTPClient
     let schibstedAccountAPI: SchibstedAccountAPI
+    let tracker: PulseTracker?
 
     private let urlBuilder: URLBuilder
     private let tokenHandler: TokenHandler
@@ -57,18 +59,19 @@ public class Client: CustomStringConvertible {
      - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
      - parameter httpClient: Optional custom HTTPClient
      */
-    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, tracker: PulseTracker? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
         let sessionKeychainStorage = SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
-
+        
         self.init(configuration: configuration,
                   sessionStorage: sessionKeychainStorage,
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
                   jwks: jwks,
-                  tokenHandler: tokenHandler)
+                  tokenHandler: tokenHandler,
+                  tracker: tracker)
     }
     
     /**
@@ -80,7 +83,7 @@ public class Client: CustomStringConvertible {
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
      */
-    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, sessionStorageConfig: SessionStorageConfig, tracker: PulseTracker? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
@@ -100,12 +103,14 @@ public class Client: CustomStringConvertible {
         
         // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
         // TODO: MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
+        let sdkTracker = Self.configurePulseTracker(injectedTracker: tracker)
         let legacyClient = Client(configuration: legacyClientConfiguration,
                                   sessionStorage:  newSessionStorage,
                                   stateStorage: stateStorage,
                                   httpClient: chttpClient,
                                   jwks: jwks,
-                                  tokenHandler: tokenHandler)
+                                  tokenHandler: tokenHandler,
+                                  tracker: sdkTracker) //not sure if it should be here also
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
                                                             to: newSessionStorage,
                                                             legacyClient: legacyClient,
@@ -117,10 +122,11 @@ public class Client: CustomStringConvertible {
                   stateStorage: stateStorage,
                   httpClient: chttpClient,
                   jwks: jwks,
-                  tokenHandler: tokenHandler)
+                  tokenHandler: tokenHandler,
+                  tracker: tracker)
     }
     
-    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler) {
+    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler, tracker: PulseTracker?) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
@@ -128,6 +134,7 @@ public class Client: CustomStringConvertible {
         self.tokenHandler = tokenHandler
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
+        self.tracker = Self.configurePulseTracker(injectedTracker: tracker)
     }
 
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
@@ -283,6 +290,22 @@ public class Client: CustomStringConvertible {
             return nil
         }
         return sessionStorage.getLatestSession()
+    }
+    
+    private static func configurePulseTracker(injectedTracker: PulseTracker?) -> PulseTracker? {
+        guard let injectedTracker = injectedTracker else {
+            return nil
+        }
+        let sdkTracker = PulseTracker(parent: injectedTracker).update { json in
+            var transformed = json
+            var provider = transformed["provider"] as? JSON
+            provider?["component"] = "account.sdk.ios.web" //or AccountSDKiOS?
+            provider?["componentVersion"] = sdkVersion
+            provider?["author"] = "AccountSDK"
+            transformed["provider"] = provider
+            return transformed
+        }
+        return sdkTracker
     }
 }
 
