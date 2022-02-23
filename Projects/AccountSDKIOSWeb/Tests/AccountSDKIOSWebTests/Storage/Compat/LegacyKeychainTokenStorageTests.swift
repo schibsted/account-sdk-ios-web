@@ -139,7 +139,7 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             do {
                 try keychainStorage.set(legacySDKtokenData: data)
             } catch (let error) {
-                XCTAssertEqual(KeychainStorageError.storeError, error as! KeychainStorageError)
+                XCTAssertEqual(KeychainStorageError.storeError(reason: .invalidData), error as! KeychainStorageError)
                 expectation.fulfill()
             }
             self.waitForExpectations(timeout: 0.5, handler: nil)
