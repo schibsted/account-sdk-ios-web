@@ -37,7 +37,7 @@ class KeychainStorage: KeychainStoring {
         
         guard status == errSecSuccess else {
             SchibstedAccountLogger.instance.error("KeychainStorage error: \(status)")
-            throw KeychainStorageError.storeError
+            throw KeychainStorageError.storeError(reason: .keychainError(status: status))
         }
     }
 

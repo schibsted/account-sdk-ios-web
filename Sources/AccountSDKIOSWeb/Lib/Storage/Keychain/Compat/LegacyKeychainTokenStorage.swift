@@ -94,7 +94,7 @@ class LegacyKeychainTokenStorage {
               let idTokenDict = dict["idToken"] as? [String: Any],
               let idToken = idTokenDict["string"] as? String,
               let userId = dict["userID"] as? String else {
-                  throw KeychainStorageError.storeError
+                  throw KeychainStorageError.storeError(reason: .invalidData)
         }
         
         // Build as Legacy Keychain JSON structure

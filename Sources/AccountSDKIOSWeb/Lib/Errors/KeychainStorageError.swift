@@ -1,7 +1,12 @@
 import Foundation
 
-enum KeychainStorageError: Error {
-    case storeError
+enum StoreErrorReason: Equatable {
+    case keychainError(status: OSStatus)
+    case invalidData
+}
+
+enum KeychainStorageError: Error, Equatable {
+    case storeError(reason: StoreErrorReason)
     case operationError
     case deleteError
     case itemEncodingError
@@ -11,8 +16,8 @@ enum KeychainStorageError: Error {
 extension KeychainStorageError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .storeError:
-            return NSLocalizedString("Unable to store the secret", comment: "")
+        case .storeError(let reason):
+            return NSLocalizedString("Unable to store the secret, reason: \(reason)", comment: "")
         case .operationError:
             return NSLocalizedString("Unable to fulfill the keychain query", comment: "")
         case .deleteError:
