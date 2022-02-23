@@ -88,6 +88,7 @@
 		CE079FD827ABF7F9009CD898 /* UIFont+Bold.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */; };
 		CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */; };
 		CE3E98962782E6C800B2F403 /* KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E98952782E6C800B2F403 /* KeyWindow.swift */; };
+		CE45FE0027C6355300DBD8FC /* MFATypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE45FDFF27C6355300DBD8FC /* MFATypeTests.swift */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
@@ -235,6 +236,7 @@
 		CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Bold.swift"; sourceTree = "<group>"; };
 		CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVC.swift"; sourceTree = "<group>"; };
 		CE3E98952782E6C800B2F403 /* KeyWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyWindow.swift; sourceTree = "<group>"; };
+		CE45FDFF27C6355300DBD8FC /* MFATypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFATypeTests.swift; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
@@ -738,6 +740,7 @@
 				CE699DCC2732A26A009EE30D /* Mocks */,
 				2473CB9F2678AED60001B861 /* URLBuilderTests.swift */,
 				CED92B78272C086100572645 /* XCTestCaseWithMockHTTPClient.swift */,
+				CE45FDFF27C6355300DBD8FC /* MFATypeTests.swift */,
 			);
 			name = AccountSDKIOSWebTests;
 			path = Tests/AccountSDKIOSWebTests;
@@ -1148,6 +1151,7 @@
 				CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */,
 				24240CA9278EDF9500544153 /* SimplifiedLoginManagerTests.swift in Sources */,
 				A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */,
+				CE45FE0027C6355300DBD8FC /* MFATypeTests.swift in Sources */,
 				CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */,
 				OBJ_254 /* LegacyKeychainSessionStorageTests.swift in Sources */,
 				2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */,

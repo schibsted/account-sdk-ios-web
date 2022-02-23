@@ -49,6 +49,7 @@ struct ContentView: View {
                     Button(action: resumeUser, label: { Text("Resume user")})
                     Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
                     Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
+                    Button(action: triggerBankIdFlow, label: { Text("Trigger BankId for SE") })
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
@@ -134,6 +135,25 @@ struct ContentView: View {
         let context = ASWebAuthSessionContextProvider()
         let session = client.getLoginSession(contextProvider: context,
                                                   withMFA: .sms,
+                                                  withSSO: true) { result in
+            switch result {
+            case .success(let user):
+                print("Success - logged in as \(user.uuid ?? "")")
+                self.user = user
+            case .failure(let error):
+                print(error)
+            }
+        }
+        if let session = session {
+            asWebAuthSession = session
+            asWebAuthSession?.start()
+        }
+    }
+    
+    func triggerBankIdFlow() {
+        let context = ASWebAuthSessionContextProvider()
+        let session = client.getLoginSession(contextProvider: context,
+                                             withMFA: .preEid(.se),
                                                   withSSO: true) { result in
             switch result {
             case .success(let user):
