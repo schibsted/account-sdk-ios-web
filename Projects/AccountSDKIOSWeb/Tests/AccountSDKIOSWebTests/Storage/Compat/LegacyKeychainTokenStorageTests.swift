@@ -97,9 +97,6 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             let tokenDictionary: [String : Any] = [
                 "accessToken": "foo",
                 "refreshToken": "bar",
-                "idToken": [
-                    "string": "foo-bar"
-                ],
                 "userID": "foobar"
             ]
             
@@ -118,30 +115,5 @@ final class LegacyKeychainTokenStorageTests: XCTestCase {
             XCTAssertEqual(keychainStorage.get(), [
                 LegacyTokenData(accessToken: "foo", refreshToken: "bar")
             ])
-        }
-        
-        func testSettingIncorrectLegacyToken() {
-            
-            let tokenDictionary: [String : Any] = [
-                "accessToken": "foo",
-                "refreshToken": "bar",
-                "userID": "foobar"
-            ]
-            
-            let expectation = self.expectation(description: "Saving token with incorrect format throws KeychainStorageError")
-            
-            guard let data = try? JSONSerialization.data(withJSONObject: tokenDictionary, options: []) else {
-                XCTFail("Cannot serialize test input")
-                return
-            }
-            
-            let keychainStorage = LegacyKeychainTokenStorage(keychain: keychainMock!)
-            do {
-                try keychainStorage.set(legacySDKtokenData: data)
-            } catch (let error) {
-                XCTAssertEqual(KeychainStorageError.storeError(reason: .invalidData), error as! KeychainStorageError)
-                expectation.fulfill()
-            }
-            self.waitForExpectations(timeout: 0.5, handler: nil)
         }
 }
