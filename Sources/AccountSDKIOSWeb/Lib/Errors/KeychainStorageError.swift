@@ -2,7 +2,7 @@ import Foundation
 
 enum StoreErrorReason: Equatable {
     case keychainError(status: OSStatus)
-    case invalidData
+    case invalidData(reason: String)
 }
 
 enum KeychainStorageError: Error, Equatable {

@@ -87,18 +87,22 @@ class LegacyKeychainTokenStorage {
         }
      */
     func set(legacySDKtokenData: Data) throws {
-        let json = try JSONSerialization.jsonObject(with: legacySDKtokenData, options: [])
-        guard let dict = json as? [String: Any],
-              let accessToken = dict["accessToken"] as? String,
-              let refreshToken = dict["refreshToken"] as? String,
-              let userId = dict["userID"] as? String else {
-                  throw KeychainStorageError.storeError(reason: .invalidData)
+        guard let dict = try JSONSerialization.jsonObject(with: legacySDKtokenData, options: []) as? [String:Any] else {
+            throw KeychainStorageError.storeError(reason: .invalidData(reason: "Cannot deserialize legacySDKtokenData"))
+        }
+        
+        guard let accessToken = dict["accessToken"] as? String else {
+            throw KeychainStorageError.storeError(reason: .invalidData(reason: "Missed accessToken"))
+        }
+        
+        guard let refreshToken = dict["refreshToken"] as? String else {
+            throw KeychainStorageError.storeError(reason: .invalidData(reason: "Missed refreshToken"))
         }
         
         // Build as Legacy Keychain JSON structure
         var loggedInUsers: [String: [String: String]] = [:]
-        let loggedInUser: [String: String] = [Self.KeychainKey.refreshToken: refreshToken,
-                                              Self.KeychainKey.userID: userId]
+        let loggedInUser: [String: String] = [Self.KeychainKey.refreshToken: refreshToken]
+        
         loggedInUsers[accessToken] = loggedInUser
         let keychainData = [Self.KeychainKey.loggedInUsers: loggedInUsers]
         
