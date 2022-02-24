@@ -91,8 +91,6 @@ class LegacyKeychainTokenStorage {
         guard let dict = json as? [String: Any],
               let accessToken = dict["accessToken"] as? String,
               let refreshToken = dict["refreshToken"] as? String,
-              let idTokenDict = dict["idToken"] as? [String: Any],
-              let idToken = idTokenDict["string"] as? String,
               let userId = dict["userID"] as? String else {
                   throw KeychainStorageError.storeError(reason: .invalidData)
         }
@@ -100,7 +98,6 @@ class LegacyKeychainTokenStorage {
         // Build as Legacy Keychain JSON structure
         var loggedInUsers: [String: [String: String]] = [:]
         let loggedInUser: [String: String] = [Self.KeychainKey.refreshToken: refreshToken,
-                                              Self.KeychainKey.idToken: idToken,
                                               Self.KeychainKey.userID: userId]
         loggedInUsers[accessToken] = loggedInUser
         let keychainData = [Self.KeychainKey.loggedInUsers: loggedInUsers]
