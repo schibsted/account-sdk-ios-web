@@ -49,6 +49,8 @@ public class Client: CustomStringConvertible {
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
     private var isSessionInProgress: Bool = false
+    
+    let tracker: TrackingEventsHandler?
 
     /**
      Initializes the Client with given configuration
@@ -57,7 +59,7 @@ public class Client: CustomStringConvertible {
      - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
      - parameter httpClient: Optional custom HTTPClient
      */
-    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, tracker: TrackingEventsHandler? = nil, httpClient: HTTPClient? = nil) {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
@@ -68,7 +70,8 @@ public class Client: CustomStringConvertible {
                   stateStorage: StateStorage(),
                   httpClient: chttpClient,
                   jwks: jwks,
-                  tokenHandler: tokenHandler)
+                  tokenHandler: tokenHandler,
+                  tracker: tracker)
     }
     
     /**
@@ -117,10 +120,11 @@ public class Client: CustomStringConvertible {
                   stateStorage: stateStorage,
                   httpClient: chttpClient,
                   jwks: jwks,
-                  tokenHandler: tokenHandler)
+                  tokenHandler: tokenHandler,
+                  tracker: tracker)
     }
     
-    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler) {
+    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler, tracker: TrackingEventsHandler? = nil) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
@@ -128,6 +132,7 @@ public class Client: CustomStringConvertible {
         self.tokenHandler = tokenHandler
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
+        self.tracker = tracker
     }
 
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
