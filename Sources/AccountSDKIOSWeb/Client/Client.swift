@@ -59,7 +59,11 @@ public class Client: CustomStringConvertible {
      - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
      - parameter httpClient: Optional custom HTTPClient
      */
-    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, tracker: TrackingEventsHandler? = nil, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration,
+                            appIdentifierPrefix: String? = nil,
+                            tracker: TrackingEventsHandler? = nil,
+                            httpClient: HTTPClient? = nil) {
+
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
@@ -83,7 +87,12 @@ public class Client: CustomStringConvertible {
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
      */
-    public convenience init(configuration: ClientConfiguration, appIdentifierPrefix: String? = nil, sessionStorageConfig: SessionStorageConfig, httpClient: HTTPClient? = nil) {
+    public convenience init(configuration: ClientConfiguration,
+                            appIdentifierPrefix: String? = nil,
+                            sessionStorageConfig: SessionStorageConfig,
+                            tracker: TrackingEventsHandler? = nil,
+                            httpClient: HTTPClient? = nil) {
+        
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
         
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
