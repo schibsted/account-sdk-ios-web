@@ -55,13 +55,14 @@ final class IdTokenValidatorTests: XCTestCase {
         }
     }
     
-    func testAcceptsDefaultAMRResponseForEiDValuesOnPre() {
-        let expectedAMRValue = "eid-se"
+    func testAcceptsDefaultAmrResponseForEidValues() {
+        let sentAMRValue = "eid-se"
         let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue(["eid-se", "other_value"]))
-        let context = IdTokenValidationContext.from(expectedClaims: claims).copy(expectedAMR: OptionalValue(expectedAMRValue))
+        let context = IdTokenValidationContext.from(expectedClaims: claims).copy(expectedAMR: OptionalValue(sentAMRValue))
 
         let recievedClaims = Fixtures.idTokenClaims.copy(amr: OptionalValue(["eid", "other_value"]))
         let signedIdToken = IdTokenValidatorTests.createSignedIdToken(claims: recievedClaims)
+
         Await.until { done in
             IdTokenValidator.validate(idToken: signedIdToken, jwks: IdTokenValidatorTests.jwks, context: context) { result in
                 XCTAssertEqual(result, .success(recievedClaims))
