@@ -56,9 +56,9 @@ final class IdTokenValidatorTests: XCTestCase {
     }
     
     func testAcceptsDefaultAmrResponseForEidValues() {
-        let sentAMRValue = "eid-se"
-        let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue(["eid-se", "other_value"]))
-        let context = IdTokenValidationContext.from(expectedClaims: claims).copy(expectedAMR: OptionalValue(sentAMRValue))
+        let expectedAMRValue = "eid-se"
+        let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue([expectedAMRValue, "other_value"]))
+        let context = IdTokenValidationContext.from(expectedClaims: claims)
 
         let recievedClaims = Fixtures.idTokenClaims.copy(amr: OptionalValue(["eid", "other_value"]))
         let signedIdToken = IdTokenValidatorTests.createSignedIdToken(claims: recievedClaims)
