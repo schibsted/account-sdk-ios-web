@@ -186,10 +186,13 @@ public class Client: CustomStringConvertible {
             guard let url = callbackURL else {
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
+                    self.tracker?.engagement(.click(on: .cancel), in: .webBrowser)
                     completion(.failure(.canceled))
                 } else {
                     SchibstedAccountLogger.instance.error("Login flow error: \(String(describing: error))")
-                    completion(.failure(.unexpectedError(message: "ASWebAuthenticationSession failed: \(String(describing: error))")))
+                    let error = LoginError.unexpectedError(message: "ASWebAuthenticationSession failed: \(String(describing: error))")
+                    self.tracker?.error(.loginError(error), in: .webBrowser)
+                    completion(.failure(error))
                 }
                 self.isSessionInProgress = false
                 return

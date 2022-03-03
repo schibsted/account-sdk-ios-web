@@ -19,20 +19,21 @@ public protocol TrackingEventsHandler: AnyObject {
     var loginID: String? { get set }
     var merchantID: String? { get set }
 
-    func interaction(_ interaction: TrackingEvent.Interaction, with screen: TrackingEvent.Screen)
+    func interaction(_ interaction: TrackingEvent.Interaction, with screen: TrackingEvent.Screen, additionalFields: [TrackingEvent.AdditionalField])
     func engagement(_ engagement: TrackingEvent.Engagement, in screen: TrackingEvent.Screen)
     func error(_ errorType: TrackingEvent.ErrorType, in screen: TrackingEvent.Screen)
 }
 
 extension TrackingEventsHandler {
     func interaction(_ interaction: TrackingEvent.Interaction, with screen: TrackingEvent.Screen) {
-        self.interaction(interaction, with: screen)
+        self.interaction(interaction, with: screen, additionalFields: [])
     }
 }
 
 public enum TrackingEvent {
     public enum Screen {
         case simplifiedLogin
+        case webBrowser
     }
 
     public enum Interaction {
@@ -45,6 +46,7 @@ public enum TrackingEvent {
         case switchAccount
         case conitnueWithoutLogginIn
         case privacyPolicy
+        case cancel
     }
 
     public enum Engagement {
@@ -59,5 +61,10 @@ public enum TrackingEvent {
         case httpError(HTTPError)
         case loginStateError(LoginStateError)
         case generic(Error)
+    }
+    
+    public enum AdditionalField {
+        case getLoginSession(MFAType?)
+        case sso(Bool)
     }
 }

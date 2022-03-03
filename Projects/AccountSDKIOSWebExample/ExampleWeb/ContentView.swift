@@ -32,7 +32,7 @@ struct ContentView: View {
         self.client = client
         self.clientConfiguration = clientConfiguration
         
-        let appIdentifierPrefix = "J5FN75WZ65"
+        let appIdentifierPrefix = "858G4SLVS5"
         self.sharedKeychainClient = Client(configuration: clientConfiguration, appIdentifierPrefix: appIdentifierPrefix)
     }
     
