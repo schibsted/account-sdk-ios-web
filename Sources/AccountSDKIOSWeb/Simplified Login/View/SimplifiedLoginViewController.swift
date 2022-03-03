@@ -143,7 +143,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        tracker?.interaction(.hide, with: trackerScreenID)
+        tracker?.interaction(.close, with: trackerScreenID)
     }
     
     func setupiPhoneConstraints() {

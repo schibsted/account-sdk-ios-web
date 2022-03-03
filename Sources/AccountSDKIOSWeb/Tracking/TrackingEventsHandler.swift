@@ -38,7 +38,7 @@ public enum TrackingEvent {
 
     public enum Interaction {
         case view
-        case hide
+        case close
     }
 
     public enum UIElement {
