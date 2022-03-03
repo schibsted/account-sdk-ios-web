@@ -54,6 +54,22 @@ final class IdTokenValidatorTests: XCTestCase {
             }
         }
     }
+    
+    func testAcceptsDefaultAmrResponseForEidValues() {
+        let expectedAMRValue = "eid-se"
+        let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue([expectedAMRValue, "other_value"]))
+        let context = IdTokenValidationContext.from(expectedClaims: claims)
+
+        let recievedClaims = Fixtures.idTokenClaims.copy(amr: OptionalValue(["eid", "other_value"]))
+        let signedIdToken = IdTokenValidatorTests.createSignedIdToken(claims: recievedClaims)
+
+        Await.until { done in
+            IdTokenValidator.validate(idToken: signedIdToken, jwks: IdTokenValidatorTests.jwks, context: context) { result in
+                XCTAssertEqual(result, .success(recievedClaims))
+                done()
+            }
+        }
+    }
 
     func testRejectsMismatchingNonce() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims)

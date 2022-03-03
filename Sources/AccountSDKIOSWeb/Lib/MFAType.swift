@@ -34,8 +34,4 @@ public enum PreEidType: String, Codable {
     case no = "eid-no"
     /// BankId verification - Sweden
     case se = "eid-se"
-    /// BankId verification - Finland
-    case fi = "eid-fi"
-    /// BankId verification - Denmark
-    case dk = "eid-dk"
 }
