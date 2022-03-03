@@ -54,10 +54,14 @@ internal enum IdTokenValidator {
     }
     
     private static func contains(_ values: [String]?, value: String?) -> Bool {
-        guard let value = value else {
+        guard var value = value else {
             return true
         }
-
+        
+        if let _ = PreEidType(rawValue: value) {
+            value = MFAType.eid.rawValue
+        }
+        
         if let values = values {
             return values.contains(value)
         }
