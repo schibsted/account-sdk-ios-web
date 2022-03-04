@@ -13,7 +13,7 @@ public enum MFAType: Codable {
     /// BankId verification for PRE environment
     case preEid(PreEidType)
 
-  var rawValue: String {
+  public var rawValue: String {
     switch self {
     case .password:
         return "password"
