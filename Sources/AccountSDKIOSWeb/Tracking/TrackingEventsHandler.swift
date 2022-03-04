@@ -15,7 +15,6 @@ public protocol TrackingEventsHandler: AnyObject {
     var delegate: TrackingEventsHandlerDelegate? { get set }
 
     var clientConfiguration: ClientConfiguration? { get set }
-    var mfaVariant: MFAType? {get set}
     var loginID: String? { get set }
     var merchantID: String? { get set }
 
