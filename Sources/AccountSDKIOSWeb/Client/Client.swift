@@ -168,6 +168,7 @@ public class Client: CustomStringConvertible {
         
         if isSessionInProgress {
             SchibstedAccountLogger.instance.info("Previous login flow still in progress")
+            tracker?.error(.loginError(.previousSessionInProgress), in: .webBrowser)
             completion(.failure(.previousSessionInProgress))
             return nil
         }
@@ -181,6 +182,8 @@ public class Client: CustomStringConvertible {
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
         }
+        
+        tracker?.interaction(.view, with: .webBrowser, additionalFields: [.getLoginSession(withMFA), .loginHint(loginHint), .withAssertion((assertion != nil) ? true : false), .extraScopeValues(extraScopeValues)])
         
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
@@ -205,6 +208,7 @@ public class Client: CustomStringConvertible {
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
+            tracker?.error(.refreshTokenError(.noRefreshToken), in: .webBrowser)
             completion(.failure(.noRefreshToken))
             return
         }
@@ -216,6 +220,7 @@ public class Client: CustomStringConvertible {
                 SchibstedAccountLogger.instance.debug("Successfully refreshed user tokens")
                 guard let tokens = user.tokens else {
                     SchibstedAccountLogger.instance.info("User has logged-out during token refresh, discarding new tokens.")
+                    self.tracker?.error(.loginStateError(.notLoggedIn), in: .webBrowser)
                     completion(.failure(.unexpectedError(error: LoginStateError.notLoggedIn)))
                     return
                 }

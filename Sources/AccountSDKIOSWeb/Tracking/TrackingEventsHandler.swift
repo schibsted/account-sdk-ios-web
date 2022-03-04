@@ -66,5 +66,8 @@ public enum TrackingEvent {
     public enum AdditionalField {
         case getLoginSession(MFAType?)
         case sso(Bool)
+        case loginHint(String?)
+        case withAssertion(Bool)
+        case extraScopeValues(Set<String>)
     }
 }
