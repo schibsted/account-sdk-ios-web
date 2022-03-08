@@ -142,6 +142,7 @@ public class Client: CustomStringConvertible {
         self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
         self.tracker = tracker
+        self.tracker?.clientConfiguration = self.configuration
     }
 
     func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
