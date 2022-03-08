@@ -208,7 +208,7 @@ public class Client: CustomStringConvertible {
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         guard let existingRefreshToken = user.tokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
-            tracker?.error(.refreshTokenError(.noRefreshToken), in: .webBrowser)
+            tracker?.error(.refreshTokenError(.noRefreshToken), in: .noScreen)
             completion(.failure(.noRefreshToken))
             return
         }
@@ -220,7 +220,7 @@ public class Client: CustomStringConvertible {
                 SchibstedAccountLogger.instance.debug("Successfully refreshed user tokens")
                 guard let tokens = user.tokens else {
                     SchibstedAccountLogger.instance.info("User has logged-out during token refresh, discarding new tokens.")
-                    self.tracker?.error(.loginStateError(.notLoggedIn), in: .webBrowser)
+                    self.tracker?.error(.loginStateError(.notLoggedIn), in: .noScreen)
                     completion(.failure(.unexpectedError(error: LoginStateError.notLoggedIn)))
                     return
                 }
@@ -237,6 +237,7 @@ public class Client: CustomStringConvertible {
                 self.storeSession(userSession: userSession, completion: completion)
             case .failure(let error):
                 SchibstedAccountLogger.instance.error("Failed to refresh user tokens")
+                self.tracker?.error(.refreshTokenError(.refreshRequestFailed(error: error)), in: .noScreen)
                 completion(.failure(.refreshRequestFailed(error: error)))
             }
         }
@@ -254,6 +255,7 @@ public class Client: CustomStringConvertible {
                         retry(attempts - 1)
                     } else {
                         SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
+                        self.tracker?.error(.refreshTokenError(.unexpectedError(error: error)), in: .noScreen)
                         completion(.failure(.unexpectedError(error: error)))
                     }
                 }
@@ -274,6 +276,7 @@ public class Client: CustomStringConvertible {
                     let user = User(client: self, tokens: tokenResult.userTokens)
                     completion(.success(user))
                 case .failure(let error):
+                    self.tracker?.error(.loginError(.unexpectedError(message: error.localizedDescription)), in: .noScreen)
                     completion(.failure(.unexpectedError(message: error.localizedDescription)))
                 }
             }
@@ -281,17 +284,21 @@ public class Client: CustomStringConvertible {
             SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(String(describing: body))")
             if let errorJSON = body,
                let oauthError = OAuthError.fromJSON(errorJSON) {
+                self.tracker?.error(.loginError(.tokenErrorResponse(error: oauthError)), in: .webBrowser)
                 completion(.failure(.tokenErrorResponse(error: oauthError)))
                 return
             }
-
+            self.tracker?.error(.loginError(.unexpectedError(message: "Failed to obtain user tokens")), in: .webBrowser)
             completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
         case .failure(.idTokenError(.missingExpectedAMRValue)):
             SchibstedAccountLogger.instance.error("MFA authentication failed")
+            self.tracker?.error(.loginError(.missingExpectedMFA), in: .webBrowser)
             completion(.failure(.missingExpectedMFA))
         case .failure(let error):
-            SchibstedAccountLogger.instance.error("Failed to obtain user tokens: \(error)")
-            completion(.failure(.unexpectedError(message: "Failed to obtain user tokens")))
+            let msg = "Failed to obtain user tokens: \(error)"
+            SchibstedAccountLogger.instance.error("\(msg)")
+            self.tracker?.error(.loginError(.unexpectedError(message: msg)), in: .webBrowser)
+            completion(.failure(.unexpectedError(message: msg)))
         }
     }
     
@@ -388,6 +395,7 @@ extension Client {
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
                isSessionInProgress = false
+               self.tracker?.error(.loginError(.unsolicitedResponse), in: .webBrowser)
                completion(.failure(.unsolicitedResponse))
                return
         }
@@ -395,12 +403,16 @@ extension Client {
         isSessionInProgress = false
 
         if let error = url.valueOf(queryParameter: "error") {
-            completion(.failure(.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))))
+            let error = LoginError.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))
+            self.tracker?.error(.loginError(error), in: .webBrowser)
+            completion(.failure(error))
             return
         }
         
         guard let authCode = url.valueOf(queryParameter: "code") else {
-            completion(.failure(.unexpectedError(message: "Missing authorization code from authentication response")))
+            let error = LoginError.unexpectedError(message: "Missing authorization code from authentication response")
+            self.tracker?.error(.loginError(error), in: .webBrowser)
+            completion(.failure(error))
             return
         }
 

@@ -1,19 +1,6 @@
 import Foundation
 
-//// is it necessary in the new implementation?
-//public protocol TrackingEventsHandlerDelegate: AnyObject {
-//    /**
-//     Should be called when a new JWE is returned
-//
-//     This is used by the `IdentityUI` to link tracking events between
-//     the SDK and the Schibsted account backend
-//     */
-//    func trackingEventsHandlerDidReceivedJWE(_ jwe: String)
-//}
-
 public protocol TrackingEventsHandler: AnyObject {
-//    var delegate: TrackingEventsHandlerDelegate? { get set }
-
     var clientConfiguration: ClientConfiguration? { get set }
     var loginID: String? { get set }
     var merchantID: String? { get set }
@@ -33,6 +20,7 @@ public enum TrackingEvent {
     public enum Screen {
         case simplifiedLogin
         case webBrowser
+        case noScreen
     }
 
     public enum Interaction {
