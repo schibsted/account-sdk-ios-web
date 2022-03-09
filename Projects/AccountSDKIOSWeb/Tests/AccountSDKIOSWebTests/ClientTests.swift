@@ -123,7 +123,7 @@ final class ClientTests: XCTestCase {
             ),
             (
                 HTTPError.unexpectedError(underlying: HTTPError.noData),
-                LoginError.unexpectedError(message: "Failed to obtain user tokens")
+                LoginError.unexpectedError(message: "Failed to obtain user tokens: \(TokenError.tokenRequestError(AccountSDKIOSWeb.HTTPError.unexpectedError(underlying: AccountSDKIOSWeb.HTTPError.noData)))")
             )
         ]
         for (returnedResponse, expectedResult) in testData {
