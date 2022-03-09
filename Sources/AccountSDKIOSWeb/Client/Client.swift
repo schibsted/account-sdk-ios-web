@@ -135,7 +135,14 @@ public class Client: CustomStringConvertible {
                   tracker: tracker)
     }
     
-    init(configuration: ClientConfiguration, sessionStorage: SessionStorage, stateStorage: StateStorage, httpClient: HTTPClient, jwks: JWKS, tokenHandler: TokenHandler, tracker: TrackingEventsHandler? = nil) {
+    init(configuration: ClientConfiguration,
+         sessionStorage: SessionStorage,
+         stateStorage: StateStorage,
+         httpClient: HTTPClient,
+         jwks: JWKS,
+         tokenHandler: TokenHandler,
+         tracker: TrackingEventsHandler? = nil) {
+        
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
@@ -147,7 +154,9 @@ public class Client: CustomStringConvertible {
         self.tracker?.clientConfiguration = self.configuration
     }
 
-    func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(authCode: String,
+                          authState: AuthState?,
+                          completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
     }
        
@@ -186,7 +195,11 @@ public class Client: CustomStringConvertible {
             preconditionFailure("Couldn't create loginURL")
         }
         
-        tracker?.interaction(.view, with: .webBrowser, additionalFields: [.getLoginSession(withMFA), .loginHint(loginHint), .withAssertion((assertion != nil) ? true : false), .extraScopeValues(extraScopeValues)])
+        tracker?.interaction(.view, with: .webBrowser,
+                             additionalFields: [.getLoginSession(withMFA),
+                                                .loginHint(loginHint),
+                                                .withAssertion((assertion != nil) ? true : false),
+                                                .extraScopeValues(extraScopeValues)])
         
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
@@ -194,9 +207,9 @@ public class Client: CustomStringConvertible {
                     SchibstedAccountLogger.instance.debug("Login flow was cancelled")
                     self.tracker?.engagement(.click(on: .cancel), in: .webBrowser)
                     completion(.failure(.canceled))
-                } else {
-                    SchibstedAccountLogger.instance.error("Login flow error: \(String(describing: error))")
-                    let error = LoginError.unexpectedError(message: "ASWebAuthenticationSession failed: \(String(describing: error))")
+                } else if let error = error {
+                    SchibstedAccountLogger.instance.error("Login flow error: \(error)")
+                    let error = LoginError.unexpectedError(message: "ASWebAuthenticationSession failed: \(error)")
                     self.tracker?.error(.loginError(error), in: .webBrowser)
                     completion(.failure(error))
                 }
