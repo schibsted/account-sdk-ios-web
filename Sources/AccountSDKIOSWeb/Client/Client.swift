@@ -57,6 +57,7 @@ public class Client: CustomStringConvertible {
      
      - parameter configuration: Client configuration object
      - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used
+     - parameter tracker: The tracking event implementation that will be called at various spots
      - parameter httpClient: Optional custom HTTPClient
      */
     public convenience init(configuration: ClientConfiguration,
@@ -84,6 +85,7 @@ public class Client: CustomStringConvertible {
      - parameter configuration: The ClientConfiguration instance.
      - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used. This value will overule the value of sessionStorageConfig.accessGroup.
      - parameter sessionStorageConfig: The configuration struct used in migration process
+     - parameter tracker: The tracking event implementation that will be called at various spots
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
      */
