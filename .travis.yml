@@ -33,6 +33,5 @@ notifications:
     if: branch = master
     recipients:
       - anna.zamora@schibsted.com
-      - daniel.echegaray@schibsted.com
     on_success: change
     on_failure: always

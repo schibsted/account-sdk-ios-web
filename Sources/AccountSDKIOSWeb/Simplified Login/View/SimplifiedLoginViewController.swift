@@ -11,6 +11,8 @@ class SimplifiedLoginViewController: UIViewController {
     private var originalTransform: CGAffineTransform?
     private var bottomConstraint: NSLayoutConstraint?
 
+    let tracker: TrackingEventsHandler?
+    let trackerScreenID: TrackingEvent.Screen = .simplifiedLogin
     
     private lazy var userInformationView: UserInformationView = {
         let view = UserInformationView(viewModel: viewModel)
@@ -64,8 +66,9 @@ class SimplifiedLoginViewController: UIViewController {
         return view
     }()
     
-    init(viewModel: SimplifiedLoginViewModel) {
+    init(viewModel: SimplifiedLoginViewModel, tracker: TrackingEventsHandler?) {
         self.viewModel = viewModel
+        self.tracker = tracker
         super.init(nibName: nil, bundle: nil)
         
         if isPhone {
@@ -134,7 +137,13 @@ class SimplifiedLoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        tracker?.interaction(.view, with: trackerScreenID)
         animateShowingOverlay()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tracker?.interaction(.close, with: trackerScreenID)
     }
     
     func setupiPhoneConstraints() {
@@ -294,10 +303,22 @@ class SimplifiedLoginViewController: UIViewController {
 
 extension SimplifiedLoginViewController {
     
-    @objc func primaryButtonClicked() { viewModel.send(action: .clickedContinueAsUser) }
-    @objc func loginWithDifferentAccountClicked() { viewModel.send(action: .clickedLoginWithDifferentAccount) }
-    @objc func continueWithoutLoginClicked() { viewModel.send(action: .clickedContinueWithoutLogin) }
-    @objc func privacyPolicyClicked() { viewModel.send(action: .clickedClickPrivacyPolicy) }
+    @objc func primaryButtonClicked() {
+        tracker?.engagement(.click(on: .continueAsButton), in: trackerScreenID)
+        viewModel.send(action: .clickedContinueAsUser)
+    }
+    @objc func loginWithDifferentAccountClicked() {
+        tracker?.engagement(.click(on: .switchAccount), in: trackerScreenID)
+        viewModel.send(action: .clickedLoginWithDifferentAccount)
+    }
+    @objc func continueWithoutLoginClicked() {
+        tracker?.engagement(.click(on: .conitnueWithoutLogginIn), in: trackerScreenID)
+        viewModel.send(action: .clickedContinueWithoutLogin)
+    }
+    @objc func privacyPolicyClicked() {
+        tracker?.engagement(.click(on: .privacyPolicy), in: trackerScreenID)
+        viewModel.send(action: .clickedClickPrivacyPolicy)
+    }
     
     enum UserAction {
         case clickedContinueAsUser

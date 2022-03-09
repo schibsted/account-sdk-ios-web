@@ -50,12 +50,15 @@ struct SimplifiedLoginUIFactory {
                                 session.start()
                         } else {
                             SchibstedAccountLogger.instance.error("Could not start authentication session")
+                            client.tracker?.error(.loginError(.previousSessionInProgress), in: .simplifiedLogin)
                             completion(.failure(LoginError.previousSessionInProgress))
                         }
                     }
                 case .failure(let error):
                     SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
-                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
+                    let error = LoginError.unexpectedError(message: "Failed to obtain Assertion")
+                    client.tracker?.error(.loginError(error), in: .simplifiedLogin)
+                    completion(.failure(error))
                 }
             }
         }
@@ -116,12 +119,15 @@ struct SimplifiedLoginUIFactory {
                             session.start()
                         } else {
                             SchibstedAccountLogger.instance.error("Could not start authentication session")
+                            client.tracker?.error(.loginError(.previousSessionInProgress), in: .simplifiedLogin)
                             completion(.failure(LoginError.previousSessionInProgress))
                         }
                     }
                 case .failure(let error):
                     SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
-                    completion(.failure(LoginError.unexpectedError(message: "Failed to obtain Assertion")))
+                    let error = LoginError.unexpectedError(message: "Failed to obtain Assertion")
+                    client.tracker?.error(.loginError(error), in: .simplifiedLogin)
+                    completion(.failure(error))
                 }
             }
         }
@@ -130,7 +136,7 @@ struct SimplifiedLoginUIFactory {
     }
     
     private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
-        let s = SimplifiedLoginViewController(viewModel: viewModel)
+        let s = SimplifiedLoginViewController(viewModel: viewModel, tracker: client.tracker)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
         
         viewModel.onClickedContinueWithoutLogin = {

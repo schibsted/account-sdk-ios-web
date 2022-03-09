@@ -108,6 +108,7 @@
 		CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B7A272C15D800572645 /* MockURLProtocol.swift */; };
 		CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */; };
 		CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */; };
+		CEE5182127CE24A700BD3559 /* TrackingEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */; };
 		CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE91D4827A8212500A71061 /* SchibstedColor.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
@@ -254,6 +255,7 @@
 		CED92B7A272C15D800572645 /* MockURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIFactory.swift; sourceTree = "<group>"; };
 		CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModel.swift; sourceTree = "<group>"; };
+		CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingEventsHandler.swift; sourceTree = "<group>"; };
 		CEE91D4827A8212500A71061 /* SchibstedColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedColor.swift; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
 			isa = PBXGroup;
 			children = (
+				CEE5181F27CE247F00BD3559 /* Tracking */,
 				CE5225CC2747D69A009E015E /* Resources */,
 				2401AD0A273D009C007C63A6 /* Simplified Login */,
 				24844037269347C500CE88F2 /* Util */,
@@ -688,6 +691,14 @@
 				244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		CEE5181F27CE247F00BD3559 /* Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */,
+			);
+			path = Tracking;
 			sourceTree = "<group>";
 		};
 		OBJ_172 /* Products */ = {
@@ -1055,6 +1066,7 @@
 				24209498273D0269004CF03D /* FooterView.swift in Sources */,
 				24209497273D0266004CF03D /* UserInformationView.swift in Sources */,
 				2489C9BD26733A0900AA0A4C /* HTTPClientWithURLSession.swift in Sources */,
+				CEE5182127CE24A700BD3559 /* TrackingEventsHandler.swift in Sources */,
 				CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */,
 				24AE1A3E26A5972600865A68 /* HTTPURLResponse+Extensions.swift in Sources */,
 				24EB151F267A17A0002D9628 /* LoginStateError.swift in Sources */,
