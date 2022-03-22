@@ -21,7 +21,8 @@ extension Client {
             case .postTransferFromOldSDK(let accessGroup, let completion):
                 try Client.loadOldSDKDataFromDeviceToKeychain(key: key, accessGroup: accessGroup, completion: completion)
             case .clear:
-                Client.clearStoredUserOnDevice(key: key)
+                Client.clearStoredUserOnDevice(key: keyPrefix + key)
+                Client.clearStoredUserOnDevice(key: oldSDKKeyPrefix + key)
             }
         }
     }
@@ -46,7 +47,8 @@ extension Client {
     }
     
     private static func loadFromDeviceToKeychain(key: String, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let tokenData = UserDefaults.standard.object(forKey: Client.keyPrefix + key) as? Data else {
+        let key = Client.keyPrefix + key
+        guard let tokenData = UserDefaults.standard.object(forKey: key) as? Data else {
             completion( .failure(AppTransfer.AppTransferError.UserSessionNotFound))
             return
         }
@@ -70,7 +72,8 @@ extension Client {
     }
     
     private static func loadOldSDKDataFromDeviceToKeychain(key: String, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) throws {
-        guard let tokenData = UserDefaults.standard.object(forKey: Client.oldSDKKeyPrefix + key) as? Data else {
+        let key = Client.oldSDKKeyPrefix + key
+        guard let tokenData = UserDefaults.standard.object(forKey: key) as? Data else {
             completion(.failure(AppTransfer.AppTransferError.UserSessionNotFound))
             return
         }
@@ -87,6 +90,6 @@ extension Client {
     }
     
     private static func clearStoredUserOnDevice(key: String) {
-        UserDefaults.standard.removeObject(forKey: Client.keyPrefix + key)
+        UserDefaults.standard.removeObject(forKey: key)
     }
 }
