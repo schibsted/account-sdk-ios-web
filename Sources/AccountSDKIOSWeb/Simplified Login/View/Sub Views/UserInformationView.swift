@@ -78,7 +78,6 @@ class UserInformationView: UIView {
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-        backgroundColor = .green
         translatesAutoresizingMaskIntoConstraints = false
         avatarView.addSubview(initialsLabel)
         addSubview(avatarView)

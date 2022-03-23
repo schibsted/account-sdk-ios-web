@@ -18,7 +18,6 @@ class ExplanatoryView: UIView {
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-        backgroundColor = .blue
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(explanationLabel)
     }
