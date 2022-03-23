@@ -80,7 +80,7 @@ class LinksView: UIView {
         view.font = UIFont.preferredFont(forTextStyle: .callout)
         view.textAlignment = .center
         view.adjustsFontForContentSizeCategory = true
-        view.textColor = SchibstedColor.textLightGrey.value
+        view.textColor = SchibstedColor.textLightGray.value
         view.numberOfLines = 0
         view.lineBreakMode = .byWordWrapping
         view.sizeToFit()

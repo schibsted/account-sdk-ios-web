@@ -3,6 +3,7 @@ import SwiftUI
 
 class FooterView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
+    let uiVersion: SimplifiedLoginUIVersion
     
     lazy var internalConstraints: [NSLayoutConstraint] = {
         let popularBrandsHeights = popularBrandsImageViews.map{ $0.heightAnchor.constraint(equalToConstant: 36) }
@@ -59,24 +60,16 @@ class FooterView: UIStackView {
     // Privacy
     
     private lazy var explanationLabel: UILabel = {
-        let view = UILabel()
-        view.numberOfLines = -1
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 4.0
-        paragraphStyle.alignment = .center
-        let attrString = NSMutableAttributedString(string: String.localizedStringWithFormat(viewModel.localizationModel.explanationText, viewModel.clientName))
-        
-        attrString.addAttributes([
-            .paragraphStyle : paragraphStyle,
-            .font : UIFont.preferredFont(forTextStyle: .footnote),
-            .foregroundColor : SchibstedColor.textLightGrey.value
-        ], range: NSMakeRange(0, attrString.length))
-        
-        view.attributedText = attrString
-        view.adjustsFontForContentSizeCategory = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
+        let localizedString: String
+        if uiVersion == .explanatoryCopy {
+            localizedString = String.localizedStringWithFormat(
+                viewModel.localizationModel.shortExplanationText)
+        } else {
+            localizedString = String.localizedStringWithFormat(
+                viewModel.localizationModel.explanationText,
+                viewModel.clientName)
+        }
+        let view = UILabel.paragraphLabel(localizedString: localizedString)
         return view
     }()
     
@@ -85,7 +78,7 @@ class FooterView: UIStackView {
         let attributes:  [NSAttributedString.Key: Any] = [
             .underlineStyle : NSUnderlineStyle.single.rawValue,
             .font: UIFont.preferredFont(forTextStyle: .footnote),
-            .foregroundColor: SchibstedColor.textDarkGrey.value
+            .foregroundColor: SchibstedColor.textDarkGray.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.privacyPolicyTitle,
                                                  attributes: attributes)
@@ -99,8 +92,9 @@ class FooterView: UIStackView {
         return view
     }()
     
-    init(viewModel: SimplifiedLoginViewModel) {
+    init(viewModel: SimplifiedLoginViewModel, uiVersion: SimplifiedLoginUIVersion) {
         self.viewModel = viewModel
+        self.uiVersion = uiVersion
         super.init(frame: .zero)
         
         ////  Ecosystem

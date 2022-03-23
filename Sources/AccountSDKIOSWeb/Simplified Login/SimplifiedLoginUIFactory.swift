@@ -14,6 +14,7 @@ struct SimplifiedLoginUIFactory {
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
+                                    uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
@@ -63,7 +64,7 @@ struct SimplifiedLoginUIFactory {
             }
         }
         
-        return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
+        return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
     }
     
     @available(iOS 13.0, *)
@@ -78,6 +79,7 @@ struct SimplifiedLoginUIFactory {
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
+                                    uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
        
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
@@ -132,11 +134,15 @@ struct SimplifiedLoginUIFactory {
             }
         }
         
-        return commonSetup(completion: completion, client: client, assertionFetcher: assertionFetcher, viewModel: viewModel)
+        return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
     }
     
-    private static func commonSetup(completion: @escaping LoginResultHandler, client: Client, assertionFetcher: SimplifiedLoginFetching,  viewModel: SimplifiedLoginViewModel) -> UIViewController {
-        let s = SimplifiedLoginViewController(viewModel: viewModel, tracker: client.tracker)
+    private static func commonSetup(client: Client,
+                                    viewModel: SimplifiedLoginViewModel,
+                                    uiVersion: SimplifiedLoginUIVersion,
+                                    assertionFetcher: SimplifiedLoginFetching,
+                                    completion: @escaping LoginResultHandler) -> UIViewController {
+        let s = SimplifiedLoginViewController(viewModel: viewModel, uiVersion: uiVersion, tracker: client.tracker)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
         
         viewModel.onClickedContinueWithoutLogin = {

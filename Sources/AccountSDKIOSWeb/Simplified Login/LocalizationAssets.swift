@@ -2,10 +2,12 @@ import Foundation
 
 enum Localization {
     enum SimplifiedLogin: String{
-        case continueToLogIn = "SimplifiedWidget.continueToLogIn"
+        case loginWithOneClick = "SimplifiedWidget.logInWithOneClick"
         case schibstedTitle = "SimplifiedWidget.schibstedAccount"
+        case loginIncentive = "SimplifiedWidget.loginIncentive"
         case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
         case explanationText = "SimplifiedWidget.footer"
+        case shortExplanationText = "SimplifiedWidget.shortFooter"
         case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
         case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
         case switchAccount = "SimplifiedWidget.loginWithDifferentAccount"
@@ -19,12 +21,16 @@ enum Localization {
 }
 
 struct SimplifiedLoginLocalizationModel {
-    var continueToLogIn: String {
-        return Localization.SimplifiedLogin.continueToLogIn.localizedString
+    var loginWithOneClick: String {
+        return Localization.SimplifiedLogin.loginWithOneClick.localizedString
     }
     
     var schibstedTitle: String {
         return Localization.SimplifiedLogin.schibstedTitle.localizedString
+    }
+    
+    var loginIncentive: String {
+        return Localization.SimplifiedLogin.loginIncentive.localizedString
     }
     
     var continueWithoutLogin: String {
@@ -33,6 +39,10 @@ struct SimplifiedLoginLocalizationModel {
     
     var explanationText: String {
         return Localization.SimplifiedLogin.explanationText.localizedString
+    }
+    
+    var shortExplanationText: String {
+        return Localization.SimplifiedLogin.shortExplanationText.localizedString
     }
     
     var privacyPolicyTitle: String {
