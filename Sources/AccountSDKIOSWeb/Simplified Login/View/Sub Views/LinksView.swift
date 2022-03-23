@@ -9,9 +9,9 @@ class LinksView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         
-        addSubview(differentAccountView)
         differentAccountView.addSubview(notYouLabel)
         differentAccountView.addSubview(loginWithDifferentAccountButton)
+        addSubview(differentAccountView)
         addSubview(continueWithoutLoginButton)
         translatesAutoresizingMaskIntoConstraints = false
     }
@@ -20,17 +20,20 @@ class LinksView: UIView {
         return [
             differentAccountView.topAnchor.constraint(equalTo: topAnchor),
             differentAccountView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            differentAccountView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            differentAccountView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            notYouLabel.leadingAnchor.constraint(greaterThanOrEqualTo: differentAccountView.leadingAnchor),
+            differentAccountView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 0),
+            differentAccountView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: 0),
+            
             notYouLabel.topAnchor.constraint(equalTo: differentAccountView.topAnchor, constant: 2),
             notYouLabel.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 2),
-            notYouLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
-            loginWithDifferentAccountButton.leadingAnchor.constraint(equalTo: notYouLabel.trailingAnchor, constant: 5),
+            notYouLabel.trailingAnchor.constraint(equalTo: loginWithDifferentAccountButton.leadingAnchor, constant: -5),
+            notYouLabel.leadingAnchor.constraint(equalTo: differentAccountView.leadingAnchor, constant: 10),
+            notYouLabel.widthAnchor.constraint(greaterThanOrEqualTo: differentAccountView.widthAnchor, multiplier: 1/5),
             loginWithDifferentAccountButton.topAnchor.constraint(equalTo: differentAccountView.topAnchor, constant: 2),
             loginWithDifferentAccountButton.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 2),
             loginWithDifferentAccountButton.centerYAnchor.constraint(equalTo: notYouLabel.centerYAnchor),
-            loginWithDifferentAccountButton.trailingAnchor.constraint(lessThanOrEqualTo: differentAccountView.trailingAnchor, constant: -10),
+            loginWithDifferentAccountButton.trailingAnchor.constraint(equalTo: differentAccountView.trailingAnchor, constant: -10),
+            loginWithDifferentAccountButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 1/2),
+            
             continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 10),
             continueWithoutLoginButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
             continueWithoutLoginButton.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -68,7 +71,7 @@ class LinksView: UIView {
         button.setAttributedTitle(attributedText, for: .normal)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.textAlignment = .left
         button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -78,7 +81,7 @@ class LinksView: UIView {
         let view = UILabel()
         view.text = viewModel.localizationModel.notYouTitle
         view.font = UIFont.preferredFont(forTextStyle: .callout)
-        view.textAlignment = .center
+        view.textAlignment = .right
         view.adjustsFontForContentSizeCategory = true
         view.textColor = SchibstedColor.textLightGray.value
         view.numberOfLines = 0
