@@ -107,7 +107,7 @@ class SimplifiedLoginViewController: UIViewController {
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            let height = 489 + (uiVersion != .minimalVersion ? 46 : 0)
+            let height = 459 + (uiVersion != .minimalVersion ? 46 : 0)
             let y = Int(view.frame.height) - height + 25
             containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
             containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -222,8 +222,8 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 165),
             
             // Container View
-            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525),
-            containerView.heightAnchor.constraint(equalToConstant: 520),
+            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: uiVersion == .minimalVersion ? 495 : 525),
+            containerView.heightAnchor.constraint(equalToConstant: uiVersion == .minimalVersion ? 480 : 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
