@@ -14,7 +14,7 @@ class ExplanatoryView: UIView {
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [ explanationLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                  explanationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-                 explanationLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 10),
+                 explanationLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                  explanationLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 2),
                  explanationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2)]
     }()
@@ -22,7 +22,6 @@ class ExplanatoryView: UIView {
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
-        backgroundColor = .systemYellow
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(explanationLabel)
     }
