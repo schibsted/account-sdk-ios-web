@@ -94,7 +94,7 @@ class SimplifiedLoginViewController: UIViewController {
             modalTransitionStyle = .crossDissolve
         } else {
             modalPresentationStyle = .formSheet
-            preferredContentSize = .init(width: 450, height: uiVersion == .minimalVersion ? 474 : 524)
+            preferredContentSize = .init(width: 450, height: uiVersion == .minimal ? 474 : 524)
         }
     }
     
@@ -107,7 +107,7 @@ class SimplifiedLoginViewController: UIViewController {
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
         
         if isPhone {
-            let height = 459 + (uiVersion != .minimalVersion ? 46 : 0)
+            let height = 459 + (uiVersion != .minimal ? 46 : 0)
             let y = Int(view.frame.height) - height + 25
             containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
             containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -140,7 +140,7 @@ class SimplifiedLoginViewController: UIViewController {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
             view.addGestureRecognizer(tapGestureRecognizer)
         } else {
-            scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: uiVersion == .minimalVersion ? 454 : 500)
+            scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: uiVersion == .minimal ? 454 : 500)
             scrollView.addSubview(headerView)
             scrollView.addSubview(userInformationView)
             scrollView.addSubview(explanatoryView)
@@ -161,13 +161,13 @@ class SimplifiedLoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tracker?.interaction(.view, with: trackerScreenID)
+        tracker?.interaction(.view, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         animateShowingOverlay()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        tracker?.interaction(.close, with: trackerScreenID)
+        tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
     }
     
     func setupiPhoneConstraints() {
@@ -216,8 +216,8 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 165),
             
             // Container View
-            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: uiVersion == .minimalVersion ? 495 : 525),
-            containerView.heightAnchor.constraint(equalToConstant: uiVersion == .minimalVersion ? 480 : 520),
+            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: uiVersion == .minimal ? 495 : 525),
+            containerView.heightAnchor.constraint(equalToConstant: uiVersion == .minimal ? 480 : 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -368,19 +368,19 @@ class SimplifiedLoginViewController: UIViewController {
 extension SimplifiedLoginViewController {
     
     @objc func primaryButtonClicked() {
-        tracker?.engagement(.click(on: .continueAsButton), in: trackerScreenID)
+        tracker?.engagement(.click(on: .continueAsButton), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedContinueAsUser)
     }
     @objc func loginWithDifferentAccountClicked() {
-        tracker?.engagement(.click(on: .switchAccount), in: trackerScreenID)
+        tracker?.engagement(.click(on: .switchAccount), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedLoginWithDifferentAccount)
     }
     @objc func continueWithoutLoginClicked() {
-        tracker?.engagement(.click(on: .conitnueWithoutLogginIn), in: trackerScreenID)
+        tracker?.engagement(.click(on: .conitnueWithoutLogginIn), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedContinueWithoutLogin)
     }
     @objc func privacyPolicyClicked() {
-        tracker?.engagement(.click(on: .privacyPolicy), in: trackerScreenID)
+        tracker?.engagement(.click(on: .privacyPolicy), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedClickPrivacyPolicy)
     }
     

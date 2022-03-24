@@ -97,7 +97,7 @@ extension SimplifiedLoginManager {
      - parameter window: window used to present SimplifiedLoginViewController
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
-    public func requestSimplifiedLogin(_ clientName: String? = nil, uiVersion: SimplifiedLoginUIVersion = .minimalVersion, window: UIWindow? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+    public func requestSimplifiedLogin(_ clientName: String? = nil, uiVersion: SimplifiedLoginUIVersion = .minimal, window: UIWindow? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let clientName = (clientName != nil) ? clientName! : Bundle.applicationName() else {
             SchibstedAccountLogger.instance.error("Please configure application display name or pass visibleClientName parameter")
@@ -125,7 +125,7 @@ extension SimplifiedLoginManager {
         }
     }
     
-    func makeViewController(_ clientName: String, uiVersion: SimplifiedLoginUIVersion = .minimalVersion, window: UIWindow? = nil, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
+    func makeViewController(_ clientName: String, uiVersion: SimplifiedLoginUIVersion = .minimal, window: UIWindow? = nil, simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let simplifiedLoginViewController: UIViewController
         if #available(iOS 13.0, *) {
             simplifiedLoginViewController = SimplifiedLoginUIFactory.buildViewController(client: self.client,
