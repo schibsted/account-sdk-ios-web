@@ -171,22 +171,17 @@ class SimplifiedLoginViewController: UIViewController {
     }
     
     func setupiPhoneConstraints() {
-        
         let margin = view.layoutMarginsGuide
-        
         let buttonWidth = primaryButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow
         let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 4)
         let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
-        let headerHeight: CGFloat = (uiVersion == .headingCopy) ? 36 : 0
-        let explanatoryHeight: CGFloat = (uiVersion == .explanatoryCopy) ? 48 : 0
         
-        let allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + headerView.internalConstraints + explanatoryView.internalConstraints + [
+        var allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + headerView.internalConstraints + explanatoryView.internalConstraints + [
             // Header View
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: headerHeight),
             
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -198,7 +193,6 @@ class SimplifiedLoginViewController: UIViewController {
             explanatoryView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             explanatoryView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: uiVersion == .explanatoryCopy ? 20 : 0),
-            explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: explanatoryHeight),
 
             // Primary button
             primaryButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: 20),
@@ -233,6 +227,16 @@ class SimplifiedLoginViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ]
         
+        if uiVersion == .headingCopy {
+            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
+            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+        } else if uiVersion == .explanatoryCopy {
+            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
+            allConstraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
+        } else {
+            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
+            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+        }
         NSLayoutConstraint.activate(allConstraints)
     }
     

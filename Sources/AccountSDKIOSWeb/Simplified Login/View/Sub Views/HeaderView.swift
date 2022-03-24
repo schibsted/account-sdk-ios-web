@@ -31,6 +31,7 @@ class HeaderView: UIView {
                 loginWithOneClickLabel.topAnchor.constraint(equalTo: topAnchor),
                 loginWithOneClickLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                 loginWithOneClickLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                grayLine.topAnchor.constraint(equalTo: loginWithOneClickLabel.bottomAnchor, constant: 10),
                 grayLine.heightAnchor.constraint(equalToConstant: 1),
                 grayLine.leadingAnchor.constraint(equalTo: leadingAnchor),
                 grayLine.trailingAnchor.constraint(equalTo: trailingAnchor),
