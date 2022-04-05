@@ -1,5 +1,5 @@
 "SimplifiedWidget.logInWithOneClick" = "Logg inn med ett klikk";
-"SimplifiedWidget.loginIncentive" = "Du er allerede logget på en av Schibsteds tjenester.";
+"SimplifiedWidget.loginIncentive" = "Du er allerede logget på en av\nSchibsteds tjenester. Fortsett med ett klikk.";
 "SimplifiedWidget.schibstedAccount" = "Schibsted-konto";
 "SimplifiedWidget.continueAs" = "Fortsett som";
 "SimplifiedWidget.continueWithoutLogin" = "Fortsett uten å logge inn";

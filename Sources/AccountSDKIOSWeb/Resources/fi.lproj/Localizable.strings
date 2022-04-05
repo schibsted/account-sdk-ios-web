@@ -1,5 +1,5 @@
 "SimplifiedWidget.logInWithOneClick" = "Kirjaudu sisään yhdellä napsautuksella";
-"SimplifiedWidget.loginIncentive" = "Olet jo kirjautunut sisään yhteen Schibsted-palveluista.";
+"SimplifiedWidget.loginIncentive" = "Olet jo kirjautunut sisään yhteen\nSchibsted-palveluista. Jatka yhdellä napsautuksella.";
 "SimplifiedWidget.schibstedAccount" = "Schibsted-tili";
 "SimplifiedWidget.continueAs" = "Jatka käyttäjänä";
 "SimplifiedWidget.continueWithoutLogin" = "Jatka kirjautumatta sisään";
