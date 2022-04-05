@@ -1,12 +1,11 @@
 "SimplifiedWidget.logInWithOneClick" = "Kirjaudu sisään yhdellä napsautuksella";
-"SimplifiedWidget.loginIncentive" = "Olet jo kirjautunut sisään johonkin seuraavista
-Schibstedin palvelut.";
+"SimplifiedWidget.loginIncentive" = "Olet jo kirjautunut sisään yhteen Schibsted-palveluista.";
 "SimplifiedWidget.schibstedAccount" = "Schibsted-tili";
 "SimplifiedWidget.continueAs" = "Jatka käyttäjänä";
 "SimplifiedWidget.continueWithoutLogin" = "Jatka kirjautumatta sisään";
-"SimplifiedWidget.footer" = "Olet kirjautuneena Schibsted-tilille ja\n voit jatkaa kohteeseen %@ yhdellä napautuksella.";
-"SimplifiedWidget.shortFooter" = "Schibstedin tilillä voit kirjautua kaikkiin Schibstedin palveluihin.";
+"SimplifiedWidget.footer" = "Olet kirjautuneena palveluun Schibsted-tililläsi ja\nvoit jatkaa kohteeseen %@ yhdellä napautuksella";
+"SimplifiedWidget.shortFooter" = "Schibsted-tilillä voit kirjautua sisään kaikkiin Schibsted-palveluihin.";
 "SimplifiedWidget.privacyPolicy" = "Tietosuoja";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/fi/tietosuoja-ja-evastekaytannot/";
-"SimplifiedWidget.notYou" = "Et sinä?";
+"SimplifiedWidget.notYou" = "Väärä käyttäjä?";
 "SimplifiedWidget.loginWithDifferentAccount" = "Vaihda tiliä";
