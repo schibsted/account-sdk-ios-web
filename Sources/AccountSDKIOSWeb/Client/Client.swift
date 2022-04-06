@@ -195,7 +195,7 @@ public class Client: CustomStringConvertible {
             preconditionFailure("Couldn't create loginURL")
         }
         
-        tracker?.interaction(.view, with: .webBrowser,
+        tracker?.interaction(.open, with: .webBrowser,
                              additionalFields: [.getLoginSession(withMFA),
                                                 .loginHint(loginHint),
                                                 .withAssertion((assertion != nil) ? true : false),

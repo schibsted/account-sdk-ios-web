@@ -161,7 +161,7 @@ class SimplifiedLoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tracker?.interaction(.view, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
+        tracker?.interaction(.open, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         animateShowingOverlay()
     }
     

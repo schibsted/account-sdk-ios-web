@@ -27,7 +27,7 @@ public enum TrackingEvent {
     }
 
     public enum Interaction {
-        case view
+        case open
         case close
     }
 
