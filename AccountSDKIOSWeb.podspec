@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'AccountSDKIOSWeb'
-  s.version          = '3.3.1'
+  s.version          = '3.4.0'
   s.summary          = 'New implementation of the Schibsted account iOS SDK using the web flows via ASWebAuthenticationSession.'
   s.homepage         = 'https://schibsted.github.io/account-sdk-ios-web/'
   s.license          = { :type => "MIT" }
