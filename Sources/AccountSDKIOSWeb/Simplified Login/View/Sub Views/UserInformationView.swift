@@ -53,7 +53,7 @@ class UserInformationView: UIView {
         view.lineBreakMode = .byWordWrapping
         view.numberOfLines = 0
         view.sizeToFit()
-        view.textColor = SchibstedColor.textDarkGrey.value
+        view.textColor = SchibstedColor.textDarkGray.value
         view.translatesAutoresizingMaskIntoConstraints = false
         view.adjustsFontForContentSizeCategory = true
 
@@ -68,7 +68,7 @@ class UserInformationView: UIView {
         view.lineBreakMode = .byCharWrapping
         view.numberOfLines = 0
         view.sizeToFit()
-        view.textColor = SchibstedColor.textLightGrey.value
+        view.textColor = SchibstedColor.textLightGray.value
         view.translatesAutoresizingMaskIntoConstraints = false
         view.adjustsFontForContentSizeCategory = true
         

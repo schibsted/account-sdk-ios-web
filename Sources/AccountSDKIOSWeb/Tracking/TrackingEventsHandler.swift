@@ -6,13 +6,16 @@ public protocol TrackingEventsHandler: AnyObject {
     var merchantID: String? { get set }
 
     func interaction(_ interaction: TrackingEvent.Interaction, with screen: TrackingEvent.Screen, additionalFields: [TrackingEvent.AdditionalField])
-    func engagement(_ engagement: TrackingEvent.Engagement, in screen: TrackingEvent.Screen)
+    func engagement(_ engagement: TrackingEvent.Engagement, in screen: TrackingEvent.Screen, additionalFields: [TrackingEvent.AdditionalField])
     func error(_ errorType: TrackingEvent.ErrorType, in screen: TrackingEvent.Screen)
 }
 
 extension TrackingEventsHandler {
     func interaction(_ interaction: TrackingEvent.Interaction, with screen: TrackingEvent.Screen) {
         self.interaction(interaction, with: screen, additionalFields: [])
+    }
+    func engagement(_ engagement: TrackingEvent.Engagement, in screen: TrackingEvent.Screen) {
+        self.engagement(engagement, in: screen, additionalFields: [])
     }
 }
 
@@ -24,7 +27,7 @@ public enum TrackingEvent {
     }
 
     public enum Interaction {
-        case view
+        case open
         case close
     }
 
@@ -56,5 +59,6 @@ public enum TrackingEvent {
         case loginHint(String?)
         case withAssertion(Bool)
         case extraScopeValues(Set<String>)
+        case uiVersion(SimplifiedLoginUIVersion)
     }
 }

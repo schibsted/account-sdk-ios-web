@@ -49,7 +49,7 @@ struct ContentView: View {
                     Button(action: resumeUser, label: { Text("Resume user")})
                     Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
                     Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
-                    Button(action: triggerBankIdFlow, label: { Text("Trigger BankId for SE") })
+                    Button(action: triggerBankIdFlow, label: { Text("Trigger BankId for NO") })
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
@@ -60,7 +60,9 @@ struct ContentView: View {
                     Text("Simplified Login")
                         .underline()
                     Button(action: loginFromSharedKeychain, label: { Text("Login from shared keychain")})
-                    Button(action: triggerSimplifiedLogin, label: { Text("Trigger Simplified login")})
+                    Button(action: { triggerSimplifiedLogin(uiVersion: .minimal) }, label: { Text("Trigger Simplified login UI v1")})
+                    Button(action: { triggerSimplifiedLogin(uiVersion: .headingCopy) }, label: { Text("Trigger Simplified login UI v2")})
+                    Button(action: { triggerSimplifiedLogin(uiVersion: .explanatoryCopy) }, label: { Text("Trigger Simplified login UI v3")})
                 }
                 .padding()
                 .border(Color.black)
@@ -79,10 +81,10 @@ struct ContentView: View {
         
     }
     
-    func triggerSimplifiedLogin() {
+    func triggerSimplifiedLogin(uiVersion: SimplifiedLoginUIVersion) {
         let context = ASWebAuthSessionContextProvider()
         let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
-        manager.requestSimplifiedLogin("A visble product name") { result in
+        manager.requestSimplifiedLogin("A visble product name", uiVersion: uiVersion) { result in
             switch (result) {
             case .success():
                 print("success: requestSimplifiedLogin")
@@ -153,7 +155,7 @@ struct ContentView: View {
     func triggerBankIdFlow() {
         let context = ASWebAuthSessionContextProvider()
         let session = client.getLoginSession(contextProvider: context,
-                                             withMFA: .preEid(.se),
+                                             withMFA: .preEid(.no),
                                                   withSSO: true) { result in
             switch result {
             case .success(let user):

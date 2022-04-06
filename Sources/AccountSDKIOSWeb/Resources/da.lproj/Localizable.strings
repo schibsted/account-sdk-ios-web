@@ -1,9 +1,11 @@
-"SimplifiedWidget.continueToLogIn" = "Fortsæt med at logge ind";
+"SimplifiedWidget.logInWithOneClick" = "Log ind med et enkelt klik";
+"SimplifiedWidget.loginIncentive" = "Du er allerede logget ind på en af\nSchibsteds ydelser. Fortsæt med et enkelt klik.";
 "SimplifiedWidget.schibstedAccount" = "Schibsted-konto";
 "SimplifiedWidget.continueAs" = "Fortsæt som";
 "SimplifiedWidget.continueWithoutLogin" = "Fortsæt uden at logge ind";
 "SimplifiedWidget.footer" = "Du er logget ind på en tjeneste med Schibsted og kan fortsætte på %@ med et klik";
-"SimplifiedWidget.privacyPolicy" = "Fortrolighedserklæring";
+"SimplifiedWidget.shortFooter" = "Med en Schibsted-konto kan du logge ind på alle Schibsted-tjenester.";
+"SimplifiedWidget.privacyPolicy" = "Fortrolighedspolitik";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/privacy-and-cookie-policy-english-schibsted-norge/";
 "SimplifiedWidget.notYou" = "Ikke dig?";
 "SimplifiedWidget.loginWithDifferentAccount" = "Skift konto";
