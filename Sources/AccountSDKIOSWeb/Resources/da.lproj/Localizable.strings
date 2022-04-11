@@ -6,6 +6,6 @@
 "SimplifiedWidget.footer" = "Du er logget ind på en tjeneste med Schibsted og kan fortsætte på %@ med et klik";
 "SimplifiedWidget.shortFooter" = "Med en Schibsted-konto kan du logge ind på alle Schibsted-tjenester.";
 "SimplifiedWidget.privacyPolicy" = "Fortrolighedspolitik";
-"SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/privacy-and-cookie-policy-english-schibsted-norge/";
+"SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/dk/persondata-og-cookiepolitik/";
 "SimplifiedWidget.notYou" = "Ikke dig?";
 "SimplifiedWidget.loginWithDifferentAccount" = "Skift konto";
