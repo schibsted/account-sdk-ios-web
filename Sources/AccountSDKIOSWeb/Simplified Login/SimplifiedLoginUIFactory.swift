@@ -23,12 +23,12 @@ struct SimplifiedLoginUIFactory {
 
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
 
-        let vc = window?.visibleViewController
+        let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
             // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
             if Result.failure(LoginError.canceled) != result {
                 DispatchQueue.main.async {
-                    vc?.dismiss(animated: true, completion: nil)
+                    viewController?.dismiss(animated: true, completion: nil)
                 }
             }
             completion(result)
@@ -48,7 +48,7 @@ struct SimplifiedLoginUIFactory {
                 case .success(let assertion):
                     DispatchQueue.main.async {
                         if let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion) {
-                                session.start()
+                            session.start()
                         } else {
                             SchibstedAccountLogger.instance.error("Could not start authentication session")
                             client.tracker?.error(.loginError(.previousSessionInProgress), in: .simplifiedLogin)
@@ -83,16 +83,22 @@ struct SimplifiedLoginUIFactory {
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
-        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
+        let userDataModel = ConcreteSimplifiedLoginUserData(
+            userContext: userContext,
+            userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
+        let viewModel = SimplifiedLoginViewModel(
+            imageDataModel: imageDataModel,
+            userDataModel: userDataModel,
+            localizationModel: localizationModel,
+            visibleClientName: clientName)
 
-        let vc = window?.visibleViewController
+        let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
             // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
             if Result.failure(LoginError.canceled) != result {
                 DispatchQueue.main.async {
-                    vc?.dismiss(animated: true, completion: nil)
+                    viewController?.dismiss(animated: true, completion: nil)
                 }
             }
             completion(result)
@@ -142,18 +148,18 @@ struct SimplifiedLoginUIFactory {
                                     uiVersion: SimplifiedLoginUIVersion,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let s = SimplifiedLoginViewController(viewModel: viewModel, uiVersion: uiVersion, tracker: client.tracker)
+        let viewController = SimplifiedLoginViewController(viewModel: viewModel, uiVersion: uiVersion, tracker: client.tracker)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
 
         viewModel.onClickedContinueWithoutLogin = {
-            s.dismiss(animated: true, completion: nil)
+            viewController.dismiss(animated: true, completion: nil)
         }
 
         viewModel.onClickedPrivacyPolicy = {
             let svc = SFSafariViewController(url: url)
-            s.present(svc, animated: true, completion: nil)
+            viewController.present(svc, animated: true, completion: nil)
         }
 
-        return s
+        return viewController
     }
 }

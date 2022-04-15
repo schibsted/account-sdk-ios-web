@@ -24,4 +24,3 @@ public extension Bundle {
         return Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
     }
 }
-

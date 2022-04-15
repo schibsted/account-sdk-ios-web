@@ -9,7 +9,7 @@ extension Client {
         case clear
 
         public enum AppTransferError: Error {
-            case UserSessionNotFound
+            case userSessionNotFound
         }
 
         public func setup(for key: String) throws {
@@ -34,7 +34,7 @@ extension Client {
         do {
 
             let keychain = KeychainStorage(forService: Client.keychainServiceName, accessGroup: accessGroup)
-            guard let data = try keychain.getValue(forAccount: clientId) else { throw AppTransfer.AppTransferError.UserSessionNotFound }
+            guard let data = try keychain.getValue(forAccount: clientId) else { throw AppTransfer.AppTransferError.userSessionNotFound }
 
             let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
             let encoded = try JSONEncoder().encode(tokenData)
@@ -49,7 +49,7 @@ extension Client {
     private static func loadFromDeviceToKeychain(key: String, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) {
         let key = Client.keyPrefix + key
         guard let tokenData = UserDefaults.standard.object(forKey: key) as? Data else {
-            completion( .failure(AppTransfer.AppTransferError.UserSessionNotFound))
+            completion( .failure(AppTransfer.AppTransferError.userSessionNotFound))
             return
         }
 
@@ -74,13 +74,13 @@ extension Client {
     private static func loadOldSDKDataFromDeviceToKeychain(key: String, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) throws {
         let key = Client.oldSDKKeyPrefix + key
         guard let tokenData = UserDefaults.standard.object(forKey: key) as? Data else {
-            completion(.failure(AppTransfer.AppTransferError.UserSessionNotFound))
+            completion(.failure(AppTransfer.AppTransferError.userSessionNotFound))
             return
         }
 
         do {
-            let kc = LegacyKeychainTokenStorage(accessGroup: accessGroup)
-            try kc.set(legacySDKtokenData: tokenData)
+            let legacyKeychain = LegacyKeychainTokenStorage(accessGroup: accessGroup)
+            try legacyKeychain.set(legacySDKtokenData: tokenData)
             Client.clearStoredUserOnDevice(key: key)
             completion(.success())
         } catch {

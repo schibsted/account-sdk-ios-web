@@ -102,12 +102,14 @@ class SimplifiedLoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // swiftlint:disable function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = isPhone ? .black.withAlphaComponent(0.6) : .white
 
         if isPhone {
             let height = 459 + (uiVersion != .minimal ? 46 : 0)
+            // swiftlint:disable identifier_name
             let y = Int(view.frame.height) - height + 25
             containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
             containerView.translatesAutoresizingMaskIntoConstraints = false

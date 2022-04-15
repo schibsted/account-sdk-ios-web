@@ -13,6 +13,7 @@ class MigratingKeychainCompatStorage: SessionStorage {
     private let makeTokenRequest: (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void
     private var oldSDKClient: OldSDKClient?
 
+    // swiftlint:disable identifier_name
     init(from: LegacyKeychainSessionStorage,
          to: KeychainSessionStorage,
          legacyClient: Client,

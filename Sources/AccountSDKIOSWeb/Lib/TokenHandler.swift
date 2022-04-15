@@ -21,6 +21,7 @@ internal struct TokenResult: CustomStringConvertible {
 }
 
 internal struct TokenResponse: Codable, Equatable, CustomStringConvertible {
+    // swiftlint:disable identifier_name
     let access_token: String
     let refresh_token: String?
     let id_token: String?

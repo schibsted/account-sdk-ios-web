@@ -40,6 +40,7 @@ public enum TrackingEvent {
     }
 
     public enum Engagement {
+        // swiftlint:disable identifier_name
         case click(on: UIElement)
     }
 

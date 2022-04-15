@@ -13,6 +13,7 @@ public final class MulticastDelegate<T> {
     }
 
     func invokeDelegates(_ invocation: (T) -> Void) {
+        // swiftlint:disable force_cast
         delegates.allObjects.reversed().forEach { invocation($0 as! T) }
     }
 }

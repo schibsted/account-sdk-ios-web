@@ -28,7 +28,9 @@ class FooterView: UIStackView {
 
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: viewModel.schibstedLogoName, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
+        let image: UIImage = UIImage(named: viewModel.schibstedLogoName,
+                                     in: Bundle.accountSDK(for: FooterView.self),
+                                     compatibleWith: nil) ?? UIImage()
 
         view.image = image
         view.contentMode = .center
@@ -97,9 +99,9 @@ class FooterView: UIStackView {
         self.uiVersion = uiVersion
         super.init(frame: .zero)
 
-        ////  Ecosystem
-        for iv in popularBrandsImageViews {
-            popularBrandsStackView.addArrangedSubview(iv)
+        // Ecosystem
+        for item in popularBrandsImageViews {
+            popularBrandsStackView.addArrangedSubview(item)
         }
         popularBrandsStackView.reverseSubviewsZIndex()
 
@@ -107,7 +109,7 @@ class FooterView: UIStackView {
         ecoSystemBarStackView.addArrangedSubview(schibstedIconImageView)
         self.addArrangedSubview(ecoSystemBarStackView)
 
-        ////  Privacy and Explanation
+        // Privacy and Explanation
         self.addArrangedSubview(explanationLabel)
         self.addArrangedSubview(privacyURLButton)
 

@@ -2,6 +2,7 @@ import Foundation
 import JOSESwift
 
 internal struct RSAJWK: Codable {
+    // swiftlint:disable identifier_name
     let kid: String
     let kty: String
     let e: String

@@ -24,6 +24,7 @@ public final class SimplifiedLoginManager {
         if _contextProvider == nil {
             _contextProvider = ASWebAuthSessionContextProvider()
         }
+        // swiftlint:disable force_cast
         return _contextProvider as! ASWebAuthSessionContextProvider
     }
 

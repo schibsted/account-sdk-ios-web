@@ -32,14 +32,17 @@ class SimplifiedLoginFetcher: SimplifiedLoginFetching {
                 case .success(let userContextResponse):
                     self.fetchProfile(user: user, userContext: userContextResponse, completion: completion)
                 case .failure(let error):
-                    SchibstedAccountLogger.instance.error("Failed to fetch userContextFromToken: \(String(describing: error))")
+                    SchibstedAccountLogger.instance
+                        .error("Failed to fetch userContextFromToken: \(String(describing: error))")
                     completion(.failure(error))
                 }
             }
         } catch {completion(.failure(error))}
     }
 
-    func fetchProfile(user: User, userContext: UserContextFromTokenResponse, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
+    func fetchProfile(user: User,
+                      userContext: UserContextFromTokenResponse,
+                      completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
         user.fetchProfileData { result in
             switch result {
             case .success(let profileResponse):
