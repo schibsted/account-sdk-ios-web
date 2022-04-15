@@ -8,8 +8,10 @@ class FooterView: UIStackView {
     lazy var internalConstraints: [NSLayoutConstraint] = {
         let popularBrandsHeights = popularBrandsImageViews.map { $0.heightAnchor.constraint(equalToConstant: 36) }
         let popularBrandsWidths = popularBrandsImageViews.map { $0.widthAnchor.constraint(equalToConstant: 36) }
-        return popularBrandsWidths + popularBrandsHeights + [schibstedIconImageView.heightAnchor.constraint(equalToConstant: 16),
-            schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)
+        return popularBrandsWidths +
+        popularBrandsHeights +
+        [schibstedIconImageView.heightAnchor.constraint(equalToConstant: 16),
+         schibstedIconImageView.widthAnchor.constraint(equalToConstant: 100)
         ]
     }()
 

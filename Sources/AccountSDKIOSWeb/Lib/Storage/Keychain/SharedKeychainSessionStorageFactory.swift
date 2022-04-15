@@ -12,7 +12,10 @@ struct SharedKeychainSessionStorageFactory {
         self.sharedKeychain = sharedKeychain
     }
 
-    func makeKeychain(clientId: String, service: String, accessGroup: String? = nil, appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
+    func makeKeychain(clientId: String,
+                      service: String,
+                      accessGroup: String? = nil,
+                      appIdentifierPrefix: String? = nil) -> KeychainSessionStorage {
 
         let keychain = self.keychain ?? KeychainSessionStorage(service: service, accessGroup: accessGroup)
 
@@ -23,7 +26,8 @@ struct SharedKeychainSessionStorageFactory {
 
         let sharedKeychainAccessGroup = "\(appIdentifierPrefix).\(Self.sharedKeychainGroup)"
 
-        let sharedKeychain = self.sharedKeychain ?? KeychainSessionStorage(service: service, accessGroup: sharedKeychainAccessGroup)
+        let sharedKeychain = self.sharedKeychain ??
+        KeychainSessionStorage(service: service, accessGroup: sharedKeychainAccessGroup)
 
         // check if correct entitlements are added to the app
         do {
@@ -39,7 +43,8 @@ struct SharedKeychainSessionStorageFactory {
             .filter { $0.clientId == clientId }
 
         guard clientSessionInSharedKeychain.isEmpty else {
-            SchibstedAccountLogger.instance.debug("Session for clientId already exists in shared keychain. Return shared keychain")
+            SchibstedAccountLogger.instance
+                .debug("Session for clientId already exists in shared keychain. Return shared keychain")
             return sharedKeychain
         }
 

@@ -65,7 +65,8 @@ class SimplifiedLoginFetcher: SimplifiedLoginFetching {
             case .success(let assertionResponse):
                 completion(.success(assertionResponse))
             case .failure(let error):
-                SchibstedAccountLogger.instance.error("Failed to fetch Simplified Login assertion: \(String(describing: error))")
+                SchibstedAccountLogger.instance
+                    .error("Failed to fetch Simplified Login assertion: \(String(describing: error))")
                 completion(.failure(error))
             }
         }

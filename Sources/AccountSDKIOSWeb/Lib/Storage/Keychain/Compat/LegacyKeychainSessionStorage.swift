@@ -31,7 +31,10 @@ class LegacyKeychainSessionStorage {
               let clientId = accessTokenClaims["client_id"] as? String else {
             return nil
         }
-        return LegacyUserSession(clientId: clientId, accessToken: validatedAccessToken, refreshToken: legacyTokenData.refreshToken, updatedAt: Date())
+        return LegacyUserSession(clientId: clientId,
+                                 accessToken: validatedAccessToken,
+                                 refreshToken: legacyTokenData.refreshToken,
+                                 updatedAt: Date())
     }
 
     private func unverifiedClaims(from token: String) -> [String: Any]? {

@@ -63,11 +63,14 @@ internal class TokenHandler {
     init(configuration: ClientConfiguration, httpClient: HTTPClient, jwks: JWKS) {
         self.configuration = configuration
         self.httpClient = httpClient
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL,
+                                                       sessionServiceURL: configuration.sessionServiceURL)
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String, authState: AuthState?, completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(authCode: String,
+                          authState: AuthState?,
+                          completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "authorization_code",
@@ -89,7 +92,9 @@ internal class TokenHandler {
                                                                         nonce: authState?.nonce,
                                                                         expectedAMR: authState?.mfa?.rawValue)
 
-                IdTokenValidator.validate(idToken: idToken, jwks: self.jwks, context: idTokenValidationContext) { result in
+                IdTokenValidator.validate(idToken: idToken,
+                                          jwks: self.jwks,
+                                          context: idTokenValidationContext) { result in
                     switch result {
                     case .success(let claims):
                         let userTokens = UserTokens(accessToken: tokenResponse.access_token,
@@ -113,7 +118,9 @@ internal class TokenHandler {
         }
     }
 
-    func makeTokenRequest(refreshToken: String, scope: String? = nil, completion: @escaping HTTPResultHandler<TokenResponse>) {
+    func makeTokenRequest(refreshToken: String,
+                          scope: String? = nil,
+                          completion: @escaping HTTPResultHandler<TokenResponse>) {
         var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "refresh_token",

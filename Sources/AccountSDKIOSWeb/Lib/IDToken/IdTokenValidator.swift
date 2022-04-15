@@ -8,7 +8,10 @@ internal struct IdTokenValidationContext {
 }
 
 internal enum IdTokenValidator {
-    static func validate(idToken: String, jwks: JWKS, context: IdTokenValidationContext, completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
+    static func validate(idToken: String,
+                         jwks: JWKS,
+                         context: IdTokenValidationContext,
+                         completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
         JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
             switch result {
             case .success(let payload):
@@ -17,7 +20,8 @@ internal enum IdTokenValidator {
                     return
                 }
 
-                // ID Token Validation according to https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation
+              // ID Token Validation according to
+              // https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation
 
                 guard removeTrailingSlash(from: claims.iss) == removeTrailingSlash(from: context.issuer) else {
                     completion(.failure(.invalidIssuer))
@@ -41,7 +45,8 @@ internal enum IdTokenValidator {
                 }
 
                 guard IdTokenValidator.contains(claims.amr, value: context.expectedAMR) else {
-                    SchibstedAccountLogger.instance.info("Requested AMR values were not fulfilled: \(String(describing: claims.amr)) != \(String(describing: context.expectedAMR))")
+                    SchibstedAccountLogger.instance
+                        .info("Requested AMR values were not fulfilled: \(String(describing: claims.amr)) != \(String(describing: context.expectedAMR))")
                     completion(.failure(.missingExpectedAMRValue))
                     return
                 }

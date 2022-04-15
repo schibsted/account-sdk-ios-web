@@ -118,7 +118,10 @@ class SimplifiedLoginViewController: UIViewController {
             containerView.layer.cornerRadius = 10
             containerView.backgroundColor = .white
 
-            scrollView.frame = CGRect(x: 0, y: 20, width: containerView.frame.size.width, height: containerView.frame.size.height)
+            scrollView.frame = CGRect(x: 0,
+                                      y: 20,
+                                      width: containerView.frame.size.width,
+                                      height: containerView.frame.size.height)
 
             if #available(iOS 13.0, *) {
                 scrollView.automaticallyAdjustsScrollIndicatorInsets = false
@@ -179,7 +182,9 @@ class SimplifiedLoginViewController: UIViewController {
         let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 4)
         let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
 
-        var allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + headerView.internalConstraints + explanatoryView.internalConstraints + [
+        var allConstraints =  userInformationView.internalConstraints +
+        footerStackView.internalConstraints + linksView.internalConstraints +
+        headerView.internalConstraints + explanatoryView.internalConstraints + [
             // Header View
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -188,13 +193,15 @@ class SimplifiedLoginViewController: UIViewController {
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: uiVersion == .headingCopy ? 15 : 5),
+            userInformationView.topAnchor.constraint(equalTo: headerView.bottomAnchor,
+                                                     constant: uiVersion == .headingCopy ? 15 : 5),
             userInformationView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
 
             // Explanatory view
             explanatoryView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             explanatoryView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: uiVersion == .explanatoryCopy ? 20 : 0),
+            explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor,
+                                                 constant: uiVersion == .explanatoryCopy ? 20 : 0),
 
             // Primary button
             primaryButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: 20),
@@ -243,25 +250,31 @@ class SimplifiedLoginViewController: UIViewController {
     }
 
     func setupiPadConstraints() {
-        var allConstraints =  userInformationView.internalConstraints + footerStackView.internalConstraints + linksView.internalConstraints + headerView.internalConstraints + explanatoryView.internalConstraints + [
+        var allConstraints =  userInformationView.internalConstraints +
+        footerStackView.internalConstraints + linksView.internalConstraints +
+        headerView.internalConstraints + explanatoryView.internalConstraints + [
 
             // Header View
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: uiVersion == .headingCopy ? 35 : 0),
+            headerView.topAnchor.constraint(equalTo: scrollView.topAnchor,
+                                            constant: uiVersion == .headingCopy ? 35 : 0),
 
             // UserInformation
             userInformationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: headerView.bottomAnchor, constant: uiVersion == .headingCopy ? 15 : 35),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: headerView.bottomAnchor,
+                                                     constant: uiVersion == .headingCopy ? 15 : 35),
             userInformationView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
 
             // Explanatory view
             explanatoryView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             explanatoryView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor, constant: uiVersion == .explanatoryCopy ? 20 : 0),
+            explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor,
+                                                 constant: uiVersion == .explanatoryCopy ? 20 : 0),
 
             // Primary button
-            primaryButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: uiVersion == .explanatoryCopy ? 10 : 30),
+            primaryButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor,
+                                               constant: uiVersion == .explanatoryCopy ? 10 : 30),
             primaryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             primaryButton.widthAnchor.constraint(equalToConstant: 326),
@@ -308,7 +321,8 @@ class SimplifiedLoginViewController: UIViewController {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             if var bottomConstraint = self.bottomConstraint {
                 NSLayoutConstraint.deactivate([bottomConstraint])
-                bottomConstraint = self.containerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 25)
+                bottomConstraint = self.containerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                                                              constant: 25)
                 NSLayoutConstraint.activate([bottomConstraint])
                 self.view.layoutIfNeeded()
             }
@@ -355,22 +369,20 @@ class SimplifiedLoginViewController: UIViewController {
     }
 
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        get {
-            .portrait
-        }
+        return .portrait
     }
 
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        get {
-            isPhone ? .portrait : .all
-        }
+        return isPhone ? .portrait : .all
     }
 }
 
 extension SimplifiedLoginViewController {
 
     @objc func primaryButtonClicked() {
-        tracker?.engagement(.click(on: .continueAsButton), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
+        tracker?.engagement(.click(on: .continueAsButton),
+                            in: trackerScreenID,
+                            additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedContinueAsUser)
     }
     @objc func loginWithDifferentAccountClicked() {
@@ -378,11 +390,15 @@ extension SimplifiedLoginViewController {
         viewModel.send(action: .clickedLoginWithDifferentAccount)
     }
     @objc func continueWithoutLoginClicked() {
-        tracker?.engagement(.click(on: .conitnueWithoutLogginIn), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
+        tracker?.engagement(.click(on: .conitnueWithoutLogginIn),
+                            in: trackerScreenID,
+                            additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedContinueWithoutLogin)
     }
     @objc func privacyPolicyClicked() {
-        tracker?.engagement(.click(on: .privacyPolicy), in: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
+        tracker?.engagement(.click(on: .privacyPolicy),
+                            in: trackerScreenID,
+                            additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedClickPrivacyPolicy)
     }
 

@@ -12,8 +12,12 @@ public protocol UserProtocol {
     func logout()
     func isLoggedIn() -> Bool
 
-    func webSessionURL(clientId: String, redirectURI: String, state: String?, completion: @escaping HTTPResultHandler<URL>)
-    func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>)
+    func webSessionURL(clientId: String,
+                       redirectURI: String,
+                       state: String?,
+                       completion: @escaping HTTPResultHandler<URL>)
+    func oneTimeCode(clientId: String,
+                     completion: @escaping HTTPResultHandler<String>)
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
 }
 
@@ -36,16 +40,12 @@ public class User: UserProtocol {
 
     /// user idToken
     public var idToken: String? {
-        get {
-            tokens?.idToken
-        }
+        return tokens?.idToken
     }
 
     /// User UUID
     public var uuid: String? {
-        get {
-            tokens?.idTokenClaims.sub
-        }
+        return tokens?.idTokenClaims.sub
     }
 
     /**
@@ -54,9 +54,7 @@ public class User: UserProtocol {
      A user_id used by some Schibsted account APIs
      */
     public var userId: String? {
-        get {
-            tokens?.idTokenClaims.userId
-        }
+        return tokens?.idTokenClaims.userId
     }
 
     internal init(client: Client, tokens: UserTokens) {
@@ -93,8 +91,14 @@ public class User: UserProtocol {
      - parameter state: An opaque value used by the client to maintain state between
      - parameter completion: The callback that receives the URL or an error in case of failure
      */
-    public func webSessionURL(clientId: String, redirectURI: String, state: String? = nil, completion: @escaping HTTPResultHandler<URL>) {
-        client.schibstedAccountAPI.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI, state: state) { result in
+    public func webSessionURL(clientId: String,
+                              redirectURI: String,
+                              state: String? = nil,
+                              completion: @escaping HTTPResultHandler<URL>) {
+        client.schibstedAccountAPI.sessionExchange(for: self,
+                                                      clientId: clientId,
+                                                      redirectURI: redirectURI,
+                                                      state: state) { result in
             switch result {
             case .success(let response):
                 let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
@@ -180,7 +184,10 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
-                    self.refreshHandler.refreshWithRetry(user: self, requestResult: requestResult, request: request, completion: completion)
+                    self.refreshHandler.refreshWithRetry(user: self,
+                                                         requestResult: requestResult,
+                                                         request: request,
+                                                         completion: completion)
                 } else {
                     completion(.failure(.errorResponse(code: code, body: body)))
                 }
@@ -206,6 +213,7 @@ extension User {
     /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
     final class TokenRefreshRequestHandler {
 
+        // swiftlint:disable nesting
         private enum State {
             case isRefreshing
             case notRefreshing
@@ -308,7 +316,8 @@ extension User {
             }
         }
 
-        private func saveRequestOnRefreshFailure<T:Decodable>(initialRequestResult: Result<T, HTTPError>, completion: @escaping HTTPResultHandler<T>) {
+        private func saveRequestOnRefreshFailure<T:Decodable>(initialRequestResult: Result<T, HTTPError>,
+                                                              completion: @escaping HTTPResultHandler<T>) {
             let failure: (Result<UserTokens, RefreshTokenError>) -> Void = { result in
                 switch result {
                 case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
@@ -340,7 +349,9 @@ extension User {
         // MARK: Execute requests and completions
 
         private func executeRequestOnRefreshSuccess() {
-            requestsOnRefreshSuccess.value.forEach({ DispatchQueue.global().async(execute: $0) }) // Execute in FIFO order.
+            requestsOnRefreshSuccess.value.forEach({
+                DispatchQueue.global().async(execute: $0)
+            }) // Execute in FIFO order.
             removeAll()
         }
 
@@ -371,7 +382,9 @@ protocol UserRequestMaking: AnyObject {
 }
 
 final class DefaultUserRequestMaker: UserRequestMaking {
-    func makeRequest<T>(user: User, request: URLRequest, completion: @escaping HTTPResultHandler<T>) where T : Decodable {
+    func makeRequest<T>(user: User,
+                        request: URLRequest,
+                        completion: @escaping HTTPResultHandler<T>) where T : Decodable {
         user.makeRequest(request: request, completion: completion)
     }
 }

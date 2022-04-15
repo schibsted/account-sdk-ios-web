@@ -32,7 +32,8 @@ class ExplanatoryView: UIView {
 }
 
 extension UILabel {
-    static func paragraphLabel(localizedString: String, font: UIFont = UIFont.preferredFont(forTextStyle: .footnote)) -> UILabel {
+    static func paragraphLabel(localizedString: String,
+                               font: UIFont = UIFont.preferredFont(forTextStyle: .footnote)) -> UILabel {
         let view = UILabel()
         view.numberOfLines = -1
 

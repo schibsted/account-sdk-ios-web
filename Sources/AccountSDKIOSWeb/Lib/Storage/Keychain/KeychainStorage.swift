@@ -81,7 +81,8 @@ class KeychainStorage: KeychainStoring {
         }
 
         if status == errSecMissingEntitlement {
-            SchibstedAccountLogger.instance.error("KeychainStorager error: \(KeychainStorageError.entitlementMissing.localizedDescription)")
+            SchibstedAccountLogger.instance
+                .error("KeychainStorager error: \(KeychainStorageError.entitlementMissing.localizedDescription)")
             throw KeychainStorageError.entitlementMissing
         }
 

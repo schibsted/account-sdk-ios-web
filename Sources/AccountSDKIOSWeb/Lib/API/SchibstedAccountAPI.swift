@@ -135,7 +135,8 @@ class SchibstedAccountAPI {
         }
     }
 
-    func assertionForSimplifiedLogin(for user: User, completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
+    func assertionForSimplifiedLogin(for user: User,
+                                     completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
         let request = RequestBuilder.assertionForSimplifiedLogin.asRequest(baseURL: baseURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
@@ -143,7 +144,9 @@ class SchibstedAccountAPI {
         }
     }
 
-    func tokenRequest(with httpClient: HTTPClient, parameters: [String: String], completion: @escaping HTTPResultHandler<TokenResponse>) {
+    func tokenRequest(with httpClient: HTTPClient,
+                      parameters: [String: String],
+                      completion: @escaping HTTPResultHandler<TokenResponse>) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create token request")
@@ -182,7 +185,10 @@ class SchibstedAccountAPI {
     }
 
     /// API endpoint called with New SDK clientID, and oldSDKAccesstoken
-    func oldSDKCodeExchange(with httpClient: HTTPClient, clientId: String, oldSDKAccessToken: String, completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> ) {
+    func oldSDKCodeExchange(with httpClient: HTTPClient,
+                            clientId: String,
+                            oldSDKAccessToken: String,
+                            completion: @escaping HTTPResultHandler<SchibstedAccountAPIResponse<CodeExchangeResponse>> ) {
         let codeExchangeRequest = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
         let authenticatedRequest = authenticatedBearerRequest(codeExchangeRequest, token: oldSDKAccessToken)
         httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
@@ -191,9 +197,15 @@ class SchibstedAccountAPI {
     }
 
     /// API endpoint called with old SDK clientID and old SDK Client secret, and old SDK refreshToken
-    func oldSDKRefresh(with httpClient: HTTPClient, refreshToken: String, clientId: String, clientSecret: String, completion: @escaping HTTPResultHandler<TokenResponse> ) {
+    func oldSDKRefresh(with httpClient: HTTPClient,
+                       refreshToken: String,
+                       clientId: String,
+                       clientSecret: String,
+                       completion: @escaping HTTPResultHandler<TokenResponse> ) {
         let request = RequestBuilder.oldSDKRefreshToken(oldSDKRefreshToken: refreshToken).asRequest(baseURL: baseURL)
-        let authenticatedRequest = authenticatedBasicRequest(request, legacyClientId: clientId, legacyClientSecret: clientSecret)
+        let authenticatedRequest = authenticatedBasicRequest(request,
+                                                             legacyClientId: clientId,
+                                                             legacyClientSecret: clientSecret)
         httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: authenticatedRequest),
                            withRetryPolicy: retryPolicy,
                            completion: completion)
@@ -208,7 +220,9 @@ private func authenticatedBearerRequest(_ request: URLRequest, token: String) ->
     return requestCopy
 }
 
-private func authenticatedBasicRequest(_ request: URLRequest, legacyClientId: String, legacyClientSecret: String) -> URLRequest {
+private func authenticatedBasicRequest(_ request: URLRequest,
+                                       legacyClientId: String,
+                                       legacyClientSecret: String) -> URLRequest {
     var requestCopy = request
 
     let loginString = encode(legacyClientId: legacyClientId, legacyClientSecret: legacyClientSecret)

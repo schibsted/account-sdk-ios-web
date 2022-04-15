@@ -27,20 +27,18 @@ public struct UserProfileResponse: Codable, Equatable {
     public var utcOffset: String?
 
     public var emailVerifiedDate: String? {
-        get { emailVerified?.value }
+        return emailVerified?.value
     }
 
     public var phoneNumberVerifiedDate: String? {
-        get { phoneNumberVerified?.value }
+        return phoneNumberVerified?.value
     }
 
     public var birthdate: String? {
-        get {
-            if birthday == "0000-00-00" {
-                return nil
-            }
-            return birthday
+        if birthday == "0000-00-00" {
+            return nil
         }
+        return birthday
     }
 
     init(
@@ -150,8 +148,8 @@ public struct Email: Identifier {
     internal var verified: StringBool?
     public var verifiedTime: String?
 
-    public var isPrimary: Bool? { get { primary?.value } }
-    public var isVerified: Bool? { get { verified?.value } }
+    public var isPrimary: Bool? { return primary?.value }
+    public var isVerified: Bool? { return verified?.value }
 }
 
 public struct PhoneNumber: Identifier {
@@ -161,8 +159,8 @@ public struct PhoneNumber: Identifier {
     internal var verified: StringBool?
     public var verifiedTime: String?
 
-    public var isPrimary: Bool? { get { primary?.value } }
-    public var isVerified: Bool? { get { verified?.value } }
+    public var isPrimary: Bool? { return primary?.value }
+    public var isVerified: Bool? { return verified?.value }
 }
 
 public struct Name: Codable, Equatable {
@@ -188,8 +186,8 @@ public struct Address: Codable, Equatable {
     public var type: AddressType?
 
     public enum AddressType: String, Codable, Equatable {
-        case home = "home"
-        case delivery = "delivery"
-        case invoice = "invoice"
+        case home
+        case delivery
+        case invoice
     }
 }

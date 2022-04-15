@@ -18,10 +18,14 @@ struct SimplifiedLoginUIFactory {
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
-        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
+        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext,
+                                                            userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
 
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel,
+                                                 userDataModel: userDataModel,
+                                                 localizationModel: localizationModel,
+                                                 visibleClientName: clientName)
 
         let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
@@ -47,7 +51,11 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        if let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion) {
+                        if let session = client.createWebAuthenticationSession(withMFA: nil,
+                                                                               loginHint: nil,
+                                                                               assertion: assertion.assertion,
+                                                                               extraScopeValues: [],
+                                                                               completion: extendedCompletion) {
                             session.start()
                         } else {
                             SchibstedAccountLogger.instance.error("Could not start authentication session")
@@ -56,7 +64,8 @@ struct SimplifiedLoginUIFactory {
                         }
                     }
                 case .failure(let error):
-                    SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
+                    SchibstedAccountLogger.instance
+                        .error("Failed to fetch assertion on Simplified login flow: \(error)")
                     let error = LoginError.unexpectedError(message: "Failed to obtain Assertion")
                     client.tracker?.error(.loginError(error), in: .simplifiedLogin)
                     completion(.failure(error))
@@ -64,10 +73,15 @@ struct SimplifiedLoginUIFactory {
             }
         }
 
-        return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
+        return commonSetup(client: client,
+                           viewModel: viewModel,
+                           uiVersion: uiVersion,
+                           assertionFetcher: assertionFetcher,
+                           completion: completion)
     }
 
     @available(iOS 13.0, *)
+    // swiftlint:disable function_parameter_count
     static func buildViewController(client: Client,
                                     contextProvider: ASWebAuthenticationPresentationContextProviding,
                                     assertionFetcher: SimplifiedLoginFetching,
@@ -120,7 +134,11 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        if let session = client.createWebAuthenticationSession(withMFA: nil, loginHint: nil, assertion: assertion.assertion, extraScopeValues: [], completion: extendedCompletion) {
+                        if let session = client.createWebAuthenticationSession(withMFA: nil,
+                                                                               loginHint: nil,
+                                                                               assertion: assertion.assertion,
+                                                                               extraScopeValues: [],
+                                                                               completion: extendedCompletion) {
                             viewModel.asWebAuthenticationSession = session
                             session.presentationContextProvider = contextProvider
                             session.prefersEphemeralWebBrowserSession = true
@@ -132,7 +150,8 @@ struct SimplifiedLoginUIFactory {
                         }
                     }
                 case .failure(let error):
-                    SchibstedAccountLogger.instance.error("Failed to fetch assertion on Simplified login flow: \(error)")
+                    SchibstedAccountLogger.instance
+                        .error("Failed to fetch assertion on Simplified login flow: \(error)")
                     let error = LoginError.unexpectedError(message: "Failed to obtain Assertion")
                     client.tracker?.error(.loginError(error), in: .simplifiedLogin)
                     completion(.failure(error))
@@ -140,7 +159,11 @@ struct SimplifiedLoginUIFactory {
             }
         }
 
-        return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
+        return commonSetup(client: client,
+                           viewModel: viewModel,
+                           uiVersion: uiVersion,
+                           assertionFetcher: assertionFetcher,
+                           completion: completion)
     }
 
     private static func commonSetup(client: Client,
@@ -148,7 +171,9 @@ struct SimplifiedLoginUIFactory {
                                     uiVersion: SimplifiedLoginUIVersion,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewController = SimplifiedLoginViewController(viewModel: viewModel, uiVersion: uiVersion, tracker: client.tracker)
+        let viewController = SimplifiedLoginViewController(viewModel: viewModel,
+                                                           uiVersion: uiVersion,
+                                                           tracker: client.tracker)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
 
         viewModel.onClickedContinueWithoutLogin = {

@@ -29,9 +29,11 @@ class LinksView: UIView {
             notYouLabel.leadingAnchor.constraint(equalTo: differentAccountView.leadingAnchor, constant: 10),
             notYouLabel.widthAnchor.constraint(greaterThanOrEqualTo: differentAccountView.widthAnchor, multiplier: 1/5),
             loginWithDifferentAccountButton.topAnchor.constraint(equalTo: differentAccountView.topAnchor, constant: 2),
-            loginWithDifferentAccountButton.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 2),
+            loginWithDifferentAccountButton.bottomAnchor.constraint(equalTo: differentAccountView.bottomAnchor,
+                                                                    constant: 2),
             loginWithDifferentAccountButton.centerYAnchor.constraint(equalTo: notYouLabel.centerYAnchor),
-            loginWithDifferentAccountButton.trailingAnchor.constraint(equalTo: differentAccountView.trailingAnchor, constant: -10),
+            loginWithDifferentAccountButton.trailingAnchor.constraint(equalTo: differentAccountView.trailingAnchor,
+                                                                      constant: -10),
             loginWithDifferentAccountButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 1/2),
 
             continueWithoutLoginButton.topAnchor.constraint(equalTo: differentAccountView.bottomAnchor, constant: 10),

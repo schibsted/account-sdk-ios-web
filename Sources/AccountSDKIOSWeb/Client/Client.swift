@@ -19,7 +19,10 @@ public struct SessionStorageConfig {
      - parameter legacyAccessGroup: Optional access group name from old SDK.
      
      */
-    public init(legacyClientID: String, legacyClientSecret: String, accessGroup: String? = nil, legacyAccessGroup: String? = nil) {
+    public init(legacyClientID: String,
+                legacyClientSecret: String,
+                accessGroup: String? = nil,
+                legacyAccessGroup: String? = nil) {
         self.legacyClientId = legacyClientID
         self.accessGroup = accessGroup
         self.legacyAccessGroup = legacyAccessGroup
@@ -66,9 +69,16 @@ public class Client: CustomStringConvertible {
                             httpClient: HTTPClient? = nil) {
 
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
-        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
-        let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
-        let sessionKeychainStorage = SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId, service: Client.keychainServiceName, accessGroup: nil, appIdentifierPrefix: appIdentifierPrefix)
+        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
+                              httpClient: chttpClient)
+        let tokenHandler = TokenHandler(configuration: configuration,
+                                        httpClient: chttpClient,
+                                        jwks: jwks)
+        let sessionKeychainStorage = SharedKeychainSessionStorageFactory()
+            .makeKeychain(clientId: configuration.clientId,
+                          service: Client.keychainServiceName,
+                          accessGroup: nil,
+                          appIdentifierPrefix: appIdentifierPrefix)
 
         self.init(configuration: configuration,
                   sessionStorage: sessionKeychainStorage,
@@ -98,18 +108,23 @@ public class Client: CustomStringConvertible {
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
 
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
-        let newSessionStorage =  SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId,
-                                                                                    service: Client.keychainServiceName,
-                                                                                    accessGroup: sessionStorageConfig.accessGroup,
-                                                                                    appIdentifierPrefix: appIdentifierPrefix)
+        let newSessionStorage =  SharedKeychainSessionStorageFactory()
+            .makeKeychain(clientId: configuration.clientId,
+                          service: Client.keychainServiceName,
+                          accessGroup: sessionStorageConfig.accessGroup,
+                          appIdentifierPrefix: appIdentifierPrefix)
 
         let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
                                                             serverURL: configuration.serverURL,
                                                             sessionServiceURL: configuration.sessionServiceURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
                                                             redirectURI: URL(string: "http://")!) // TODO: Handle url
-        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
-        let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
+        let jwks = RemoteJWKS(
+            jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
+            httpClient: chttpClient)
+        let tokenHandler = TokenHandler(configuration: configuration,
+                                        httpClient: chttpClient,
+                                        jwks: jwks)
         let stateStorage = StateStorage()
 
         // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
@@ -120,11 +135,16 @@ public class Client: CustomStringConvertible {
                                   httpClient: chttpClient,
                                   jwks: jwks,
                                   tokenHandler: tokenHandler)
+        let clousure = { authCode, authState, completion in
+            tokenHandler.makeTokenRequest(authCode: authCode,
+                                          authState: authState,
+                                          completion: completion)
+        }
         let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
                                                             to: newSessionStorage,
                                                             legacyClient: legacyClient,
                                                             legacyClientSecret: sessionStorageConfig.legacyClientSecret,
-                                                            makeTokenRequest: { authCode, authState, completion in tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)})
+                                                            makeTokenRequest: clousure)
 
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
@@ -148,7 +168,8 @@ public class Client: CustomStringConvertible {
         self.stateStorage = stateStorage
         self.httpClient = httpClient
         self.tokenHandler = tokenHandler
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL, sessionServiceURL: configuration.sessionServiceURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL,
+                                                       sessionServiceURL: configuration.sessionServiceURL)
         self.urlBuilder = URLBuilder(configuration: configuration)
         self.tracker = tracker
         self.tracker?.clientConfiguration = self.configuration
@@ -189,7 +210,9 @@ public class Client: CustomStringConvertible {
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
 
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, assertion: assertion, extraScopeValues: extraScopeValues)
+        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint,
+                                                          assertion: assertion,
+                                                          extraScopeValues: extraScopeValues)
 
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
@@ -235,7 +258,8 @@ public class Client: CustomStringConvertible {
             case .success(let tokenResponse):
                 SchibstedAccountLogger.instance.debug("Successfully refreshed user tokens")
                 guard let tokens = user.tokens else {
-                    SchibstedAccountLogger.instance.info("User has logged-out during token refresh, discarding new tokens.")
+                    SchibstedAccountLogger.instance
+                        .info("User has logged-out during token refresh, discarding new tokens.")
                     self.tracker?.error(.loginStateError(.notLoggedIn), in: .noScreen)
                     completion(.failure(.unexpectedError(error: LoginStateError.notLoggedIn)))
                     return
@@ -259,7 +283,9 @@ public class Client: CustomStringConvertible {
         }
     }
 
-    private func storeSession(userSession: UserSession, attempts: Int = 1, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    private func storeSession(userSession: UserSession,
+                              attempts: Int = 1,
+                              completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         func retry(_ attempts: Int) {
             self.sessionStorage.store(userSession, accessGroup: nil) { result in
                 switch result {
@@ -280,7 +306,8 @@ public class Client: CustomStringConvertible {
         retry(attempts)
     }
 
-    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>, completion: @escaping LoginResultHandler) {
+    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>,
+                                          completion: @escaping LoginResultHandler) {
         switch result {
         case .success(let tokenResult):
             let userSession = UserSession(clientId: self.configuration.clientId,
@@ -292,7 +319,8 @@ public class Client: CustomStringConvertible {
                     let user = User(client: self, tokens: tokenResult.userTokens)
                     completion(.success(user))
                 case .failure(let error):
-                    self.tracker?.error(.loginError(.unexpectedError(message: error.localizedDescription)), in: .noScreen)
+                    self.tracker?.error(.loginError(.unexpectedError(message: error.localizedDescription)),
+                                        in: .noScreen)
                     completion(.failure(.unexpectedError(message: error.localizedDescription)))
                 }
             }
@@ -365,7 +393,10 @@ extension Client {
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-        return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
+        return createWebAuthenticationSession(withMFA: withMFA,
+                                              loginHint: loginHint,
+                                              extraScopeValues: extraScopeValues,
+                                              completion: completion)
     }
 
     /**
@@ -389,7 +420,10 @@ extension Client {
                                 withSSO: Bool = true,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
 
-        let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
+        let session = createWebAuthenticationSession(withMFA: withMFA,
+                                                     loginHint: loginHint,
+                                                     extraScopeValues: extraScopeValues,
+                                                     completion: completion)
         session?.presentationContextProvider = contextProvider
         session?.prefersEphemeralWebBrowserSession = !withSSO
 
@@ -419,7 +453,8 @@ extension Client {
         isSessionInProgress = false
 
         if let error = url.valueOf(queryParameter: "error") {
-            let error = LoginError.authenticationErrorResponse(error: OAuthError(error: error, errorDescription: url.valueOf(queryParameter: "error_description")))
+            let error = LoginError.authenticationErrorResponse(error: OAuthError(error: error,
+                                                                                 errorDescription: url.valueOf(queryParameter: "error_description")))
             self.tracker?.error(.loginError(error), in: .webBrowser)
             completion(.failure(error))
             return
