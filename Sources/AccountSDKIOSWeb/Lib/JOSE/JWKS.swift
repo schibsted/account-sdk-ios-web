@@ -38,10 +38,10 @@ internal class RemoteJWKS: JWKS {
             completion(cachedKey)
             return
         }
-        
+
         fetchJWKS(keyId: keyId, completion: completion)
     }
-    
+
     private func fetchJWKS(keyId: String, completion: @escaping (JWK?) -> Void) {
         let request = URLRequest(url: jwksURI)
         httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) { (result: Result<JWKSResponse, HTTPError>) -> Void in
@@ -51,7 +51,7 @@ internal class RemoteJWKS: JWKS {
                     let jwk = RSAPublicKey(modulus: keyData.n, exponent: keyData.e)
                     self.cache.setObject(jwk, forKey: keyData.kid)
                 }
-                
+
                 completion(self.cache.object(forKey: keyId))
             case .failure:
                 SchibstedAccountLogger.instance.error("Failed to fetch JWKS")

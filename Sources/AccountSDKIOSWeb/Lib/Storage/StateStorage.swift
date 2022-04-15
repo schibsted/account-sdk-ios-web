@@ -2,11 +2,11 @@ import Foundation
 
 internal class StateStorage {
     private let storage: Storage
-    
+
     init(storage: Storage = UserDefaultsStorage(UserDefaults.standard)) {
         self.storage = storage
     }
-    
+
     func setValue<T : Codable> (_ value: T?, forKey key: String) -> Bool {
         if let encoded = try? JSONEncoder().encode(value) {
             storage.setValue(encoded, forKey: key)
@@ -22,10 +22,10 @@ internal class StateStorage {
             return deserialised
         }
 
-        return nil;
+        return nil
     }
-    
+
     func removeValue(forKey key: String) {
         storage.removeValue(forKey: key)
-    }   
+    }
 }

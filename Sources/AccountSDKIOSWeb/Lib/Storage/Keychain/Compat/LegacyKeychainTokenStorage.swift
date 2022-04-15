@@ -21,13 +21,13 @@ class LegacyKeychainTokenStorage {
         static let loggedInUsers = "logged_in_users"
         static let userID = "user_id"
     }
-    
+
     private let keychain: KeychainStoring
 
     init(accessGroup: String? = nil) {
         keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
-    
+
     // Now just for test purposes (proper dependency injection in the future)
     init(keychain: KeychainStoring) {
         self.keychain = keychain
@@ -50,31 +50,31 @@ class LegacyKeychainTokenStorage {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
             return []
         }
-        
+
         guard let data = maybeData else {
             return []
         }
-        
+
         guard let deserialised = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [String: Any] else {
             SchibstedAccountLogger.instance.error("Failed to deserialise legacy keychain data")
             return []
         }
-        
+
         guard let parsed = deserialised[Self.KeychainKey.loggedInUsers] as? [String: [String: Any]] else {
             SchibstedAccountLogger.instance.error("Failed to parse legacy keychain data")
             return []
         }
-        
+
         let storedTokens: [LegacyTokenData] = parsed.compactMap { (accessToken, data) in
             guard let refreshToken = data[Self.KeychainKey.refreshToken] as? String else {
                 return nil
             }
             return LegacyTokenData(accessToken: accessToken, refreshToken: refreshToken)
         }
-        
+
         return storedTokens
     }
-    
+
     /**
      == LegacySDKtokenData  data structure ==
         {
@@ -90,26 +90,26 @@ class LegacyKeychainTokenStorage {
         guard let dict = try JSONSerialization.jsonObject(with: legacySDKtokenData, options: []) as? [String:Any] else {
             throw KeychainStorageError.storeError(reason: .invalidData(reason: "Cannot deserialize legacySDKtokenData"))
         }
-        
+
         guard let accessToken = dict["accessToken"] as? String else {
             throw KeychainStorageError.storeError(reason: .invalidData(reason: "Missed accessToken"))
         }
-        
+
         guard let refreshToken = dict["refreshToken"] as? String else {
             throw KeychainStorageError.storeError(reason: .invalidData(reason: "Missed refreshToken"))
         }
-        
+
         // Build as Legacy Keychain JSON structure
         var loggedInUsers: [String: [String: String]] = [:]
         let loggedInUser: [String: String] = [Self.KeychainKey.refreshToken: refreshToken]
-        
+
         loggedInUsers[accessToken] = loggedInUser
         let keychainData = [Self.KeychainKey.loggedInUsers: loggedInUsers]
-        
+
         let data = try NSKeyedArchiver.archivedData(withRootObject: keychainData, requiringSecureCoding: true)
         try keychain.setValue(data, forAccount: account, accessGroup: nil)
     }
-    
+
     func remove() {
         do {
             try keychain.removeValue(forAccount: account)

@@ -16,13 +16,13 @@ struct SimplifiedLoginUIFactory {
                                     extraScopeValues: Set<String> = [],
                                     uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        
+
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
-        
+
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
-        
+
         let vc = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
             // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
@@ -33,7 +33,7 @@ struct SimplifiedLoginUIFactory {
             }
             completion(result)
         }
-        
+
         viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
@@ -41,7 +41,7 @@ struct SimplifiedLoginUIFactory {
                                                                           completion: extendedCompletion)
             viewModel.asWebAuthenticationSession?.start()
         }
-        
+
         viewModel.onClickedContinueAsUser = {
             assertionFetcher.fetchAssertion { result in
                 switch result {
@@ -63,10 +63,10 @@ struct SimplifiedLoginUIFactory {
                 }
             }
         }
-        
+
         return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
     }
-    
+
     @available(iOS 13.0, *)
     static func buildViewController(client: Client,
                                     contextProvider: ASWebAuthenticationPresentationContextProviding,
@@ -81,12 +81,12 @@ struct SimplifiedLoginUIFactory {
                                     withSSO: Bool = true,
                                     uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-       
+
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext, userProfileResponse: userProfileResponse)
         let localizationModel = SimplifiedLoginLocalizationModel()
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel, userDataModel: userDataModel, localizationModel: localizationModel, visibleClientName: clientName)
-        
+
         let vc = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
             // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
@@ -97,7 +97,7 @@ struct SimplifiedLoginUIFactory {
             }
             completion(result)
         }
-        
+
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
@@ -108,7 +108,7 @@ struct SimplifiedLoginUIFactory {
                                                                           completion: extendedCompletion)
             viewModel.asWebAuthenticationSession?.start()
         }
-        
+
         viewModel.onClickedContinueAsUser = {
             assertionFetcher.fetchAssertion { result in
                 switch result {
@@ -133,10 +133,10 @@ struct SimplifiedLoginUIFactory {
                 }
             }
         }
-        
+
         return commonSetup(client: client, viewModel: viewModel, uiVersion: uiVersion, assertionFetcher: assertionFetcher, completion: completion)
     }
-    
+
     private static func commonSetup(client: Client,
                                     viewModel: SimplifiedLoginViewModel,
                                     uiVersion: SimplifiedLoginUIVersion,
@@ -144,16 +144,16 @@ struct SimplifiedLoginUIFactory {
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         let s = SimplifiedLoginViewController(viewModel: viewModel, uiVersion: uiVersion, tracker: client.tracker)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
-        
+
         viewModel.onClickedContinueWithoutLogin = {
             s.dismiss(animated: true, completion: nil)
         }
-        
+
         viewModel.onClickedPrivacyPolicy = {
             let svc = SFSafariViewController(url: url)
             s.present(svc, animated: true, completion: nil)
         }
-        
+
         return s
     }
 }

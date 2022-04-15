@@ -3,8 +3,8 @@ import Foundation
 internal struct IdTokenValidationContext {
     let issuer: String
     let clientId: String
-    var nonce: String? = nil
-    var expectedAMR: String? = nil
+    var nonce: String?
+    var expectedAMR: String?
 }
 
 internal enum IdTokenValidator {
@@ -23,7 +23,7 @@ internal enum IdTokenValidator {
                     completion(.failure(.invalidIssuer))
                     return
                 }
-                
+
                 guard claims.aud.contains(context.clientId) else {
                     completion(.failure(.invalidAudience))
                     return
@@ -39,7 +39,7 @@ internal enum IdTokenValidator {
                     completion(.failure(.invalidNonce))
                     return
                 }
-                
+
                 guard IdTokenValidator.contains(claims.amr, value: context.expectedAMR) else {
                     SchibstedAccountLogger.instance.info("Requested AMR values were not fulfilled: \(String(describing: claims.amr)) != \(String(describing: context.expectedAMR))")
                     completion(.failure(.missingExpectedAMRValue))
@@ -52,28 +52,28 @@ internal enum IdTokenValidator {
             }
         }
     }
-    
+
     private static func contains(_ values: [String]?, value: String?) -> Bool {
         guard var value = value else {
             return true
         }
-        
+
         if let _ = PreEidType(rawValue: value) {
             value = MFAType.eid.rawValue
         }
-        
+
         if let values = values {
             return values.contains(value)
         }
-        
+
         return false
     }
-    
+
     private static func removeTrailingSlash(from: String) -> String {
         if (from.last == "/") {
             return String(from.dropLast())
         }
-        
+
         return from
     }
 }

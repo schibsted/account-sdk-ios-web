@@ -10,7 +10,7 @@ protocol SimplifiedLoginFetching {
 
 class SimplifiedLoginFetcher: SimplifiedLoginFetching {
     let client: Client
-    init(client: Client){
+    init(client: Client) {
         self.client = client
     }
 
@@ -22,9 +22,9 @@ class SimplifiedLoginFetcher: SimplifiedLoginFetching {
         let user = User(client: client, tokens: latestUserSession.userTokens)
         return user
     }
-    
+
     func fetchData(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
-        do{
+        do {
             let user = try getLatestSharedUser()
             self.retainedSharedUser = user
             user.userContextFromToken { result in
@@ -38,7 +38,7 @@ class SimplifiedLoginFetcher: SimplifiedLoginFetching {
             }
         } catch {completion(.failure(error))}
     }
-    
+
     func fetchProfile(user: User, userContext: UserContextFromTokenResponse, completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void) {
         user.fetchProfileData { result in
             switch result {
@@ -50,13 +50,13 @@ class SimplifiedLoginFetcher: SimplifiedLoginFetching {
             }
         }
     }
-    
+
     func fetchAssertion(completion: @escaping (SimplifiedLoginAssertionResult) -> Void) {
         guard let user = retainedSharedUser else {
             completion(.failure(SimplifiedLoginManager.SimplifiedLoginError.noLoggedInSessionInSharedKeychain))
             return
         }
-        
+
         user.assertionForSimplifiedLogin { result in
             switch result {
             case .success(let assertionResponse):

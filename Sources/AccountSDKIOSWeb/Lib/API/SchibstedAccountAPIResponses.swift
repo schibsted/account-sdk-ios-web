@@ -1,39 +1,39 @@
 import Foundation
 
 public struct UserProfileResponse: Codable, Equatable {
-    public var uuid: String? = nil
-    public var userId: String? = nil
-    public var status: Int? = nil
-    public var email: String? = nil
-    internal var emailVerified: StringOrIgnore? = nil
-    public var emails: [Email]? = nil
-    public var phoneNumber: String? = nil
-    internal var phoneNumberVerified: StringOrIgnore? = nil
-    public var phoneNumbers: [PhoneNumber]? = nil
-    public var displayName: String? = nil
-    public var name: Name? = nil
-    public var addresses: [String: Address]? = nil
-    public var gender: String? = nil
+    public var uuid: String?
+    public var userId: String?
+    public var status: Int?
+    public var email: String?
+    internal var emailVerified: StringOrIgnore?
+    public var emails: [Email]?
+    public var phoneNumber: String?
+    internal var phoneNumberVerified: StringOrIgnore?
+    public var phoneNumbers: [PhoneNumber]?
+    public var displayName: String?
+    public var name: Name?
+    public var addresses: [String: Address]?
+    public var gender: String?
     internal var birthday: String?
-    public var accounts: [String: Account]? = nil
-    public var merchants: [Int]? = nil
-    public var published: String? = nil
-    public var verified: String? = nil
-    public var updated: String? = nil
-    public var passwordChanged: String? = nil
-    public var lastAuthenticated: String? = nil
-    public var lastLoggedIn: String? = nil
-    public var locale: String? = nil
-    public var utcOffset: String? = nil
+    public var accounts: [String: Account]?
+    public var merchants: [Int]?
+    public var published: String?
+    public var verified: String?
+    public var updated: String?
+    public var passwordChanged: String?
+    public var lastAuthenticated: String?
+    public var lastLoggedIn: String?
+    public var locale: String?
+    public var utcOffset: String?
 
     public var emailVerifiedDate: String? {
         get { emailVerified?.value }
     }
-    
+
     public var phoneNumberVerifiedDate: String? {
         get { phoneNumberVerified?.value }
     }
-    
+
     public var birthdate: String? {
         get {
             if birthday == "0000-00-00" {
@@ -42,7 +42,7 @@ public struct UserProfileResponse: Codable, Equatable {
             return birthday
         }
     }
-    
+
     init(
         uuid: String? = nil,
         userId: String? = nil,
@@ -94,7 +94,7 @@ public struct UserProfileResponse: Codable, Equatable {
         self.locale = locale
         self.utcOffset = utcOffset
     }
-    
+
     public init(from decoder: Decoder) throws {
         let keyedContainer = try decoder.container(keyedBy: CodingKeys.self)
         self.uuid = try? keyedContainer.decode(String.self, forKey: .uuid)
@@ -119,14 +119,14 @@ public struct UserProfileResponse: Codable, Equatable {
         self.lastLoggedIn = try? keyedContainer.decode(String.self, forKey: .lastLoggedIn)
         self.locale = try? keyedContainer.decode(String.self, forKey: .locale)
         self.utcOffset = try? keyedContainer.decode(String.self, forKey: .utcOffset)
-        
+
         // Backend service could return empty dictionary as an array.
         if let addresses = try? keyedContainer.decodeIfPresent([String: Address].self, forKey: .addresses) {
             self.addresses = addresses
         } else {
             self.addresses = [:]
         }
-        
+
         if let accounts = try? keyedContainer.decodeIfPresent([String: Account].self, forKey: .accounts) {
             self.accounts = accounts
         } else {
@@ -137,55 +137,55 @@ public struct UserProfileResponse: Codable, Equatable {
 
 public protocol Identifier: Codable, Equatable {
     var value: String? { get }
-    var type: String?  { get }
+    var type: String? { get }
     var isPrimary: Bool? { get }
     var isVerified: Bool? { get }
     var verifiedTime: String? { get }
 }
 
 public struct Email: Identifier {
-    public var value: String? = nil
-    public var type: String? = nil
-    internal var primary: StringBool? = nil
-    internal var verified: StringBool? = nil
-    public var verifiedTime: String? = nil
-    
+    public var value: String?
+    public var type: String?
+    internal var primary: StringBool?
+    internal var verified: StringBool?
+    public var verifiedTime: String?
+
     public var isPrimary: Bool? { get { primary?.value } }
     public var isVerified: Bool? { get { verified?.value } }
 }
 
 public struct PhoneNumber: Identifier {
-    public var value: String? = nil
-    public var type: String? = nil
-    internal var primary: StringBool? = nil
-    internal var verified: StringBool? = nil
-    public var verifiedTime: String? = nil
-    
+    public var value: String?
+    public var type: String?
+    internal var primary: StringBool?
+    internal var verified: StringBool?
+    public var verifiedTime: String?
+
     public var isPrimary: Bool? { get { primary?.value } }
     public var isVerified: Bool? { get { verified?.value } }
 }
 
 public struct Name: Codable, Equatable {
-    public var givenName: String? = nil
-    public var familyName: String? = nil
-    public var formatted: String? = nil
+    public var givenName: String?
+    public var familyName: String?
+    public var formatted: String?
 }
 
 public struct Account: Codable, Equatable {
-    public var id: String? = nil
-    public var accountName: String? = nil
-    public var domain: String? = nil
-    public var connected: String? = nil
+    public var id: String?
+    public var accountName: String?
+    public var domain: String?
+    public var connected: String?
 }
 
 public struct Address: Codable, Equatable {
-    public var formatted: String? = nil
-    public var streetAddress: String? = nil
-    public var postalCode: String? = nil
-    public var locality: String? = nil
-    public var region: String? = nil
-    public var country: String? = nil
-    public var type: AddressType? = nil
+    public var formatted: String?
+    public var streetAddress: String?
+    public var postalCode: String?
+    public var locality: String?
+    public var region: String?
+    public var country: String?
+    public var type: AddressType?
 
     public enum AddressType: String, Codable, Equatable {
         case home = "home"

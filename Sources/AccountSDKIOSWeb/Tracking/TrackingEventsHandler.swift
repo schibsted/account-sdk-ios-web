@@ -52,7 +52,7 @@ public enum TrackingEvent {
         case loginStateError(LoginStateError)
         case generic(Error)
     }
-    
+
     public enum AdditionalField {
         case getLoginSession(MFAType?)
         case sso(Bool)

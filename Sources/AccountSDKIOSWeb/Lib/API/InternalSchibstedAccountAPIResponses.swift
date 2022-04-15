@@ -9,7 +9,7 @@ extension StringOrIgnore {
         let container = try decoder.singleValueContainer()
         self.value = try? container.decode(String.self)
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         guard let stringValue = value else {
@@ -35,11 +35,11 @@ extension StringBool {
             asString = true
             return
         }
-        
+
         self.value = value
         asString = false
     }
-    
+
     func encode(to encoder: Encoder) throws {
         guard let boolValue = value else {
             return

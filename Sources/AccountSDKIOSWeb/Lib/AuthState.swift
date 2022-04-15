@@ -6,35 +6,35 @@ internal struct AuthState: Codable {
     let nonce: String
     let codeVerifier: String
     let mfa: MFAType?
-    
+
     func codeChallengeMethod() -> String {
         return "S256"
     }
-    
+
     func makeCodeChallenge () -> String {
         return computeCodeChallenge(from: codeVerifier)
     }
-    
+
 }
 
 extension AuthState {
-    
+
     init(mfa: MFAType?) {
-        
+
         let state = randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
-        
+
         self.init(state: state, nonce: nonce, codeVerifier: codeVerifier, mfa: mfa)
     }
 }
 
-fileprivate func randomString(length: Int) -> String {
+private func randomString(length: Int) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     return String((0..<length).map { _ in letters.randomElement()! })
 }
 
-fileprivate func computeCodeChallenge(from codeVerifier: String) -> String {
+private func computeCodeChallenge(from codeVerifier: String) -> String {
     func base64url(data: Data) -> String {
         let base64url = data.base64EncodedString()
             .replacingOccurrences(of: "/", with: "_")

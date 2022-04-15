@@ -27,7 +27,6 @@ internal enum JOSEUtil {
             return
         }
 
-
         guard let algorithm = jws.header.algorithm else {
             completion(.failure(.unspecifiedAlgorithm))
             return
@@ -38,7 +37,7 @@ internal enum JOSEUtil {
                 completion(.failure(.unknownKeyId))
                 return
             }
-            
+
             guard let publicKey = key.toSecKey(),
                 let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKey) else {
                 completion(.failure(.unsupportedKeyType))
@@ -55,4 +54,3 @@ internal enum JOSEUtil {
         }
     }
 }
-

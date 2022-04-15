@@ -3,7 +3,7 @@ import Foundation
 internal struct UserDefaultsStorage: Storage {
     static let keyPrefix = "com.schibsted.account"
     private let storage: UserDefaults
-    
+
     init(_ storage: UserDefaults) {
         self.storage = storage
     }
@@ -19,7 +19,7 @@ internal struct UserDefaultsStorage: Storage {
     func removeValue(forKey key: String) {
         storage.removeObject(forKey: type(of: self).addPrefix(toKey: key))
     }
-    
+
     internal static func addPrefix(toKey key: String) -> String {
         return [keyPrefix, key].joined(separator: ".")
     }

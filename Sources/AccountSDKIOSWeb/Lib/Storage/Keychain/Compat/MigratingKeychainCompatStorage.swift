@@ -1,8 +1,8 @@
 import Foundation
 
 class MigratingKeychainCompatStorage: SessionStorage {
-    var accessGroup: String?  {
-        get{
+    var accessGroup: String? {
+        get {
             return newStorage.accessGroup
         }
     }
@@ -12,26 +12,25 @@ class MigratingKeychainCompatStorage: SessionStorage {
     private let legacyClientSecret: String
     private let makeTokenRequest: (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void
     private var oldSDKClient: OldSDKClient?
-    
+
     init(from: LegacyKeychainSessionStorage,
          to: KeychainSessionStorage,
          legacyClient: Client,
          legacyClientSecret: String,
-         makeTokenRequest: @escaping (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void)
-    {
+         makeTokenRequest: @escaping (_ authCode: String, _ authState: AuthState?, _ completion:  @escaping (Result<TokenResult, TokenError>) -> Void) -> Void) {
         self.newStorage = to
         self.legacyStorage = from
         self.legacyClient = legacyClient
         self.legacyClientSecret = legacyClientSecret
         self.makeTokenRequest = makeTokenRequest
     }
-    
+
     func store(_ value: UserSession, accessGroup: String? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         // only delegate to new storage; no need to store in legacy storage
         newStorage.store(value, completion: completion)
-            
+
     }
-    
+
     func get(forClientId: String, completion: @escaping (UserSession?) -> Void ) {
         // try new storage first
         newStorage.get(forClientId: forClientId) { session in
@@ -39,7 +38,7 @@ class MigratingKeychainCompatStorage: SessionStorage {
                 completion(session)
                 return
             }
-            
+
             // if no existing session found, look in legacy storage with
             guard let legacySession = self.legacyStorage.get(forClientId: self.legacyClient.configuration.clientId) else {
                 completion(nil)
@@ -49,9 +48,9 @@ class MigratingKeychainCompatStorage: SessionStorage {
             self.migrateLegacyUserSession(forClientId: forClientId, legacySession: legacySession, completion: completion)
         }
     }
-    
+
     private func migrateLegacyUserSession(forClientId: String, legacySession: LegacyUserSession, completion: @escaping (UserSession?) -> Void) {
-        
+
         self.oldSDKClient = OldSDKClient(clientId: legacyClient.configuration.clientId, clientSecret: self.legacyClientSecret, api: legacyClient.schibstedAccountAPI, legacyAccessToken: legacySession.accessToken, legacyRefreshToken: legacySession.refreshToken)
         oldSDKClient?.oneTimeCodeWithOldSDKRefresh(newSDKClientId: forClientId) { result in
             switch result {
@@ -62,7 +61,7 @@ class MigratingKeychainCompatStorage: SessionStorage {
                         let newUserSession = UserSession(clientId: forClientId, userTokens: tokenResult.userTokens, updatedAt: Date())
                         self.newStorage.store(newUserSession) { output in
                             switch output {
-                            case .success():
+                            case .success:
                                 self.legacyStorage.remove()
                                 completion(newUserSession)
                             case .failure(let error):
@@ -81,12 +80,12 @@ class MigratingKeychainCompatStorage: SessionStorage {
             }
         }
     }
-    
+
     func getAll() -> [UserSession] {
         // only delegate to new storage; this functionality is not supported by legacyStorage
         return newStorage.getAll()
     }
-    
+
     func remove(forClientId: String) {
         newStorage.remove(forClientId: forClientId)
         legacyStorage.remove() // data should have already been removed from legacy storage during migration. But could fail.
@@ -101,7 +100,7 @@ class OldSDKClient {
     let legacyAccessToken: String
     let legacyRefreshToken: String
     var httpClient: HTTPClient
-    
+
     init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyAccessToken: String, legacyRefreshToken: String, httpClient: HTTPClient) {
         self.clientId = clientId
         self.clientSecret = clientSecret
@@ -109,14 +108,14 @@ class OldSDKClient {
         self.legacyAccessToken = legacyAccessToken
         self.legacyRefreshToken = legacyRefreshToken
         self.httpClient = httpClient
-        
+
     }
-    
+
     convenience init(clientId: String, clientSecret: String, api: SchibstedAccountAPI, legacyAccessToken: String, legacyRefreshToken: String) {
         let httpClient = HTTPClientWithURLSession()
         self.init(clientId: clientId, clientSecret: clientSecret, api: api, legacyAccessToken: legacyAccessToken, legacyRefreshToken: legacyRefreshToken, httpClient: httpClient)
     }
-    
+
     func oneTimeCodeWithOldSDKRefresh(newSDKClientId: String, completion: @escaping HTTPResultHandler<String>) {
         api.oldSDKCodeExchange(with: httpClient, clientId: newSDKClientId, oldSDKAccessToken: legacyAccessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in
             switch requestResult {
@@ -147,9 +146,9 @@ class OldSDKClient {
             }
         }
     }
-    
-    func oldSDKRefresh(refreshToken: String, completion: @escaping (Result<String, Error>)-> Void) {
-        
+
+    func oldSDKRefresh(refreshToken: String, completion: @escaping (Result<String, Error>) -> Void) {
+
         let resultHandler: HTTPResultHandler<TokenResponse> = { result in
             switch result {
             case .success(let tokenResponse):
@@ -159,10 +158,10 @@ class OldSDKClient {
                 completion(.failure(error))
             }
         }
-        
+
         api.oldSDKRefresh(with: httpClient, refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completion: resultHandler)
     }
-    
+
     func oneTimeCode(newSDKClientId: String, oldSDKAccessToken: String,  completion: @escaping HTTPResultHandler<String>) {
         self.api.oldSDKCodeExchange(with: self.httpClient, clientId: newSDKClientId, oldSDKAccessToken: oldSDKAccessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in
             switch requestResult {

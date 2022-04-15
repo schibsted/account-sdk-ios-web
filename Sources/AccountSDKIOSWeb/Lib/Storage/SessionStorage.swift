@@ -12,14 +12,14 @@ public struct UserTokens: Codable, Equatable, CustomStringConvertible {
     let refreshToken: String?
     let idToken: String
     let idTokenClaims: IdTokenClaims
-    
+
     public init(accessToken: String, refreshToken: String?, idToken: String, idTokenClaims: IdTokenClaims) {
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.idToken = idToken
         self.idTokenClaims = idTokenClaims
     }
-    
+
     public var description: String {
         return "UserTokens("
             + "accessToken: \(removeSignature(fromToken: accessToken)),\n"
@@ -32,13 +32,13 @@ public struct UserTokens: Codable, Equatable, CustomStringConvertible {
 internal protocol SessionStorage {
     var accessGroup: String? { get }
     func store(_ value: UserSession, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void)
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void)  
+    func get(forClientId: String, completion: @escaping (UserSession?) -> Void)
     func getAll() -> [UserSession]
     func remove(forClientId: String)
     func getLatestSession() -> UserSession?
 }
 
-extension SessionStorage {    
+extension SessionStorage {
     func getLatestSession() -> UserSession? {
         let latestUserSession = self.getAll()
             .sorted { $0.updatedAt > $1.updatedAt }

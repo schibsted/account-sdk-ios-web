@@ -9,7 +9,7 @@ public struct SessionStorageConfig {
     let legacyClientSecret: String
     let accessGroup: String?
     let legacyAccessGroup: String?
-    
+
     /**
      Initialize the SessionStorageConfig struct for given client IDs and access group.
 
@@ -37,7 +37,7 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 /// Represents a client registered with Schibsted account.
 public class Client: CustomStringConvertible {
     let configuration: ClientConfiguration
-    
+
     static let authStateKey = "AuthState"
     static let keychainServiceName = "com.schibsted.account"
 
@@ -49,7 +49,7 @@ public class Client: CustomStringConvertible {
     private let stateStorage: StateStorage
     private var sessionStorage: SessionStorage
     private var isSessionInProgress: Bool = false
-    
+
     let tracker: TrackingEventsHandler?
 
     /**
@@ -78,7 +78,7 @@ public class Client: CustomStringConvertible {
                   tokenHandler: tokenHandler,
                   tracker: tracker)
     }
-    
+
     /**
      Initialize the Client to support migration from Legacy SchibstedAccount SDK to the new Schibsted account keychain storage using UserSession.
 
@@ -94,15 +94,15 @@ public class Client: CustomStringConvertible {
                             sessionStorageConfig: SessionStorageConfig,
                             tracker: TrackingEventsHandler? = nil,
                             httpClient: HTTPClient? = nil) {
-        
+
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
-        
+
         let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
         let newSessionStorage =  SharedKeychainSessionStorageFactory().makeKeychain(clientId: configuration.clientId,
                                                                                     service: Client.keychainServiceName,
                                                                                     accessGroup: sessionStorageConfig.accessGroup,
                                                                                     appIdentifierPrefix: appIdentifierPrefix)
-        
+
         let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
                                                             serverURL: configuration.serverURL,
                                                             sessionServiceURL: configuration.sessionServiceURL,
@@ -111,7 +111,7 @@ public class Client: CustomStringConvertible {
         let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"), httpClient: chttpClient)
         let tokenHandler = TokenHandler(configuration: configuration, httpClient: chttpClient, jwks: jwks)
         let stateStorage = StateStorage()
-        
+
         // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
         // TODO: MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
         let legacyClient = Client(configuration: legacyClientConfiguration,
@@ -125,7 +125,7 @@ public class Client: CustomStringConvertible {
                                                             legacyClient: legacyClient,
                                                             legacyClientSecret: sessionStorageConfig.legacyClientSecret,
                                                             makeTokenRequest: { authCode, authState, completion in tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)})
-        
+
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
                   stateStorage: stateStorage,
@@ -134,7 +134,7 @@ public class Client: CustomStringConvertible {
                   tokenHandler: tokenHandler,
                   tracker: tracker)
     }
-    
+
     init(configuration: ClientConfiguration,
          sessionStorage: SessionStorage,
          stateStorage: StateStorage,
@@ -142,7 +142,7 @@ public class Client: CustomStringConvertible {
          jwks: JWKS,
          tokenHandler: TokenHandler,
          tracker: TrackingEventsHandler? = nil) {
-        
+
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
@@ -159,25 +159,25 @@ public class Client: CustomStringConvertible {
                           completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
         self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
     }
-       
+
     /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
     private func storeAuthState(withMFA: MFAType?) -> AuthState {
         let authState = AuthState(mfa: withMFA)
-        
+
         guard stateStorage.setValue(authState, forKey: Client.authStateKey) else {
             SchibstedAccountLogger.instance.error("Failed to store login state")
             preconditionFailure("Couln't store login state")
         }
-        
+
         return authState
     }
-    
+
     func createWebAuthenticationSession(withMFA: MFAType? = nil,
                                         loginHint: String? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
                                         completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-        
+
         if isSessionInProgress {
             SchibstedAccountLogger.instance.info("Previous login flow still in progress")
             tracker?.error(.loginError(.previousSessionInProgress), in: .webBrowser)
@@ -185,22 +185,22 @@ public class Client: CustomStringConvertible {
             return nil
         }
         isSessionInProgress = true
-        
+
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA)
-        
+
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint, assertion: assertion, extraScopeValues: extraScopeValues)
-        
+
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
         }
-        
+
         tracker?.interaction(.open, with: .webBrowser,
                              additionalFields: [.getLoginSession(withMFA),
                                                 .loginHint(loginHint),
                                                 .withAssertion((assertion != nil) ? true : false),
                                                 .extraScopeValues(extraScopeValues)])
-        
+
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
                 if case ASWebAuthenticationSessionError.canceledLogin? = error {
@@ -246,7 +246,7 @@ public class Client: CustomStringConvertible {
                                             idToken: tokens.idToken,
                                             idTokenClaims: tokens.idTokenClaims)
                 user.tokens = userTokens
-                
+
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,
                                               updatedAt: Date())
@@ -258,12 +258,12 @@ public class Client: CustomStringConvertible {
             }
         }
     }
-    
+
     private func storeSession(userSession: UserSession, attempts: Int = 1, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         func retry(_ attempts: Int) {
             self.sessionStorage.store(userSession, accessGroup: nil) { result in
                 switch result {
-                case .success():
+                case .success:
                     completion(.success(userSession.userTokens))
                 case .failure(let error):
                     if attempts > 0 {
@@ -288,7 +288,7 @@ public class Client: CustomStringConvertible {
                                           updatedAt: Date())
             sessionStorage.store(userSession, accessGroup: nil) { output in
                 switch output {
-                case .success():
+                case .success:
                     let user = User(client: self, tokens: tokenResult.userTokens)
                     completion(.success(user))
                 case .failure(let error):
@@ -317,11 +317,11 @@ public class Client: CustomStringConvertible {
             completion(.failure(.unexpectedError(message: msg)))
         }
     }
-    
+
     func destroySession() {
         sessionStorage.remove(forClientId: configuration.clientId)
     }
-    
+
     // used only for getting latest session from shared keychain
     func getLatestSharedSession() -> UserSession? {
         guard sessionStorage.accessGroup != nil else {
@@ -332,9 +332,9 @@ public class Client: CustomStringConvertible {
 }
 
 extension Client {
-    
+
     // MARK: - Public
-    
+
     /**
      Resume any previously logged-in user session.
      
@@ -346,11 +346,11 @@ extension Client {
                 completion(nil)
                 return
             }
-            
+
             completion(User(client: self, tokens: session.userTokens))
         }
     }
- 
+
     /**
      Gets an authentication web session. Only one session can be started at the time.
      
@@ -367,7 +367,7 @@ extension Client {
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
         return createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
     }
-    
+
     /**
      Gets an authentication web session. Only one session can be started at the time.
      
@@ -388,14 +388,14 @@ extension Client {
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-        
+
         let session = createWebAuthenticationSession(withMFA: withMFA, loginHint: loginHint, extraScopeValues: extraScopeValues, completion: completion)
         session?.presentationContextProvider = contextProvider
         session?.prefersEphemeralWebBrowserSession = !withSSO
-        
+
         return session
     }
-    
+
     /**
      Call this with the full URL received as deep link to complete the login flow.
         
@@ -424,7 +424,7 @@ extension Client {
             completion(.failure(error))
             return
         }
-        
+
         guard let authCode = url.valueOf(queryParameter: "code") else {
             let error = LoginError.unexpectedError(message: "Missing authorization code from authentication response")
             self.tracker?.error(.loginError(error), in: .webBrowser)
@@ -436,7 +436,7 @@ extension Client {
             self.handleTokenRequestResult($0, completion: completion)
         }
     }
-    
+
     /// Client description containing clientId value.
     public var description: String {
         return "Client(\(configuration.clientId))"

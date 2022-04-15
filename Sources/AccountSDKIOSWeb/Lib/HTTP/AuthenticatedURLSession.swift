@@ -60,7 +60,7 @@ public final class AuthenticatedURLSession {
                         completionHandler: completionHandler
                     )
                     self?.refreshTokenDataTask?.resume()
-                case .failure(_):
+                case .failure:
                     completionHandler(data, response, error)
                 }
             }

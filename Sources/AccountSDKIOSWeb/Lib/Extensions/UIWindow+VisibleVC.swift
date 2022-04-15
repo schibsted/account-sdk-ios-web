@@ -4,7 +4,7 @@ extension UIWindow {
     public var visibleViewController: UIViewController? {
         return UIWindow.visibleViewController(from: rootViewController)
     }
-    
+
     public static func visibleViewController(from viewController: UIViewController?) -> UIViewController? {
         switch viewController {
         case let navigationController as UINavigationController:

@@ -3,7 +3,7 @@ import UIKit
 class HeaderView: UIView {
     private let isPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
     let viewModel: SimplifiedLoginViewModel
-    
+
     private lazy var loginWithOneClickLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.localizationModel.loginWithOneClick
@@ -17,7 +17,7 @@ class HeaderView: UIView {
         view.adjustsFontForContentSizeCategory = true
         return view
     }()
-    
+
     private lazy var grayLine: UIView = {
         let view = UIView()
         view.backgroundColor = SchibstedColor.lineGray.value
@@ -25,7 +25,7 @@ class HeaderView: UIView {
         view.isHidden = isPad ? true : false
         return view
     }()
-    
+
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [loginWithOneClickLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                 loginWithOneClickLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -38,7 +38,7 @@ class HeaderView: UIView {
                 grayLine.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
     }()
-    
+
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -46,7 +46,7 @@ class HeaderView: UIView {
         addSubview(loginWithOneClickLabel)
         addSubview(grayLine)
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
