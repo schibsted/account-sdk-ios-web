@@ -109,8 +109,7 @@ class SimplifiedLoginViewController: UIViewController {
 
         if isPhone {
             let height = 459 + (uiVersion != .minimal ? 46 : 0)
-            // swiftlint:disable identifier_name
-            let y = Int(view.frame.height) - height + 25
+            let y = Int(view.frame.height) - height + 25 // swiftlint:disable:this identifier_name
             containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
             containerView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -156,10 +155,7 @@ class SimplifiedLoginViewController: UIViewController {
             view.addSubview(scrollView)
         }
 
-        primaryButton.addTarget(self, action: #selector(SimplifiedLoginViewController.primaryButtonClicked), for: .touchUpInside)
-        linksView.loginWithDifferentAccountButton.addTarget(self, action: #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked), for: .touchUpInside)
-        linksView.continueWithoutLoginButton.addTarget(self, action: #selector(SimplifiedLoginViewController.continueWithoutLoginClicked), for: .touchUpInside)
-        footerStackView.privacyURLButton.addTarget(self, action: #selector(SimplifiedLoginViewController.privacyPolicyClicked), for: .touchUpInside)
+        setupButtonTargets()
 
         isPhone ? setupiPhoneConstraints() : setupiPadConstraints()
     }
@@ -175,12 +171,25 @@ class SimplifiedLoginViewController: UIViewController {
         tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
     }
 
+    func setupButtonTargets() {
+        let primaryButtonSelector = #selector(SimplifiedLoginViewController.primaryButtonClicked)
+        let switchAccountSelector = #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked)
+        let continueWithoutLoginSelector = #selector(SimplifiedLoginViewController.continueWithoutLoginClicked)
+        let privacyPolicySelector = #selector(SimplifiedLoginViewController.privacyPolicyClicked)
+
+        primaryButton.addTarget(self, action: primaryButtonSelector, for: .touchUpInside)
+        linksView.loginWithDifferentAccountButton.addTarget(self, action: switchAccountSelector, for: .touchUpInside)
+        linksView.continueWithoutLoginButton.addTarget(self, action: continueWithoutLoginSelector, for: .touchUpInside)
+        footerStackView.privacyURLButton.addTarget(self, action: privacyPolicySelector, for: .touchUpInside)
+    }
+
     func setupiPhoneConstraints() {
         let margin = view.layoutMarginsGuide
         let buttonWidth = primaryButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow
         let buttonLead = primaryButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 4)
         let buttonTrail = primaryButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
+        let containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: uiVersion == .minimal ? 495 : 525)
 
         var allConstraints =  userInformationView.internalConstraints +
         footerStackView.internalConstraints + linksView.internalConstraints +
@@ -225,7 +234,7 @@ class SimplifiedLoginViewController: UIViewController {
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 165),
 
             // Container View
-            (bottomConstraint != nil) ? bottomConstraint! : containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: uiVersion == .minimal ? 495 : 525),
+            (bottomConstraint != nil) ? bottomConstraint! : containerViewBottomConstraint,
             containerView.heightAnchor.constraint(equalToConstant: uiVersion == .minimal ? 480 : 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

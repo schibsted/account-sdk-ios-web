@@ -5,6 +5,8 @@ import SafariServices
 struct SimplifiedLoginUIFactory {
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
+    // swiftlint:disable function_parameter_count
+    // swiftlint:disable function_body_length
     static func buildViewController(client: Client,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,

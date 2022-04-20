@@ -24,8 +24,7 @@ public final class SimplifiedLoginManager {
         if _contextProvider == nil {
             _contextProvider = ASWebAuthSessionContextProvider()
         }
-        // swiftlint:disable force_cast
-        return _contextProvider as! ASWebAuthSessionContextProvider
+        return _contextProvider as! ASWebAuthSessionContextProvider // swiftlint:disable:this force_cast
     }
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")

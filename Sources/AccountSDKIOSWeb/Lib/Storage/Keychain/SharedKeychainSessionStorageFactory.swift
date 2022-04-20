@@ -62,11 +62,9 @@ struct SharedKeychainSessionStorageFactory {
                 case .success:
                     didMigrateKeychainToShared = true
                     SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")
-                    break
                 case .failure(let error):
                     keychain.store(userSession, accessGroup: nil) { _ in } // roll back
                     SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
-                    break
                 }
                 dispatchSemaphore.signal()
             }

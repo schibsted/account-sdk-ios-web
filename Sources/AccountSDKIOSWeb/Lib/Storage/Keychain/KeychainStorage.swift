@@ -53,7 +53,7 @@ class KeychainStorage: KeychainStoring {
             return []
         }
 
-        let result = items as! [Data?]
+        let result = items as! [Data?] // swiftlint:disable:this force_cast
         return result.compactMap { $0 }
     }
 

@@ -5,9 +5,11 @@ extension Client {
     public enum AppTransfer {
         case preTransfer(_ clientId: String, _ accessGroup: String?)
         case postTransfer(accessGroup: String?, completion: (Result<Void, Error>) -> Void)
-        case postTransferFromOldSDK(accessGroup: String?, completion: (Result<Void, Error>) -> Void)  /// Only needs to be invoked if the old SDK was used to store login data pre App Transfer.
+        /// Only needs to be invoked if the old SDK was used to store login data pre App Transfer.
+        case postTransferFromOldSDK(accessGroup: String?, completion: (Result<Void, Error>) -> Void)
         case clear
 
+        // swiftlint:disable nesting
         public enum AppTransferError: Error {
             case userSessionNotFound
         }

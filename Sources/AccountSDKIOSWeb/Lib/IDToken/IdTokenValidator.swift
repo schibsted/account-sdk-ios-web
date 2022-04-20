@@ -63,7 +63,7 @@ internal enum IdTokenValidator {
             return true
         }
 
-        if let _ = PreEidType(rawValue: value) {
+        if PreEidType(rawValue: value) != nil {
             value = MFAType.eid.rawValue
         }
 

@@ -94,7 +94,11 @@ class SchibstedAccountAPI {
         return requestWithHeaders
     }
 
-    func sessionExchange(for user: User, clientId: String, redirectURI: String, state: String? = nil, completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
+    func sessionExchange(for user: User,
+                         clientId: String,
+                         redirectURI: String,
+                         state: String? = nil,
+                         completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         var parameters = [
             "type": "session",

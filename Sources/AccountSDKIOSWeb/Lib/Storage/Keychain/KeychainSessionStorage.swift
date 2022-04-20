@@ -2,9 +2,7 @@ import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
     var accessGroup: String? {
-        get {
-            keychain.accessGroup
-        }
+        return keychain.accessGroup
     }
 
     private let keychain: KeychainStorage

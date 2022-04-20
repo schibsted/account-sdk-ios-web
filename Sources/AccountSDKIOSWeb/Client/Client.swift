@@ -99,6 +99,7 @@ public class Client: CustomStringConvertible {
      - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
      
      */
+    // swiftlint:disable function_body_length
     public convenience init(configuration: ClientConfiguration,
                             appIdentifierPrefix: String? = nil,
                             sessionStorageConfig: SessionStorageConfig,

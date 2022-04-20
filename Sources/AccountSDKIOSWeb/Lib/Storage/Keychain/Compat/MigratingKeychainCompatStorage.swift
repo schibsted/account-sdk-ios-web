@@ -207,7 +207,7 @@ class OldSDKClient {
 
         self.api.oldSDKCodeExchange(with: self.httpClient,
                                     clientId: newSDKClientId,
-                                    oldSDKAccessToken: oldSDKAccessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in
+                                    oldSDKAccessToken: oldSDKAccessToken) { (requestResult: Result<SchibstedAccountAPIResponse<CodeExchangeResponse>, HTTPError>) in // swiftlint:disable:this line_length
             switch requestResult {
             case .failure( let error):
                 SchibstedAccountLogger.instance.info("Failed legacy code exchange with refreshed token: \(error)")
