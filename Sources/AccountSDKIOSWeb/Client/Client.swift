@@ -136,7 +136,7 @@ public class Client: CustomStringConvertible {
                                   httpClient: chttpClient,
                                   jwks: jwks,
                                   tokenHandler: tokenHandler)
-        let clousure = { authCode, authState, completion in
+        let closure = { authCode, authState, completion in
             tokenHandler.makeTokenRequest(authCode: authCode,
                                           authState: authState,
                                           completion: completion)
@@ -145,7 +145,7 @@ public class Client: CustomStringConvertible {
                                                             to: newSessionStorage,
                                                             legacyClient: legacyClient,
                                                             legacyClientSecret: sessionStorageConfig.legacyClientSecret,
-                                                            makeTokenRequest: clousure)
+                                                            makeTokenRequest: closure)
 
         self.init(configuration: configuration,
                   sessionStorage: sessionStorage,
