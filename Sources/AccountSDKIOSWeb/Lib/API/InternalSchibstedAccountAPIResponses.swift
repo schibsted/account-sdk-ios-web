@@ -46,7 +46,7 @@ extension StringBool {
         }
 
         var container = encoder.singleValueContainer()
-        if (asString) {
+        if asString {
             try container.encode(String(boolValue))
         } else {
             try container.encode(boolValue)

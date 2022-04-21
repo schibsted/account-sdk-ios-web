@@ -43,9 +43,9 @@ extension UILabel {
         let attrString = NSMutableAttributedString(string: localizedString)
 
         attrString.addAttributes([
-            .paragraphStyle : paragraphStyle,
-            .font : font,
-            .foregroundColor : SchibstedColor.textLightGray.value
+            .paragraphStyle: paragraphStyle,
+            .font: font,
+            .foregroundColor: SchibstedColor.textLightGray.value
         ], range: NSRange(location: 0, length: attrString.length))
 
         view.attributedText = attrString

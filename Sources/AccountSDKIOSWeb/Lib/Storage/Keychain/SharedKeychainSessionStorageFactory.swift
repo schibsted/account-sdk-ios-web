@@ -32,7 +32,7 @@ struct SharedKeychainSessionStorageFactory {
         // check if correct entitlements are added to the app
         do {
             _ = try sharedKeychain.checkEntitlements()
-        } catch (let error) {
+        } catch let error {
             guard let keychainError = error as? KeychainStorageError, keychainError != .entitlementMissing else {
                 SchibstedAccountLogger.instance.debug("Return regular keychain when entitlements are missing")
                 return keychain
@@ -58,7 +58,7 @@ struct SharedKeychainSessionStorageFactory {
             }
             keychain.remove(forClientId: clientId)
             sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup) { result in
-                switch (result) {
+                switch result {
                 case .success:
                     didMigrateKeychainToShared = true
                     SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")

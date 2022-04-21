@@ -87,7 +87,7 @@ class LegacyKeychainTokenStorage {
         }
      */
     func set(legacySDKtokenData: Data) throws {
-        guard let dict = try JSONSerialization.jsonObject(with: legacySDKtokenData, options: []) as? [String:Any] else {
+        guard let dict = try JSONSerialization.jsonObject(with: legacySDKtokenData, options: []) as? [String: Any] else {
             throw KeychainStorageError.storeError(reason: .invalidData(reason: "Cannot deserialize legacySDKtokenData"))
         }
 

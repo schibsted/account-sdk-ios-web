@@ -45,8 +45,8 @@ class LinksView: UIView {
 
     lazy var continueWithoutLoginButton: UIButton = {
         let button = UIButton()
-        let attributes:  [NSAttributedString.Key: Any] = [
-            .underlineStyle : NSUnderlineStyle.single.rawValue,
+        let attributes: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
             .font: UIFont.preferredFont(forTextStyle: .callout),
             .foregroundColor: SchibstedColor.blue.value
         ]
@@ -63,8 +63,8 @@ class LinksView: UIView {
 
     lazy var loginWithDifferentAccountButton: UIButton = {
         let button = UIButton()
-        let attributes:  [NSAttributedString.Key: Any] = [
-            .underlineStyle : NSUnderlineStyle.single.rawValue,
+        let attributes: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
             .font: UIFont.preferredFont(forTextStyle: .callout),
             .foregroundColor: SchibstedColor.blue.value
         ]

@@ -30,7 +30,6 @@ public enum MFAType: Codable {
 }
 
 public enum PreEidType: String, Codable {
-    // swiftlint:disable identifier_name
     /// BankId verification - Norway
     case no = "eid-no"
     /// BankId verification - Sweden

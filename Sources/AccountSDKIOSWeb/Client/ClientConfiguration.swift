@@ -55,7 +55,7 @@ public struct ClientConfiguration {
                   redirectURI: redirectURI)
     }
 
-    init(env: Environment,serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
+    init(env: Environment, serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
         self.env = env
         self.serverURL = serverURL
         self.sessionServiceURL = sessionServiceURL

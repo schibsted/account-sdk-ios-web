@@ -131,7 +131,7 @@ public class Client: CustomStringConvertible {
         // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
         // TODO: MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
         let legacyClient = Client(configuration: legacyClientConfiguration,
-                                  sessionStorage:  newSessionStorage,
+                                  sessionStorage: newSessionStorage,
                                   stateStorage: stateStorage,
                                   httpClient: chttpClient,
                                   jwks: jwks,

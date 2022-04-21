@@ -75,7 +75,7 @@ internal enum IdTokenValidator {
     }
 
     private static func removeTrailingSlash(from: String) -> String {
-        if (from.last == "/") {
+        if from.last == "/" {
             return String(from.dropLast())
         }
 

@@ -79,8 +79,8 @@ class FooterView: UIStackView {
 
     lazy var privacyURLButton: UIButton = {
         let view = UIButton()
-        let attributes:  [NSAttributedString.Key: Any] = [
-            .underlineStyle : NSUnderlineStyle.single.rawValue,
+        let attributes: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
             .font: UIFont.preferredFont(forTextStyle: .footnote),
             .foregroundColor: SchibstedColor.textDarkGray.value
         ]

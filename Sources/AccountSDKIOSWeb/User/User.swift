@@ -316,8 +316,10 @@ extension User {
             }
         }
 
-        private func saveRequestOnRefreshFailure<T:Decodable>(initialRequestResult: Result<T, HTTPError>,
-                                                              completion: @escaping HTTPResultHandler<T>) {
+        private func saveRequestOnRefreshFailure<T: Decodable>(
+            initialRequestResult: Result<T, HTTPError>,
+            completion: @escaping HTTPResultHandler<T>) {
+
             let failure: (Result<UserTokens, RefreshTokenError>) -> Void = { result in
                 switch result {
                 case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
@@ -384,7 +386,7 @@ protocol UserRequestMaking: AnyObject {
 final class DefaultUserRequestMaker: UserRequestMaking {
     func makeRequest<T>(user: User,
                         request: URLRequest,
-                        completion: @escaping HTTPResultHandler<T>) where T : Decodable {
+                        completion: @escaping HTTPResultHandler<T>) where T: Decodable {
         user.makeRequest(request: request, completion: completion)
     }
 }

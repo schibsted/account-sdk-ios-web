@@ -7,7 +7,7 @@ internal class StateStorage {
         self.storage = storage
     }
 
-    func setValue<T : Codable> (_ value: T?, forKey key: String) -> Bool {
+    func setValue<T: Codable> (_ value: T?, forKey key: String) -> Bool {
         if let encoded = try? JSONEncoder().encode(value) {
             storage.setValue(encoded, forKey: key)
             return true
@@ -16,7 +16,7 @@ internal class StateStorage {
         return false
     }
 
-    func value<T : Codable>(forKey key: String) -> T? {
+    func value<T: Codable>(forKey key: String) -> T? {
         if let storedData = storage.value(forKey: key),
            let deserialised = try? JSONDecoder().decode(T.self, from: storedData) {
             return deserialised
