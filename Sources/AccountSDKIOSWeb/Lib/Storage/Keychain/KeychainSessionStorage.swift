@@ -2,17 +2,15 @@ import Foundation
 
 internal class KeychainSessionStorage: SessionStorage {
     var accessGroup: String? {
-        get {
-            keychain.accessGroup
-        }
+        return keychain.accessGroup
     }
 
     private let keychain: KeychainStorage
-    
+
     init(service: String, accessGroup: String? = nil) {
         self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
-    
+
     func store(_ value: UserSession, accessGroup: String? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let tokenData = try? JSONEncoder().encode(value) else {
             SchibstedAccountLogger.instance.error("\(KeychainStorageError.itemEncodingError.localizedDescription)")
@@ -27,8 +25,8 @@ internal class KeychainSessionStorage: SessionStorage {
             completion(.failure(error))
         }
     }
-    
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void){
+
+    func get(forClientId: String, completion: @escaping (UserSession?) -> Void) {
         do {
             if let data = try keychain.getValue(forAccount: forClientId) {
                 let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
@@ -41,12 +39,12 @@ internal class KeychainSessionStorage: SessionStorage {
             completion(nil)
         }
     }
-    
+
     func getAll() -> [UserSession] {
         let data = keychain.getAll()
         return data.compactMap { try? JSONDecoder().decode(UserSession.self, from: $0) }
     }
-    
+
     func remove(forClientId: String) {
         do {
             try keychain.removeValue(forAccount: forClientId)
@@ -54,7 +52,7 @@ internal class KeychainSessionStorage: SessionStorage {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
         }
     }
-    
+
     func checkEntitlements() throws -> Data? {
         try keychain.getValue(forAccount: "test_string")
     }

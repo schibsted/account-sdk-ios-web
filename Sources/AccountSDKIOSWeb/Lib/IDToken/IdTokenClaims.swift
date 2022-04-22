@@ -8,7 +8,7 @@ public struct IdTokenClaims: Codable, Equatable {
     let exp: Double
     let nonce: String?
     let amr: [String]?
-    
+
     public init(iss: String, sub: String, userId: String, aud: [String], exp: Double, nonce: String?, amr: [String]?) {
         self.iss = iss
         self.sub = sub
@@ -18,10 +18,11 @@ public struct IdTokenClaims: Codable, Equatable {
         self.nonce = nonce
         self.amr = amr
     }
-    
+
    enum CodingKeys: String, CodingKey {
         case iss
         case sub
+       // swiftlint:disable identifier_name
         case legacy_user_id
         case aud
         case exp
@@ -42,14 +43,14 @@ extension IdTokenClaims {
         self.nonce = try values.decodeIfPresent(String.self, forKey: .nonce)
         self.amr = try values.decodeIfPresent([String].self, forKey: .amr)
     }
-    
+
     private static func extractAudience(from values: KeyedDecodingContainer<CodingKeys>) throws -> [String] {
         // first try to read 'aud' as a plain string value
         guard let singleAudienceValue = try? values.decode(String.self, forKey: .aud) else {
             // if that fails, try to read it as an array of values
             return try values.decode([String].self, forKey: .aud)
         }
-        
+
         return [singleAudienceValue]
     }
 }

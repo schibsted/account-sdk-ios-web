@@ -6,12 +6,12 @@ class HTTPClientWithURLSession: HTTPClient {
     init(session: URLSessionProtocol = URLSession.shared) {
         self.session = session
     }
-    
+
     func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>) {
         func retry(_ attempts: Int) {
             execute(request: request) { (result: Result<T, HTTPError>) in
                 switch result {
-                case .success(_):
+                case .success:
                     completion(result)
                 case .failure(let error):
                     if attempts > 0 && withRetryPolicy.shouldRetry(for: error) {
@@ -23,7 +23,7 @@ class HTTPClientWithURLSession: HTTPClient {
                 }
             }
         }
-        
+
         retry(withRetryPolicy.numRetries(for: request))
     }
 
@@ -33,18 +33,18 @@ class HTTPClientWithURLSession: HTTPClient {
                 completion(.failure(.unexpectedError(underlying: requestError)))
                 return
             }
-            
+
             if let httpResponse = response as? HTTPURLResponse, httpResponse.isError {
                 let errorBody = data.map { String(decoding: $0, as: UTF8.self) }
                 completion(.failure(.errorResponse(code: httpResponse.statusCode, body: errorBody)))
                 return
             }
-            
+
             guard let responseBody = data else {
                 completion(.failure(.noData))
                 return
             }
-            
+
             do {
                 let deserialised = try JSONDecoder().decode(T.self, from: responseBody)
                 completion(.success(deserialised))
@@ -52,7 +52,7 @@ class HTTPClientWithURLSession: HTTPClient {
                 completion(.failure(.unexpectedError(underlying: error)))
             }
         }
-        
+
         task.resume()
     }
 }

@@ -9,7 +9,7 @@ extension StringOrIgnore {
         let container = try decoder.singleValueContainer()
         self.value = try? container.decode(String.self)
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         guard let stringValue = value else {
@@ -35,18 +35,18 @@ extension StringBool {
             asString = true
             return
         }
-        
+
         self.value = value
         asString = false
     }
-    
+
     func encode(to encoder: Encoder) throws {
         guard let boolValue = value else {
             return
         }
 
         var container = encoder.singleValueContainer()
-        if (asString) {
+        if asString {
             try container.encode(String(boolValue))
         } else {
             try container.encode(boolValue)
@@ -67,6 +67,7 @@ struct CodeExchangeResponse: Codable {
 }
 
 struct UserContextFromTokenResponse: Codable, Equatable {
+    // swiftlint:disable identifier_name
     let identifier: String
     let display_text: String
     let client_name: String

@@ -8,12 +8,16 @@ public protocol UserProtocol {
     var delegates: MulticastDelegate<UserDelegate> { get }
     var uuid: String? { get }
     var userId: String? { get }
-    
+
     func logout()
     func isLoggedIn() -> Bool
-    
-    func webSessionURL(clientId: String, redirectURI: String, state: String?, completion: @escaping HTTPResultHandler<URL>)
-    func oneTimeCode(clientId: String, completion: @escaping HTTPResultHandler<String>)
+
+    func webSessionURL(clientId: String,
+                       redirectURI: String,
+                       state: String?,
+                       completion: @escaping HTTPResultHandler<URL>)
+    func oneTimeCode(clientId: String,
+                     completion: @escaping HTTPResultHandler<String>)
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
 }
 
@@ -21,7 +25,7 @@ public protocol UserProtocol {
 public class User: UserProtocol {
     let client: Client
     var tokens: UserTokens?
-    
+
     /**
      Sets the tokens. Should only be used when testing.
      */
@@ -31,21 +35,17 @@ public class User: UserProtocol {
 
     /// Delegates listening to User events such as logout
     public let delegates: MulticastDelegate = MulticastDelegate<UserDelegate>()
-    
+
     let refreshHandler = TokenRefreshRequestHandler()
 
     /// user idToken
     public var idToken: String? {
-        get {
-            tokens?.idToken
-        }
+        return tokens?.idToken
     }
-    
+
     /// User UUID
     public var uuid: String? {
-        get {
-            tokens?.idTokenClaims.sub
-        }
+        return tokens?.idTokenClaims.sub
     }
 
     /**
@@ -54,16 +54,14 @@ public class User: UserProtocol {
      A user_id used by some Schibsted account APIs
      */
     public var userId: String? {
-        get {
-            tokens?.idTokenClaims.userId
-        }
+        return tokens?.idTokenClaims.userId
     }
-    
+
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
         self.tokens = tokens
     }
-    
+
     /**
      Log user out
      
@@ -74,7 +72,7 @@ public class User: UserProtocol {
         client.destroySession()
         self.delegates.invokeDelegates({ $0.userDidLogout() })
     }
-    
+
     /**
      Check if this user is logged-in.
          
@@ -84,7 +82,7 @@ public class User: UserProtocol {
     public func isLoggedIn() -> Bool {
         return tokens != nil
     }
-    
+
     /**
      Generate URL with embedded one-time code for creating a web session for the current user.
      
@@ -93,8 +91,14 @@ public class User: UserProtocol {
      - parameter state: An opaque value used by the client to maintain state between
      - parameter completion: The callback that receives the URL or an error in case of failure
      */
-    public func webSessionURL(clientId: String, redirectURI: String, state: String? = nil, completion: @escaping HTTPResultHandler<URL>) {
-        client.schibstedAccountAPI.sessionExchange(for: self, clientId: clientId, redirectURI: redirectURI, state: state) { result in
+    public func webSessionURL(clientId: String,
+                              redirectURI: String,
+                              state: String? = nil,
+                              completion: @escaping HTTPResultHandler<URL>) {
+        client.schibstedAccountAPI.sessionExchange(for: self,
+                                                      clientId: clientId,
+                                                      redirectURI: redirectURI,
+                                                      state: state) { result in
             switch result {
             case .success(let response):
                 let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
@@ -104,7 +108,7 @@ public class User: UserProtocol {
             }
         }
     }
-    
+
     /**
      Requests a OAuth authorization code for the current user.
      The code is short-lived and one-time use only.
@@ -123,7 +127,7 @@ public class User: UserProtocol {
             }
         }
     }
-    
+
     /// Fetch user profile data
     public func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         client.schibstedAccountAPI.userProfile(for: self, completion: completion)
@@ -131,15 +135,15 @@ public class User: UserProtocol {
 }
 
 extension User {
-    
+
     func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
         client.schibstedAccountAPI.userContextFromToken(for: self, completion: completion)
     }
-    
+
     func assertionForSimplifiedLogin(completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
         self.client.schibstedAccountAPI.assertionForSimplifiedLogin(for: self, completion: completion)
     }
-    
+
     static func shouldLogout(tokenResponseBody: String?) -> Bool {
         if let errorJSON = tokenResponseBody,
            let oauthError = OAuthError.fromJSON(errorJSON),
@@ -149,7 +153,7 @@ extension User {
 
         return false
     }
-    
+
     func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
     }
@@ -163,7 +167,7 @@ extension User {
         requestCopy.setValue("Bearer \(tokens.accessToken)", forHTTPHeaderField: "Authorization")
         client.httpClient.execute(request: requestCopy, completion: completion)
     }
-    
+
     /**
      Perform a request with user access token as Bearer token in Authorization header.
      
@@ -180,7 +184,10 @@ extension User {
             case .failure(.errorResponse(let code, let body)):
                 // 401 might indicate expired access token
                 if code == 401 {
-                    self.refreshHandler.refreshWithRetry(user: self, requestResult: requestResult, request: request, completion: completion)
+                    self.refreshHandler.refreshWithRetry(user: self,
+                                                         requestResult: requestResult,
+                                                         request: request,
+                                                         completion: completion)
                 } else {
                     completion(.failure(.errorResponse(code: code, body: body)))
                 }
@@ -202,10 +209,11 @@ extension User: Equatable {
 // MARK: NetworkRefreshRequestHandler
 
 extension User {
-    
+
     /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
     final class TokenRefreshRequestHandler {
 
+        // swiftlint:disable nesting
         private enum State {
             case isRefreshing
             case notRefreshing
@@ -227,7 +235,7 @@ extension User {
         }
 
         // MARK: Refresh flows
-        
+
         func refreshWithRetry<T: Decodable>(
             user: User,
             requestResult: Result<T, HTTPError>,
@@ -249,7 +257,7 @@ extension User {
                 break
             }
         }
-        
+
         func refreshWithoutRetry(user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
             saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
 
@@ -261,12 +269,12 @@ extension User {
                 break
             }
         }
-        
+
         private func refreshAndExecute(user: User) {
             tokenRefresher.refreshTokens(for: user) { result in
                 self.isTokenRefreshing.modify { _ in .notRefreshing }
                 self.executeAfterRefresh(with: result)
-                
+
                 switch result {
                 case .success:
                     // On successfull refresh. Execute all waiting requests.
@@ -277,16 +285,16 @@ extension User {
                         SchibstedAccountLogger.instance.info("Invalid refresh token, logging user out")
                         user.logout()
                     }
-                    
+
                     self.executeOnRefreshFailure(with: result)
                 default:
                     self.executeOnRefreshFailure(with: result)
                 }
             }
         }
-       
+
         // MARK: Read and write request lists
-        
+
         private func saveRefreshWithoutRetryCompletion(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
             completionsOnRefreshWithoutRetry.modify { currentValue in
                 var newValue = currentValue
@@ -294,7 +302,7 @@ extension User {
                 return newValue
             }
         }
-        
+
         private func saveRequestOnRefreshSuccess(_ block: @escaping () -> Void) {
             requestsOnRefreshSuccess.modify { currentValue in
                 var newValue = currentValue
@@ -307,8 +315,11 @@ extension User {
                 return newValue
             }
         }
-        
-        private func saveRequestOnRefreshFailure<T:Decodable>(initialRequestResult: Result<T, HTTPError>, completion: @escaping HTTPResultHandler<T>) {
+
+        private func saveRequestOnRefreshFailure<T: Decodable>(
+            initialRequestResult: Result<T, HTTPError>,
+            completion: @escaping HTTPResultHandler<T>) {
+
             let failure: (Result<UserTokens, RefreshTokenError>) -> Void = { result in
                 switch result {
                 case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
@@ -317,9 +328,9 @@ extension User {
                         return
                     }
                     completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
-                case .failure(_):
+                case .failure:
                     completion(initialRequestResult)
-                
+
                 default: // Should not get here
                     completion(initialRequestResult)
                 }
@@ -331,25 +342,27 @@ extension User {
                 return newValue
             }
         }
-        
+
         private func removeAll() {
             requestsOnRefreshSuccess.modify { _ in [] }
             requestsOnRefreshFailure.modify { _ in [] }
         }
-        
+
         // MARK: Execute requests and completions
-        
+
         private func executeRequestOnRefreshSuccess() {
-            requestsOnRefreshSuccess.value.forEach({ DispatchQueue.global().async(execute: $0) }) // Execute in FIFO order.
+            requestsOnRefreshSuccess.value.forEach({
+                DispatchQueue.global().async(execute: $0)
+            }) // Execute in FIFO order.
             removeAll()
         }
-        
+
         private func executeOnRefreshFailure(with result: Result<UserTokens, RefreshTokenError>) {
             requestsOnRefreshFailure.value.forEach { $0(result) }
             removeAll()
         }
-        
-        private func executeAfterRefresh(with result: Result<UserTokens, RefreshTokenError>)  {
+
+        private func executeAfterRefresh(with result: Result<UserTokens, RefreshTokenError>) {
             completionsOnRefreshWithoutRetry.value.forEach { $0(result) }
             completionsOnRefreshWithoutRetry.modify { _ in [] }
         }
@@ -371,7 +384,9 @@ protocol UserRequestMaking: AnyObject {
 }
 
 final class DefaultUserRequestMaker: UserRequestMaking {
-    func makeRequest<T>(user: User, request: URLRequest, completion: @escaping HTTPResultHandler<T>) where T : Decodable {
+    func makeRequest<T>(user: User,
+                        request: URLRequest,
+                        completion: @escaping HTTPResultHandler<T>) where T: Decodable {
         user.makeRequest(request: request, completion: completion)
     }
 }

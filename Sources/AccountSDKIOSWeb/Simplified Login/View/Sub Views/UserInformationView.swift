@@ -3,7 +3,7 @@ import UIKit
 class UserInformationView: UIView {
     let viewModel: SimplifiedLoginViewModel
     private let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
-    
+
     lazy var internalConstraints: [NSLayoutConstraint] = {
         return [avatarView.heightAnchor.constraint(equalToConstant: 48),
                 avatarView.widthAnchor.constraint(equalToConstant: 48),
@@ -20,18 +20,18 @@ class UserInformationView: UIView {
                 emailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
         ]
     }()
-    
+
     // MARK: User information
-    
+
     private lazy var avatarView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 23
         view.backgroundColor = SchibstedColor.blue.value
-        
+
         return view
     }()
-    
+
     private lazy var initialsLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.initials
@@ -44,7 +44,6 @@ class UserInformationView: UIView {
         return view
     }()
 
-    
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.displayName
@@ -59,7 +58,7 @@ class UserInformationView: UIView {
 
         return view
     }()
-    
+
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.email
@@ -71,10 +70,10 @@ class UserInformationView: UIView {
         view.textColor = SchibstedColor.textLightGray.value
         view.translatesAutoresizingMaskIntoConstraints = false
         view.adjustsFontForContentSizeCategory = true
-        
+
         return view
     }()
-    
+
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -84,6 +83,6 @@ class UserInformationView: UIView {
         addSubview(nameLabel)
         addSubview(emailLabel)
     }
-    
+
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }

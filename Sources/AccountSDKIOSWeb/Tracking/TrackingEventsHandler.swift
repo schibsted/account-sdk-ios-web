@@ -40,7 +40,7 @@ public enum TrackingEvent {
     }
 
     public enum Engagement {
-        case click(on: UIElement)
+        case click(on: UIElement) // swiftlint:disable:this identifier_name
     }
 
     public enum ErrorType {
@@ -52,7 +52,7 @@ public enum TrackingEvent {
         case loginStateError(LoginStateError)
         case generic(Error)
     }
-    
+
     public enum AdditionalField {
         case getLoginSession(MFAType?)
         case sso(Bool)

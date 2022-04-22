@@ -1,4 +1,3 @@
-
 import Foundation
 
 public struct ClientConfiguration {
@@ -12,16 +11,16 @@ public struct ClientConfiguration {
     public var clientId: String
     /// Registered redirect URI
     public var redirectURI: URL
-    
+
     public var env: Environment
-    
+
     public enum Environment: String {
         case proCom = "https://login.schibsted.com"
         case proFi = "https://login.schibsted.fi"
         case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
         case proDk = "https://login.schibsted.dk"
-        
+
         var sessionService: String {
             let sessionServiceStr: String
             switch self {
@@ -39,7 +38,7 @@ public struct ClientConfiguration {
             return sessionServiceStr
         }
     }
-    
+
     /**
      Generate URL for Schibsted account pages.
      */
@@ -47,7 +46,7 @@ public struct ClientConfiguration {
         let url = serverURL.appendingPathComponent("/account/summary")
         return url
     }
-    
+
     public init(environment: Environment, clientId: String, redirectURI: URL) {
         self.init(env: environment,
                   serverURL: URL(string: environment.rawValue)!,
@@ -55,8 +54,8 @@ public struct ClientConfiguration {
                   clientId: clientId,
                   redirectURI: redirectURI)
     }
-    
-    init(env: Environment,serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
+
+    init(env: Environment, serverURL: URL, sessionServiceURL: URL, clientId: String, redirectURI: URL) {
         self.env = env
         self.serverURL = serverURL
         self.sessionServiceURL = sessionServiceURL

@@ -16,7 +16,9 @@ internal extension JWK {
 }
 
 internal enum JOSEUtil {
-    internal static func verifySignature(of serialisedJWS: String, withKeys jwks: JWKS, completion: @escaping (Result<Data, SignatureValidationError>) -> Void) {
+    internal static func verifySignature(of serialisedJWS: String,
+                                         withKeys jwks: JWKS,
+                                         completion: @escaping (Result<Data, SignatureValidationError>) -> Void) {
         guard let jws = try? JWS(compactSerialization: serialisedJWS) else {
             completion(.failure(.invalidJWS))
             return
@@ -26,7 +28,6 @@ internal enum JOSEUtil {
             completion(.failure(.noKeyId))
             return
         }
-
 
         guard let algorithm = jws.header.algorithm else {
             completion(.failure(.unspecifiedAlgorithm))
@@ -38,7 +39,7 @@ internal enum JOSEUtil {
                 completion(.failure(.unknownKeyId))
                 return
             }
-            
+
             guard let publicKey = key.toSecKey(),
                 let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKey) else {
                 completion(.failure(.unsupportedKeyType))
@@ -55,4 +56,3 @@ internal enum JOSEUtil {
         }
     }
 }
-

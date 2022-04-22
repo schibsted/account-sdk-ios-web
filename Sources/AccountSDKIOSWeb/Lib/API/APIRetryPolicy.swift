@@ -17,7 +17,7 @@ class APIRetryPolicy: RetryPolicy {
 
         return false
     }
-    
+
     func numRetries(for: URLRequest) -> Int {
         return 1
     }

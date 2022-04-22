@@ -19,7 +19,7 @@ class KeychainStorage: KeychainStoring {
 
     func setValue(_ value: Data, forAccount: String?, accessGroup: String? = nil) throws {
         let status: OSStatus
-        
+
         if try getValue(forAccount: forAccount) == nil {
             var query = itemQuery(forAccount: forAccount)
             query[kSecValueData as String] = value
@@ -34,7 +34,7 @@ class KeychainStorage: KeychainStoring {
             }
             status = SecItemUpdate(searchQuery as CFDictionary, updateQuery as CFDictionary)
         }
-        
+
         guard status == errSecSuccess else {
             SchibstedAccountLogger.instance.error("KeychainStorage error: \(status)")
             throw KeychainStorageError.storeError(reason: .keychainError(status: status))
@@ -44,7 +44,7 @@ class KeychainStorage: KeychainStoring {
     func getValue(forAccount: String?) throws -> Data? {
         return try get(query: itemQuery(forAccount: forAccount)) as? Data
     }
-    
+
     func getAll() -> [Data] {
         var query: [String: Any] = itemQuery(forAccount: nil)
         query[kSecMatchLimit as String] = kSecMatchLimitAll
@@ -53,38 +53,39 @@ class KeychainStorage: KeychainStoring {
             return []
         }
 
-        let result = items as! [Data?]
+        let result = items as! [Data?] // swiftlint:disable:this force_cast
         return result.compactMap { $0 }
     }
 
     private func itemQuery(forAccount: String?, returnData: Bool = true) -> [String: Any] {
         var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
+            kSecAttrService as String: service
         ]
         accessGroup.map { query[kSecAttrAccessGroup as String] = $0 }
         forAccount.map { query[kSecAttrAccount as String] = $0 }
-        
+
         if returnData {
             query[kSecReturnData as String] = true
         }
-        
+
         return query
     }
 
     private func get(query: [String: Any]) throws -> AnyObject? {
         var extractedData: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &extractedData)
-        
+
         if status == errSecItemNotFound {
             return nil
         }
 
         if status == errSecMissingEntitlement {
-            SchibstedAccountLogger.instance.error("KeychainStorager error: \(KeychainStorageError.entitlementMissing.localizedDescription)")
+            SchibstedAccountLogger.instance
+                .error("KeychainStorager error: \(KeychainStorageError.entitlementMissing.localizedDescription)")
             throw KeychainStorageError.entitlementMissing
         }
-        
+
         guard status == errSecSuccess else {
             SchibstedAccountLogger.instance.error("KeychainStorage error: \(status)")
             throw KeychainStorageError.operationError
