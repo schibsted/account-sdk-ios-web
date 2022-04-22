@@ -54,8 +54,6 @@ public class Client: CustomStringConvertible {
     private var isSessionInProgress: Bool = false
 
     let tracker: TrackingEventsHandler?
-    
-    let t = 23 as! String
 
     /**
      Initializes the Client with given configuration
