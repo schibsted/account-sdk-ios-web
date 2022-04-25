@@ -168,7 +168,6 @@ class SimplifiedLoginViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
     }
 
     func setupButtonTargets() {
@@ -343,6 +342,7 @@ class SimplifiedLoginViewController: UIViewController {
         let location = sender.location(in: containerView)
         if location.y < 0 {
             self.dismiss(animated: true, completion: nil)
+            tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         }
     }
 
@@ -355,6 +355,7 @@ class SimplifiedLoginViewController: UIViewController {
                     self.view.backgroundColor = .clear
                 }
                 self.dismiss(animated: true, completion: nil)
+                tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
             } else if let originalTransform = originalTransform {
                 UIView.animate(withDuration: 0.3) {
                     self.containerView.transform = originalTransform
@@ -402,6 +403,7 @@ extension SimplifiedLoginViewController {
         tracker?.engagement(.click(on: .conitnueWithoutLogginIn),
                             in: trackerScreenID,
                             additionalFields: [.uiVersion(uiVersion)])
+        tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(uiVersion)])
         viewModel.send(action: .clickedContinueWithoutLogin)
     }
     @objc func privacyPolicyClicked() {
