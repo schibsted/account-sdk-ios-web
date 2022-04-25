@@ -434,13 +434,19 @@ extension Client {
     /**
      Call this with the full URL received as deep link to complete the login flow.
         
-     This only needs to be used if manually starting the login flow using `getLoginSession`.
-     Calling `login()` will handle this for you.
+     This needs to be used if manually starting the login flow using `getLoginSession`.
      
      - parameter url: Full URL from received deep link upon completion of user authentication.
      - parameter completion: Callback that receives the login result.
     */
     public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
+        if url.pathComponents.contains("cancel") {
+            isSessionInProgress = false
+            self.tracker?.error(.loginError(.canceled), in: .webBrowser)
+            completion(.failure(.canceled))
+            return
+        }
+
         // Check if coming back after triggered web flow login
         guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
