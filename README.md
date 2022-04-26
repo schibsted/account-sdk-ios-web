@@ -225,6 +225,7 @@ Simplified Login comes with the following localization support:
 #### Releasing
 
 1. Make sure all changes going in the release have been merged to `master` branch.
+1. Update new SDK version number in both [Version.swift](https://github.com/schibsted/account-sdk-ios-web/blob/master/Sources/AccountSDKIOSWeb/Lib/Version.swift) and [AccountSDKIOSWeb.podspec](SchibstedAccount.podspec) files. Merge this change.
 1. Create a new [release via GitHub](https://github.com/schibsted/account-sdk-ios/releases).
     1. Enter the version number as the tag name and include the changes in the release description.
 1. Bump the version in [Podspec](SchibstedAccount.podspec)
