@@ -442,6 +442,10 @@ extension Client {
     */
     public func handleAuthenticationResponse(url: URL, completion: @escaping LoginResultHandler) {
         // Check if coming back after triggered web flow login
+        if url.pathComponents.contains("bankId") {
+            return
+        }
+        
         guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
