@@ -434,7 +434,7 @@ extension Client {
     /**
      Call this with the full URL received as deep link to complete the login flow.
         
-     This needs to be used if manually starting the login flow using `getLoginSession`.
+     This needs to be used if manually starting the login flow using `getLoginSession` or if authenticating with Swedish BankID.
      
      - parameter url: Full URL from received deep link upon completion of user authentication.
      - parameter completion: Callback that receives the login result.
