@@ -225,10 +225,8 @@ Simplified Login comes with the following localization support:
 #### Releasing
 
 1. Make sure all changes going in the release have been merged to `master` branch.
-1. Update new SDK version number in both [Version.swift](https://github.com/schibsted/account-sdk-ios-web/blob/master/Sources/AccountSDKIOSWeb/Lib/Version.swift) and [AccountSDKIOSWeb.podspec](SchibstedAccount.podspec) files. Merge this change.
+1. Update new SDK version number in both [Version.swift](https://github.com/schibsted/account-sdk-ios-web/blob/master/Sources/AccountSDKIOSWeb/Lib/Version.swift) and [AccountSDKIOSWeb.podspec](SchibstedAccount.podspec) files. Commit this change to the `master` branch.
 1. Create a new [release via GitHub](https://github.com/schibsted/account-sdk-ios/releases).
     1. Enter the version number as the tag name and include the changes in the release description.
-1. Bump the version in [Podspec](SchibstedAccount.podspec)
-1. Commit Podspec changes to a new branch, push it to GitHub, and make PR from it and then merge to master.
-1. Publish the pod by running `pod trunk push AccountSDKIOSWeb.podspec`. 
-    1. To successfully call 'pod trunk' you need to first setup pod trunk on your machine and be added as a contributor to the library. See https://guides.cocoapods.org/making/getting-setup-with-trunk.html
+1. Publish the pod by running `pod trunk push AccountSDKIOSWeb.podspec` from your local machine.
+    1. To successfully call `pod trunk` you need to first setup pod trunk on your computer and be added as a contributor to the library. See https://guides.cocoapods.org/making/getting-setup-with-trunk.html
