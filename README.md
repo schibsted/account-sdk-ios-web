@@ -98,7 +98,7 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
     asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, withSSO: true, completion: handleLoginResult)
     asWebAuthSession.start() // this will trigger the web context asking the user to login
     ```
-1. Handle the response as an incoming URL, e.g. via your app's delegate `application(_:open:options:)`:
+2. Handle the response as an incoming URL, e.g. via your app's delegate `application(_:open:options:)`:
     ```swift
     func application(_ application: UIApplication,
                      open url: URL,
@@ -112,7 +112,21 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
     }
     ```
     
-When implementing Swedish BankID authentication, the parent app must catch the redirect URI and prevent `handleAuthenticationResponse` from being called, to allow the authentication flow to finish. The URI scheme that is used to redirect back to the parent app from BankID will have the following format: `{app_uri_scheme}:/bankId`.
+3. When implementing **Swedish BankID** authentication the parent app must catch the redirect URI and return with no action. Please make sure that `handleAuthenticationResponse` is not called for the BankID redirect. The URI scheme that is used to redirect back to the parent app from BankID will have the following format: `{app_uri_scheme}:/bankId`. Find below a code example:
+    ```swift
+    func handleOnOpenUrl(url: URL) {
+        if url.pathComponents.contains("bankId") {
+            return
+        }
+        
+        client.handleAuthenticationResponse(url: url) { result in
+            DispatchQueue.main.async {
+                asWebAuthSession.cancel() // manually close the ASWebAuthenticationSession
+            }
+            handleLoginResult(result)
+        }
+    }
+    ```
     
 ### Obtaining tokens externally
 
