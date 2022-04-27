@@ -446,7 +446,8 @@ extension Client {
             completion(.failure(.canceled))
             return
         }
-        
+
+        // Check if coming back after triggered web flow login
         guard let storedData: AuthState = stateStorage.value(forKey: type(of: self).authStateKey),
            let receivedState = url.valueOf(queryParameter: "state"),
            storedData.state == receivedState else {
