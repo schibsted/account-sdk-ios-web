@@ -181,7 +181,7 @@ final class ClientTests: XCTestCase {
             }
         }
     }
-
+    
     func testHandleAuthenticationResponseCancelResponse() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
