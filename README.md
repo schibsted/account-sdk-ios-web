@@ -112,6 +112,8 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
     }
     ```
     
+When implementing Swedish BankID authentication, the parent app must catch the redirect URI and prevent `handleAuthenticationResponse` from being called, to allow the authentication flow to finish. The URI scheme that is used to redirect back to the parent app from BankID will have the following format: `{app_uri_scheme}:/bankId`.
+    
 ### Obtaining tokens externally
 
 Tokens can be obtained externally and injected into SDK for the already created users. This can be useful in the case of a test scenario.

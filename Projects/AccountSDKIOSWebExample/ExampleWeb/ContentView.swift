@@ -194,6 +194,10 @@ struct ContentView: View {
     }
     
     func handleOnOpenUrl(url: URL) {
+        if url.pathComponents.contains("bankId") {
+            return
+        }
+        
         client.handleAuthenticationResponse(url: url) { result in
             DispatchQueue.main.async {
                 asWebAuthSession?.cancel()

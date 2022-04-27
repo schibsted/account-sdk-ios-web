@@ -181,19 +181,6 @@ final class ClientTests: XCTestCase {
             }
         }
     }
-    
-    func testHandleAuthenticationResponseBankIdResponse() {
-        let mockStorage = MockStorage()
-        stub(mockStorage) { mock in
-            when(mock.value(forKey: Client.authStateKey)).thenReturn(nil)
-        }
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
-        
-        Await.until { done in
-            client.handleAuthenticationResponse(url: URL("com.example:/bankId")) { result in done()
-            }
-        }
-    }
 
     func testHandleAuthenticationResponseCancelResponse() {
         let mockStorage = MockStorage()

@@ -434,7 +434,7 @@ extension Client {
     /**
      Call this with the full URL received as deep link to complete the login flow.
         
-     This needs to be used if manually starting the login flow using `getLoginSession` or if authenticating with Swedish BankID.
+     This needs to be used if manually starting the login flow using `getLoginSession`.
      
      - parameter url: Full URL from received deep link upon completion of user authentication.
      - parameter completion: Callback that receives the login result.
@@ -444,11 +444,6 @@ extension Client {
             isSessionInProgress = false
             self.tracker?.error(.loginError(.canceled), in: .webBrowser)
             completion(.failure(.canceled))
-            return
-        }
-
-        // Check if coming back after triggered web flow login
-        if url.pathComponents.contains("bankId") {
             return
         }
         
