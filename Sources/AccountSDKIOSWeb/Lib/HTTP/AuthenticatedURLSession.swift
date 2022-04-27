@@ -1,3 +1,8 @@
+//
+// Copyright © 2022 Schibsted.
+// Licensed under the terms of the MIT license. See LICENSE in the project root.
+//
+
 import Foundation
 
 /// AuthenticatedURLSession wraps a User to allow Bearer authenticated requests and the use of URLSessionDataTask
