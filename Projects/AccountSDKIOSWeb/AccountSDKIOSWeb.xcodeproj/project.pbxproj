@@ -101,6 +101,7 @@
 		CE9B958B27E8A46000C62C6C /* SimplifiedLoginUIVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9B958A27E8A46000C62C6C /* SimplifiedLoginUIVersion.swift */; };
 		CE9B958D27E8ACEF00C62C6C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9B958C27E8ACEF00C62C6C /* HeaderView.swift */; };
 		CE9B958F27E8CFA100C62C6C /* ExplanatoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9B958E27E8CFA100C62C6C /* ExplanatoryView.swift */; };
+		CEA9A2D8282D362300C1D8F3 /* ContinueButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA9A2D7282D362300C1D8F3 /* ContinueButton.swift */; };
 		CEB3F82827295F4F009F440C /* AuthenticatedURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */; };
 		CEB3F82A272ACF2F009F440C /* AuthenticatedURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */; };
 		CEB631F92747C4B2009CE3B3 /* Bundle+AccountSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */; };
@@ -251,6 +252,7 @@
 		CE9B958A27E8A46000C62C6C /* SimplifiedLoginUIVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIVersion.swift; sourceTree = "<group>"; };
 		CE9B958C27E8ACEF00C62C6C /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		CE9B958E27E8CFA100C62C6C /* ExplanatoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplanatoryView.swift; sourceTree = "<group>"; };
+		CEA9A2D7282D362300C1D8F3 /* ContinueButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueButton.swift; sourceTree = "<group>"; };
 		CEB3F82727295F4F009F440C /* AuthenticatedURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSession.swift; sourceTree = "<group>"; };
 		CEB3F829272ACF2F009F440C /* AuthenticatedURLSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedURLSessionTests.swift; sourceTree = "<group>"; };
 		CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AccountSDK.swift"; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				2401AD12273D0120007C63A6 /* FooterView.swift */,
 				CE9B958C27E8ACEF00C62C6C /* HeaderView.swift */,
 				CE9B958E27E8CFA100C62C6C /* ExplanatoryView.swift */,
+				CEA9A2D7282D362300C1D8F3 /* ContinueButton.swift */,
 			);
 			path = "Sub Views";
 			sourceTree = "<group>";
@@ -1109,6 +1112,7 @@
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
 				CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */,
 				2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */,
+				CEA9A2D8282D362300C1D8F3 /* ContinueButton.swift in Sources */,
 				243BFAD82750F20700382494 /* String+Localization.swift in Sources */,
 				CE9B958D27E8ACEF00C62C6C /* HeaderView.swift in Sources */,
 				2489C9BA26733A0900AA0A4C /* Client.swift in Sources */,

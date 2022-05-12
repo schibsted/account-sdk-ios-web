@@ -28,33 +28,12 @@ class SimplifiedLoginViewController: UIViewController {
     }()
 
     // MARK: Primary button
-
-    private lazy var primaryButton: UIButton = {
-        let button = UIButton()
-        let title = "\(viewModel.localizationModel.continuAsButtonTitle) \(viewModel.displayName)"
-
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 25
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.titleLabel?.textAlignment = .center
-        button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = SchibstedColor.blue.value
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        return button
-    }()
+    private lazy var primaryButton: UIButton = ContinueButton(viewModel: viewModel)
 
     // MARK: Links
-
-    private lazy var linksView: LinksView = {
-        return LinksView(viewModel: viewModel)
-    }()
+    private lazy var linksView: LinksView = LinksView(viewModel: viewModel)
 
     // MARK: Header
-
     private lazy var headerView: HeaderView = {
         let view = HeaderView(viewModel: viewModel)
         view.isHidden = uiVersion == .headingCopy ? false : true
@@ -62,7 +41,6 @@ class SimplifiedLoginViewController: UIViewController {
     }()
 
     // MARK: Explanatory
-
     private lazy var explanatoryView: ExplanatoryView = {
         let view = ExplanatoryView(viewModel: viewModel)
         view.isHidden = uiVersion == .explanatoryCopy ? false : true
@@ -70,7 +48,6 @@ class SimplifiedLoginViewController: UIViewController {
     }()
 
     // MARK: Footer
-
     private lazy var footerStackView: FooterView = {
         let view = FooterView(viewModel: viewModel, uiVersion: uiVersion)
         view.alignment = .center
