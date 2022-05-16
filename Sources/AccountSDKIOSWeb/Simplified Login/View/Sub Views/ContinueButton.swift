@@ -5,9 +5,9 @@
 
 import UIKit
 
-class ContinueButton: UIButton {
-    let viewModel: SimplifiedLoginViewModel
-    let isExtended: Bool
+final class ContinueButton: UIButton {
+    private let viewModel: SimplifiedLoginViewModel
+    private let isExtended: Bool
 
     private lazy var title: String = {
         return "\(viewModel.localizationModel.continuAsButtonTitle) \(viewModel.displayName)"
@@ -35,15 +35,15 @@ class ContinueButton: UIButton {
     }()
 
     private lazy var internalConstraints: [NSLayoutConstraint] = {
-        return [initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
-                initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
-                avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-                avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
-                avatarView.widthAnchor.constraint(equalToConstant: 40),
-                avatarView.heightAnchor.constraint(equalToConstant: 40),
-                titleLabel!.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 10),
-                titleLabel!.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 3),
-                titleLabel!.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -3)
+        [initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
+         initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
+         avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+         avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
+         avatarView.widthAnchor.constraint(equalToConstant: 40),
+         avatarView.heightAnchor.constraint(equalToConstant: 40),
+         titleLabel!.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 10),
+         titleLabel!.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 3),
+         titleLabel!.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -3)
         ]
     }()
 
