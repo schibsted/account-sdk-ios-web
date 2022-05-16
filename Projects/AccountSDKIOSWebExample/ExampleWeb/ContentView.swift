@@ -68,6 +68,7 @@ struct ContentView: View {
                     Button(action: { triggerSimplifiedLogin(uiVersion: .minimal) }, label: { Text("Trigger Simplified login UI v1")})
                     Button(action: { triggerSimplifiedLogin(uiVersion: .headingCopy) }, label: { Text("Trigger Simplified login UI v2")})
                     Button(action: { triggerSimplifiedLogin(uiVersion: .explanatoryCopy) }, label: { Text("Trigger Simplified login UI v3")})
+                    Button(action: { triggerSimplifiedLogin(uiVersion: .combinedButton) }, label: { Text("Trigger Simplified login UI v4")})
                 }
                 .padding()
                 .border(Color.black)
