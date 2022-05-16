@@ -201,7 +201,7 @@ class SimplifiedLoginViewController: UIViewController {
                                                  constant: uiVersion == .explanatoryCopy ? 20 : 0),
 
             // Primary button
-            continueButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: uiVersion == .combinedButton ? -30 : 20),
+            continueButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: uiVersion == .combinedButton ? 10 : 20),
             continueButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             continueButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             buttonWidth,
@@ -233,12 +233,16 @@ class SimplifiedLoginViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ]
 
-        if uiVersion == .headingCopy || uiVersion == .combinedButton {
+        if uiVersion == .headingCopy {
             allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
         } else if uiVersion == .explanatoryCopy {
             allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
             allConstraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
+        } else if uiVersion == .combinedButton {
+            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
+            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+            allConstraints.append(userInformationView.heightAnchor.constraint(equalToConstant: 0))
         } else {
             allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
