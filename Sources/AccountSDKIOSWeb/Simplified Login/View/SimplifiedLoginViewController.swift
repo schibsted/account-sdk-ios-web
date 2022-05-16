@@ -175,7 +175,9 @@ class SimplifiedLoginViewController: UIViewController {
         buttonWidth.priority = .defaultLow
         let buttonLead = continueButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor, constant: 4)
         let buttonTrail = continueButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
-        let containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: (uiVersion == .minimal || uiVersion == .combinedButton) ? 495 : 525)
+        let containerViewBottomConstraint = containerView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: (uiVersion == .minimal || uiVersion == .combinedButton) ? 495 : 525)
 
         var allConstraints =  userInformationView.internalConstraints +
         footerStackView.internalConstraints + linksView.internalConstraints +
