@@ -246,7 +246,9 @@ class SimplifiedLoginViewController: UIViewController {
         } else if shouldUseCombinedButtonView {
             allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(userInformationView.heightAnchor.constraint(equalToConstant: 0))
+            let userInformationHeight = userInformationView.heightAnchor.constraint(equalToConstant: 0)
+            userInformationHeight.priority = .defaultHigh
+            allConstraints.append(userInformationHeight)
         } else {
             allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
@@ -284,7 +286,10 @@ class SimplifiedLoginViewController: UIViewController {
                                                 constant: conitnueButtonTop),
             continueButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             continueButton.heightAnchor.constraint(greaterThanOrEqualToConstant: shouldUseCombinedButtonView ? 56 : 48),
-            continueButton.widthAnchor.constraint(equalToConstant: 326),
+            continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: 326),
+            continueButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 290),
+            continueButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+            continueButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20),
 
             // Links View
             linksView.topAnchor.constraint(lessThanOrEqualTo: continueButton.bottomAnchor, constant: 10),
@@ -296,8 +301,10 @@ class SimplifiedLoginViewController: UIViewController {
             // Footer
             footerStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 180),
-            footerStackView.widthAnchor.constraint(equalToConstant: 394),
+            footerStackView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
             footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+            footerStackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+            footerStackView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20),
 
             // Scroll View
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -315,7 +322,9 @@ class SimplifiedLoginViewController: UIViewController {
         } else if shouldUseCombinedButtonView {
             allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(userInformationView.heightAnchor.constraint(equalToConstant: 0))
+            let userInformationHeight = userInformationView.heightAnchor.constraint(equalToConstant: 0)
+            userInformationHeight.priority = .defaultHigh
+            allConstraints.append(userInformationHeight)
         } else {
             allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
             allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
