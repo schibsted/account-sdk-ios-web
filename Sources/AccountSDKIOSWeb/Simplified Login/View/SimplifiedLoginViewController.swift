@@ -160,7 +160,7 @@ class SimplifiedLoginViewController: UIViewController {
         footerStackView.privacyURLButton.addTarget(self, action: privacyPolicySelector, for: .touchUpInside)
     }
 
-    private func setupiPhoneConstraints() {
+    private func setupiPhoneConstraints() { // swiftlint:disable:this function_body_length
         let margin = view.layoutMarginsGuide
         let buttonWidth = continueButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow
@@ -170,9 +170,10 @@ class SimplifiedLoginViewController: UIViewController {
             equalTo: view.bottomAnchor,
             constant: (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 495 : 525)
 
-        var allConstraints =  userInformationView.internalConstraints +
-        footerStackView.internalConstraints + linksView.internalConstraints +
-        headerView.internalConstraints + explanatoryView.internalConstraints + [
+        var allConstraints = [NSLayoutConstraint]()
+        allConstraints.append(contentsOf: commonConstraints())
+
+        allConstraints += [
             // Header View
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -224,32 +225,16 @@ class SimplifiedLoginViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ]
 
-        if viewModel.shouldUseHeadingCopyView {
-            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-        } else if viewModel.shouldUseExplanatoryView {
-            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
-        } else if viewModel.shouldUseCombinedButtonView {
-            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-            let userInformationHeight = userInformationView.heightAnchor.constraint(equalToConstant: 0)
-            userInformationHeight.priority = .defaultHigh
-            allConstraints.append(userInformationHeight)
-        } else {
-            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-        }
         NSLayoutConstraint.activate(allConstraints)
     }
 
     private func setupiPadConstraints() {
         let conitnueButtonTop: CGFloat = viewModel.shouldUseExplanatoryView ? 15 : viewModel.shouldUseCombinedButtonView ? 0 : 30
 
-        var allConstraints =  userInformationView.internalConstraints +
-        footerStackView.internalConstraints + linksView.internalConstraints +
-        headerView.internalConstraints + explanatoryView.internalConstraints + [
+        var allConstraints = [NSLayoutConstraint]()
+        allConstraints.append(contentsOf: commonConstraints())
 
+        allConstraints += [
             // Header View
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -300,24 +285,31 @@ class SimplifiedLoginViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
 
+        NSLayoutConstraint.activate(allConstraints)
+    }
+
+    private func commonConstraints() -> [NSLayoutConstraint] {
+        var constraints = userInformationView.internalConstraints +
+        footerStackView.internalConstraints + linksView.internalConstraints +
+        headerView.internalConstraints + explanatoryView.internalConstraints
+
         if viewModel.shouldUseHeadingCopyView {
-            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+            constraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
+            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
         } else if viewModel.shouldUseExplanatoryView {
-            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
+            constraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
+            constraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
         } else if viewModel.shouldUseCombinedButtonView {
-            allConstraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+            constraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
+            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
             let userInformationHeight = userInformationView.heightAnchor.constraint(equalToConstant: 0)
             userInformationHeight.priority = .defaultHigh
-            allConstraints.append(userInformationHeight)
+            constraints.append(userInformationHeight)
         } else {
-            allConstraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            allConstraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
+            constraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
+            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
         }
-
-        NSLayoutConstraint.activate(allConstraints)
+        return constraints
     }
 
     private func animateShowingOverlay() {
