@@ -104,6 +104,16 @@ class FooterView: UIStackView {
         self.viewModel = viewModel
         super.init(frame: .zero)
 
+        backgroundColor = SchibstedColor.lightGray.value
+        alignment = .center
+        axis = .vertical
+        distribution = .fill
+        spacing = 12
+        layer.cornerRadius = 12
+        translatesAutoresizingMaskIntoConstraints = false
+        layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 12, right: 16)
+        isLayoutMarginsRelativeArrangement = true
+
         // Ecosystem
         for item in popularBrandsImageViews {
             popularBrandsStackView.addArrangedSubview(item)

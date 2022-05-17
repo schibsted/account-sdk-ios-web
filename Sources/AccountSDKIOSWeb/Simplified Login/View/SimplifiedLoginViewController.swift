@@ -28,7 +28,9 @@ class SimplifiedLoginViewController: UIViewController {
     }()
 
     // MARK: Links
-    private lazy var linksView: LinksView = LinksView(viewModel: viewModel)
+    private lazy var linksView: LinksView = {
+        LinksView(viewModel: viewModel)
+    }()
 
     // MARK: Header
     private lazy var headerView: HeaderView = {
@@ -42,19 +44,7 @@ class SimplifiedLoginViewController: UIViewController {
 
     // MARK: Footer
     private lazy var footerStackView: FooterView = {
-        let view = FooterView(viewModel: viewModel)
-        view.alignment = .center
-        view.axis = .vertical
-        view.distribution = .fill
-        view.spacing = 12
-        view.layer.cornerRadius = 12
-
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = SchibstedColor.lightGray.value
-
-        view.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 12, right: 16)
-        view.isLayoutMarginsRelativeArrangement = true
-        return view
+        FooterView(viewModel: viewModel)
     }()
 
     init(viewModel: SimplifiedLoginViewModel) {
@@ -75,63 +65,14 @@ class SimplifiedLoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // swiftlint:disable function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = viewModel.isPhone ? .black.withAlphaComponent(0.6) : .white
 
-        if viewModel.isPhone {
-            let height = 459 + ((!viewModel.shouldUseMinimalView || !viewModel.shouldUseCombinedButtonView) ? 46 : 0)
-            let y = Int(view.frame.height) - height + 25 // swiftlint:disable:this identifier_name
-            containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-
-            originalTransform = containerView.transform
-            containerView.layer.cornerRadius = 10
-            containerView.backgroundColor = .white
-
-            scrollView.frame = CGRect(x: 0,
-                                      y: 20,
-                                      width: containerView.frame.size.width,
-                                      height: containerView.frame.size.height)
-
-            if #available(iOS 13.0, *) {
-                scrollView.automaticallyAdjustsScrollIndicatorInsets = false
-            } else {
-                scrollView.contentInsetAdjustmentBehavior = .never
-            }
-
-            scrollView.addSubview(headerView)
-            scrollView.addSubview(userInformationView)
-            scrollView.addSubview(explanatoryView)
-            scrollView.addSubview(continueButton)
-            scrollView.addSubview(linksView)
-            scrollView.addSubview(footerStackView)
-            containerView.addSubview(scrollView)
-
-            view.addSubview(containerView)
-            bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525)
-
-            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
-            view.addGestureRecognizer(panGestureRecognizer)
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
-            view.addGestureRecognizer(tapGestureRecognizer)
-        } else {
-            let overlayHeight = (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 454 : 500
-            scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: overlayHeight)
-            scrollView.addSubview(headerView)
-            scrollView.addSubview(userInformationView)
-            scrollView.addSubview(explanatoryView)
-            scrollView.addSubview(continueButton)
-            scrollView.addSubview(linksView)
-            scrollView.addSubview(footerStackView)
-            scrollView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(scrollView)
-        }
-
+        configureForIphone()
+        configureForIpad()
         setupButtonTargets()
 
-        viewModel.isPhone ? setupiPhoneConstraints() : setupiPadConstraints()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -144,7 +85,70 @@ class SimplifiedLoginViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
 
-    func setupButtonTargets() {
+    private func configureForIphone() {
+        guard viewModel.isPhone else {
+            return
+        }
+
+        let height = 459 + ((!viewModel.shouldUseMinimalView || !viewModel.shouldUseCombinedButtonView) ? 46 : 0)
+        let y = Int(view.frame.height) - height + 25 // swiftlint:disable:this identifier_name
+        containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+
+        originalTransform = containerView.transform
+        containerView.layer.cornerRadius = 10
+        containerView.backgroundColor = .white
+
+        scrollView.frame = CGRect(x: 0,
+                                  y: 20,
+                                  width: containerView.frame.size.width,
+                                  height: containerView.frame.size.height)
+
+        if #available(iOS 13.0, *) {
+            scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+        } else {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        }
+
+        scrollView.addSubview(headerView)
+        scrollView.addSubview(userInformationView)
+        scrollView.addSubview(explanatoryView)
+        scrollView.addSubview(continueButton)
+        scrollView.addSubview(linksView)
+        scrollView.addSubview(footerStackView)
+        containerView.addSubview(scrollView)
+
+        view.addSubview(containerView)
+        bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 525)
+
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(sender:)))
+        view.addGestureRecognizer(panGestureRecognizer)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(sender:)))
+        view.addGestureRecognizer(tapGestureRecognizer)
+
+        setupiPhoneConstraints()
+    }
+
+    private func configureForIpad() {
+        guard !viewModel.isPhone else {
+            return
+        }
+
+        let overlayHeight = (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 454 : 500
+        scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: overlayHeight)
+        scrollView.addSubview(headerView)
+        scrollView.addSubview(userInformationView)
+        scrollView.addSubview(explanatoryView)
+        scrollView.addSubview(continueButton)
+        scrollView.addSubview(linksView)
+        scrollView.addSubview(footerStackView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+
+        setupiPadConstraints()
+    }
+
+    private func setupButtonTargets() {
         let primaryButtonSelector = #selector(SimplifiedLoginViewController.primaryButtonClicked)
         let switchAccountSelector = #selector(SimplifiedLoginViewController.loginWithDifferentAccountClicked)
         let continueWithoutLoginSelector = #selector(SimplifiedLoginViewController.continueWithoutLoginClicked)
@@ -156,7 +160,7 @@ class SimplifiedLoginViewController: UIViewController {
         footerStackView.privacyURLButton.addTarget(self, action: privacyPolicySelector, for: .touchUpInside)
     }
 
-    func setupiPhoneConstraints() {
+    private func setupiPhoneConstraints() {
         let margin = view.layoutMarginsGuide
         let buttonWidth = continueButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow
@@ -239,7 +243,7 @@ class SimplifiedLoginViewController: UIViewController {
         NSLayoutConstraint.activate(allConstraints)
     }
 
-    func setupiPadConstraints() {
+    private func setupiPadConstraints() {
         let conitnueButtonTop: CGFloat = viewModel.shouldUseExplanatoryView ? 15 : viewModel.shouldUseCombinedButtonView ? 0 : 30
 
         var allConstraints =  userInformationView.internalConstraints +
