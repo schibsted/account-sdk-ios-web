@@ -119,8 +119,8 @@ class FooterView: UIStackView {
         // Privacy and Explanation
         self.addArrangedSubview(explanationLabel)
         self.addArrangedSubview(privacyURLButton)
-
     }
+
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     private func getRoundedImageView(name: String) -> UIImageView {
