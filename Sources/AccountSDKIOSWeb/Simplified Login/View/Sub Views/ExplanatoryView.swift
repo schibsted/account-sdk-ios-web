@@ -28,6 +28,7 @@ class ExplanatoryView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        isHidden = viewModel.shouldUseExplanatoryView ? false : true
         addSubview(explanationLabel)
     }
 

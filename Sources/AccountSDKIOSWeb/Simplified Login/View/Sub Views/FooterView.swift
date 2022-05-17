@@ -8,7 +8,6 @@ import SwiftUI
 
 class FooterView: UIStackView {
     let viewModel: SimplifiedLoginViewModel
-    let uiVersion: SimplifiedLoginUIVersion
 
     lazy var internalConstraints: [NSLayoutConstraint] = {
         let popularBrandsHeights = popularBrandsImageViews.map { $0.heightAnchor.constraint(equalToConstant: 36) }
@@ -70,7 +69,7 @@ class FooterView: UIStackView {
 
     private lazy var explanationLabel: UILabel = {
         let localizedString: String
-        if uiVersion == .explanatoryCopy {
+        if viewModel.shouldUseExplanatoryView {
             localizedString = String.localizedStringWithFormat(
                 viewModel.localizationModel.shortExplanationText)
         } else {
@@ -101,9 +100,8 @@ class FooterView: UIStackView {
         return view
     }()
 
-    init(viewModel: SimplifiedLoginViewModel, uiVersion: SimplifiedLoginUIVersion) {
+    init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
-        self.uiVersion = uiVersion
         super.init(frame: .zero)
 
         // Ecosystem

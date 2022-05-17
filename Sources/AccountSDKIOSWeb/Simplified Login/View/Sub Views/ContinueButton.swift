@@ -47,9 +47,9 @@ final class ContinueButton: UIButton {
         ]
     }()
 
-    init(viewModel: SimplifiedLoginViewModel, extended: Bool = false) {
+    init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
-        self.isExtended = extended
+        self.isExtended = viewModel.shouldUseCombinedButtonView
         super.init(frame: .zero)
         setup()
     }

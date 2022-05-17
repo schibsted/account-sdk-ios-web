@@ -48,6 +48,7 @@ class HeaderView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        isHidden = (viewModel.shouldUseHeadingCopyView || viewModel.shouldUseCombinedButtonView) ? false : true
         addSubview(loginWithOneClickLabel)
         addSubview(grayLine)
     }
