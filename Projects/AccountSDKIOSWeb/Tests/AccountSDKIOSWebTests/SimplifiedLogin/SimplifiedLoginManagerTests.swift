@@ -14,7 +14,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
     func testRequestSimplifiedLogin_noLoggedInSessionInSharedKeychain () {
         let mockHTTPClient = MockHTTPClient()
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
-        let sut = SimplifiedLoginManager(client: client, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
+        let sut = SimplifiedLoginManager(client: client, contextProvider: ASWebAuthSessionContextProvider(), completion: { result in })
         
         let expectation = self.expectation(description: "Should fail with SimplifiedLoginError.noLoggedInSessionInSharedKeychain")
         sut.requestSimplifiedLogin("A client name", completion: { result in
@@ -43,7 +43,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         mockClient.userSessionToReturn = returnedUserSession
         
         let expectation = self.expectation(description: "Should fail with SimplifiedLoginError.noClientNameFound when clientName is nil")
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), completion: { result in })
         sut.requestSimplifiedLogin(nil, completion: { result in
             switch result {
             case .failure(SimplifiedLoginManager.SimplifiedLoginError.noClientNameFound):
@@ -80,7 +80,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         window.rootViewController = vc
         window.makeKeyAndVisible()
         
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, fetcher: mockFetcher, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), fetcher: mockFetcher, completion: { result in })
         let expectation = self.expectation(description: "Should fail when fetchData fails")
         sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
             switch result {
@@ -121,7 +121,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         window.makeKeyAndVisible()
         
         
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, fetcher: mockFetcher, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), fetcher: mockFetcher, completion: { result in })
         let expectation = self.expectation(description: "Should be a sucessfull flow")
         sut.requestSimplifiedLogin("A client name", window: window, completion: { result in
             switch result {
@@ -167,7 +167,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         mockClient.userSessionToReturn = returnedUserSession
         
         let expectation = self.expectation(description: "Should fail with SimplifiedLoginError.noVisibleViewControllerFound")
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), completion: { result in })
         sut.requestSimplifiedLogin("A name", completion: { result in
             switch result {
             case .failure(SimplifiedLoginManager.SimplifiedLoginError.noVisibleViewControllerFound):
@@ -209,7 +209,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         mockClient.userSessionToReturn = returnedUserSession
         
         let expectation = self.expectation(description: "Should fail when fetchData fails")
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), completion: { result in })
         sut.requestSimplifiedLogin("A name", completion: { result in
             switch result {
             case .failure(HTTPError.unexpectedError(underlying: LoginError.unsolicitedResponse)):
@@ -256,7 +256,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         window.makeKeyAndVisible()
         
         
-        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), env: .pre, completion: { result in })
+        let sut = SimplifiedLoginManager(client: mockClient, contextProvider: ASWebAuthSessionContextProvider(), completion: { result in })
         let expectation = self.expectation(description: "Should be a successfull flow")
         sut.requestSimplifiedLogin("A name", window: window, completion: { result in
             switch result {
