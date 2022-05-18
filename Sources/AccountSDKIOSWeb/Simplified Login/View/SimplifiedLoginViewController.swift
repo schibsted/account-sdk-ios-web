@@ -271,12 +271,10 @@ class SimplifiedLoginViewController: UIViewController {
             linksView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
 
             // Footer
-            footerStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 180),
-            footerStackView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
-            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
-            footerStackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
-            footerStackView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20),
+            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: viewModel.shouldUseHeadingCopyView ? 0 : -20),
+            footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
             // Scroll View
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
