@@ -66,7 +66,6 @@ public final class SimplifiedLoginManager {
     @available(iOS 13.0, *)
     convenience public init(client: Client,
                             contextProvider: ASWebAuthenticationPresentationContextProviding,
-                            env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
                             withMFA: MFAType? = nil,
                             loginHint: String? = nil,
                             extraScopeValues: Set<String> = [],
@@ -75,7 +74,6 @@ public final class SimplifiedLoginManager {
         let fetcher = SimplifiedLoginFetcher(client: client)
         self.init(client: client,
                   contextProvider: contextProvider,
-                  env: env,
                   withMFA: withMFA,
                   loginHint: loginHint,
                   extraScopeValues: extraScopeValues,
@@ -87,7 +85,6 @@ public final class SimplifiedLoginManager {
     @available(iOS 13.0, *)
     init(client: Client,
          contextProvider: ASWebAuthenticationPresentationContextProviding,
-         env: ClientConfiguration.Environment, // TODO: Currently used to decide language.
          withMFA: MFAType? = nil,
          loginHint: String? = nil,
          extraScopeValues: Set<String> = [],

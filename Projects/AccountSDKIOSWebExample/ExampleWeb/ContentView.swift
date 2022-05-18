@@ -89,7 +89,7 @@ struct ContentView: View {
     
     func triggerSimplifiedLogin(uiVersion: SimplifiedLoginUIVersion) {
         let context = ASWebAuthSessionContextProvider()
-        let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, env: clientConfiguration.env, completion: handleResult)
+        let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, completion: handleResult)
         manager.requestSimplifiedLogin("A visble product name", uiVersion: uiVersion) { result in
             switch (result) {
             case .success():

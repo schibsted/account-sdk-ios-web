@@ -13,7 +13,7 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let userData = UserData()
         let localizationModel = SimplifiedLoginLocalizationModel()
 
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData, userDataModel: userData, localizationModel: localizationModel, visibleClientName: "Schibsted")
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData, userDataModel: userData, localizationModel: localizationModel, visibleClientName: "Schibsted", uiVersion: .minimal)
         
         XCTAssertEqual(viewModel.clientName, "Schibsted")
         XCTAssertEqual(viewModel.schibstedLogoName, imageData
@@ -28,7 +28,7 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let userData = UserData()
         let localizationModel = SimplifiedLoginLocalizationModel()
 
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData, userDataModel: userData, localizationModel: localizationModel, visibleClientName: "Schibsted")
+        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData, userDataModel: userData, localizationModel: localizationModel, visibleClientName: "Schibsted", uiVersion: .minimal)
         
         let didCallPrivacyPolicy = self.expectation(description: "Correctly call privacy policy closure")
         let didCallContinueAsUser = self.expectation(description: "Correctly call continue as closure")
@@ -68,7 +68,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData,
                                                  userDataModel: userData,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: "Schibsted")
+                                                 visibleClientName: "Schibsted",
+                                                 uiVersion: .minimal)
         
         XCTAssertEqual(viewModel.initials, "AS", "Initials should come from displayname if givenName and FamilyName is empty")
     }
@@ -85,7 +86,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData,
                                                  userDataModel: userData,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: "Schibsted")
+                                                 visibleClientName: "Schibsted",
+                                                 uiVersion: .minimal)
         
         XCTAssertEqual(viewModel.initials, "T", "Initials should come from givenName and FamilyName if set")
     }
@@ -102,7 +104,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData,
                                                  userDataModel: userData,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: "Schibsted")
+                                                 visibleClientName: "Schibsted",
+                                                 uiVersion: .minimal)
         
         XCTAssertEqual(viewModel.initials, "T", "Initials should come from displayname if givenName is empty")
     }
@@ -119,7 +122,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData,
                                                  userDataModel: userData,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: "Schibsted")
+                                                 visibleClientName: "Schibsted",
+                                                 uiVersion: .minimal)
         
         XCTAssertEqual(viewModel.initials, "T", "Initials should come from displayname if FamilyName is empty")
     }

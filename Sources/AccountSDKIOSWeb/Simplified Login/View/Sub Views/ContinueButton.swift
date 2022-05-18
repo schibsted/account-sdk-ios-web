@@ -7,7 +7,6 @@ import UIKit
 
 final class ContinueButton: UIButton {
     private let viewModel: SimplifiedLoginViewModel
-    private let isExtended: Bool
 
     private lazy var title: String = {
         return "\(viewModel.localizationModel.continuAsButtonTitle) \(viewModel.displayName)"
@@ -47,9 +46,8 @@ final class ContinueButton: UIButton {
         ]
     }()
 
-    init(viewModel: SimplifiedLoginViewModel, extended: Bool = false) {
+    init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
-        self.isExtended = extended
         super.init(frame: .zero)
         setup()
     }
@@ -66,7 +64,7 @@ final class ContinueButton: UIButton {
         backgroundColor = SchibstedColor.blue.value
         translatesAutoresizingMaskIntoConstraints = false
 
-        isExtended ? extendedSetup() : basicSetup()
+        viewModel.shouldUseCombinedButtonView ? extendedSetup() : basicSetup()
     }
 
     private func basicSetup() {

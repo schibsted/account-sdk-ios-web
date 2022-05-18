@@ -32,7 +32,9 @@ struct SimplifiedLoginUIFactory {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel,
                                                  userDataModel: userDataModel,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: clientName)
+                                                 visibleClientName: clientName,
+                                                 uiVersion: uiVersion,
+                                                 tracker: client.tracker)
 
         let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
@@ -112,7 +114,9 @@ struct SimplifiedLoginUIFactory {
             imageDataModel: imageDataModel,
             userDataModel: userDataModel,
             localizationModel: localizationModel,
-            visibleClientName: clientName)
+            visibleClientName: clientName,
+            uiVersion: uiVersion,
+            tracker: client.tracker)
 
         let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
@@ -178,9 +182,7 @@ struct SimplifiedLoginUIFactory {
                                     uiVersion: SimplifiedLoginUIVersion,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
-        let viewController = SimplifiedLoginViewController(viewModel: viewModel,
-                                                           uiVersion: uiVersion,
-                                                           tracker: client.tracker)
+        let viewController = SimplifiedLoginViewController(viewModel: viewModel)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
 
         viewModel.onClickedContinueWithoutLogin = {
