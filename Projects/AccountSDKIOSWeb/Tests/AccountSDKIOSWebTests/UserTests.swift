@@ -92,7 +92,7 @@ final class UserTests: XCTestCase {
                 }
 
             // refresh token request
-            let tokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+            let tokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
@@ -332,7 +332,7 @@ final class UserTests: XCTestCase {
     
     func testUserContextReturnsCorrectValue() {
         let mockHTTPClient = MockHTTPClient()
-        let expectedResponse = UserContextFromTokenResponse(identifier: "identifier", display_text: "master-of-puppets", client_name: "metallica")
+        let expectedResponse = UserContextFromTokenResponse(identifier: "identifier", displayText: "master-of-puppets", clientName: "metallica")
         stub(mockHTTPClient) { mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in

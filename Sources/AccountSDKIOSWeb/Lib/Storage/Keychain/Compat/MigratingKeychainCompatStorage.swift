@@ -191,7 +191,7 @@ class OldSDKClient {
         let resultHandler: HTTPResultHandler<TokenResponse> = { result in
             switch result {
             case .success(let tokenResponse):
-                completion(.success(tokenResponse.access_token))
+                completion(.success(tokenResponse.accessToken))
             case .failure(let error):
                 SchibstedAccountLogger.instance
                     .info("Failed to migrate tokens. With error: \(error.localizedDescription)")

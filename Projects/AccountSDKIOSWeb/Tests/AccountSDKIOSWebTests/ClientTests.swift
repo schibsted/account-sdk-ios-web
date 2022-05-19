@@ -68,7 +68,7 @@ final class ClientTests: XCTestCase {
 
     func testHandleAuthenticationResponseHandlesSuccessResponse() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
@@ -101,7 +101,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: tokenResponse.id_token!, idTokenClaims: Fixtures.idTokenClaims)
+                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: tokenResponse.idToken!, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(result, .success(User(client: client, tokens: expectedTokens)))
                 done()
             }
@@ -154,7 +154,7 @@ final class ClientTests: XCTestCase {
         let nonce = "testNonce"
         let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue(nil)) // no AMR in ID Token
         let idToken = createIdToken(claims: claims)
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
@@ -263,7 +263,7 @@ final class ClientTests: XCTestCase {
     
     func testDoNotRetryStoringToKeychainInCaseOfSuccess() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
@@ -289,7 +289,7 @@ final class ClientTests: XCTestCase {
         client.refreshTokens(for: user) { result in
             switch result {
             case .success(let tokens):
-                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(tokens, expectedTokens)
             case .failure(let error):
                 XCTFail("Unexprected error \(error.localizedDescription)")
@@ -300,7 +300,7 @@ final class ClientTests: XCTestCase {
     
     func testRetryStoringToKeychainInCaseOfFailure() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
@@ -336,7 +336,7 @@ final class ClientTests: XCTestCase {
     
     func testSuccessfullSecondAttemptToStoreSessionTokens() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
-        let tokenResponse = TokenResponse(access_token: "accessToken", refresh_token: "refreshToken", id_token: idToken, scope: "openid", expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
         var isFirst = true
 
@@ -368,7 +368,7 @@ final class ClientTests: XCTestCase {
         client.refreshTokens(for: user) { result in
             switch result {
             case .success(let tokens):
-                let expectedTokens = UserTokens(accessToken: tokenResponse.access_token, refreshToken: tokenResponse.refresh_token, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(tokens, expectedTokens)
             case .failure(let error):
                 XCTFail("Unexprected error \(error.localizedDescription)")

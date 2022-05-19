@@ -270,8 +270,8 @@ public class Client: CustomStringConvertible {
                     completion(.failure(.unexpectedError(error: LoginStateError.notLoggedIn)))
                     return
                 }
-                let refreshToken = tokenResponse.refresh_token ?? tokens.refreshToken
-                let userTokens = UserTokens(accessToken: tokenResponse.access_token,
+                let refreshToken = tokenResponse.refreshToken ?? tokens.refreshToken
+                let userTokens = UserTokens(accessToken: tokenResponse.accessToken,
                                             refreshToken: refreshToken,
                                             idToken: tokens.idToken,
                                             idTokenClaims: tokens.idTokenClaims)
