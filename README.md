@@ -29,7 +29,7 @@ This will help you create a client and configure the necessary data.
 
 Swift Package Manager: `.package(url: "https://github.com/schibsted/account-sdk-ios-web")`
 
-CocoaPods `pod 'AccountSDKIOSWeb', '~> 2.2.0'`
+CocoaPods `pod 'AccountSDKIOSWeb'`
 
 ### Usage
 
