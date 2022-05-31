@@ -51,7 +51,9 @@ class HTTPClientWithURLSession: HTTPClient {
             }
 
             do {
-                let deserialised = try JSONDecoder().decode(T.self, from: responseBody)
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let deserialised = try decoder.decode(T.self, from: responseBody)
                 completion(.success(deserialised))
             } catch {
                 completion(.failure(.unexpectedError(underlying: error)))

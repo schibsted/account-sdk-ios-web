@@ -60,7 +60,7 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
            !lastName.isEmpty {
             return "\(firstName) \(lastName)"
         } else {
-            return userData.userContext.display_text
+            return userData.userContext.displayText
         }
     }
 

@@ -26,20 +26,19 @@ internal struct TokenResult: CustomStringConvertible {
 }
 
 internal struct TokenResponse: Codable, Equatable, CustomStringConvertible {
-    // swiftlint:disable identifier_name
-    let access_token: String
-    let refresh_token: String?
-    let id_token: String?
+    let accessToken: String
+    let refreshToken: String?
+    let idToken: String?
     let scope: String?
-    let expires_in: Int
+    let expiresIn: Int
 
     var description: String {
         return "TokenResponse("
-            + "access_token: \(removeSignature(fromToken: access_token)),\n"
-            + "refresh_token: \(removeSignature(fromToken: refresh_token)),\n"
-            + "id_token: \(removeSignature(fromToken: id_token)),\n"
+            + "access_token: \(removeSignature(fromToken: accessToken)),\n"
+            + "refresh_token: \(removeSignature(fromToken: refreshToken)),\n"
+            + "id_token: \(removeSignature(fromToken: idToken)),\n"
             + "scope: \(scope ?? ""),\n"
-            + "expires_in: \(expires_in))"
+            + "expires_in: \(expiresIn))"
 
     }
 }
@@ -87,7 +86,7 @@ internal class TokenHandler {
         schibstedAccountAPI.tokenRequest(with: httpClient, parameters: parameters) { result in
             switch result {
             case .success(let tokenResponse):
-                guard let idToken = tokenResponse.id_token else {
+                guard let idToken = tokenResponse.idToken else {
                     completion(.failure(.idTokenError(.missingIdToken)))
                     return
                 }
@@ -102,13 +101,13 @@ internal class TokenHandler {
                                           context: idTokenValidationContext) { result in
                     switch result {
                     case .success(let claims):
-                        let userTokens = UserTokens(accessToken: tokenResponse.access_token,
-                                                    refreshToken: tokenResponse.refresh_token,
+                        let userTokens = UserTokens(accessToken: tokenResponse.accessToken,
+                                                    refreshToken: tokenResponse.refreshToken,
                                                     idToken: idToken,
                                                     idTokenClaims: claims)
                         let tokenResult = TokenResult(userTokens: userTokens,
                                                       scope: tokenResponse.scope,
-                                                      expiresIn: tokenResponse.expires_in)
+                                                      expiresIn: tokenResponse.expiresIn)
                         completion(.success(tokenResult))
                         return
                     case .failure(let idTokenValidationError):

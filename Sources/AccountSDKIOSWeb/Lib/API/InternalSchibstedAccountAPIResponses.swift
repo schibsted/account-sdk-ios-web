@@ -72,10 +72,9 @@ struct CodeExchangeResponse: Codable {
 }
 
 struct UserContextFromTokenResponse: Codable, Equatable {
-    // swiftlint:disable identifier_name
     let identifier: String
-    let display_text: String
-    let client_name: String
+    let displayText: String
+    let clientName: String
 }
 
 struct SimplifiedLoginAssertionResponse: Codable, Equatable {

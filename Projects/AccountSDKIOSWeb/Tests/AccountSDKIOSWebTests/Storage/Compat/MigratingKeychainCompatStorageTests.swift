@@ -174,11 +174,11 @@ final class OldSDKClientTests: XCTestCase {
                 }
         }
         
-        let expectedTokenRefreshResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
-                                             refresh_token: nil,
-                                             id_token: nil,
+        let expectedTokenRefreshResponse = TokenResponse(accessToken: Fixtures.userTokens.accessToken,
+                                             refreshToken: nil,
+                                             idToken: nil,
                                              scope: nil,
-                                             expires_in: 1337)
+                                             expiresIn: 1337)
         let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
         var codeExchangeCallCount = 0
         stub(mockApi) { mock in
@@ -221,11 +221,11 @@ final class OldSDKClientTests: XCTestCase {
                 }
         }
         
-        let expectedTokenRefreshResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
-                                             refresh_token: nil,
-                                             id_token: nil,
+        let expectedTokenRefreshResponse = TokenResponse(accessToken: Fixtures.userTokens.accessToken,
+                                             refreshToken: nil,
+                                             idToken: nil,
                                              scope: nil,
-                                             expires_in: 1337)
+                                             expiresIn: 1337)
         let mockApi = MockSchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
         var codeExchangeCallCount = 0
         stub(mockApi) { mock in
@@ -258,11 +258,11 @@ final class OldSDKClientTests: XCTestCase {
     }
     
     func testOLDSDKRefresh() throws {
-        let expectedResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
-                                             refresh_token: nil,
-                                             id_token: nil,
+        let expectedResponse = TokenResponse(accessToken: Fixtures.userTokens.accessToken,
+                                             refreshToken: nil,
+                                             idToken: nil,
                                              scope: nil,
-                                             expires_in: 1337)
+                                             expiresIn: 1337)
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in

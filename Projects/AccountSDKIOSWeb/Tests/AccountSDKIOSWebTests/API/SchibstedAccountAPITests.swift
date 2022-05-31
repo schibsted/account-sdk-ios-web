@@ -76,8 +76,8 @@ final class SchibstedAccountAPITests: XCTestCase {
 
     func testUserContextFromTokenUsesSessionServiceURL() {
         let response = UserContextFromTokenResponse(identifier: "An identifier",
-                                                    display_text: "A display name",
-                                                    client_name: "Schibsted Client Name")
+                                                    displayText: "A display name",
+                                                    clientName: "Schibsted Client Name")
 
         
         let mockHTTPClient = MockHTTPClient()
@@ -112,8 +112,8 @@ final class SchibstedAccountAPITests: XCTestCase {
     
     func testUserContextFromTokenSuccessResponse() {
         let response = UserContextFromTokenResponse(identifier: "An identifier",
-                                                    display_text: "A display name",
-                                                    client_name: "Schibsted Client Name")
+                                                    displayText: "A display name",
+                                                    clientName: "Schibsted Client Name")
 
         
         let mockHTTPClient = MockHTTPClient()
@@ -231,11 +231,11 @@ final class SchibstedAccountAPITests: XCTestCase {
     }
     
     func testOldSDKRefreshSuccessResponse() {
-        let expectedResponse = TokenResponse(access_token: Fixtures.userTokens.accessToken,
-                                             refresh_token: Fixtures.userTokens.refreshToken,
-                                             id_token: nil,
+        let expectedResponse = TokenResponse(accessToken: Fixtures.userTokens.accessToken,
+                                             refreshToken: Fixtures.userTokens.refreshToken,
+                                             idToken: nil,
                                              scope: nil,
-                                             expires_in: 1337)
+                                             expiresIn: 1337)
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
@@ -250,8 +250,8 @@ final class SchibstedAccountAPITests: XCTestCase {
             api.oldSDKRefresh(with: mockHTTPClient, refreshToken: "", clientId: "", clientSecret: "") { result in
                 switch result {
                 case .success(let receivedResponse):
-                    XCTAssertEqual(receivedResponse.access_token, expectedResponse.access_token)
-                    XCTAssertEqual(receivedResponse.refresh_token, expectedResponse.refresh_token)
+                    XCTAssertEqual(receivedResponse.accessToken, expectedResponse.accessToken)
+                    XCTAssertEqual(receivedResponse.refreshToken, expectedResponse.refreshToken)
                 default:
                     XCTFail("Unexpected result \(result)")
                 }
@@ -265,7 +265,7 @@ final class SchibstedAccountAPITests: XCTestCase {
         stub(mockHTTPClient) {mock in
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
                 .then { _, _, completion in
-                    completion(.success(TokenResponse(access_token: "", refresh_token: "", id_token: nil, scope: nil, expires_in: 1337)))
+                    completion(.success(TokenResponse(accessToken: "", refreshToken: "", idToken: nil, scope: nil, expiresIn: 1337)))
                 }
         }
         

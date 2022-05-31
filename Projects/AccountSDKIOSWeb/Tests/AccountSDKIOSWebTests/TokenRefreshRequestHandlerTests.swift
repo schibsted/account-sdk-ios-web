@@ -39,7 +39,7 @@ class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
     }
     
     func testRefreshWithRetryRetriedRequestSucess() {
-        let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
         self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
         let sucessResponse = TestResponse(data:  "Retried request SUCCESS")
@@ -69,7 +69,7 @@ class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
     }
     
     func testRefreshWithRetryRetriedRequestFailure() {
-        let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
         self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
 
@@ -99,7 +99,7 @@ class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
     }
     
     func testRefreshWithRetrySameRequestRetried() {
-        let tokenResponse: TokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
         self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
         
         let successResponse = TestResponse(data:  "Any response for retried request")
@@ -154,7 +154,7 @@ class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
     }
     
     func testRefreshWithoutRetryCompletionCalledWithRefreshResultSuccess() {
-        let tokenResponse = TokenResponse(access_token: "newAccessToken", refresh_token: "newRefreshToken", id_token: nil, scope: nil, expires_in: 3600)
+        let tokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
         self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
 
         let mockSessionStorage = MockSessionStorage()
@@ -168,8 +168,8 @@ class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
         sut.refreshWithoutRetry(user: user) { result in
             switch result {
             case .success(let data):
-                XCTAssertEqual(data.accessToken, tokenResponse.access_token)
-                XCTAssertEqual(data.refreshToken, tokenResponse.refresh_token)
+                XCTAssertEqual(data.accessToken, tokenResponse.accessToken)
+                XCTAssertEqual(data.refreshToken, tokenResponse.refreshToken)
                 expectation.fulfill()
             default:
                 XCTFail()

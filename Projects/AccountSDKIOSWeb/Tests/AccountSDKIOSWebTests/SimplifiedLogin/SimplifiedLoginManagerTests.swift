@@ -110,7 +110,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         
         // Mock Fetcher
         let mockFetcher = MockSimplifiedLoginFetcher()
-        let contextResponse = UserContextFromTokenResponse(identifier: "23", display_text: "32", client_name: "32")
+        let contextResponse = UserContextFromTokenResponse(identifier: "23", displayText: "32", clientName: "32")
         let userProfileResponse = Fixtures.userProfileResponse
         mockFetcher.fetchDataToReturn = .success(SimplifiedLoginFetchedData(contextResponse, userProfileResponse))
         
@@ -140,7 +140,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
     
     func testRequestSimplifiedLogin_noWindow() {
         // MockHTTPClient
-        let contextResponse = UserContextFromTokenResponse(identifier: "23", display_text: "32", client_name: "32")
+        let contextResponse = UserContextFromTokenResponse(identifier: "23", displayText: "32", clientName: "32")
         let userProfileResponse = Fixtures.userProfileResponse
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
@@ -224,7 +224,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
 
     func testRequestSimplifiedLogin_integrationSuccess() {
         // MockHTTPClient
-        let contextResponse = UserContextFromTokenResponse(identifier: "23", display_text: "32", client_name: "32")
+        let contextResponse = UserContextFromTokenResponse(identifier: "23", displayText: "32", clientName: "32")
         let userProfileResponse = Fixtures.userProfileResponse
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
