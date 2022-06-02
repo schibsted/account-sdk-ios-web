@@ -33,6 +33,34 @@ final class ContinueButton: UIButton {
         return view
     }()
 
+    private lazy var nameTitleLabel: UILabel = {
+        let view = UILabel()
+        view.text = title
+        view.isAccessibilityElement = false
+        view.font = UIFont.preferredFont(forTextStyle: .callout).bold()
+        view.textAlignment = .left
+        view.numberOfLines = 1
+        view.lineBreakMode = .byTruncatingTail
+        view.textColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        return view
+    }()
+
+    private lazy var emailLabel: UILabel = {
+        let view = UILabel()
+        view.text = viewModel.email
+        view.isAccessibilityElement = false
+        view.font = UIFont.preferredFont(forTextStyle: .footnote)
+        view.textAlignment = .left
+        view.lineBreakMode = .byTruncatingTail
+        view.numberOfLines = 1
+        view.textColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        return view
+    }()
+
     private lazy var internalConstraints: [NSLayoutConstraint] = {
         [initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
          initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
@@ -40,9 +68,13 @@ final class ContinueButton: UIButton {
          avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
          avatarView.widthAnchor.constraint(equalToConstant: 40),
          avatarView.heightAnchor.constraint(equalToConstant: 40),
-         titleLabel!.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 10),
-         titleLabel!.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 3),
-         titleLabel!.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -3)
+         nameTitleLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 8),
+         nameTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26),
+         nameTitleLabel.topAnchor.constraint(equalTo: avatarView.topAnchor, constant: 0),
+         emailLabel.leadingAnchor.constraint(equalTo: nameTitleLabel.leadingAnchor),
+         emailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26),
+         emailLabel.topAnchor.constraint(equalTo: nameTitleLabel.bottomAnchor, constant: 1),
+         heightAnchor.constraint(equalToConstant: 56)
         ]
     }()
 
@@ -58,8 +90,8 @@ final class ContinueButton: UIButton {
 
     private func setup() {
         titleLabel?.adjustsFontForContentSizeCategory = true
-        titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel?.lineBreakMode = .byTruncatingTail
         setTitleColor(.white, for: .normal)
         backgroundColor = SchibstedColor.blue.value
         translatesAutoresizingMaskIntoConstraints = false
@@ -68,26 +100,22 @@ final class ContinueButton: UIButton {
     }
 
     private func basicSetup() {
-        layer.cornerRadius = 25
+        layer.cornerRadius = 24
         titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout).bold()
         titleLabel?.textAlignment = .center
         setTitle(title, for: .normal)
+
+        NSLayoutConstraint.activate([
+            titleLabel!.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 47),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 48)])
     }
 
     private func extendedSetup() {
-        layer.cornerRadius = 27
-        titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        titleLabel?.textAlignment = .left
-
-        let extendedTitle = title + "\n\(viewModel.email)"
-        let attributedString = NSMutableAttributedString(string: extendedTitle)
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .callout).bold()]
-        let boldedRange = NSRange(attributedString.string.range(of: "\(title)")!, in: attributedString.string)
-        attributedString.addAttributes(attributes, range: boldedRange)
-        setAttributedTitle(attributedString, for: .normal)
-
+        layer.cornerRadius = 28
         avatarView.addSubview(initialsLabel)
         addSubview(avatarView)
+        addSubview(nameTitleLabel)
+        addSubview(emailLabel)
         NSLayoutConstraint.activate(internalConstraints)
     }
 }
