@@ -46,6 +46,10 @@ final class ContinueButton: UIButton {
 
         return view
     }()
+    
+    private lazy var combinedTitleView: UIView = {
+        return UIView()
+    }()
 
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
@@ -64,17 +68,18 @@ final class ContinueButton: UIButton {
     private lazy var internalConstraints: [NSLayoutConstraint] = {
         [initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
          initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
-         avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+         avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
          avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
          avatarView.widthAnchor.constraint(equalToConstant: 40),
          avatarView.heightAnchor.constraint(equalToConstant: 40),
          nameTitleLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 8),
          nameTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26),
-         nameTitleLabel.topAnchor.constraint(equalTo: avatarView.topAnchor, constant: 0),
+         nameTitleLabel.topAnchor.constraint(equalTo: combinedTitleView.topAnchor, constant: 10),
          emailLabel.leadingAnchor.constraint(equalTo: nameTitleLabel.leadingAnchor),
          emailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26),
-         emailLabel.topAnchor.constraint(equalTo: nameTitleLabel.bottomAnchor, constant: 1),
-         heightAnchor.constraint(equalToConstant: 56)
+         emailLabel.topAnchor.constraint(equalTo: nameTitleLabel.bottomAnchor, constant: 0),
+         emailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
+         heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
         ]
     }()
 
@@ -114,8 +119,9 @@ final class ContinueButton: UIButton {
         layer.cornerRadius = 28
         avatarView.addSubview(initialsLabel)
         addSubview(avatarView)
-        addSubview(nameTitleLabel)
-        addSubview(emailLabel)
+        combinedTitleView.addSubview(nameTitleLabel)
+        combinedTitleView.addSubview(emailLabel)
+        addSubview(combinedTitleView)
         NSLayoutConstraint.activate(internalConstraints)
     }
 }
