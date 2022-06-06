@@ -85,7 +85,7 @@ class FooterView: UIStackView {
         let view = UIButton()
         let attributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
-            .font: UIFont.preferredFont(forTextStyle: .footnote),
+            .font: UIFont.preferedCustomFont(Inter.regular.rawValue, textStyle: .subheadline),
             .foregroundColor: SchibstedColor.textDarkGray.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.privacyPolicyTitle,
