@@ -32,12 +32,13 @@ class HeaderView: UIView {
     }()
 
     lazy var internalConstraints: [NSLayoutConstraint] = {
+        let isHeaderVisible: Bool = viewModel.shouldUseHeadingCopyView || viewModel.shouldUseCombinedButtonView
         return [loginWithOneClickLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                 loginWithOneClickLabel.topAnchor.constraint(equalTo: topAnchor),
                 loginWithOneClickLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                 loginWithOneClickLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-                grayLine.topAnchor.constraint(equalTo: loginWithOneClickLabel.bottomAnchor, constant: 10),
-                grayLine.heightAnchor.constraint(equalToConstant: 1),
+                grayLine.topAnchor.constraint(equalTo: loginWithOneClickLabel.bottomAnchor, constant: isHeaderVisible ? 10 : 0),
+                grayLine.heightAnchor.constraint(equalToConstant: isHeaderVisible ? 1 : 0),
                 grayLine.leadingAnchor.constraint(equalTo: leadingAnchor),
                 grayLine.trailingAnchor.constraint(equalTo: trailingAnchor),
                 grayLine.bottomAnchor.constraint(equalTo: bottomAnchor)
