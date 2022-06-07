@@ -6,11 +6,11 @@
 import UIKit
 
 extension UIFont {
-    static func preferedCustomFont(_ fontFamily: String, textStyle: UIFont.TextStyle) -> UIFont {
+    static func preferredCustomFont(_ fontFamily: Inter, textStyle: UIFont.TextStyle) -> UIFont {
         let systemDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
 
         let customFontDescriptor = UIFontDescriptor.init(
-            fontAttributes: [UIFontDescriptor.AttributeName.family: fontFamily,
+            fontAttributes: [UIFontDescriptor.AttributeName.family: fontFamily.rawValue,
                              UIFontDescriptor.AttributeName.size: systemDescriptor.pointSize])
         return UIFont(descriptor: customFontDescriptor, size: 0)
     }

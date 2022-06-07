@@ -52,7 +52,7 @@ class UserInformationView: UIView {
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.displayName
-        view.font = UIFont.preferedCustomFont(Inter.semiBold.rawValue, textStyle: .subheadline)
+        view.font = UIFont.preferredCustomFont(.semiBold, textStyle: .subheadline)
         view.textAlignment = .left
         view.lineBreakMode = .byTruncatingTail
         view.numberOfLines = 1
@@ -67,7 +67,7 @@ class UserInformationView: UIView {
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.email
-        view.font = UIFont.preferedCustomFont(Inter.regular.rawValue, textStyle: .subheadline)
+        view.font = UIFont.preferredCustomFont(.regular, textStyle: .subheadline)
         view.textAlignment = .left
         view.lineBreakMode = .byTruncatingTail
         view.numberOfLines = 1

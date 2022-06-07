@@ -10,7 +10,7 @@ class ExplanatoryView: UIView {
 
     private lazy var explanationLabel: UILabel = {
         let text = String.localizedStringWithFormat(viewModel.localizationModel.loginIncentive)
-        let font = UIFont.preferedCustomFont(Inter.regular.rawValue, textStyle: .subheadline)
+        let font = UIFont.preferredCustomFont(.regular, textStyle: .subheadline)
         let view = UILabel.paragraphLabel(localizedString: text,
                                           font: font)
         return view
@@ -39,7 +39,7 @@ class ExplanatoryView: UIView {
 
 extension UILabel {
     static func paragraphLabel(localizedString: String,
-                               font: UIFont = UIFont.preferedCustomFont(Inter.regular.rawValue, textStyle: .subheadline)) -> UILabel {
+                               font: UIFont = UIFont.preferredCustomFont(.regular, textStyle: .subheadline)) -> UILabel {
         let view = UILabel()
         view.numberOfLines = -1
 

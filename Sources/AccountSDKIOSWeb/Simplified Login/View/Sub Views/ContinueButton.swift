@@ -37,7 +37,7 @@ final class ContinueButton: UIButton {
         let view = UILabel()
         view.text = title
         view.isAccessibilityElement = false
-        view.font = UIFont.preferedCustomFont(Inter.semiBold.rawValue, textStyle: .body)
+        view.font = UIFont.preferredCustomFont(.semiBold, textStyle: .body)
         view.textAlignment = .left
         view.numberOfLines = 1
         view.lineBreakMode = .byTruncatingTail
@@ -61,7 +61,7 @@ final class ContinueButton: UIButton {
         let view = UILabel()
         view.text = viewModel.email
         view.isAccessibilityElement = false
-        view.font = UIFont.preferedCustomFont(Inter.regular.rawValue, textStyle: .subheadline)
+        view.font = UIFont.preferredCustomFont(.regular, textStyle: .subheadline)
         view.textAlignment = .left
         view.lineBreakMode = .byTruncatingTail
         view.numberOfLines = 1
@@ -109,7 +109,7 @@ final class ContinueButton: UIButton {
 
     private func basicSetup() {
         layer.cornerRadius = 24
-        titleLabel?.font = UIFont.preferedCustomFont(Inter.medium.rawValue, textStyle: .callout)
+        titleLabel?.font = UIFont.preferredCustomFont(.medium, textStyle: .callout)
         titleLabel?.textAlignment = .center
         setTitle(title, for: .normal)
 
