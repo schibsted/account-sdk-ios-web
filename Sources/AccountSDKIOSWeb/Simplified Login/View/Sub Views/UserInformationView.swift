@@ -54,8 +54,8 @@ class UserInformationView: UIView {
         view.text = viewModel.displayName
         view.font = UIFont.preferredFont(forTextStyle: .callout).bold()
         view.textAlignment = .left
-        view.lineBreakMode = .byWordWrapping
-        view.numberOfLines = 0
+        view.lineBreakMode = .byTruncatingTail
+        view.numberOfLines = 1
         view.sizeToFit()
         view.textColor = SchibstedColor.textDarkGray.value
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +69,8 @@ class UserInformationView: UIView {
         view.text = viewModel.email
         view.font = UIFont.preferredFont(forTextStyle: .footnote)
         view.textAlignment = .left
-        view.lineBreakMode = .byCharWrapping
-        view.numberOfLines = 0
+        view.lineBreakMode = .byTruncatingTail
+        view.numberOfLines = 1
         view.sizeToFit()
         view.textColor = SchibstedColor.textLightGray.value
         view.translatesAutoresizingMaskIntoConstraints = false
