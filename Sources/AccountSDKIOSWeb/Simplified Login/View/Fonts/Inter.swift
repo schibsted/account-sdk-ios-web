@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+import UIKit
 
 // Inter is an Open Font, see https://github.com/rsms/inter
 enum Inter: String, CaseIterable {
@@ -11,4 +11,17 @@ enum Inter: String, CaseIterable {
     case medium = "Inter-Medium"
     case regular = "Inter-Regular"
     case semiBold = "Inter-SemiBold"
+
+    var systemWeight: UIFont.Weight {
+        switch self {
+        case .bold:
+            return .bold
+        case .medium:
+            return .medium
+        case .regular:
+            return .regular
+        case .semiBold:
+            return .semibold
+        }
+    }
 }

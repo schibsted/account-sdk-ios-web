@@ -7,11 +7,14 @@ import UIKit
 
 extension UIFont {
     static func preferredCustomFont(_ fontName: Inter, textStyle: UIFont.TextStyle) -> UIFont {
+        let systemDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+
         guard UIFont.fontNames(forFamilyName: "Inter").contains(fontName.rawValue) else {
-            return UIFont.preferredFont(forTextStyle: textStyle)
+            let font = UIFont.systemFont(ofSize: systemDescriptor.pointSize, weight: fontName.systemWeight)
+            let metrics = UIFontMetrics(forTextStyle: textStyle)
+            return metrics.scaledFont(for: font)
         }
 
-        let systemDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
         let customFontDescriptor = UIFontDescriptor(
             fontAttributes: [UIFontDescriptor.AttributeName.visibleName: fontName.rawValue,
                              UIFontDescriptor.AttributeName.size: systemDescriptor.pointSize])
