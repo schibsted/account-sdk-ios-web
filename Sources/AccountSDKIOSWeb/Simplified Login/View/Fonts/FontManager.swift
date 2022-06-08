@@ -19,7 +19,10 @@ struct FontManager {
         guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension),
               let fontDataProvider = CGDataProvider(url: fontURL as CFURL),
               let font = CGFont(fontDataProvider) else {
-            fatalError("Couldn't create font from filename: \(fontName) with extension \(fontExtension)")
+
+            SchibstedAccountLogger.instance
+                .error("Couldn't create font from filename: \(fontName) with extension \(fontExtension)")
+            return
         }
 
         var error: Unmanaged<CFError>?

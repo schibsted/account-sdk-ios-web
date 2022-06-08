@@ -5,9 +5,10 @@
 
 import Foundation
 
+// Inter is an Open Font, see https://github.com/rsms/inter
 enum Inter: String, CaseIterable {
-    case bold = "Inter-Bold-700"
-    case medium = "Inter-Medium-500"
-    case regular = "Inter-Regular-400"
-    case semiBold = "Inter-SemiBold-600"
+    case bold = "Inter-Bold"
+    case medium = "Inter-Medium"
+    case regular = "Inter-Regular"
+    case semiBold = "Inter-SemiBold"
 }
