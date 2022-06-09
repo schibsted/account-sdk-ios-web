@@ -124,7 +124,7 @@ public class Client: CustomStringConvertible {
                                                             serverURL: configuration.serverURL,
                                                             sessionServiceURL: configuration.sessionServiceURL,
                                                             clientId: sessionStorageConfig.legacyClientId,
-                                                            redirectURI: URL(string: "http://")!) // TODO: Handle url
+                                                            redirectURI: URL(string: "http://")!)
         let jwks = RemoteJWKS(
             jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
             httpClient: chttpClient)
@@ -134,7 +134,7 @@ public class Client: CustomStringConvertible {
         let stateStorage = StateStorage()
 
         // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
-        // TODO: MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
+        // MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
         let legacyClient = Client(configuration: legacyClientConfiguration,
                                   sessionStorage: newSessionStorage,
                                   stateStorage: stateStorage,

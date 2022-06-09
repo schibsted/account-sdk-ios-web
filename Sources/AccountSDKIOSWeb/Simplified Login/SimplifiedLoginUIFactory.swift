@@ -48,7 +48,7 @@ struct SimplifiedLoginUIFactory {
             completion(result)
         }
 
-        viewModel.onClickedSwitchAccount = { // TODO: need to be tested with iOS 12
+        viewModel.onClickedSwitchAccount = {
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
