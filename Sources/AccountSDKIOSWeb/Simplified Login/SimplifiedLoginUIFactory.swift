@@ -24,6 +24,7 @@ struct SimplifiedLoginUIFactory {
                                     uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
+        FontManager.registerFonts()
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext,
                                                             userProfileResponse: userProfileResponse)
@@ -105,6 +106,7 @@ struct SimplifiedLoginUIFactory {
                                     uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
+        FontManager.registerFonts()
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
         let userDataModel = ConcreteSimplifiedLoginUserData(
             userContext: userContext,

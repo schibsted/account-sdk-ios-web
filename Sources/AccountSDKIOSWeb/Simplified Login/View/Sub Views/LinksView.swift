@@ -52,7 +52,7 @@ class LinksView: UIView {
         let button = UIButton()
         let attributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
-            .font: UIFont.preferredFont(forTextStyle: .callout),
+            .font: UIFont.preferredCustomFont(.regular, textStyle: .callout),
             .foregroundColor: SchibstedColor.blue.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.continueWithoutLogin,
@@ -70,7 +70,7 @@ class LinksView: UIView {
         let button = UIButton()
         let attributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
-            .font: UIFont.preferredFont(forTextStyle: .callout),
+            .font: UIFont.preferredCustomFont(.regular, textStyle: .callout),
             .foregroundColor: SchibstedColor.blue.value
         ]
         let attributedText = NSAttributedString(string: viewModel.localizationModel.switchAccount,
@@ -87,7 +87,7 @@ class LinksView: UIView {
     private lazy var notYouLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.localizationModel.notYouTitle
-        view.font = UIFont.preferredFont(forTextStyle: .callout)
+        view.font = UIFont.preferredCustomFont(.regular, textStyle: .callout)
         view.textAlignment = .right
         view.adjustsFontForContentSizeCategory = true
         view.textColor = SchibstedColor.textLightGray.value

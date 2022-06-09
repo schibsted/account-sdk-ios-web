@@ -12,7 +12,7 @@ class HeaderView: UIView {
     private lazy var loginWithOneClickLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.localizationModel.loginWithOneClick
-        view.font = UIFont.preferredFont(forTextStyle: .body).bold()
+        view.font = UIFont.preferredCustomFont(.medium, textStyle: .body)
         view.textAlignment = .center
         view.lineBreakMode = .byWordWrapping
         view.numberOfLines = 0

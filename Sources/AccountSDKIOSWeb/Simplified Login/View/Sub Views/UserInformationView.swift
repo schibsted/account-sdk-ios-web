@@ -41,7 +41,7 @@ class UserInformationView: UIView {
         let view = UILabel()
         view.text = viewModel.initials
         view.isAccessibilityElement = false
-        view.font = UIFont.boldSystemFont(ofSize: 17)
+        view.font = UIFont(name: Inter.bold.rawValue, size: 17)
         view.textAlignment = .center
         view.textColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ class UserInformationView: UIView {
     private lazy var nameLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.displayName
-        view.font = UIFont.preferredFont(forTextStyle: .callout).bold()
+        view.font = UIFont.preferredCustomFont(.semiBold, textStyle: .subheadline)
         view.textAlignment = .left
         view.lineBreakMode = .byTruncatingTail
         view.numberOfLines = 1
@@ -67,7 +67,7 @@ class UserInformationView: UIView {
     private lazy var emailLabel: UILabel = {
         let view = UILabel()
         view.text = viewModel.email
-        view.font = UIFont.preferredFont(forTextStyle: .footnote)
+        view.font = UIFont.preferredCustomFont(.regular, textStyle: .subheadline)
         view.textAlignment = .left
         view.lineBreakMode = .byTruncatingTail
         view.numberOfLines = 1

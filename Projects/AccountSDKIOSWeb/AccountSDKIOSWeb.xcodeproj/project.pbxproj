@@ -85,12 +85,17 @@
 		A9941FDF257523C800513EED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9941FDE257523C800513EED /* Preview Assets.xcassets */; };
 		A994206E2575594300513EED /* JOSESwift in Frameworks */ = {isa = PBXBuildFile; productRef = A994206D2575594300513EED /* JOSESwift */; };
 		A99420832575597800513EED /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = A99420822575597800513EED /* Cuckoo */; };
-		CE079FD827ABF7F9009CD898 /* UIFont+Bold.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */; };
+		CE2095AD28508BEE00D7B437 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE2095AB28508BEB00D7B437 /* Inter-Bold.ttf */; };
+		CE2095AE28508BF100D7B437 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE2095AC28508BEB00D7B437 /* Inter-Medium.ttf */; };
+		CE2095AF28508BF500D7B437 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE2095A928508BEB00D7B437 /* Inter-Regular.ttf */; };
+		CE2095B028508BF800D7B437 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE2095AA28508BEB00D7B437 /* Inter-SemiBold.ttf */; };
 		CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */; };
 		CE3E98962782E6C800B2F403 /* KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3E98952782E6C800B2F403 /* KeyWindow.swift */; };
 		CE45FE0027C6355300DBD8FC /* MFATypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE45FDFF27C6355300DBD8FC /* MFATypeTests.swift */; };
 		CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5225CD2747D69A009E015E /* Assets.xcassets */; };
 		CE5E5B472735416000E18EA7 /* LegacyKeychainTokenStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* LegacyKeychainTokenStorageTests.swift */; };
+		CE5FA22B284DDAE800792C12 /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5FA22A284DDAE800792C12 /* FontManager.swift */; };
+		CE5FA230284DED5500792C12 /* Inter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5FA22F284DED5500792C12 /* Inter.swift */; };
 		CE699DD02732A2CC009EE30D /* KeychainStorageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */; };
 		CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C7881B25CC0D7500B7E027 /* KeychainTests.swift */; };
 		CE6AB47D276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */; };
@@ -114,6 +119,7 @@
 		CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */; };
 		CEE5182127CE24A700BD3559 /* TrackingEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */; };
 		CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE91D4827A8212500A71061 /* SchibstedColor.swift */; };
+		CEFF10F0284E01E5006ABAB4 /* UIFont+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFF10EF284E01E5006ABAB4 /* UIFont+Custom.swift */; };
 		OBJ_192 /* AccountSDKIOSWeb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */; };
 		OBJ_245 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* Await.swift */; };
 		OBJ_246 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ClientTests.swift */; };
@@ -238,11 +244,16 @@
 		"AccountSDKIOSWeb::AccountSDKIOSKeychainTests::Product" /* AccountSDKIOSKeychainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSKeychainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWeb::Product" /* AccountSDKIOSWeb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AccountSDKIOSWeb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"AccountSDKIOSWeb::AccountSDKIOSWebTests::Product" /* AccountSDKIOSWebTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AccountSDKIOSWebTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Bold.swift"; sourceTree = "<group>"; };
+		CE2095A928508BEB00D7B437 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		CE2095AA28508BEB00D7B437 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		CE2095AB28508BEB00D7B437 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		CE2095AC28508BEB00D7B437 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
 		CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+VisibleVC.swift"; sourceTree = "<group>"; };
 		CE3E98952782E6C800B2F403 /* KeyWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyWindow.swift; sourceTree = "<group>"; };
 		CE45FDFF27C6355300DBD8FC /* MFATypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFATypeTests.swift; sourceTree = "<group>"; };
 		CE5225CD2747D69A009E015E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE5FA22A284DDAE800792C12 /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
+		CE5FA22F284DED5500792C12 /* Inter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inter.swift; sourceTree = "<group>"; };
 		CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorageMock.swift; sourceTree = "<group>"; };
 		CE6AB47C276A2A7300E11A16 /* SharedKeychainSessionStorageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedKeychainSessionStorageFactory.swift; sourceTree = "<group>"; };
 		CE754A5627103071000F2EA9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
@@ -265,6 +276,7 @@
 		CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModel.swift; sourceTree = "<group>"; };
 		CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingEventsHandler.swift; sourceTree = "<group>"; };
 		CEE91D4827A8212500A71061 /* SchibstedColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedColor.swift; sourceTree = "<group>"; };
+		CEFF10EF284E01E5006ABAB4 /* UIFont+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Custom.swift"; sourceTree = "<group>"; };
 		OBJ_178 /* cuckoo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cuckoo; sourceTree = SOURCE_ROOT; };
 		OBJ_182 /* generate_mocks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_mocks.sh; sourceTree = "<group>"; };
 		OBJ_40 /* LegacyKeychainTokenStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyKeychainTokenStorageTests.swift; sourceTree = "<group>"; };
@@ -390,11 +402,11 @@
 		243BFAD92750F21B00382494 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				CEFF10EF284E01E5006ABAB4 /* UIFont+Custom.swift */,
 				CE99896B270EFEE200CB9E95 /* Result+VoidSuccess.swift */,
 				CEB631F82747C4B2009CE3B3 /* Bundle+AccountSDK.swift */,
 				243BFAD72750F20700382494 /* String+Localization.swift */,
 				CE3E9870277C9A7A00B2F403 /* UIWindow+VisibleVC.swift */,
-				CE079FD727ABF7F9009CD898 /* UIFont+Bold.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -477,6 +489,7 @@
 			children = (
 				2401AD0B273D00CF007C63A6 /* SimplifiedLoginViewController.swift */,
 				CEE91D4827A8212500A71061 /* SchibstedColor.swift */,
+				CE5FA231284DED5D00792C12 /* Fonts */,
 				2401AD0D273D00D9007C63A6 /* Sub Views */,
 			);
 			path = View;
@@ -685,6 +698,7 @@
 		CE5225CC2747D69A009E015E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CE5FA221284A09C500792C12 /* Fonts */,
 				243BFAD22750D75A00382494 /* da.lproj */,
 				243BFACF2750D75A00382494 /* fi.lproj */,
 				243BFAC92750D68300382494 /* nb.lproj */,
@@ -693,6 +707,26 @@
 				CE5225CD2747D69A009E015E /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		CE5FA221284A09C500792C12 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				CE2095AB28508BEB00D7B437 /* Inter-Bold.ttf */,
+				CE2095AC28508BEB00D7B437 /* Inter-Medium.ttf */,
+				CE2095A928508BEB00D7B437 /* Inter-Regular.ttf */,
+				CE2095AA28508BEB00D7B437 /* Inter-SemiBold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		CE5FA231284DED5D00792C12 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				CE5FA22F284DED5500792C12 /* Inter.swift */,
+				CE5FA22A284DDAE800792C12 /* FontManager.swift */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		CE699DCC2732A26A009EE30D /* Mocks */ = {
@@ -984,10 +1018,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE5225D42747D6C9009E015E /* Assets.xcassets in Resources */,
+				CE2095AF28508BF500D7B437 /* Inter-Regular.ttf in Resources */,
 				243BFAD62750D75A00382494 /* Localizable.strings in Resources */,
 				243BFAC32750C62500382494 /* Localizable.strings in Resources */,
+				CE2095AD28508BEE00D7B437 /* Inter-Bold.ttf in Resources */,
+				CE2095AE28508BF100D7B437 /* Inter-Medium.ttf in Resources */,
 				243BFACC2750D68400382494 /* Localizable.strings in Resources */,
 				243BFAD52750D75A00382494 /* Localizable.strings in Resources */,
+				CE2095B028508BF800D7B437 /* Inter-SemiBold.ttf in Resources */,
 				243BFAC72750C67000382494 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1090,6 +1128,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				CE5FA230284DED5500792C12 /* Inter.swift in Sources */,
 				2489C9BF26733A0900AA0A4C /* URLSessionProtocol.swift in Sources */,
 				2489C9BB26733A0900AA0A4C /* HTTPUtil.swift in Sources */,
 				24EB14882679DB3A002D9628 /* SignatureValidationError.swift in Sources */,
@@ -1104,13 +1143,13 @@
 				24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */,
 				CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */,
 				2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */,
-				CE079FD827ABF7F9009CD898 /* UIFont+Bold.swift in Sources */,
 				2449DD5026775B6300FE7197 /* URLBuilder.swift in Sources */,
 				CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */,
 				2489C9AD26733A0900AA0A4C /* AuthState.swift in Sources */,
 				244EAACA275A26DA008A1285 /* SimplifiedLoginFetcher.swift in Sources */,
 				2489C9C026733A0900AA0A4C /* SchibstedAccountAPIResponses.swift in Sources */,
 				CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */,
+				CE5FA22B284DDAE800792C12 /* FontManager.swift in Sources */,
 				2489C9A926733A0900AA0A4C /* LoginError.swift in Sources */,
 				CEA9A2D8282D362300C1D8F3 /* ContinueButton.swift in Sources */,
 				243BFAD82750F20700382494 /* String+Localization.swift in Sources */,
@@ -1138,6 +1177,7 @@
 				2472EA2C275E057A0037433D /* LocalizationAssets.swift in Sources */,
 				24844039269347C500CE88F2 /* MulticastDelegate.swift in Sources */,
 				24209496273D025E004CF03D /* SimplifiedLoginViewController.swift in Sources */,
+				CEFF10F0284E01E5006ABAB4 /* UIFont+Custom.swift in Sources */,
 				24EB1506267A0E44002D9628 /* APIRetryPolicy.swift in Sources */,
 				248440172692E97700CE88F2 /* ClientConfiguration.swift in Sources */,
 				2489C9B326733A0900AA0A4C /* LegacyKeychainSessionStorage.swift in Sources */,
