@@ -17,7 +17,7 @@ final class ContinueButton: UIButton {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 20
         view.backgroundColor = .white.withAlphaComponent(0.2)
-
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -43,7 +43,7 @@ final class ContinueButton: UIButton {
         view.lineBreakMode = .byTruncatingTail
         view.textColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -54,6 +54,7 @@ final class ContinueButton: UIButton {
         view.distribution = .fill
         view.spacing = 1
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -67,7 +68,7 @@ final class ContinueButton: UIButton {
         view.numberOfLines = 1
         view.textColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        view.isUserInteractionEnabled = false
         return view
     }()
 
