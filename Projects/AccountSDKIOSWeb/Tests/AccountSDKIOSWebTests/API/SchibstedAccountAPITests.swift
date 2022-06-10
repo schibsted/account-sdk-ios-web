@@ -143,7 +143,7 @@ final class SchibstedAccountAPITests: XCTestCase {
     // MARK: OldSDK Api endpoints
    
     func testUserProfile() {
-        let userProfileResponse = UserProfileResponse(userId: "12345", email: "test@example.com")
+        let userProfileResponse =  Fixtures.userProfileResponse
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in

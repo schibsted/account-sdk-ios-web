@@ -54,8 +54,8 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
 
     let userData: SimplifiedLoginViewModelUserData
     var displayName: String {
-        if let firstName  = userData.userProfileResponse.name?.givenName,
-           let lastName = userData.userProfileResponse.name?.familyName,
+        if let firstName  = userData.userProfileResponse.name.givenName,
+           let lastName = userData.userProfileResponse.name.familyName,
            !firstName.isEmpty,
            !lastName.isEmpty {
             return "\(firstName) \(lastName)"
@@ -64,11 +64,11 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
         }
     }
 
-    var email: String { userData.userProfileResponse.email ?? "" }
+    var email: String { userData.userProfileResponse.email }
 
     var initials: String {
-        let firstName  = userData.userProfileResponse.name?.givenName ?? ""
-        let lastName = userData.userProfileResponse.name?.familyName ?? ""
+        let firstName  = userData.userProfileResponse.name.givenName ?? ""
+        let lastName = userData.userProfileResponse.name.familyName ?? ""
 
         let shouldUseName = !firstName.isEmpty && !lastName.isEmpty
         if shouldUseName {

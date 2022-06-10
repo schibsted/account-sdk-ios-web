@@ -215,8 +215,8 @@ struct ContentView: View {
     func fetchProfileData() {
         self.user?.fetchProfileData { result in
             switch result {
-            case .success(let userData):
-                print(userData)
+            case .success(let userProfile):
+                print("userData \(userProfile)")
             case .failure(.unexpectedError(LoginStateError.notLoggedIn)):
                 print("User was logged-out")
                 self.user = nil

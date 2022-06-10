@@ -6,30 +6,30 @@
 import Foundation
 
 public struct UserProfileResponse: Codable, Equatable {
-    public var uuid: String?
-    public var userId: String?
-    public var status: Int?
-    public var email: String?
+    public var uuid: String
+    public var userId: String
+    public var status: Int
+    public var email: String
     internal var emailVerified: StringOrIgnore?
-    public var emails: [Email]?
+    public var emails: [Email]
     public var phoneNumber: String?
     internal var phoneNumberVerified: StringOrIgnore?
     public var phoneNumbers: [PhoneNumber]?
-    public var displayName: String?
-    public var name: Name?
+    public var displayName: String
+    public var name: Name
     public var addresses: [String: Address]?
-    public var gender: String?
-    internal var birthday: String?
+    public var gender: String
+    internal var birthday: String
     public var accounts: [String: Account]?
     public var merchants: [Int]?
-    public var published: String?
+    public var published: String
     public var verified: String?
-    public var updated: String?
+    public var updated: String
     public var passwordChanged: String?
-    public var lastAuthenticated: String?
-    public var lastLoggedIn: String?
-    public var locale: String?
-    public var utcOffset: String?
+    public var lastAuthenticated: String
+    public var lastLoggedIn: String
+    public var locale: String
+    public var utcOffset: String
 
     public var emailVerifiedDate: String? {
         return emailVerified?.value
@@ -47,30 +47,30 @@ public struct UserProfileResponse: Codable, Equatable {
     }
 
     init(
-        uuid: String? = nil,
-        userId: String? = nil,
-        status: Int? = nil,
-        email: String? = nil,
+        uuid: String,
+        userId: String,
+        status: Int,
+        email: String,
         emailVerified: StringOrIgnore? = nil,
-        emails: [Email]? = nil,
+        emails: [Email],
         phoneNumber: String? = nil,
         phoneNumberVerified: StringOrIgnore? = nil,
         phoneNumbers: [PhoneNumber]? = nil,
-        displayName: String? = nil,
-        name: Name? = nil,
+        displayName: String,
+        name: Name,
         addresses: [String: Address]? = nil,
-        gender: String? = nil,
-        birthday: String? = nil,
+        gender: String,
+        birthday: String,
         accounts: [String: Account]? = nil,
         merchants: [Int]? = nil,
-        published: String? = nil,
+        published: String,
         verified: String? = nil,
-        updated: String? = nil,
+        updated: String,
         passwordChanged: String? = nil,
-        lastAuthenticated: String? = nil,
-        lastLoggedIn: String? = nil,
-        locale: String? = nil,
-        utcOffset: String? = nil
+        lastAuthenticated: String,
+        lastLoggedIn: String,
+        locale: String,
+        utcOffset: String
     ) {
         self.uuid = uuid
         self.userId = userId
@@ -100,28 +100,28 @@ public struct UserProfileResponse: Codable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let keyedContainer = try decoder.container(keyedBy: CodingKeys.self)
-        self.uuid = try? keyedContainer.decode(String.self, forKey: .uuid)
-        self.userId = try? keyedContainer.decode(String.self, forKey: .userId)
-        self.status = try? keyedContainer.decode(Int.self, forKey: .status)
-        self.email = try? keyedContainer.decode(String.self, forKey: .email)
+        self.uuid = try keyedContainer.decode(String.self, forKey: .uuid)
+        self.userId = try keyedContainer.decode(String.self, forKey: .userId)
+        self.status = try keyedContainer.decode(Int.self, forKey: .status)
+        self.email = try keyedContainer.decode(String.self, forKey: .email)
         self.emailVerified = try? keyedContainer.decode(StringOrIgnore.self, forKey: .emailVerified)
-        self.emails = try? keyedContainer.decode([Email].self, forKey: .emails)
+        self.emails = try keyedContainer.decode([Email].self, forKey: .emails)
         self.phoneNumber = try? keyedContainer.decode(String.self, forKey: .phoneNumber)
         self.phoneNumberVerified = try? keyedContainer.decode(StringOrIgnore.self, forKey: .phoneNumberVerified)
         self.phoneNumbers = try? keyedContainer.decode([PhoneNumber].self, forKey: .phoneNumbers)
-        self.displayName = try? keyedContainer.decode(String.self, forKey: .displayName)
-        self.name = try? keyedContainer.decode(Name.self, forKey: .name)
-        self.gender = try? keyedContainer.decode(String.self, forKey: .gender)
-        self.birthday = try? keyedContainer.decode(String.self, forKey: .birthday)
-        self.merchants = try? keyedContainer.decode([Int].self, forKey: .merchants)
-        self.published = try? keyedContainer.decode(String.self, forKey: .published)
+        self.displayName = try keyedContainer.decode(String.self, forKey: .displayName)
+        self.name = try keyedContainer.decode(Name.self, forKey: .name)
+        self.gender = try keyedContainer.decode(String.self, forKey: .gender)
+        self.birthday = try keyedContainer.decode(String.self, forKey: .birthday)
+        self.merchants = try keyedContainer.decode([Int].self, forKey: .merchants)
+        self.published = try keyedContainer.decode(String.self, forKey: .published)
         self.verified = try? keyedContainer.decode(String.self, forKey: .verified)
-        self.updated = try? keyedContainer.decode(String.self, forKey: .updated)
+        self.updated = try keyedContainer.decode(String.self, forKey: .updated)
         self.passwordChanged = try? keyedContainer.decode(String.self, forKey: .passwordChanged)
-        self.lastAuthenticated = try? keyedContainer.decode(String.self, forKey: .lastAuthenticated)
-        self.lastLoggedIn = try? keyedContainer.decode(String.self, forKey: .lastLoggedIn)
-        self.locale = try? keyedContainer.decode(String.self, forKey: .locale)
-        self.utcOffset = try? keyedContainer.decode(String.self, forKey: .utcOffset)
+        self.lastAuthenticated = try keyedContainer.decode(String.self, forKey: .lastAuthenticated)
+        self.lastLoggedIn = try keyedContainer.decode(String.self, forKey: .lastLoggedIn)
+        self.locale = try keyedContainer.decode(String.self, forKey: .locale)
+        self.utcOffset = try keyedContainer.decode(String.self, forKey: .utcOffset)
 
         // Backend service could return empty dictionary as an array.
         if let addresses = try? keyedContainer.decodeIfPresent([String: Address].self, forKey: .addresses) {
