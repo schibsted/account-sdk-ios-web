@@ -113,7 +113,7 @@ public struct UserProfileResponse: Codable, Equatable {
         self.name = try keyedContainer.decode(Name.self, forKey: .name)
         self.gender = try keyedContainer.decode(String.self, forKey: .gender)
         self.birthday = try keyedContainer.decode(String.self, forKey: .birthday)
-        self.merchants = try keyedContainer.decode([Int].self, forKey: .merchants)
+        self.merchants = try? keyedContainer.decode([Int].self, forKey: .merchants)
         self.published = try keyedContainer.decode(String.self, forKey: .published)
         self.verified = try? keyedContainer.decode(String.self, forKey: .verified)
         self.updated = try keyedContainer.decode(String.self, forKey: .updated)

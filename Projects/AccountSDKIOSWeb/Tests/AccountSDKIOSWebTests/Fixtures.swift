@@ -14,7 +14,7 @@ struct Fixtures {
     static let jwsUtil = JWSUtil()
     static let schibstedAccountAPI = SchibstedAccountAPI(baseURL: Fixtures.clientConfig.serverURL, sessionServiceURL: Fixtures.clientConfig.sessionServiceURL)
     
-    static let userProfileResponse = UserProfileResponse(uuid: "uuid", userId: "12345", status: 0, email: "email@email.com", emailVerified: nil, emails: [], phoneNumber: "123456789", phoneNumberVerified: nil, phoneNumbers: [], displayName: "foo bar", name: Name(givenName: "John", familyName: "White", formatted: nil), addresses: [:], gender: "male", birthday: "0000-00-00", accounts: [:], merchants: [], published: "2022-06-10 09:54:23", verified: "2022-06-10 09:54:23", updated: "2022-06-10 09:54:23", passwordChanged: nil, lastAuthenticated: "2022-06-10 09:54:23", lastLoggedIn: "2022-06-10 09:54:23", locale: "sv_SE", utcOffset: "UTC+01")
+    static let userProfileResponse = UserProfileResponse(uuid: "uuid", userId: "12345", status: 0, email: "email@email.com", emailVerified: nil, emails: [], phoneNumber: "123456789", phoneNumberVerified: nil, phoneNumbers: [], displayName: "foo bar", name: Name(givenName: "John", familyName: "White", formatted: nil), addresses: [:], gender: "undisclosed", birthday: "0000-00-00", accounts: [:], merchants: [], published: "2022-06-10 09:54:23", verified: "2022-06-10 09:54:23", updated: "2022-06-10 09:54:23", passwordChanged: nil, lastAuthenticated: "2022-06-10 09:54:23", lastLoggedIn: "2022-06-10 09:54:23", locale: "sv_SE", utcOffset: "+02:00")
     static let userContext = UserContextFromTokenResponse(identifier: "foo", displayText: "foo bar", clientName: "bar")
 }
 

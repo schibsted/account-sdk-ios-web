@@ -31,37 +31,85 @@ final class SchibstedAccountAPIResponsesTests: XCTestCase {
         XCTAssertEqual(decode("\"notTrue\""), StringBool(value: false, asString: true))
     }
     
-//    func testUserProfileResponseHandleAddressesAsEmptyArray() {
-//        let json = """
-//        {
-//            "addresses": [],
-//        }
-//        """
-//        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
-//        XCTAssertTrue(parsed.addresses?.isEmpty == true, "An empty array in addresses field should be converted to an empty dictionary in the UserProfileResponse struct")
-//    }
+    func testUserProfileResponseHandleAddressesAsEmptyArray() {
+        let json = """
+        {
+            "uuid": "4321",
+            "userId": "1234",
+            "status": 1,
+            "email": "foo@bar.com",
+            "emails": [],
+            "displayName": "Foo Bar",
+            "name": {},
+            "gender": "undisclosed",
+            "birthday": "0000-00-00",
+            "published": "2022-06-13 14:05:22",
+            "updated": "2022-06-13 14:09:00",
+            "lastAuthenticated": "2022-06-13 15:30:40",
+            "lastLoggedIn": "2022-06-13 15:30:40",
+            "locale": "sv_SE",
+            "utcOffset": "+02:00",
+            "addresses": [],
+        }
+        """
+        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
+        XCTAssertTrue(parsed.addresses?.isEmpty == true, "An empty array in addresses field should be converted to an empty dictionary in the UserProfileResponse struct")
+    }
     
-//    func testUserProfileResponseHandlesBoolInStringFields() {
-//        let json = """
-//        {
-//            "emailVerified": false,
-//            "phoneNumberVerified": false
-//        }
-//        """
-//        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
-//        XCTAssertNil(parsed.emailVerifiedDate)
-//        XCTAssertNil(parsed.phoneNumberVerifiedDate)
-//    }
+    func testUserProfileResponseHandlesBoolInStringFields() {
+        let json = """
+        {
+            "emailVerified": false,
+            "phoneNumberVerified": false,
+            "uuid": "4321",
+            "userId": "1234",
+            "status": 1,
+            "email": "foo@bar.com",
+            "emails": [],
+            "displayName": "Foo Bar",
+            "name": {},
+            "gender": "undisclosed",
+            "birthday": "1910-04-10",
+            "published": "2022-06-13 14:05:22",
+            "updated": "2022-06-13 14:09:00",
+            "lastAuthenticated": "2022-06-13 15:30:40",
+            "lastLoggedIn": "2022-06-13 15:30:40",
+            "locale": "sv_SE",
+            "utcOffset": "+02:00",
+            "addresses": [],
+        }
+        """
+        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
+        XCTAssertNil(parsed.emailVerifiedDate)
+        XCTAssertNil(parsed.phoneNumberVerifiedDate)
+    }
     
-//    func testUserProfileResponseFiltersEmptyBirthdayValue() {
-//        let json = """
-//        {
-//            "birthday": "0000-00-00"
-//        }
-//        """
-//        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
-//        XCTAssertNil(parsed.birthdate)
-//    }
+    func testUserProfileResponseFiltersEmptyBirthdayValue() {
+        let json = """
+        {
+            "emailVerified": false,
+            "phoneNumberVerified": false,
+            "uuid": "4321",
+            "userId": "1234",
+            "status": 1,
+            "email": "foo@bar.com",
+            "emails": [],
+            "displayName": "Foo Bar",
+            "name": {},
+            "gender": "undisclosed",
+            "birthday": "0000-00-00",
+            "published": "2022-06-13 14:05:22",
+            "updated": "2022-06-13 14:09:00",
+            "lastAuthenticated": "2022-06-13 15:30:40",
+            "lastLoggedIn": "2022-06-13 15:30:40",
+            "locale": "sv_SE",
+            "utcOffset": "+02:00",
+            "addresses": [],
+        }
+        """
+        let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: json.data(using: .utf8)!)
+        XCTAssertNil(parsed.birthdate)
+    }
     
     func testFullProfileResponse() {
         guard let filePath = Bundle(for: type(of: self)).path(forResource: "user-profile-response", ofType: "json"),
