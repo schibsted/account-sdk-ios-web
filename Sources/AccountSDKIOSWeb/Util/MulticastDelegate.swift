@@ -9,6 +9,8 @@ public final class MulticastDelegate<T> {
 
     lazy var delegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
 
+    public init() {}
+
     public func addDelegate(_ delegate: T) {
         delegates.add(delegate as AnyObject)
     }

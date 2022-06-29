@@ -5,6 +5,14 @@
 
 import Foundation
 
+public struct TokenWrapper {
+    internal var userTokens: UserTokens?
+
+    public init(_ userTokens: UserTokens?) {
+        self.userTokens = userTokens
+    }
+}
+
 public protocol UserDelegate: AnyObject {
     func userDidLogout()
 }
@@ -13,6 +21,7 @@ public protocol UserProtocol {
     var delegates: MulticastDelegate<UserDelegate> { get }
     var uuid: String? { get }
     var userId: String? { get }
+    var tokenWrapper: TokenWrapper { get set }
 
     func logout()
     func isLoggedIn() -> Bool
@@ -24,10 +33,13 @@ public protocol UserProtocol {
     func oneTimeCode(clientId: String,
                      completion: @escaping HTTPResultHandler<String>)
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
+    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void)
 }
 
 /// Representation of logged-in user.
 public class User: UserProtocol {
+    public var tokenWrapper: TokenWrapper
+
     let client: Client
     var tokens: UserTokens?
 
@@ -65,6 +77,7 @@ public class User: UserProtocol {
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
         self.tokens = tokens
+        self.tokenWrapper = TokenWrapper(tokens)
     }
 
     /**
@@ -159,7 +172,7 @@ extension User {
         return false
     }
 
-    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    public func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
     }
 

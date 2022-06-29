@@ -7,7 +7,7 @@ import Foundation
 
 /// AuthenticatedURLSession wraps a User to allow Bearer authenticated requests and the use of URLSessionDataTask
 public final class AuthenticatedURLSession {
-    private let user: User
+    private let user: UserProtocol
     private let urlSession: URLSession
     private var refreshTokenDataTask: URLSessionDataTask?
 
@@ -18,7 +18,7 @@ public final class AuthenticatedURLSession {
      - parameter configuration: The URLSessionConfiguration object used for creating URLSession.
      
      */
-    public init(user: User, configuration: URLSessionConfiguration) {
+    public init(user: UserProtocol, configuration: URLSessionConfiguration) {
         self.user = user
         self.urlSession = URLSession(configuration: configuration)
     }
@@ -43,7 +43,7 @@ public final class AuthenticatedURLSession {
     public func dataTask(with request: URLRequest,
                          completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         let user = self.user
-        let request = authenticatedRequest(request, tokens: user.tokens)
+        let request = authenticatedRequest(request, tokens: user.tokenWrapper.userTokens)
         return urlSession.dataTask(with: request) { [weak self] data, response, error in
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.isError else {
                 completionHandler(data, response, error)
