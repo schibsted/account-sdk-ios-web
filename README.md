@@ -238,11 +238,34 @@ Simplified Login comes with the following localization support:
 1. 🇩🇰 Danish
 1. 🇬🇧 English (Default)
 
-#### Releasing
+## Local development
 
-1. Make sure all changes going in the release have been merged to `master` branch.
+### Setup
+
+#### Prerequisites
+1. All you need is Xcode with command-line tools installed. It works perfectly with version 13.4.1.
+
+#### Steps
+1. Clone repository
+1. Open `workspace.xcworkspace` file, which exists in the Projects folder. It contains two projects inside: AccountSDKIOSWeb which is the SDK itself, and ExampleWeb which serves as a demo application.
+1. To run the demo application on the simulator, choose the ExampleWeb scheme and target your choices like an iPhone or iPad. Run the application with the play button or press `command + R`. 
+1. If Xcode fails to resolve package dependency, click on them and resolve them manually. 
+
+#### Unit tests
+
+1. There are two schemes with tests. To run unit tests, select one of them and press `command + U`
+
+### How to release the SDK
+
+#### Prerequisites
+
+1. To successfully release the SDK's pod to the CocoaPods repository, you need first set up the pod trunk on your computer. See https://guides.cocoapods.org/making/getting-setup-with-trunk.html. 
+1. You should be added as an owner to the library in the CocoaPods repository. Please ask the User Access team, who can give you the correct rights.
+
+#### Steps to release
+
+1. Make sure all changes going in the release have been merged to the `master` branch.
 1. Update new SDK version number in both [Version.swift](https://github.com/schibsted/account-sdk-ios-web/blob/master/Sources/AccountSDKIOSWeb/Lib/Version.swift) and [AccountSDKIOSWeb.podspec](AccountSDKIOSWeb.podspec) files. Commit this change to the `master` branch.
 1. Create a new [release via GitHub](https://github.com/schibsted/account-sdk-ios/releases).
-    1. Enter the version number as the tag name and include the changes in the release description.
+    1. Enter the version number as the tag name, and include all important changes in the release description.
 1. Publish the pod by running `pod trunk push AccountSDKIOSWeb.podspec` from your local machine.
-    1. To successfully call `pod trunk` you need to first setup pod trunk on your computer and be added as a contributor to the library. See https://guides.cocoapods.org/making/getting-setup-with-trunk.html
