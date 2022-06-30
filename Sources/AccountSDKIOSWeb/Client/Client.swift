@@ -251,7 +251,7 @@ public class Client: CustomStringConvertible {
     }
 
     func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
-        guard let existingRefreshToken = user.tokens?.refreshToken else {
+        guard let existingRefreshToken = user.tokenWrapper.userTokens?.refreshToken else {
             SchibstedAccountLogger.instance.debug("No existing refresh token, skipping token refreh")
             tracker?.error(.refreshTokenError(.noRefreshToken), in: .noScreen)
             completion(.failure(.noRefreshToken))
@@ -263,7 +263,7 @@ public class Client: CustomStringConvertible {
             switch tokenRefreshResult {
             case .success(let tokenResponse):
                 SchibstedAccountLogger.instance.debug("Successfully refreshed user tokens")
-                guard let tokens = user.tokens else {
+                guard let tokens = user.tokenWrapper.userTokens else {
                     SchibstedAccountLogger.instance
                         .info("User has logged-out during token refresh, discarding new tokens.")
                     self.tracker?.error(.loginStateError(.notLoggedIn), in: .noScreen)
@@ -275,7 +275,7 @@ public class Client: CustomStringConvertible {
                                             refreshToken: refreshToken,
                                             idToken: tokens.idToken,
                                             idTokenClaims: tokens.idTokenClaims)
-                user.tokens = userTokens
+                user.tokenWrapper.userTokens = userTokens
 
                 let userSession = UserSession(clientId: self.configuration.clientId,
                                               userTokens: userTokens,

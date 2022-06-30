@@ -41,13 +41,12 @@ public class User: UserProtocol {
     public var tokenWrapper: TokenWrapper
 
     let client: Client
-    var tokens: UserTokens?
 
     /**
      Sets the tokens. Should only be used when testing.
      */
     public func setTokens(_ tokens: UserTokens) {
-        self.tokens = tokens
+        self.tokenWrapper.userTokens = tokens
     }
 
     /// Delegates listening to User events such as logout
@@ -57,12 +56,12 @@ public class User: UserProtocol {
 
     /// user idToken
     public var idToken: String? {
-        return tokens?.idToken
+        return tokenWrapper.userTokens?.idToken
     }
 
     /// User UUID
     public var uuid: String? {
-        return tokens?.idTokenClaims.sub
+        return tokenWrapper.userTokens?.idTokenClaims.sub
     }
 
     /**
@@ -71,12 +70,11 @@ public class User: UserProtocol {
      A user_id used by some Schibsted account APIs
      */
     public var userId: String? {
-        return tokens?.idTokenClaims.userId
+        return tokenWrapper.userTokens?.idTokenClaims.userId
     }
 
     internal init(client: Client, tokens: UserTokens) {
         self.client = client
-        self.tokens = tokens
         self.tokenWrapper = TokenWrapper(tokens)
     }
 
@@ -86,7 +84,7 @@ public class User: UserProtocol {
      Will remove stored session, including all user tokens.
      */
     public func logout() {
-        tokens = nil
+        tokenWrapper.userTokens = nil
         client.destroySession()
         self.delegates.invokeDelegates({ $0.userDidLogout() })
     }
@@ -98,7 +96,7 @@ public class User: UserProtocol {
      tokens could be obtained (e.g. due to expired or invalidated refresh token).
      */
     public func isLoggedIn() -> Bool {
-        return tokens != nil
+        return tokenWrapper.userTokens != nil
     }
 
     /**
@@ -177,7 +175,7 @@ extension User {
     }
 
     func makeRequest<T: Decodable>(request: URLRequest, completion: @escaping HTTPResultHandler<T>) {
-        guard let tokens = self.tokens else {
+        guard let tokens = self.tokenWrapper.userTokens else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))
             return
         }
@@ -220,7 +218,7 @@ extension User: Equatable {
     public static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uuid == rhs.uuid
             && lhs.client.configuration.clientId == rhs.client.configuration.clientId
-            && lhs.tokens == rhs.tokens
+        && lhs.tokenWrapper.userTokens == rhs.tokenWrapper.userTokens
     }
 }
 

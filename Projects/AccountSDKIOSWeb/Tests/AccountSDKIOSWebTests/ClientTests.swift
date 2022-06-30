@@ -289,7 +289,7 @@ final class ClientTests: XCTestCase {
         client.refreshTokens(for: user) { result in
             switch result {
             case .success(let tokens):
-                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokenWrapper.userTokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(tokens, expectedTokens)
             case .failure(let error):
                 XCTFail("Unexprected error \(error.localizedDescription)")
@@ -368,7 +368,7 @@ final class ClientTests: XCTestCase {
         client.refreshTokens(for: user) { result in
             switch result {
             case .success(let tokens):
-                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
+                let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: user.tokenWrapper.userTokens!.idToken, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(tokens, expectedTokens)
             case .failure(let error):
                 XCTFail("Unexprected error \(error.localizedDescription)")

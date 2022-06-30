@@ -298,7 +298,7 @@ final class UserTests: XCTestCase {
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         user.logout()
-        XCTAssertNil(user.tokens)
+        XCTAssertNil(user.tokenWrapper.userTokens)
         XCTAssertNil(user.uuid)
         XCTAssertFalse(user.isLoggedIn())
         
