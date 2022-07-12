@@ -3,7 +3,7 @@
 "SimplifiedWidget.schibstedAccount" = "Schibsted account";
 "SimplifiedWidget.continueAs" = "Continue as";
 "SimplifiedWidget.continueWithoutLogin" = "Continue without logging in";
-"SimplifiedWidget.footer" = "You are logged in to a service with a \nSchibsted account, and can continue on %@ with one click";
+"SimplifiedWidget.footer" = "You are logged in to a service with a Schibsted account, and can continue on %@ with one click";
 "SimplifiedWidget.shortFooter" = "With a Schibsted account, you can log in to\n all Schibsted services.";
 "SimplifiedWidget.privacyPolicy" = "Privacy policy";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/privacy-and-cookie-policy-english-schibsted-norge/";
