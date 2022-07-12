@@ -3,7 +3,7 @@
 "SimplifiedWidget.schibstedAccount" = "Schibsted-tili";
 "SimplifiedWidget.continueAs" = "Jatka käyttäjänä";
 "SimplifiedWidget.continueWithoutLogin" = "Jatka kirjautumatta sisään";
-"SimplifiedWidget.footer" = "Olet kirjautuneena palveluun Schibsted-tililläsi ja\nvoit jatkaa kohteeseen %@ yhdellä napautuksella";
+"SimplifiedWidget.footer" = "Olet kirjautuneena palveluun Schibsted-tililläsi ja voit jatkaa kohteeseen %@ yhdellä napautuksella";
 "SimplifiedWidget.shortFooter" = "Schibsted-tilillä voit kirjautua sisään kaikkiin Schibsted-palveluihin.";
 "SimplifiedWidget.privacyPolicy" = "Tietosuoja";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/fi/tietosuoja-ja-evastekaytannot/";
