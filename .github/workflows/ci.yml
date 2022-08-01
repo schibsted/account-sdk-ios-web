@@ -1,4 +1,4 @@
-name: Build the Account SDK and the Example app
+name: build & unit tests
 
 on:
   pull_request:
@@ -11,16 +11,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Resolve package dependencies
+      - name: Resolve dependencies & build SDK
         run: |
-          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
-      - name: Build the SDK
-        env:
-          platform: ${{ 'iOS Simulator' }}
-          iOS: ${{ '15.2' }}
-          device: ${{ 'iPhone 13' }}
-        run: |
-          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
+          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj build
       - name: Run unit tests
         env:
           platform: ${{ 'iOS Simulator' }}
