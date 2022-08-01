@@ -1,6 +1,6 @@
 # Schibsted account iOS SDK
 
-[![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/ci.yml/badge.svg)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/ci.yml)
+[![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/ci.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web)
 ![Platform](https://img.shields.io/badge/Platform-iOS%2012.0%2B-orange.svg?style=flat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/schibsted/account-sdk-ios-web/blob/master/LICENSE)
