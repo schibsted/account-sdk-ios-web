@@ -16,11 +16,11 @@ jobs:
           xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
       - name: Build the SDK
         run: |
-          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb
       - name: Run unit tests
         env:
           platform: ${{ 'iOS Simulator' }}
           iOS: ${{ '15.6' }}
           device: ${{ 'iPhone 13' }}
         run: |
-          xcodebuild test-without-building -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.2'
+          xcodebuild test -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.2'
