@@ -13,10 +13,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Resolve package dependencies
         run: |
-          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj build
+          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
       - name: Build the SDK
+        env:
+          platform: ${{ 'Any iOS Device' }}
         run: |
-          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination 'platform=$platform'
       - name: Run unit tests
         env:
           platform: ${{ 'iOS Simulator' }}
