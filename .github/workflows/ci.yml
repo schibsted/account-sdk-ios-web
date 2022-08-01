@@ -6,18 +6,22 @@ on:
     branches:
      - master
 
+env:
+  platform: ${{ 'iOS Simulator' }}
+  iOS: ${{ '15.2' }}
+  device: ${{ 'iPhone 13' }}
+
 jobs:
   build:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Resolve dependencies & build SDK
+      - name: Resolve package dependencies
         run: |
-          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj build
+          xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
+      - name: Build the SDK
+        run: |
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
       - name: Run unit tests
-        env:
-          platform: ${{ 'iOS Simulator' }}
-          iOS: ${{ '15.2' }}
-          device: ${{ 'iPhone 13' }}
         run: |
-          xcodebuild test -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
+          xcodebuild test-without-building -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
