@@ -1,4 +1,4 @@
-name: Update documentation
+name: update documentation
 
 on:
   pull_request:
@@ -17,8 +17,8 @@ jobs:
       - name: Generate docs
         run: |
           bundle exec jazzy
-      # - name: Deploy documentation
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./docs
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
