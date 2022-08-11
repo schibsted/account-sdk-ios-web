@@ -7,9 +7,9 @@ on:
      - master
 
 env:
-  platform: ${{ 'iOS Simulator' }}
-  iOS: ${{ '15.2' }}
-  device: ${{ 'iPhone 13' }}
+  platform: 'iOS Simulator'
+  iOS: '15.2'
+  device: 'iPhone 13'
 
 jobs:
   build:
@@ -19,6 +19,9 @@ jobs:
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
-      - name: Build the SDK and run unit tests
+      - name: Build the SDK and run unit test
         run: |
-          xcodebuild test -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
+      - name: Run unit tests
+        run: |
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
