@@ -22,6 +22,9 @@ jobs:
       - name: Build the SDK
         run: |
           xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
+      - name: Build for testing
+        run: |
+          xcodebuild build-for-testing -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
       - name: Run unit tests
         run: |
           xcodebuild test-without-building -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
