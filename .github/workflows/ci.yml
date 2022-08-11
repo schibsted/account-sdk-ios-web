@@ -19,6 +19,9 @@ jobs:
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj
-      - name: Build the SDK and run unit tests
+      - name: Build the SDK
         run: |
-          xcodebuild test -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
+          xcodebuild build -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWeb -destination "platform=$platform,name=$device,OS=$iOS"
+      - name: Run unit tests
+        run: |
+          xcodebuild test-without-building -project Projects/AccountSDKIOSWeb/AccountSDKIOSWeb.xcodeproj -scheme AccountSDKIOSWebTests -destination "platform=$platform,name=$device,OS=$iOS"
