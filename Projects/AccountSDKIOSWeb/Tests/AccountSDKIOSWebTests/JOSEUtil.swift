@@ -31,7 +31,7 @@ internal class JWSUtil {
         header.kid = keyId
         
         let payload = Payload(payload)
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKey!)!
+        let signer = Signer(signingAlgorithm: algorithm, key: privateKey!)!
         
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         return jws.compactSerializedString

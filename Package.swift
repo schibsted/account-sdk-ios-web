@@ -14,8 +14,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3.0"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0")
+        .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.4.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.4.4")
     ],
     targets: [
         .target(

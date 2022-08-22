@@ -46,7 +46,7 @@ internal enum JOSEUtil {
             }
 
             guard let publicKey = key.toSecKey(),
-                let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKey) else {
+                let verifier = Verifier(verifyingAlgorithm: algorithm, key: publicKey) else {
                 completion(.failure(.unsupportedKeyType))
                 return
             }
