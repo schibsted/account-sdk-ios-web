@@ -7,11 +7,8 @@ import Foundation
 
 enum Localization {
     enum SimplifiedLogin: String {
-        case loginWithOneClick = "SimplifiedWidget.logInWithOneClick"
-        case schibstedTitle = "SimplifiedWidget.schibstedAccount"
         case loginIncentive = "SimplifiedWidget.loginIncentive"
         case continueWithoutLogin = "SimplifiedWidget.continueWithoutLogin"
-        case explanationText = "SimplifiedWidget.footer"
         case shortExplanationText = "SimplifiedWidget.shortFooter"
         case privacyPolicyTitle = "SimplifiedWidget.privacyPolicy"
         case privacyPolicyURL = "SimplifiedWidget.privacyPolicyLink"
@@ -26,13 +23,6 @@ enum Localization {
 }
 
 struct SimplifiedLoginLocalizationModel {
-    var loginWithOneClick: String {
-        return Localization.SimplifiedLogin.loginWithOneClick.localizedString
-    }
-
-    var schibstedTitle: String {
-        return Localization.SimplifiedLogin.schibstedTitle.localizedString
-    }
 
     var loginIncentive: String {
         return Localization.SimplifiedLogin.loginIncentive.localizedString
@@ -40,10 +30,6 @@ struct SimplifiedLoginLocalizationModel {
 
     var continueWithoutLogin: String {
         return Localization.SimplifiedLogin.continueWithoutLogin.localizedString
-    }
-
-    var explanationText: String {
-        return Localization.SimplifiedLogin.explanationText.localizedString
     }
 
     var shortExplanationText: String {
