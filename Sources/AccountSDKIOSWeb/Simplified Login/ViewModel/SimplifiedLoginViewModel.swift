@@ -35,20 +35,12 @@ extension SimplifiedLoginUserActionable {
 
 class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelAuthenticator {
 
-    let clientName: String
-
     let tracker: TrackingEventsHandler?
 
     let localizationModel: SimplifiedLoginLocalizationModel
     let imageDataModel: SimplifiedLoginNamedImageData
     var schibstedLogoName: String { return imageDataModel.schibstedLogoName }
     var iconNames: [String] { return imageDataModel.iconNames }
-
-    let uiVersion: SimplifiedLoginUIVersion
-    var shouldUseCombinedButtonView: Bool { uiVersion == .combinedButton }
-    var shouldUseMinimalView: Bool { uiVersion == .minimal }
-    var shouldUseHeadingCopyView: Bool { uiVersion == .headingCopy }
-    var shouldUseExplanatoryView: Bool { uiVersion == .explanatoryCopy }
 
     let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
 
@@ -83,14 +75,10 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     init(imageDataModel: SimplifiedLoginNamedImageData,
          userDataModel: SimplifiedLoginViewModelUserData,
          localizationModel: SimplifiedLoginLocalizationModel,
-         visibleClientName: String,
-         uiVersion: SimplifiedLoginUIVersion,
          tracker: TrackingEventsHandler? = nil) {
         self.localizationModel = localizationModel
         self.imageDataModel = imageDataModel
         self.userData = userDataModel
-        self.clientName = visibleClientName
-        self.uiVersion = uiVersion
         self.tracker = tracker
     }
 

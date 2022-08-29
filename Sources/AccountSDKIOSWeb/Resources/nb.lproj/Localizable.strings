@@ -1,9 +1,6 @@
-"SimplifiedWidget.logInWithOneClick" = "Logg inn med ett klikk";
-"SimplifiedWidget.loginIncentive" = "Du er allerede logget på en av\nSchibsteds tjenester. Fortsett med ett klikk.";
-"SimplifiedWidget.schibstedAccount" = "Schibsted-konto";
+"SimplifiedWidget.loginIncentive" = "Du er allerede logget på en av Schibsteds tjenester. Fortsett med ett klikk.";
 "SimplifiedWidget.continueAs" = "Fortsett som";
 "SimplifiedWidget.continueWithoutLogin" = "Fortsett uten å logge inn";
-"SimplifiedWidget.footer" = "Du er logget inn på en tjeneste med Schibsted og kan fortsette på %@ med ett klikk";
 "SimplifiedWidget.shortFooter" = "Med Schibsted-konto kan du logge inn på alle Schibsted-tjenester.";
 "SimplifiedWidget.privacyPolicy" = "Personvernerklæring";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/no/schibsted-norge-personvernerklaering/";

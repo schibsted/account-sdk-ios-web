@@ -64,6 +64,5 @@ public enum TrackingEvent {
         case loginHint(String?)
         case withAssertion(Bool)
         case extraScopeValues(Set<String>)
-        case uiVersion(SimplifiedLoginUIVersion)
     }
 }

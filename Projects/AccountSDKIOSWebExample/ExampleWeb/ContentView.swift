@@ -12,8 +12,6 @@ struct ContentView: View {
     let client: Client
     let clientConfiguration: ClientConfiguration
     
-    let sharedKeychainClient: Client
-    
     @State var userDelegate: MyUserDelegate?
     @State private var user: User? {
         didSet {
@@ -36,9 +34,6 @@ struct ContentView: View {
     init(client: Client, clientConfiguration: ClientConfiguration) {
         self.client = client
         self.clientConfiguration = clientConfiguration
-        
-        let appIdentifierPrefix = "J5FN75WZ65"
-        self.sharedKeychainClient = Client(configuration: clientConfiguration, appIdentifierPrefix: appIdentifierPrefix)
     }
     
     var body: some View {
@@ -52,26 +47,15 @@ struct ContentView: View {
                         Text("Logged-in as \(user?.uuid ?? "unknown")")
                     }
                     Button(action: resumeUser, label: { Text("Resume user")})
-                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
-                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
-                    Button(action: triggerBankIdFlow, label: { Text("Trigger BankId for NO") })
                     Button(action: login, label: { Text("Login") } )
                         .onOpenURL { url in
                             handleOnOpenUrl(url: url)
                         }
+                    Button(action: trigger2faOtpFlow, label: { Text("Trigger 2FA (OTP)")})
+                    Button(action: trigger2faSmsFlow, label: { Text("Trigger 2FA (SMS)")})
+                    Button(action: triggerBankIdFlow, label: { Text("Trigger BankId for NO") })
+                    Button(action: triggerSimplifiedLogin, label: { Text("Trigger Simplified login ")})
                 }
-                
-                VStack(spacing: 20) {        
-                    Text("Simplified Login")
-                        .underline()
-                    Button(action: loginFromSharedKeychain, label: { Text("Login from shared keychain")})
-                    Button(action: { triggerSimplifiedLogin(uiVersion: .minimal) }, label: { Text("Trigger Simplified login UI v1")})
-                    Button(action: { triggerSimplifiedLogin(uiVersion: .headingCopy) }, label: { Text("Trigger Simplified login UI v2")})
-                    Button(action: { triggerSimplifiedLogin(uiVersion: .explanatoryCopy) }, label: { Text("Trigger Simplified login UI v3")})
-                    Button(action: { triggerSimplifiedLogin(uiVersion: .combinedButton) }, label: { Text("Trigger Simplified login UI v4")})
-                }
-                .padding()
-                .border(Color.black)
                 
                 VStack(spacing: 20) {
                     Button(action: fetchProfileData, label: { Text("Fetch profile data") } )
@@ -87,10 +71,10 @@ struct ContentView: View {
         
     }
     
-    func triggerSimplifiedLogin(uiVersion: SimplifiedLoginUIVersion) {
+    func triggerSimplifiedLogin() {
         let context = ASWebAuthSessionContextProvider()
-        let manager = SimplifiedLoginManager(client: self.sharedKeychainClient, contextProvider: context, completion: handleResult)
-        manager.requestSimplifiedLogin("A visble product name", uiVersion: uiVersion) { result in
+        let manager = SimplifiedLoginManager(client: client, contextProvider: context, completion: handleResult)
+        manager.requestSimplifiedLogin() { result in
             switch (result) {
             case .success():
                 print("success: requestSimplifiedLogin")
@@ -171,17 +155,6 @@ struct ContentView: View {
                 print(error)
             }
         }
-        if let session = session {
-            asWebAuthSession = session
-            asWebAuthSession?.start()
-        }
-    }
-    
-    func loginFromSharedKeychain(){
-        let context = ASWebAuthSessionContextProvider()
-        let session = sharedKeychainClient.getLoginSession(contextProvider: context,
-                                                  withSSO: true,
-                                                  completion: handleResult)
         if let session = session {
             asWebAuthSession = session
             asWebAuthSession?.start()

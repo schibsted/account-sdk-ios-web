@@ -68,15 +68,8 @@ class FooterView: UIStackView {
     // Privacy
 
     private lazy var explanationLabel: UILabel = {
-        let localizedString: String
-        if viewModel.shouldUseExplanatoryView {
-            localizedString = String.localizedStringWithFormat(
+        let localizedString = String.localizedStringWithFormat(
                 viewModel.localizationModel.shortExplanationText)
-        } else {
-            localizedString = String.localizedStringWithFormat(
-                viewModel.localizationModel.explanationText,
-                viewModel.clientName)
-        }
         let view = UILabel.paragraphLabel(localizedString: localizedString)
         return view
     }()

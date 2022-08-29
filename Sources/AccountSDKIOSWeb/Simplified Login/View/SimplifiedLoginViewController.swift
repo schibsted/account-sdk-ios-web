@@ -32,11 +32,6 @@ class SimplifiedLoginViewController: UIViewController {
         LinksView(viewModel: viewModel)
     }()
 
-    // MARK: Header
-    private lazy var headerView: HeaderView = {
-        HeaderView(viewModel: viewModel)
-    }()
-
     // MARK: Explanatory
     private lazy var explanatoryView: ExplanatoryView = {
         ExplanatoryView(viewModel: viewModel)
@@ -49,7 +44,7 @@ class SimplifiedLoginViewController: UIViewController {
 
     init(viewModel: SimplifiedLoginViewModel) {
         self.viewModel = viewModel
-        SchibstedAccountLogger.instance.info("Initialize Simplified login version: \(viewModel.uiVersion.rawValue)")
+        SchibstedAccountLogger.instance.info("Initialize Simplified login")
         super.init(nibName: nil, bundle: nil)
 
         if viewModel.isPhone {
@@ -57,7 +52,7 @@ class SimplifiedLoginViewController: UIViewController {
             modalTransitionStyle = .crossDissolve
         } else {
             modalPresentationStyle = .formSheet
-            preferredContentSize = .init(width: 450, height: (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 454 : 524)
+            preferredContentSize = .init(width: 450, height: 524)
         }
     }
 
@@ -77,7 +72,7 @@ class SimplifiedLoginViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.tracker?.interaction(.open, with: trackerScreenID, additionalFields: [.uiVersion(viewModel.uiVersion)])
+        viewModel.tracker?.interaction(.open, with: trackerScreenID)
         animateShowingOverlay()
     }
 
@@ -90,7 +85,7 @@ class SimplifiedLoginViewController: UIViewController {
             return
         }
 
-        let height = 459 + ((!viewModel.shouldUseMinimalView || !viewModel.shouldUseCombinedButtonView) ? 46 : 0)
+        let height = 459 + 46
         let y = Int(view.frame.height) - height + 25 // swiftlint:disable:this identifier_name
         containerView.frame = CGRect(x: 0, y: y, width: Int(UIScreen.main.bounds.width), height: height)
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +105,6 @@ class SimplifiedLoginViewController: UIViewController {
             scrollView.contentInsetAdjustmentBehavior = .never
         }
 
-        scrollView.addSubview(headerView)
         scrollView.addSubview(userInformationView)
         scrollView.addSubview(explanatoryView)
         scrollView.addSubview(continueButton)
@@ -134,9 +128,7 @@ class SimplifiedLoginViewController: UIViewController {
             return
         }
 
-        let overlayHeight = (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 454 : 500
-        scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: overlayHeight)
-        scrollView.addSubview(headerView)
+        scrollView.frame = CGRect(x: 0, y: 0, width: 450, height: 500)
         scrollView.addSubview(userInformationView)
         scrollView.addSubview(explanatoryView)
         scrollView.addSubview(continueButton)
@@ -168,32 +160,27 @@ class SimplifiedLoginViewController: UIViewController {
         let buttonTrail = continueButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -4)
         let containerViewBottomConstraint = containerView.bottomAnchor.constraint(
             equalTo: view.bottomAnchor,
-            constant: (viewModel.shouldUseMinimalView || viewModel.shouldUseCombinedButtonView) ? 495 : 525)
+            constant: 525)
 
         var allConstraints = [NSLayoutConstraint]()
         allConstraints.append(contentsOf: commonConstraints())
 
         allConstraints += [
-            // Header View
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-
             // UserInformation
             userInformationView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             userInformationView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            userInformationView.topAnchor.constraint(equalTo: headerView.bottomAnchor,
-                                                     constant: viewModel.shouldUseHeadingCopyView ? 15 : 5),
+            userInformationView.topAnchor.constraint(equalTo: scrollView.topAnchor,
+                                                     constant: 5),
             userInformationView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0),
 
             // Explanatory view
             explanatoryView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             explanatoryView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor,
-                                                 constant: viewModel.shouldUseExplanatoryView ? 20 : 0),
+                                                 constant: 20),
 
             // Primary button
-            continueButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: viewModel.shouldUseCombinedButtonView ? 10 : 20),
+            continueButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor, constant: 20),
             continueButton.centerXAnchor.constraint(equalTo: userInformationView.centerXAnchor),
             continueButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             buttonWidth,
@@ -215,7 +202,7 @@ class SimplifiedLoginViewController: UIViewController {
 
             // Container View
             (bottomConstraint != nil) ? bottomConstraint! : containerViewBottomConstraint,
-            containerView.heightAnchor.constraint(equalToConstant: viewModel.shouldUseMinimalView ? 480 : viewModel.shouldUseCombinedButtonView ? 465 : 520),
+            containerView.heightAnchor.constraint(equalToConstant: 520),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
@@ -229,35 +216,29 @@ class SimplifiedLoginViewController: UIViewController {
     }
 
     private func setupiPadConstraints() {
-        let conitnueButtonTop: CGFloat = viewModel.shouldUseExplanatoryView ? 15 : viewModel.shouldUseCombinedButtonView ? 0 : 30
+        let conitnueButtonTop: CGFloat = 15
 
         var allConstraints = [NSLayoutConstraint]()
         allConstraints.append(contentsOf: commonConstraints())
 
         allConstraints += [
-            // Header View
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.topAnchor.constraint(equalTo: scrollView.topAnchor,
-                                            constant: (viewModel.shouldUseHeadingCopyView || viewModel.shouldUseCombinedButtonView) ? 25 : 0),
-
             // UserInformation
             userInformationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: headerView.bottomAnchor,
-                                                     constant: (viewModel.shouldUseHeadingCopyView || viewModel.shouldUseCombinedButtonView) ? 15 : 35),
+            userInformationView.topAnchor.constraint(greaterThanOrEqualTo: scrollView.topAnchor,
+                                                     constant: 35),
             userInformationView.widthAnchor.constraint(lessThanOrEqualToConstant: 394),
 
             // Explanatory view
             explanatoryView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             explanatoryView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             explanatoryView.topAnchor.constraint(equalTo: userInformationView.bottomAnchor,
-                                                 constant: viewModel.shouldUseExplanatoryView ? 15 : 0),
+                                                 constant: 15),
 
             // Primary button
             continueButton.topAnchor.constraint(equalTo: explanatoryView.bottomAnchor,
                                                 constant: conitnueButtonTop),
             continueButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            continueButton.heightAnchor.constraint(greaterThanOrEqualToConstant: viewModel.shouldUseCombinedButtonView ? 56 : 48),
+            continueButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
             continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: 326),
             continueButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 290),
             continueButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
@@ -272,7 +253,7 @@ class SimplifiedLoginViewController: UIViewController {
 
             // Footer
             footerStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 180),
-            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: viewModel.shouldUseHeadingCopyView ? 0 : -20),
+            footerStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
             footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
@@ -289,24 +270,8 @@ class SimplifiedLoginViewController: UIViewController {
     private func commonConstraints() -> [NSLayoutConstraint] {
         var constraints = userInformationView.internalConstraints +
         footerStackView.internalConstraints + linksView.internalConstraints +
-        headerView.internalConstraints + explanatoryView.internalConstraints
-
-        if viewModel.shouldUseHeadingCopyView {
-            constraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-        } else if viewModel.shouldUseExplanatoryView {
-            constraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            constraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
-        } else if viewModel.shouldUseCombinedButtonView {
-            constraints.append(headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 36))
-            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-            let userInformationHeight = userInformationView.heightAnchor.constraint(equalToConstant: 0)
-            userInformationHeight.priority = .defaultHigh
-            constraints.append(userInformationHeight)
-        } else {
-            constraints.append(headerView.heightAnchor.constraint(equalToConstant: 0))
-            constraints.append(explanatoryView.heightAnchor.constraint(equalToConstant: 0))
-        }
+        explanatoryView.internalConstraints
+        constraints.append(explanatoryView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48))
         return constraints
     }
 
@@ -331,7 +296,7 @@ class SimplifiedLoginViewController: UIViewController {
         let location = sender.location(in: containerView)
         if location.y < 0 {
             self.dismiss(animated: true, completion: nil)
-            viewModel.tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(viewModel.uiVersion)])
+            viewModel.tracker?.interaction(.close, with: trackerScreenID)
         }
     }
 
@@ -344,7 +309,7 @@ class SimplifiedLoginViewController: UIViewController {
                     self.view.backgroundColor = .clear
                 }
                 self.dismiss(animated: true, completion: nil)
-                viewModel.tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(viewModel.uiVersion)])
+                viewModel.tracker?.interaction(.close, with: trackerScreenID)
             } else if let originalTransform = originalTransform {
                 UIView.animate(withDuration: 0.3) {
                     self.containerView.transform = originalTransform
@@ -380,25 +345,22 @@ extension SimplifiedLoginViewController {
 
     @objc func primaryButtonClicked() {
         viewModel.tracker?.engagement(.click(on: .continueAsButton),
-                            in: trackerScreenID,
-                            additionalFields: [.uiVersion(viewModel.uiVersion)])
+                            in: trackerScreenID)
         viewModel.send(action: .clickedContinueAsUser)
     }
     @objc func loginWithDifferentAccountClicked() {
-        viewModel.tracker?.engagement(.click(on: .switchAccount), in: trackerScreenID, additionalFields: [.uiVersion(viewModel.uiVersion)])
+        viewModel.tracker?.engagement(.click(on: .switchAccount), in: trackerScreenID)
         viewModel.send(action: .clickedLoginWithDifferentAccount)
     }
     @objc func continueWithoutLoginClicked() {
         viewModel.tracker?.engagement(.click(on: .conitnueWithoutLogginIn),
-                            in: trackerScreenID,
-                            additionalFields: [.uiVersion(viewModel.uiVersion)])
-        viewModel.tracker?.interaction(.close, with: trackerScreenID, additionalFields: [.uiVersion(viewModel.uiVersion)])
+                            in: trackerScreenID)
+        viewModel.tracker?.interaction(.close, with: trackerScreenID)
         viewModel.send(action: .clickedContinueWithoutLogin)
     }
     @objc func privacyPolicyClicked() {
         viewModel.tracker?.engagement(.click(on: .privacyPolicy),
-                            in: trackerScreenID,
-                            additionalFields: [.uiVersion(viewModel.uiVersion)])
+                            in: trackerScreenID)
         viewModel.send(action: .clickedClickPrivacyPolicy)
     }
 

@@ -107,32 +107,18 @@ extension SimplifiedLoginManager {
     /**
      Prepares and presents the Simplified Login View Controller modally. If a shared user session is found in the shared keychain this function will present a viewcontroller and then retains that shared user until requestSimplifiedLogin(...) is called again
      
-     - parameter clientName: optional client name visible in footer view of Simplified Login. If not provided CFBundleDisplayName is used by default
-     - parameter uiVersion: there are four defined version of Simplified Login overlay (prepared for tests)
      - parameter window: window used to present SimplifiedLoginViewController
      - parameter completion: callback that receives the UIViewController for Simplified Login or an error in case of failure
      */
-    public func requestSimplifiedLogin(_ clientName: String? = nil,
-                                       uiVersion: SimplifiedLoginUIVersion = .minimal,
-                                       window: UIWindow? = nil,
+    public func requestSimplifiedLogin(_ window: UIWindow? = nil,
                                        completion: @escaping (Result<Void, Error>) -> Void) {
-
-        guard let clientName = (clientName != nil) ? clientName! : Bundle.applicationName() else {
-            SchibstedAccountLogger.instance
-                .error("Please configure application display name or pass visibleClientName parameter")
-            completion(.failure(SimplifiedLoginError.noClientNameFound))
-            return
-        }
-
         self.fetcher.fetchData { result in
             switch result {
             case .success(let fetchedData):
                 DispatchQueue.main.async {
                     let keyWindow = (window != nil) ? window : KeyWindow.get()
                     let simplifiedLoginViewController =
-                    self.makeViewController(clientName,
-                                            uiVersion: uiVersion,
-                                            window: keyWindow,
+                    self.makeViewController(keyWindow,
                                             simplifiedLoginData: fetchedData)
 
                     if let visibleVC = keyWindow?.visibleViewController {
@@ -148,9 +134,7 @@ extension SimplifiedLoginManager {
         }
     }
 
-    func makeViewController(_ clientName: String,
-                            uiVersion: SimplifiedLoginUIVersion = .minimal,
-                            window: UIWindow? = nil,
+    func makeViewController(_ window: UIWindow? = nil,
                             simplifiedLoginData: SimplifiedLoginFetchedData) -> UIViewController {
         let viewController: UIViewController
         if #available(iOS 13.0, *) {
@@ -160,13 +144,11 @@ extension SimplifiedLoginManager {
                                      assertionFetcher: self.fetcher,
                                      userContext: simplifiedLoginData.context,
                                      userProfileResponse: simplifiedLoginData.profile,
-                                     clientName: clientName,
                                      window: window,
                                      withMFA: self.withMFA,
                                      loginHint: self.loginHint,
                                      extraScopeValues: self.extraScopeValues,
                                      withSSO: self.withSSO,
-                                     uiVersion: uiVersion,
                                      completion: self.completion)
         } else {
             viewController = SimplifiedLoginUIFactory
@@ -174,12 +156,10 @@ extension SimplifiedLoginManager {
                                      assertionFetcher: self.fetcher,
                                      userContext: simplifiedLoginData.context,
                                      userProfileResponse: simplifiedLoginData.profile,
-                                     clientName: clientName,
                                      window: window,
                                      withMFA: self.withMFA,
                                      loginHint: self.loginHint,
                                      extraScopeValues: self.extraScopeValues,
-                                     uiVersion: uiVersion,
                                      completion: self.completion)
         }
 

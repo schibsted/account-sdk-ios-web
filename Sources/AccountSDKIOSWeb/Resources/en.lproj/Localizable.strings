@@ -1,10 +1,7 @@
-"SimplifiedWidget.logInWithOneClick" = "Log in with one click";
-"SimplifiedWidget.loginIncentive" = "You are already logged in to one of\nSchibsted's services. Continue with one click.";
-"SimplifiedWidget.schibstedAccount" = "Schibsted account";
+"SimplifiedWidget.loginIncentive" = "You are already logged in to one of Schibsted's services. Continue with one click.";
 "SimplifiedWidget.continueAs" = "Continue as";
 "SimplifiedWidget.continueWithoutLogin" = "Continue without logging in";
-"SimplifiedWidget.footer" = "You are logged in to a service with a Schibsted account, and can continue on %@ with one click";
-"SimplifiedWidget.shortFooter" = "With a Schibsted account, you can log in to\n all Schibsted services.";
+"SimplifiedWidget.shortFooter" = "With a Schibsted account, you can log in to all Schibsted services.";
 "SimplifiedWidget.privacyPolicy" = "Privacy policy";
 "SimplifiedWidget.privacyPolicyLink" = "https://info.privacy.schibsted.com/privacy-and-cookie-policy-english-schibsted-norge/";
 "SimplifiedWidget.notYou" = "Not you?";

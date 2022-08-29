@@ -10,18 +10,15 @@ import SafariServices
 struct SimplifiedLoginUIFactory {
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
-    // swiftlint:disable function_parameter_count
     // swiftlint:disable function_body_length
     static func buildViewController(client: Client,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
-                                    clientName: String,
                                     window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
-                                    uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
         FontManager.registerFonts()
@@ -33,8 +30,6 @@ struct SimplifiedLoginUIFactory {
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel,
                                                  userDataModel: userDataModel,
                                                  localizationModel: localizationModel,
-                                                 visibleClientName: clientName,
-                                                 uiVersion: uiVersion,
                                                  tracker: client.tracker)
 
         let viewController = window?.visibleViewController
@@ -85,7 +80,6 @@ struct SimplifiedLoginUIFactory {
 
         return commonSetup(client: client,
                            viewModel: viewModel,
-                           uiVersion: uiVersion,
                            assertionFetcher: assertionFetcher,
                            completion: completion)
     }
@@ -97,13 +91,11 @@ struct SimplifiedLoginUIFactory {
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
                                     userProfileResponse: UserProfileResponse,
-                                    clientName: String,
                                     window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
-                                    uiVersion: SimplifiedLoginUIVersion,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
 
         FontManager.registerFonts()
@@ -116,8 +108,6 @@ struct SimplifiedLoginUIFactory {
             imageDataModel: imageDataModel,
             userDataModel: userDataModel,
             localizationModel: localizationModel,
-            visibleClientName: clientName,
-            uiVersion: uiVersion,
             tracker: client.tracker)
 
         let viewController = window?.visibleViewController
@@ -174,14 +164,12 @@ struct SimplifiedLoginUIFactory {
 
         return commonSetup(client: client,
                            viewModel: viewModel,
-                           uiVersion: uiVersion,
                            assertionFetcher: assertionFetcher,
                            completion: completion)
     }
 
     private static func commonSetup(client: Client,
                                     viewModel: SimplifiedLoginViewModel,
-                                    uiVersion: SimplifiedLoginUIVersion,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     completion: @escaping LoginResultHandler) -> UIViewController {
         let viewController = SimplifiedLoginViewController(viewModel: viewModel)

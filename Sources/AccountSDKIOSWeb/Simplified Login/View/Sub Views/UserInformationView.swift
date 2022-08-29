@@ -83,7 +83,7 @@ class UserInformationView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        isHidden = viewModel.shouldUseCombinedButtonView ? true : false
+        isHidden = false
         layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
 
         avatarView.addSubview(initialsLabel)
