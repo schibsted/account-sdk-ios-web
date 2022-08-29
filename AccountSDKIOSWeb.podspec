@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/AccountSDKIOSWeb/**/*.{h,m,swift}'
   s.resource_bundles = {'AccountSDKIOSWeb' => 'Sources/AccountSDKIOSWeb/Resources/**/*.{xcassets,ttf,strings}'}
   s.dependency 'JOSESwift', '~> 2.4.0'
-  s.dependency 'Logging', '~> 1.4.4'
+  s.dependency 'Logging', '~> 1.4.0'
 end
