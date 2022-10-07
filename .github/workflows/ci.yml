@@ -8,7 +8,7 @@ on:
 
 env:
   platform: 'iOS Simulator'
-  iOS: '16.0'
+  iOS: '15.2'
   device: 'iPhone 14'
   xcode-version: '14'
 
