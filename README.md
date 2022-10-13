@@ -18,8 +18,6 @@ To implement login with Schibsted account in your app, please first have a look 
 This will help you create a client and configure the necessary data.
 
 **Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see [getting started documentation](https://docs.schibsted.io/schibsted-account/gettingstarted/) for more help).
-
-**Note:** If you have implemented the [Old Schibsted SDK](https://github.com/schibsted/account-sdk-ios) in your app, and want these users to remain logged in, do not forget to add the SessionStorageConfig on instantiating your Client, `Client(configuration:sessionStorageConfig:httpClient:)`. The function `Client.resumeLastLoggedInUser(completion: @escaping (User?) -> Void)` will then handle upgrading the user old SDK credentials.
   
 ### Requirements
 

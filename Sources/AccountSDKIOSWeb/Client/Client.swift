@@ -8,33 +8,6 @@ import Foundation
 
 public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
 
-/// Configuration struct used for supporting migration from the old to the new SDK.
-public struct SessionStorageConfig {
-    let legacyClientId: String
-    let legacyClientSecret: String
-    let accessGroup: String?
-    let legacyAccessGroup: String?
-
-    /**
-     Initialize the SessionStorageConfig struct for given client IDs and access group.
-
-     - parameter legacyClientID: The clientID from old SDK.
-     - parameter legacyClientSecret: The client secret used in old SDK.
-     - parameter accessGroup: Optional prefered access group name in new SDK.
-     - parameter legacyAccessGroup: Optional access group name from old SDK.
-     
-     */
-    public init(legacyClientID: String,
-                legacyClientSecret: String,
-                accessGroup: String? = nil,
-                legacyAccessGroup: String? = nil) {
-        self.legacyClientId = legacyClientID
-        self.accessGroup = accessGroup
-        self.legacyAccessGroup = legacyAccessGroup
-        self.legacyClientSecret = legacyClientSecret
-    }
-}
-
 /// Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
 public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
@@ -88,73 +61,6 @@ public class Client: CustomStringConvertible {
         self.init(configuration: configuration,
                   sessionStorage: sessionKeychainStorage,
                   stateStorage: StateStorage(),
-                  httpClient: chttpClient,
-                  jwks: jwks,
-                  tokenHandler: tokenHandler,
-                  tracker: tracker)
-    }
-
-    /**
-     Initialize the Client to support migration from Legacy SchibstedAccount SDK to the new Schibsted account keychain storage using UserSession.
-
-     - parameter configuration: The ClientConfiguration instance.
-     - parameter appIdentifierPrefix: Optional AppIdentifierPrefix (Apple team ID). When provided, SDK switches to shared keychain and Simplified Login feature can be used. This value will overule the value of sessionStorageConfig.accessGroup.
-     - parameter sessionStorageConfig: The configuration struct used in migration process
-     - parameter tracker: The tracking event implementation that will be called at various spots
-     - parameter httpClient: Optional object performs to HTTPClient protocol. If not provided a default implementation is used.
-     
-     */
-    // swiftlint:disable function_body_length
-    public convenience init(configuration: ClientConfiguration,
-                            appIdentifierPrefix: String? = nil,
-                            sessionStorageConfig: SessionStorageConfig,
-                            tracker: TrackingEventsHandler? = nil,
-                            httpClient: HTTPClient? = nil) {
-
-        let chttpClient = httpClient ?? HTTPClientWithURLSession()
-
-        let legacySessionStorage = LegacyKeychainSessionStorage(accessGroup: sessionStorageConfig.legacyAccessGroup)
-        let newSessionStorage =  SharedKeychainSessionStorageFactory()
-            .makeKeychain(clientId: configuration.clientId,
-                          service: Client.keychainServiceName,
-                          accessGroup: sessionStorageConfig.accessGroup,
-                          appIdentifierPrefix: appIdentifierPrefix)
-
-        let legacyClientConfiguration = ClientConfiguration(env: configuration.env,
-                                                            serverURL: configuration.serverURL,
-                                                            sessionServiceURL: configuration.sessionServiceURL,
-                                                            clientId: sessionStorageConfig.legacyClientId,
-                                                            redirectURI: URL(string: "http://")!)
-        let jwks = RemoteJWKS(
-            jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
-            httpClient: chttpClient)
-        let tokenHandler = TokenHandler(configuration: configuration,
-                                        httpClient: chttpClient,
-                                        jwks: jwks)
-        let stateStorage = StateStorage()
-
-        // Initializing LegacyClient with all the same properties as regular client. Except for the configuration.
-        // MigratingKeychainCompatStorage needs a legacyClient. Client needs a MigratingKeychainCompatStorage. Untangle
-        let legacyClient = Client(configuration: legacyClientConfiguration,
-                                  sessionStorage: newSessionStorage,
-                                  stateStorage: stateStorage,
-                                  httpClient: chttpClient,
-                                  jwks: jwks,
-                                  tokenHandler: tokenHandler)
-        let makeTokenCallback = { authCode, authState, completion in
-            tokenHandler.makeTokenRequest(authCode: authCode,
-                                          authState: authState,
-                                          completion: completion)
-        }
-        let sessionStorage = MigratingKeychainCompatStorage(from: legacySessionStorage,
-                                                            to: newSessionStorage,
-                                                            legacyClient: legacyClient,
-                                                            legacyClientSecret: sessionStorageConfig.legacyClientSecret,
-                                                            makeTokenRequest: makeTokenCallback)
-
-        self.init(configuration: configuration,
-                  sessionStorage: sessionStorage,
-                  stateStorage: stateStorage,
                   httpClient: chttpClient,
                   jwks: jwks,
                   tokenHandler: tokenHandler,
