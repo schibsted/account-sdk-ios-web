@@ -207,7 +207,7 @@ let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xx
     let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
             print("Catch login result \(result)")
     }
-    manager.requestSimplifiedLogin("Your brand name visible on UI") { result in
+    manager.requestSimplifiedLogin() { result in
         switch (result) {
         case .success():
             print("success")
