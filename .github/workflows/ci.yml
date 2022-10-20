@@ -8,8 +8,8 @@ on:
 
 env:
   platform: 'iOS Simulator'
-  iOS: '15.2'
-  device: 'iPhone 13'
+  iOS: '16.0'
+  device: 'iPhone 14'
 
 jobs:
   build:
