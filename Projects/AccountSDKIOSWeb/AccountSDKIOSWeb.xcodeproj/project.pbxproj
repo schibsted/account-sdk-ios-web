@@ -111,6 +111,7 @@
 		CED92B7B272C15D800572645 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED92B7A272C15D800572645 /* MockURLProtocol.swift */; };
 		CEDC45DC27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */; };
 		CEDC45E027463D6C0060EDA2 /* SimplifiedLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */; };
+		CEDD4B0A290029240011695D /* MockURLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDD4B09290029240011695D /* MockURLSessionProtocol.swift */; };
 		CEE5182127CE24A700BD3559 /* TrackingEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */; };
 		CEE91D4927A8212500A71061 /* SchibstedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE91D4827A8212500A71061 /* SchibstedColor.swift */; };
 		CEFF10F0284E01E5006ABAB4 /* UIFont+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFF10EF284E01E5006ABAB4 /* UIFont+Custom.swift */; };
@@ -261,6 +262,7 @@
 		CED92B7A272C15D800572645 /* MockURLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		CEDC45DB27463BE90060EDA2 /* SimplifiedLoginUIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginUIFactory.swift; sourceTree = "<group>"; };
 		CEDC45DF27463D6B0060EDA2 /* SimplifiedLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplifiedLoginViewModel.swift; sourceTree = "<group>"; };
+		CEDD4B09290029240011695D /* MockURLSessionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLSessionProtocol.swift; sourceTree = "<group>"; };
 		CEE5182027CE24A700BD3559 /* TrackingEventsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingEventsHandler.swift; sourceTree = "<group>"; };
 		CEE91D4827A8212500A71061 /* SchibstedColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedColor.swift; sourceTree = "<group>"; };
 		CEFF10EF284E01E5006ABAB4 /* UIFont+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Custom.swift"; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 		CE699DCC2732A26A009EE30D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				CEDD4B09290029240011695D /* MockURLSessionProtocol.swift */,
 				CED92B7A272C15D800572645 /* MockURLProtocol.swift */,
 				CE699DCF2732A2CC009EE30D /* KeychainStorageMock.swift */,
 				244EAACF275A39A7008A1285 /* MockSessionStorageProtocol.swift */,
@@ -1199,6 +1202,7 @@
 				2473CBA02678AED60001B861 /* URLBuilderTests.swift in Sources */,
 				OBJ_256 /* StateStorageTests.swift in Sources */,
 				A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */,
+				CEDD4B0A290029240011695D /* MockURLSessionProtocol.swift in Sources */,
 				A95F1A2025826AED000D19F5 /* IdTokenClaimsTests.swift in Sources */,
 				OBJ_257 /* UserTests.swift in Sources */,
 				A95F1A1F25826AED000D19F5 /* IdTokenValidatorTests.swift in Sources */,
