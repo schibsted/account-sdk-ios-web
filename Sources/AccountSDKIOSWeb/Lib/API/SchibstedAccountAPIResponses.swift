@@ -30,6 +30,8 @@ public struct UserProfileResponse: Codable, Equatable {
     public var lastLoggedIn: String?
     public var locale: String?
     public var utcOffset: String?
+    public var mfaMethods: [MFAMethod]?
+    public var mfaEnabled: Bool?
 
     public var emailVerifiedDate: String? {
         return emailVerified?.value
@@ -122,6 +124,8 @@ public struct UserProfileResponse: Codable, Equatable {
         self.lastLoggedIn = try? keyedContainer.decode(String.self, forKey: .lastLoggedIn)
         self.locale = try? keyedContainer.decode(String.self, forKey: .locale)
         self.utcOffset = try? keyedContainer.decode(String.self, forKey: .utcOffset)
+        self.mfaEnabled = try? keyedContainer.decode(Bool.self, forKey: .mfaEnabled)
+        self.mfaMethods = try? keyedContainer.decode([MFAMethod].self, forKey: .mfaMethods)
 
         // Backend service could return empty dictionary as an array.
         if let addresses = try? keyedContainer.decodeIfPresent([String: Address].self, forKey: .addresses) {
@@ -135,6 +139,33 @@ public struct UserProfileResponse: Codable, Equatable {
         } else {
             self.accounts = [:]
         }
+    }
+}
+
+public enum MFAMethod: String, Codable {
+    case totp
+    case bankid
+    case sms
+
+    enum CodingKeys: CodingKey {
+        case type
+    }
+
+    enum Error: Swift.Error {
+        case unsupportedMFAMethod
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let method = MFAMethod(rawValue: try container.decode(String.self, forKey: .type)) else {
+            throw Error.unsupportedMFAMethod
+        }
+        self = method
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(rawValue, forKey: .type)
     }
 }
 
