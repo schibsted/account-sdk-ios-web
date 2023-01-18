@@ -35,6 +35,8 @@ public enum MFAType: Codable {
 }
 
 public enum PreEidType: String, Codable {
+    /// BankId verification - Finland
+    case fi = "eid-fi"
     /// BankId verification - Norway
     case no = "eid-no"
     /// BankId verification - Sweden
