@@ -37,5 +37,6 @@ identifier_name:
   excluded:
     - se
     - no
+    - fi
     - id
     - URL
