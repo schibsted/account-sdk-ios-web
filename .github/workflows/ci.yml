@@ -8,7 +8,7 @@ on:
 
 env:
   platform: 'iOS Simulator'
-  iOS: '16.0'
+  iOS: '16.2'
   device: 'iPhone 14'
 
 jobs:
