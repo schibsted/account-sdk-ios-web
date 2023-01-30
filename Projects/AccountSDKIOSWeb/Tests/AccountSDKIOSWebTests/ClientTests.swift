@@ -240,7 +240,7 @@ final class ClientTests: XCTestCase {
     
     func testAccountPagesURL() {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
-        XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/account/summary")
+        XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/profile-pages")
     }
     
     func testDidNotStartNewSessionBeforeFinishingOldOne() {

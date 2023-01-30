@@ -48,7 +48,7 @@ public struct ClientConfiguration {
      Generate URL for Schibsted account pages.
      */
     public var accountPagesURL: URL {
-        let url = serverURL.appendingPathComponent("/account/summary")
+        let url = serverURL.appendingPathComponent("/profile-pages")
         return url
     }
 
