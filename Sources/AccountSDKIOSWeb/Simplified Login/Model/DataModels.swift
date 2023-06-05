@@ -35,7 +35,7 @@ extension SimplifiedLoginNamedImageData {
         case .proNo:
             orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
         case .proFi:
-            orderedIconNames = ["Tori", "Oikotie", "Hintaopas", "Lendo", "Rakentaja"]
+            orderedIconNames = ["Tori", "Oikotie", "Qasa", "PodMe", "Rakentaja"]
         case .proDk:
             orderedIconNames = ["dba", "Bilbasen"]
         case .pre:
