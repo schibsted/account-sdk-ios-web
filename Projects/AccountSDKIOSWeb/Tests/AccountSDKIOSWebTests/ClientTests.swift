@@ -376,6 +376,21 @@ final class ClientTests: XCTestCase {
         }
         verify(mockSessionStorage, times(2)).store(any(), accessGroup: any(), completion: any())
     }
+    
+    func testGetExternalId() {
+        let client = Client(configuration: Fixtures.clientConfig,
+                            sessionStorage: MockSessionStorage(),
+                            stateStorage: StateStorage(storage: MockStorage()))
+        // value generated via : https://emn178.github.io/online-tools/sha256.html
+        let mockedHash = "e0b2b31df36848059b44ac0ee6784607b003a3688ac6bbdb196d8465bbc8b281"
+        let externalId = client.getExternalId(pairId: "pairId", externalParty: "externalParty", suffix: "optionalSuffix")
+        XCTAssertEqual(externalId, mockedHash)
+        
+        // value generated via : https://emn178.github.io/online-tools/sha256.html
+        let mockedHashWithoutSuffix = "386eb5f9c3e56843ff83e43fa3d69fc4c2b2072f8e8036332baefb04e96f28b9"
+        let externalIdWithoutSuffix = client.getExternalId(pairId: "pairId", externalParty: "externalParty")
+        XCTAssertEqual(externalIdWithoutSuffix, mockedHashWithoutSuffix)
+    }
 }
 
 fileprivate extension Client {

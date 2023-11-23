@@ -25,6 +25,7 @@ public struct ClientConfiguration {
         case proNo = "https://payment.schibsted.no"
         case pre = "https://identity-pre.schibsted.com"
         case proDk = "https://login.schibsted.dk"
+        case dev = "https://identity-dev.schibsted.com"
 
         var sessionService: String {
             let sessionServiceStr: String
@@ -39,6 +40,8 @@ public struct ClientConfiguration {
                 sessionServiceStr = "https://session-service.identity-pre.schibsted.com"
             case .proDk:
                 sessionServiceStr = "https://session-service.login.schibsted.dk"
+            case .dev:
+                sessionServiceStr = "https://session-service.identity-dev.schibsted.com"
             }
             return sessionServiceStr
         }

@@ -40,6 +40,8 @@ extension SimplifiedLoginNamedImageData {
             orderedIconNames = ["dba", "Bilbasen"]
         case .pre:
             orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
+        case .dev:
+            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
         }
         return orderedIconNames
     }
