@@ -121,7 +121,9 @@ final class SchibstedAccountAPIResponsesTests: XCTestCase {
             lastAuthenticated: "1970-01-01 00:00:00",
             lastLoggedIn: "1970-01-01 00:00:00",
             locale: "sv_SE",
-            utcOffset: "+02:00"
+            utcOffset: "+02:00",
+            pairId: "12345",
+            sdrn: "sdrn:schibsted:user:12345"
         )
         
         let parsed = try! JSONDecoder().decode(UserProfileResponse.self, from: jsonString.data(using: .utf8)!)

@@ -30,6 +30,8 @@ public struct UserProfileResponse: Codable, Equatable {
     public var lastLoggedIn: String?
     public var locale: String?
     public var utcOffset: String?
+    public var pairId: String?
+    public var sdrn: String?
 
     public var emailVerifiedDate: String? {
         return emailVerified?.value
@@ -70,7 +72,9 @@ public struct UserProfileResponse: Codable, Equatable {
         lastAuthenticated: String? = nil,
         lastLoggedIn: String? = nil,
         locale: String? = nil,
-        utcOffset: String? = nil
+        utcOffset: String? = nil,
+        pairId: String? = nil,
+        sdrn: String? = nil
     ) {
         self.uuid = uuid
         self.userId = userId
@@ -96,6 +100,8 @@ public struct UserProfileResponse: Codable, Equatable {
         self.lastLoggedIn = lastLoggedIn
         self.locale = locale
         self.utcOffset = utcOffset
+        self.pairId = pairId
+        self.sdrn = sdrn
     }
 
     public init(from decoder: Decoder) throws {
@@ -122,6 +128,8 @@ public struct UserProfileResponse: Codable, Equatable {
         self.lastLoggedIn = try? keyedContainer.decode(String.self, forKey: .lastLoggedIn)
         self.locale = try? keyedContainer.decode(String.self, forKey: .locale)
         self.utcOffset = try? keyedContainer.decode(String.self, forKey: .utcOffset)
+        self.pairId = try? keyedContainer.decode(String.self, forKey: .pairId)
+        self.sdrn = try? keyedContainer.decode(String.self, forKey: .sdrn)
 
         // Backend service could return empty dictionary as an array.
         if let addresses = try? keyedContainer.decodeIfPresent([String: Address].self, forKey: .addresses) {
