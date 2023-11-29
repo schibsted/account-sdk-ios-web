@@ -122,7 +122,7 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
 
 
 fileprivate func buildUserProfileResponse(givenName: String, familyName: String, displayName: String) -> UserData {
-    let userProfileResponse = UserProfileResponse(uuid: "uuid", userId: "12345", status: 0, email: nil, emailVerified: nil, emails: [], phoneNumber: "123456789", phoneNumberVerified: nil, phoneNumbers: [], displayName: "foo", name: Name(givenName: givenName, familyName: familyName, formatted: nil), addresses: [:], gender: nil, birthday: nil, accounts: [:], merchants: [], published: nil, verified: nil, updated: nil, passwordChanged: nil, lastAuthenticated: nil, lastLoggedIn: nil, locale: nil, utcOffset: nil)
+    let userProfileResponse = UserProfileResponse(uuid: "uuid", userId: "12345", status: 0, email: nil, emailVerified: nil, emails: [], phoneNumber: "123456789", phoneNumberVerified: nil, phoneNumbers: [], displayName: "foo", name: Name(givenName: givenName, familyName: familyName, formatted: nil), addresses: [:], gender: nil, birthday: nil, accounts: [:], merchants: [], published: nil, verified: nil, updated: nil, passwordChanged: nil, lastAuthenticated: nil, lastLoggedIn: nil, locale: nil, utcOffset: nil, pairId: nil, sdrn: nil)
     
     let context = UserContextFromTokenResponse(identifier: "foo", displayText: displayName, clientName: "bar")
     return UserData(userContext: context, userProfileResponse: userProfileResponse)

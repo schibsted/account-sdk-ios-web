@@ -390,6 +390,19 @@ extension Client {
         }
     }
 
+    /**
+     Gets an `externalId` identifiying user for a particular brand.
+     
+     - parameter pairId: New identifier returned from our back-end.
+     - parameter externalParty: Name of a 3rd-party integration
+     - parameter suffix: Optional if further categorisation is needed
+     */
+
+    public func getExternalId(pairId: String, externalParty: String, suffix: String = "") -> String? {
+        let stringToHash = suffix.isEmpty ? [pairId, externalParty] : [pairId, externalParty, suffix]
+        return stringToHash.joined(separator: ":").sha256Hexdigest()
+    }
+
     /// Client description containing clientId value.
     public var description: String {
         return "Client(\(configuration.clientId))"
