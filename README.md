@@ -14,10 +14,10 @@ API documentation can be found [here](https://schibsted.github.io/account-sdk-io
 ## Getting started
 
 To implement login with Schibsted account in your app, please first have a look at our
-[getting started documentation](https://docs.schibsted.io/schibsted-account/gettingstarted/).
+[documentation](https://docs.schibsted.io/schibsted-account/#best-practices).
 This will help you create a client and configure the necessary data.
 
-**Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see [getting started documentation](https://docs.schibsted.io/schibsted-account/gettingstarted/) for more help).
+**Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see the [mobile sdk's](https://docs.schibsted.io/schibsted-account/#schibsted-account-mobile-sdk-s) dedicated section for more help).
   
 ### Requirements
 
