@@ -75,6 +75,16 @@ class MyUserDelegate: UserDelegate {
 }
 ```
 
+#### ExternalId for TCF
+To support TCF consents exchange between native and WebView, we have added a new method to the SDK, which allows you to obtain an `externalId` for the consent sharing support.
+To get the `externalId`, you need to call the following method:
+
+```swift
+let externalId = client.getExternalId(pairId: String, externalParty: String, optionalSuffix: String = "")
+```
+
+`pairId` can be found under `UserProfileResponse.pairId` property.
+
 ### Notes on using custom URI schemes
 
 When using custom URI as redirect URI, the OS handles opening the app associated with the link instead of triggering the `ASWebAuthenticationSession` callback.
