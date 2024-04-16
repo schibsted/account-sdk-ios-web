@@ -24,9 +24,9 @@ internal struct AuthState: Codable {
 
 extension AuthState {
 
-    init(mfa: MFAType?) {
+    init(mfa: MFAType?, state: String?) {
 
-        let state = randomString(length: 10)
+        let state = state ?? randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
 
