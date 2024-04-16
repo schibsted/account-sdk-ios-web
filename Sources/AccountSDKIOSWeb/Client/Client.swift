@@ -331,12 +331,14 @@ extension Client {
     @available(iOS 13.0, *)
     public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
                                 withMFA: MFAType? = nil,
+                                state: String? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
 
         let session = createWebAuthenticationSession(withMFA: withMFA,
+                                                     state: state,
                                                      loginHint: loginHint,
                                                      extraScopeValues: extraScopeValues,
                                                      completion: completion)
