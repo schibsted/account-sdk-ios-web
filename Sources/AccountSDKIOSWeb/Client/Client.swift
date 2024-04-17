@@ -413,4 +413,10 @@ extension Client {
     public var description: String {
         return "Client(\(configuration.clientId))"
     }
+
+    /// Optional value for the current `state` stored in Client.
+    public var state: String? {
+        let authState: AuthState? = stateStorage.value(forKey: Client.authStateKey)
+        return authState?.state
+    }
 }

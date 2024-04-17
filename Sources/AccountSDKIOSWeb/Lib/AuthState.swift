@@ -24,8 +24,9 @@ internal struct AuthState: Codable {
 
 extension AuthState {
 
+    /// `AuthState` is initialised with `MFAType` and we also allow users to provide a custom `state`.
+    /// If `state` is `nil` it will be populated with a random string, since it is a required field.
     init(mfa: MFAType?, state: String?) {
-
         let state = state ?? randomString(length: 10)
         let nonce = randomString(length: 10)
         let codeVerifier = randomString(length: 60)
