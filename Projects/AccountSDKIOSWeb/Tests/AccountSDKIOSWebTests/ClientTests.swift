@@ -103,6 +103,7 @@ final class ClientTests: XCTestCase {
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
                 let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: tokenResponse.idToken!, idTokenClaims: Fixtures.idTokenClaims)
                 XCTAssertEqual(result, .success(User(client: client, tokens: expectedTokens)))
+                XCTAssertEqual(client.state, state)
                 done()
             }
         }

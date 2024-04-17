@@ -21,7 +21,8 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURLWithAssertion() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "assertion string", extraScopeValues: [])
-        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
+        let state = "extra state"
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: state))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -37,7 +38,7 @@ final class URLBuilderTests: XCTestCase {
         XCTAssertEqual(queryParams!["response_type"], "code")
         XCTAssertEqual(queryParams!["prompt"], "select_account")
         compareScope(queryParams!["scope"]!, Set(["openid", "offline_access"]))
-        XCTAssertNotNil(queryParams!["state"])
+        XCTAssertEqual(queryParams!["state"], state)
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])
         XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
@@ -48,7 +49,7 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURL() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
-        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -74,7 +75,7 @@ final class URLBuilderTests: XCTestCase {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
 
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: ["scope1", "scope2"])
-        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil))
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -99,7 +100,7 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURLWithMFAIncludesACRValues() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
-        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: .otp))
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: .otp, state: "extra state"))
         
         XCTAssertEqual(loginURL?.scheme, "https")
         XCTAssertEqual(loginURL?.host, "issuer.example.com")
@@ -117,7 +118,7 @@ final class URLBuilderTests: XCTestCase {
         XCTAssertEqual(queryParams!["redirect_uri"], Fixtures.clientConfig.redirectURI.absoluteString)
         XCTAssertEqual(queryParams!["response_type"], "code")
         compareScope(queryParams!["scope"]!, Set(["openid", "offline_access"]))
-        XCTAssertNotNil(queryParams!["state"])
+        XCTAssertEqual(queryParams!["state"], "extra state")
         XCTAssertNotNil(queryParams!["nonce"])
         XCTAssertNotNil(queryParams!["code_challenge"])
         XCTAssertEqual(queryParams!["code_challenge_method"], "S256")
