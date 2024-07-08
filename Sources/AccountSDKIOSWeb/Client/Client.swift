@@ -200,19 +200,17 @@ public class Client: CustomStringConvertible {
                               attempts: Int = 1,
                               completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
         func retry(_ attempts: Int) {
-            self.sessionStorage.store(userSession, accessGroup: nil) { result in
-                switch result {
-                case .success:
-                    completion(.success(userSession.userTokens))
-                case .failure(let error):
-                    if attempts > 0 {
-                        SchibstedAccountLogger.instance.info("Failed to store refreshed tokens. Trying again...")
-                        retry(attempts - 1)
-                    } else {
-                        SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
-                        self.tracker?.error(.refreshTokenError(.unexpectedError(error: error)), in: .noScreen)
-                        completion(.failure(.unexpectedError(error: error)))
-                    }
+            do {
+                try self.sessionStorage.store(userSession, accessGroup: nil)
+                completion(.success(userSession.userTokens))
+            } catch {
+                if attempts > 0 {
+                    SchibstedAccountLogger.instance.info("Failed to store refreshed tokens. Trying again...")
+                    retry(attempts - 1)
+                } else {
+                    SchibstedAccountLogger.instance.error("Failed to store refreshed tokens")
+                    self.tracker?.error(.refreshTokenError(.unexpectedError(error: error)), in: .noScreen)
+                    completion(.failure(.unexpectedError(error: error)))
                 }
             }
         }
@@ -226,16 +224,14 @@ public class Client: CustomStringConvertible {
             let userSession = UserSession(clientId: self.configuration.clientId,
                                           userTokens: tokenResult.userTokens,
                                           updatedAt: Date())
-            sessionStorage.store(userSession, accessGroup: nil) { output in
-                switch output {
-                case .success:
-                    let user = User(client: self, tokens: tokenResult.userTokens)
-                    completion(.success(user))
-                case .failure(let error):
-                    self.tracker?.error(.loginError(.unexpectedError(message: error.localizedDescription)),
-                                        in: .noScreen)
-                    completion(.failure(.unexpectedError(message: error.localizedDescription)))
-                }
+            do {
+                try sessionStorage.store(userSession, accessGroup: nil)
+                let user = User(client: self, tokens: tokenResult.userTokens)
+                completion(.success(user))
+            } catch {
+                self.tracker?.error(.loginError(.unexpectedError(message: error.localizedDescription)),
+                                    in: .noScreen)
+                completion(.failure(.unexpectedError(message: error.localizedDescription)))
             }
         case .failure(.tokenRequestError(.errorResponse(_, let body))):
             SchibstedAccountLogger.instance.error("Failed to obtain tokens: \(String(describing: body))")
@@ -281,15 +277,11 @@ extension Client {
      
      - parameter completion: The completion handler called when the resume request is complete.
      */
-    public func resumeLastLoggedInUser(completion: @escaping (User?) -> Void) {
-        sessionStorage.get(forClientId: configuration.clientId) { storedSession in
-            guard let session = storedSession else {
-                completion(nil)
-                return
-            }
-
-            completion(User(client: self, tokens: session.userTokens))
+    public func resumeLastLoggedInUser() -> User? {
+        guard let session = sessionStorage.get(forClientId: configuration.clientId) else {
+            return nil
         }
+        return User(client: self, tokens: session.userTokens)
     }
 
     /**

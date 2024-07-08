@@ -207,31 +207,23 @@ final class ClientTests: XCTestCase {
         let session = UserSession(clientId: Fixtures.clientConfig.clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.get(forClientId: Fixtures.clientConfig.clientId, completion: anyClosure()))
-                .then { clientID, completion in
-                    completion(session)
-                }
+            when(mock.get(forClientId: Fixtures.clientConfig.clientId)).thenReturn(session)
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        client.resumeLastLoggedInUser { user in
-            XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
-        }        
+        let user = client.resumeLastLoggedInUser()
+        XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
     }
 
     func testResumeLastLoggedInUserWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.get(forClientId: Fixtures.clientConfig.clientId, completion: anyClosure()))
-                .then { clientID, completion in
-                    completion(nil)
-                }
+            when(mock.get(forClientId: Fixtures.clientConfig.clientId)).thenReturn(nil)
         }
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
-        client.resumeLastLoggedInUser  { user in
-            XCTAssertNil(user)
-        }
+        let user = client.resumeLastLoggedInUser()
+        XCTAssertNil(user)
     }
 
     private func createIdToken(claims: IdTokenClaims) -> String {

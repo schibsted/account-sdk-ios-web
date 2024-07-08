@@ -196,7 +196,7 @@ This SDK implements the [best practices for user authentication via an OpenID Co
 
       **Note:** If the refresh token request fails, due to the refresh token itself having expired
       or been invalidated by the user, the SDK will log the user out.
-* Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage. This will be handled by once invoking `Client.resumeLastLoggedInUser(completion: @escaping (User?) -> Void)` upon app start.
+* Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage. This will be handled by once invoking `Client.resumeLastLoggedInUser()` upon app start.
 
 ## Simplified Login
 
