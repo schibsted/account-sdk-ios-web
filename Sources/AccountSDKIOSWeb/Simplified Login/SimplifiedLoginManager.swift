@@ -18,6 +18,7 @@ public final class SimplifiedLoginManager {
 
     // Properties for building SimplifiedLoginViewController
     let withMFA: MFAType?
+    let state: String?
     let loginHint: String?
     let extraScopeValues: Set<String>
     let completion: LoginResultHandler
@@ -35,6 +36,7 @@ public final class SimplifiedLoginManager {
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     convenience public init(client: Client,
                             withMFA: MFAType? = nil,
+                            state: String?,
                             loginHint: String? = nil,
                             extraScopeValues: Set<String> = [],
                             completion: @escaping LoginResultHandler) {
@@ -42,6 +44,7 @@ public final class SimplifiedLoginManager {
         let fetcher = SimplifiedLoginFetcher(client: client)
         self.init(client: client,
                   withMFA: withMFA,
+                  state: state,
                   loginHint: loginHint,
                   extraScopeValues: extraScopeValues,
                   fetcher: fetcher,
@@ -51,12 +54,14 @@ public final class SimplifiedLoginManager {
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     init(client: Client,
          withMFA: MFAType? = nil,
+         state: String? = nil,
          loginHint: String? = nil,
          extraScopeValues: Set<String> = [],
          fetcher: SimplifiedLoginFetching,
          completion: @escaping LoginResultHandler) {
         self.client = client
         self.withMFA = withMFA
+        self.state = state
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
         self.completion = completion
@@ -67,6 +72,7 @@ public final class SimplifiedLoginManager {
     convenience public init(client: Client,
                             contextProvider: ASWebAuthenticationPresentationContextProviding,
                             withMFA: MFAType? = nil,
+                            state: String? = nil,
                             loginHint: String? = nil,
                             extraScopeValues: Set<String> = [],
                             withSSO: Bool = true,
@@ -75,6 +81,7 @@ public final class SimplifiedLoginManager {
         self.init(client: client,
                   contextProvider: contextProvider,
                   withMFA: withMFA,
+                  state: state,
                   loginHint: loginHint,
                   extraScopeValues: extraScopeValues,
                   withSSO: withSSO,
@@ -86,6 +93,7 @@ public final class SimplifiedLoginManager {
     init(client: Client,
          contextProvider: ASWebAuthenticationPresentationContextProviding,
          withMFA: MFAType? = nil,
+         state: String? = nil,
          loginHint: String? = nil,
          extraScopeValues: Set<String> = [],
          withSSO: Bool = true,
@@ -93,6 +101,7 @@ public final class SimplifiedLoginManager {
          completion: @escaping LoginResultHandler) {
         self.client = client
         self.withMFA = withMFA
+        self.state = state
         self.loginHint = loginHint
         self.extraScopeValues = extraScopeValues
         self.completion = completion
@@ -146,6 +155,7 @@ extension SimplifiedLoginManager {
                                      userProfileResponse: simplifiedLoginData.profile,
                                      window: window,
                                      withMFA: self.withMFA,
+                                     state: self.state,
                                      loginHint: self.loginHint,
                                      extraScopeValues: self.extraScopeValues,
                                      withSSO: self.withSSO,
@@ -158,6 +168,7 @@ extension SimplifiedLoginManager {
                                      userProfileResponse: simplifiedLoginData.profile,
                                      window: window,
                                      withMFA: self.withMFA,
+                                     state: self.state,
                                      loginHint: self.loginHint,
                                      extraScopeValues: self.extraScopeValues,
                                      completion: self.completion)

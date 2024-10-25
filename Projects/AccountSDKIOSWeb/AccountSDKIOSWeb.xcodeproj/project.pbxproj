@@ -69,6 +69,16 @@
 		24EB1563267A2354002D9628 /* IdTokenClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB1557267A2350002D9628 /* IdTokenClaims.swift */; };
 		24EB156F267A2482002D9628 /* IdTokenValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EB156E267A2482002D9628 /* IdTokenValidator.swift */; };
 		595EA45F27BE8BA400492390 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595EA45E27BE8BA400492390 /* Synchronized.swift */; };
+		91A2A4D22B0E3D800013D5FD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */; };
+		91A2A4D32B0E3D800013D5FD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */; };
+		91A2A4D42B0E3D800013D5FD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */; };
+		91A2A4D52B0E3D800013D5FD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */; };
+		91A2A4D62B0E3D800013D5FD /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */; };
+		91A2A4D82B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */; };
+		91A2A4D92B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */; };
+		91A2A4DA2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */; };
+		91A2A4DB2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */; };
+		91A2A4DC2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */; };
 		A908307B25D287490065D1D9 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A908307A25D287490065D1D9 /* Logging */; };
 		A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */; };
 		A93EFCFE26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */; };
@@ -215,6 +225,8 @@
 		24EB1557267A2350002D9628 /* IdTokenClaims.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenClaims.swift; sourceTree = "<group>"; };
 		24EB156E267A2482002D9628 /* IdTokenValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdTokenValidator.swift; sourceTree = "<group>"; };
 		595EA45E27BE8BA400492390 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
+		91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		A93EFCD32630131F008200D1 /* SchibstedAccountAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPITests.swift; sourceTree = "<group>"; };
 		A93EFCFD26316CFB008200D1 /* SchibstedAccountAPIResponsesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchibstedAccountAPIResponsesTests.swift; sourceTree = "<group>"; };
 		A93EFD0526329A25008200D1 /* user-profile-response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "user-profile-response.json"; sourceTree = "<group>"; };
@@ -502,6 +514,7 @@
 		2489C97E26733A0800AA0A4C /* AccountSDKIOSWeb */ = {
 			isa = PBXGroup;
 			children = (
+				91A2A4D02B0E3D530013D5FD /* Extensions */,
 				CEE5181F27CE247F00BD3559 /* Tracking */,
 				CE5225CC2747D69A009E015E /* Resources */,
 				2401AD0A273D009C007C63A6 /* Simplified Login */,
@@ -600,6 +613,15 @@
 				CE998969270EFE0800CB9E95 /* KeychainStorageError.swift */,
 			);
 			path = Errors;
+			sourceTree = "<group>";
+		};
+		91A2A4D02B0E3D530013D5FD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				91A2A4D12B0E3D800013D5FD /* String+Extensions.swift */,
+				91A2A4D72B0E3DBC0013D5FD /* Data+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		A93EFCD2263012FC008200D1 /* API */ = {
@@ -1078,6 +1100,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9941FDA257523C400513EED /* ContentView.swift in Sources */,
+				91A2A4DC2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */,
+				91A2A4D62B0E3D800013D5FD /* String+Extensions.swift in Sources */,
 				A9941FD8257523C400513EED /* TestHostApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1086,6 +1110,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				91A2A4D82B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */,
+				91A2A4D22B0E3D800013D5FD /* String+Extensions.swift in Sources */,
 				CE699DD42732A8D4009EE30D /* KeychainTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1106,6 +1132,7 @@
 				24AE1A3E26A5972600865A68 /* HTTPURLResponse+Extensions.swift in Sources */,
 				24EB151F267A17A0002D9628 /* LoginStateError.swift in Sources */,
 				2489C9BE26733A0900AA0A4C /* HTTPClient.swift in Sources */,
+				91A2A4D32B0E3D800013D5FD /* String+Extensions.swift in Sources */,
 				24EB14952679DBB9002D9628 /* IdTokenValidationError.swift in Sources */,
 				CE3E9871277C9A7A00B2F403 /* UIWindow+VisibleVC.swift in Sources */,
 				2489C9C226733A0900AA0A4C /* RefreshTokenError.swift in Sources */,
@@ -1129,6 +1156,7 @@
 				2489C9B926733A0900AA0A4C /* URLExtensions.swift in Sources */,
 				2412D14F274BB714001F71A5 /* SimplifiedLoginManager.swift in Sources */,
 				24EB14702679D8C8002D9628 /* MFAType.swift in Sources */,
+				91A2A4D92B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */,
 				595EA45F27BE8BA400492390 /* Synchronized.swift in Sources */,
 				2489C9BC26733A0900AA0A4C /* RetryPolicy.swift in Sources */,
 				2472EA2F275E98C50037433D /* DataModels.swift in Sources */,
@@ -1168,6 +1196,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				91A2A4DA2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */,
+				91A2A4D42B0E3D800013D5FD /* String+Extensions.swift in Sources */,
 				2459C7A126735C41007A373B /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1181,6 +1211,7 @@
 				CE754A5727103071000F2EA9 /* GeneratedMocks.swift in Sources */,
 				OBJ_245 /* Await.swift in Sources */,
 				OBJ_246 /* ClientTests.swift in Sources */,
+				91A2A4DB2B0E3DBC0013D5FD /* Data+Extensions.swift in Sources */,
 				OBJ_247 /* Fixtures.swift in Sources */,
 				OBJ_249 /* HTTPUtilTests.swift in Sources */,
 				CED92B79272C086200572645 /* XCTestCaseWithMockHTTPClient.swift in Sources */,
@@ -1204,6 +1235,7 @@
 				A93EFCD42630131F008200D1 /* SchibstedAccountAPITests.swift in Sources */,
 				CEDD4B0A290029240011695D /* MockURLSessionProtocol.swift in Sources */,
 				A95F1A2025826AED000D19F5 /* IdTokenClaimsTests.swift in Sources */,
+				91A2A4D52B0E3D800013D5FD /* String+Extensions.swift in Sources */,
 				OBJ_257 /* UserTests.swift in Sources */,
 				A95F1A1F25826AED000D19F5 /* IdTokenValidatorTests.swift in Sources */,
 			);
@@ -1468,6 +1500,7 @@
 		OBJ_199 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1499,6 +1532,7 @@
 		OBJ_200 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

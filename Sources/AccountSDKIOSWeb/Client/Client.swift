@@ -94,8 +94,8 @@ public class Client: CustomStringConvertible {
     }
 
     /// The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter.
-    private func storeAuthState(withMFA: MFAType?) -> AuthState {
-        let authState = AuthState(mfa: withMFA)
+    private func storeAuthState(withMFA: MFAType?, state: String?) -> AuthState {
+        let authState = AuthState(mfa: withMFA, state: state)
 
         guard stateStorage.setValue(authState, forKey: Client.authStateKey) else {
             SchibstedAccountLogger.instance.error("Failed to store login state")
@@ -106,6 +106,7 @@ public class Client: CustomStringConvertible {
     }
 
     func createWebAuthenticationSession(withMFA: MFAType? = nil,
+                                        state: String? = nil,
                                         loginHint: String? = nil,
                                         assertion: String? = nil,
                                         extraScopeValues: Set<String> = [],
@@ -120,7 +121,7 @@ public class Client: CustomStringConvertible {
         isSessionInProgress = true
 
         let clientScheme = configuration.redirectURI.scheme
-        let authState = storeAuthState(withMFA: withMFA)
+        let authState = storeAuthState(withMFA: withMFA, state: state)
 
         let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint,
                                                           assertion: assertion,
@@ -295,6 +296,7 @@ extension Client {
      Gets an authentication web session. Only one session can be started at the time.
      
      - parameter withMFA: Optional MFA verification to prompt the user with.
+     - parameter state: Optional string that overrides `state` query item of loginURL, which is otherwise a random 10 character string.
      - parameter loginHint: Optional login hint string.
      - parameter extraScopeValues: Any additional scope values to request.
         By default `openid` and `offline_access` will always be included as scope values.
@@ -302,10 +304,12 @@ extension Client {
      - returns Web authentication session to start the login flow, or `nil` if the session has already been started.
      */
     public func getLoginSession(withMFA: MFAType? = nil,
+                                state: String? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
         return createWebAuthenticationSession(withMFA: withMFA,
+                                              state: state,
                                               loginHint: loginHint,
                                               extraScopeValues: extraScopeValues,
                                               completion: completion)
@@ -327,12 +331,14 @@ extension Client {
     @available(iOS 13.0, *)
     public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
                                 withMFA: MFAType? = nil,
+                                state: String? = nil,
                                 loginHint: String? = nil,
                                 extraScopeValues: Set<String> = [],
                                 withSSO: Bool = true,
                                 completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
 
         let session = createWebAuthenticationSession(withMFA: withMFA,
+                                                     state: state,
                                                      loginHint: loginHint,
                                                      extraScopeValues: extraScopeValues,
                                                      completion: completion)
@@ -390,8 +396,27 @@ extension Client {
         }
     }
 
+    /**
+     Gets an `externalId` identifiying user for a particular brand.
+     
+     - parameter pairId: New identifier returned from our back-end.
+     - parameter externalParty: Name of a 3rd-party integration
+     - parameter suffix: Optional if further categorisation is needed
+     */
+
+    public func getExternalId(pairId: String, externalParty: String, suffix: String = "") -> String? {
+        let stringToHash = suffix.isEmpty ? [pairId, externalParty] : [pairId, externalParty, suffix]
+        return stringToHash.joined(separator: ":").sha256Hexdigest()
+    }
+
     /// Client description containing clientId value.
     public var description: String {
         return "Client(\(configuration.clientId))"
+    }
+
+    /// Optional value for the current `state` stored in Client.
+    public var state: String? {
+        let authState: AuthState? = stateStorage.value(forKey: Client.authStateKey)
+        return authState?.state
     }
 }

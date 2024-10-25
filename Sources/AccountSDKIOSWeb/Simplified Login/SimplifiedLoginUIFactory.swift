@@ -17,6 +17,7 @@ struct SimplifiedLoginUIFactory {
                                     userProfileResponse: UserProfileResponse,
                                     window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
+                                    state: String? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
                                     completion: @escaping LoginResultHandler) -> UIViewController {
@@ -45,6 +46,7 @@ struct SimplifiedLoginUIFactory {
 
         viewModel.onClickedSwitchAccount = {
             viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
+                                                                          state: state,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
                                                                           completion: extendedCompletion)
@@ -57,6 +59,7 @@ struct SimplifiedLoginUIFactory {
                 case .success(let assertion):
                     DispatchQueue.main.async {
                         if let session = client.createWebAuthenticationSession(withMFA: nil,
+                                                                               state: nil,
                                                                                loginHint: nil,
                                                                                assertion: assertion.assertion,
                                                                                extraScopeValues: [],
@@ -93,6 +96,7 @@ struct SimplifiedLoginUIFactory {
                                     userProfileResponse: UserProfileResponse,
                                     window: UIWindow? = nil,
                                     withMFA: MFAType? = nil,
+                                    state: String? = nil,
                                     loginHint: String? = nil,
                                     extraScopeValues: Set<String> = [],
                                     withSSO: Bool = true,
@@ -125,6 +129,7 @@ struct SimplifiedLoginUIFactory {
             let context = ASWebAuthSessionContextProvider()
             viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
                                                                           withMFA: withMFA,
+                                                                          state: state,
                                                                           loginHint: loginHint,
                                                                           extraScopeValues: extraScopeValues,
                                                                           withSSO: withSSO,
@@ -138,6 +143,7 @@ struct SimplifiedLoginUIFactory {
                 case .success(let assertion):
                     DispatchQueue.main.async {
                         if let session = client.createWebAuthenticationSession(withMFA: nil,
+                                                                               state: nil,
                                                                                loginHint: nil,
                                                                                assertion: assertion.assertion,
                                                                                extraScopeValues: [],
