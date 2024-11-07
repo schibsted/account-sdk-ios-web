@@ -12,7 +12,7 @@ extension Client {
         case postTransfer(accessGroup: String?, completion: (Result<Void, Error>) -> Void)
         case clear
 
-        // swiftlint:disable nesting
+        // swiftlint:disable:next nesting
         public enum AppTransferError: Error {
             case userSessionNotFound
         }

@@ -27,7 +27,7 @@ public struct IdTokenClaims: Codable, Equatable {
    enum CodingKeys: String, CodingKey {
         case iss
         case sub
-       // swiftlint:disable identifier_name
+       // swiftlint:disable:next identifier_name
         case legacy_user_id
         case aud
         case exp
