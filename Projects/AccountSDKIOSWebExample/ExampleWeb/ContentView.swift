@@ -91,14 +91,13 @@ struct ContentView: View {
     }
     
     func resumeUser() {
-        client.resumeLastLoggedInUser() { user in
-            guard let user = user else {
-                print("User could not be resumed")
-                return
-            }
-            self.user = user
-            print("Resumed user")
+        let user = client.resumeLastLoggedInUser()
+        guard let user = user else {
+            print("User could not be resumed")
+            return
         }
+        self.user = user
+        print("Resumed user")
     }
     
     func trigger2faOtpFlow() {

@@ -10,7 +10,7 @@ import SafariServices
 struct SimplifiedLoginUIFactory {
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
-    // swiftlint:disable function_body_length
+    // swiftlint:disable:next function_body_length
     static func buildViewController(client: Client,
                                     assertionFetcher: SimplifiedLoginFetching,
                                     userContext: UserContextFromTokenResponse,
@@ -88,7 +88,7 @@ struct SimplifiedLoginUIFactory {
     }
 
     @available(iOS 13.0, *)
-    // swiftlint:disable function_parameter_count
+    // swiftlint:disable:next function_parameter_count function_body_length
     static func buildViewController(client: Client,
                                     contextProvider: ASWebAuthenticationPresentationContextProviding,
                                     assertionFetcher: SimplifiedLoginFetching,

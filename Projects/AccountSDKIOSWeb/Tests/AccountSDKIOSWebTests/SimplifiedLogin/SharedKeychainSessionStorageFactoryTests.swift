@@ -54,9 +54,9 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
         }
         let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
         stub(keychainSessionStorageMock) { mock in
-            when(mock.get(forClientId: "client_id", completion: anyClosure()))
-                .then { _, completion in
-                    completion(userSession)
+            when(mock.get(forClientId: "client_id"))
+                .then { _ in
+                    userSession
                 }
         }
         
@@ -65,7 +65,7 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
         XCTAssertIdentical(keychain, sharedKeychainSessionStorageMock)
         verify(sharedKeychainSessionStorageMock).checkEntitlements()
         verify(sharedKeychainSessionStorageMock).getAll()
-        verify(sharedKeychainSessionStorageMock, never()).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
+        verify(sharedKeychainSessionStorageMock, never()).store(any(), accessGroup: sharedAccessGroup)
     }
     
     func testReturnsSharedKeychainWithUpdatedAccessGroupForItem() {
@@ -75,19 +75,16 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
             when(mock.checkEntitlements()).then { _ in
                 return Data()
             }
-            when(mock.store(any(), accessGroup: sharedAccessGroup, completion: anyClosure()))
-                .then { _, _, completion in
-                    completion(.success())
-                }
+            when(mock.store(any(), accessGroup: sharedAccessGroup)).then { _ in }
             when(mock.getAll()).then { _ in
                 return []
             }
         }
         let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
         stub(keychainSessionStorageMock) { mock in
-            when(mock.get(forClientId: "client_id", completion: anyClosure()))
-                .then { _, completion in
-                    completion(userSession)
+            when(mock.get(forClientId: "client_id"))
+                .then { _ in
+                    userSession
                 }
             when(mock.remove(forClientId: "client_id")).thenDoNothing()
         }
@@ -96,8 +93,8 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
 
         XCTAssertIdentical(keychain, sharedKeychainSessionStorageMock)
         verify(sharedKeychainSessionStorageMock).checkEntitlements()
-        verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
-        verify(keychainSessionStorageMock).get(forClientId: "client_id", completion: anyClosure())
+        verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup)
+        verify(keychainSessionStorageMock).get(forClientId: "client_id")
         verify(keychainSessionStorageMock).remove(forClientId: "client_id")
     }
     
@@ -108,9 +105,9 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
             when(mock.checkEntitlements()).then { _ in
                 return Data()
             }
-            when(mock.store(any(), accessGroup: sharedAccessGroup, completion: anyClosure()))
-                .then { _, _, completion in
-                    completion(.failure(KeychainStorageError.operationError))
+            when(mock.store(any(), accessGroup: sharedAccessGroup))
+                .then { _ in
+                    throw KeychainStorageError.operationError
                 }
             when(mock.getAll()).then { _ in
                 return []
@@ -118,14 +115,14 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
         }
         let keychainSessionStorageMock = MockKeychainSessionStorage(service: "service_name", accessGroup: accessGroup)
         stub(keychainSessionStorageMock) { mock in
-            when(mock.get(forClientId: "client_id", completion: anyClosure()))
-                .then { _, completion in
-                    completion(userSession)
+            when(mock.get(forClientId: "client_id"))
+                .then { _ in
+                    userSession
                 }
             when(mock.remove(forClientId: "client_id")).thenDoNothing()
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure()))
-                .then { _, _, completion in
-                    completion(.success())
+            when(mock.store(any(), accessGroup: any()))
+                .then { _ in
+                    
                 }
         }
 
@@ -133,10 +130,10 @@ final class SharedKeychainSessionStorageFactoryTests: XCTestCase {
 
         XCTAssertIdentical(keychain, keychainSessionStorageMock)
         verify(sharedKeychainSessionStorageMock).checkEntitlements()
-        verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup, completion: anyClosure())
-        verify(keychainSessionStorageMock).get(forClientId: "client_id", completion: anyClosure())
+        verify(sharedKeychainSessionStorageMock).store(any(), accessGroup: sharedAccessGroup)
+        verify(keychainSessionStorageMock).get(forClientId: "client_id")
         verify(keychainSessionStorageMock).remove(forClientId: "client_id")
-        verify(keychainSessionStorageMock).store(any(), accessGroup: any(), completion: anyClosure())
+        verify(keychainSessionStorageMock).store(any(), accessGroup: any())
     }
     
 }

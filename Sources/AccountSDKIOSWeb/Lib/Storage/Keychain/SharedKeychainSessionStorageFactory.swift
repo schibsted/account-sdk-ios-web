@@ -10,7 +10,6 @@ struct SharedKeychainSessionStorageFactory {
     static let sharedKeychainGroup = "com.schibsted.simplifiedLogin"
     private var keychain: KeychainSessionStorage?
     private var sharedKeychain: KeychainSessionStorage?
-    private let dispatchSemaphore = DispatchSemaphore(value: 1)
 
     init(keychain: KeychainSessionStorage? = nil, sharedKeychain: KeychainSessionStorage? = nil) {
         self.keychain = keychain
@@ -54,29 +53,22 @@ struct SharedKeychainSessionStorageFactory {
         }
 
         // update accessGroup for clientId entry
-        var didMigrateKeychainToShared = false
-        keychain.get(forClientId: clientId) { userSession in
-            guard let userSession = userSession else {
-                didMigrateKeychainToShared = true
-                dispatchSemaphore.signal()
-                return
-            }
-            keychain.remove(forClientId: clientId)
-            sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup) { result in
-                switch result {
-                case .success:
-                    didMigrateKeychainToShared = true
-                    SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")
-                case .failure(let error):
-                    keychain.store(userSession, accessGroup: nil) { _ in } // roll back
-                    SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
-                }
-                dispatchSemaphore.signal()
-            }
+        let userSession = keychain.get(forClientId: clientId)
+        guard let userSession else {
+            return sharedKeychain
         }
 
-        dispatchSemaphore.wait()
+        keychain.remove(forClientId: clientId)
 
-        return didMigrateKeychainToShared ? sharedKeychain : keychain
+        do {
+            try sharedKeychain.store(userSession, accessGroup: sharedKeychainAccessGroup)
+            SchibstedAccountLogger.instance.debug("Session successfully migrated to a shared keychain")
+            return sharedKeychain
+        } catch {
+            try? keychain.store(userSession, accessGroup: nil) // roll back
+            SchibstedAccountLogger.instance.error("Cannot store data to shared keychain with error \(error.localizedDescription)")
+        }
+
+        return keychain
     }
 }

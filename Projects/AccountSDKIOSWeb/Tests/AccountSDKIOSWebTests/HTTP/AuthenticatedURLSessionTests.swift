@@ -9,7 +9,7 @@ import Cuckoo
 
 final class AccountSDKIOSWebTests: XCTestCaseWithMockHTTPClient {
     
-    let testURL = URL("http://www.example.com")
+    let testURL = URL(staticString: "http://www.example.com")
     let testConfig : URLSessionConfiguration = {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]

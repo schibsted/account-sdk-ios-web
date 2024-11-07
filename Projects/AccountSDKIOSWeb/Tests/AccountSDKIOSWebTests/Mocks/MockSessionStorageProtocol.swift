@@ -14,7 +14,7 @@ struct MockSessionStorageProtocol: SessionStorage {
         return sessions
     }
     
-    func store(_ value: UserSession, accessGroup: String?, completion: @escaping (Result<Void, Error>) -> Void) { }
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void) { }
+    func store(_ value: AccountSDKIOSWeb.UserSession, accessGroup: String?) throws { }
+    func get(forClientId: String) -> AccountSDKIOSWeb.UserSession? { return nil }
     func remove(forClientId: String) {}
 }

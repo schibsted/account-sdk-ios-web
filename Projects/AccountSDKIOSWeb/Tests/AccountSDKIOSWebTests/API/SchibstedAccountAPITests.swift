@@ -183,7 +183,7 @@ final class RequestBuilderTests: XCTestCase {
     // MARK: Session Service Request
     
     func testUserContextFromTokensRequestWrongURL() throws {
-        let sessionURL = URL("https://example.com")
+        let sessionURL = URL(staticString: "https://example.com")
         let expectedURL = sessionURL.appendingPathComponent("/bad/path")
 
         let sut = RequestBuilder.userContextFromToken
@@ -195,7 +195,7 @@ final class RequestBuilderTests: XCTestCase {
 
     func testCodeExchangeAsRequestExpectedURL() throws {
         let expectedClientId = "aString"
-        let baseURL = URL("https://example.com")
+        let baseURL = URL(staticString: "https://example.com")
         let expectedURL = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         
         let sut = RequestBuilder.codeExchange(clientId: expectedClientId)
@@ -205,7 +205,7 @@ final class RequestBuilderTests: XCTestCase {
     
     func testCodeExchangeAsRequestWrongURL() throws {
         let expectedClientId = "aString"
-        let baseURL = URL("https://example.com")
+        let baseURL = URL(staticString: "https://example.com")
         let expectedURL = baseURL.appendingPathComponent("/bad/path")
         
         let sut = RequestBuilder.codeExchange(clientId: expectedClientId)
@@ -216,7 +216,7 @@ final class RequestBuilderTests: XCTestCase {
     // MARK: OldSDKRefreshToken tests
     
     func testOldSDKRefreshTokenAsRequestExpectedURL() throws {
-        let baseURL = URL("https://example.com")
+        let baseURL = URL(staticString: "https://example.com")
         let expectedURL = baseURL.appendingPathComponent("/oauth/token")
         let expectedRefreshToken = "A refreshToken"
         
@@ -226,7 +226,7 @@ final class RequestBuilderTests: XCTestCase {
     }
     
     func testOldSDKRefreshTokenAsRequestWrongURL() throws {
-        let baseURL = URL("https://example.com")
+        let baseURL = URL(staticString: "https://example.com")
         let expectedURL = baseURL.appendingPathComponent("/bad/path")
         let expectedRefreshToken = "A refreshToken"
         
@@ -238,7 +238,7 @@ final class RequestBuilderTests: XCTestCase {
     // MARK: Session Service Request
     
     func testAssertionForSimplifiedLoginAsRequestExpectedURL() throws {
-        let baseURL = URL("https://example.com")
+        let baseURL = URL(staticString: "https://example.com")
         let expectedURL = baseURL.appendingPathComponent("/api/2/user/auth/token")
 
         let sut = RequestBuilder.assertionForSimplifiedLogin

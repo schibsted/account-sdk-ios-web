@@ -24,7 +24,7 @@ private class TestRetryPolicy: RetryPolicy {
 final class HTTPClientWithURLSessionTests: XCTestCase {
     
     func testDoesntRetrySuccessfulRequest() throws {
-        let request = URLRequest(url: URL("https://example.com"))
+        let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
         
         let urlResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: nil)
@@ -44,7 +44,7 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
     }
     
     func testRetriesFailedRequest() throws {
-        let request = URLRequest(url: URL("https://example.com"))
+        let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
         
         let failedRequestResult: (Data?, HTTPURLResponse?, Error?) = (nil, nil, URLError(.cannotConnectToHost))
@@ -66,7 +66,7 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
     }
     
     func testRetries5xxRequest() throws {
-        let request = URLRequest(url: URL("https://example.com"))
+        let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
         
         let failedUrlResponse = HTTPURLResponse(url: request.url!, statusCode: 502, httpVersion: "HTTP/1.1", headerFields: nil)
@@ -89,7 +89,7 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
     }
     
     func testDontRetryFailedRequestIfNoRetriesPolicy() throws {
-        let request = URLRequest(url: URL("https://example.com"))
+        let request = URLRequest(url: URL(staticString: "https://example.com"))
         
         let failureResults: [(Data?, HTTPURLResponse?, Error?)] = [
             (nil, nil, URLError(.cannotConnectToHost)),

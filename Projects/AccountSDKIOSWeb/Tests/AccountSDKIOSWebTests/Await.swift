@@ -5,7 +5,7 @@
 
 import XCTest
 
-extension XCTWaiter.Result: CustomStringConvertible {
+extension XCTWaiter.Result: @retroactive CustomStringConvertible {
     public var description: String {
         let state: String
         switch self {

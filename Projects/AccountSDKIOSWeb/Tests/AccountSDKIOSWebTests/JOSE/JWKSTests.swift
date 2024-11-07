@@ -21,7 +21,7 @@ private class DictionaryCache<V>: Cache<V> {
 }
 
 final class RemoteJWKSTests: XCTestCase {
-    private let jwksURI = URL("https://example.com/jwks")
+    private let jwksURI = URL(staticString: "https://example.com/jwks")
     private let testJWK = RSAPublicKey(modulus: "aaa", exponent: "bbb")
 
     func testGetKeyReturnsAlreadyCachedKey() {

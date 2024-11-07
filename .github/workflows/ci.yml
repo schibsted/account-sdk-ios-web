@@ -8,12 +8,12 @@ on:
 
 env:
   platform: 'iOS Simulator'
-  iOS: '17.0.1'
-  device: 'iPhone 15'
+  iOS: '18.1'
+  device: 'iPhone 16'
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: maxim-lobanov/setup-xcode@v1

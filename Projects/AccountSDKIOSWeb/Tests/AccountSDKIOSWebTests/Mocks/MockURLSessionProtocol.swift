@@ -7,7 +7,7 @@ import Foundation
 import XCTest
 @testable import AccountSDKIOSWeb
 
-private class FakeDataTask: URLSessionDataTask {
+private class FakeDataTask: URLSessionDataTask, @unchecked Sendable {
     private let completionHandler: () -> Void
     
     init(completionHandler: @escaping () -> Void) {
