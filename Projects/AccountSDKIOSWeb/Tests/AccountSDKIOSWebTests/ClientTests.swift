@@ -23,7 +23,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         
         Await.until { done in
-            client.handleAuthenticationResponse(url: URL("com.example://login?state=no-exist&code=123456")) { result in
+            client.handleAuthenticationResponse(url: URL(staticString: "com.example://login?state=no-exist&code=123456")) { result in
                 XCTAssertEqual(result, .failure(.unsolicitedResponse))
                 done()
             }
@@ -86,9 +86,7 @@ final class ClientTests: XCTestCase {
 
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
-                completion(.success())
-            }
+            when(mock.store(any(), accessGroup: any())).then {_ in }
         }
         let state = "testState"
         let mockStorage = MockStorage()
@@ -112,7 +110,7 @@ final class ClientTests: XCTestCase {
     func testHandleAuthenticationResponseHandlesTokenErrorResponse() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).thenDoNothing()
+            when(mock.store(any(), accessGroup: any())).thenDoNothing()
         }
         let state = "testState"
         let mockStorage = MockStorage()
@@ -196,7 +194,7 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         
         Await.until { done in
-            client.handleAuthenticationResponse(url: URL("com.example:/cancel")) { result in
+            client.handleAuthenticationResponse(url: URL(staticString: "com.example:/cancel")) { result in
                 XCTAssertEqual(result, .failure(.canceled))
                 done()
             }
@@ -269,9 +267,7 @@ final class ClientTests: XCTestCase {
         let mockSessionStorage = MockSessionStorage()
         
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
-                completion(.success())
-            }
+            when(mock.store(any(), accessGroup: any())).then {_ in }
         }
         let stateStorage = StateStorage(storage: MockStorage())
         
@@ -288,7 +284,7 @@ final class ClientTests: XCTestCase {
                 XCTFail("Unexprected error \(error.localizedDescription)")
             }
         }
-        verify(mockSessionStorage, times(1)).store(any(), accessGroup: any(), completion: any())
+        verify(mockSessionStorage, times(1)).store(any(), accessGroup: any())
     }
     
     func testRetryStoringToKeychainInCaseOfFailure() {
@@ -306,8 +302,8 @@ final class ClientTests: XCTestCase {
         let mockSessionStorage = MockSessionStorage()
         
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
-                completion(.failure(KeychainStorageError.operationError))
+            when(mock.store(any(), accessGroup: any())).then { _ in
+                throw KeychainStorageError.operationError
             }
         }
         let stateStorage = StateStorage(storage: MockStorage())
@@ -324,7 +320,7 @@ final class ClientTests: XCTestCase {
                 XCTAssertEqual(String(describing: error), "unexpectedError(error: AccountSDKIOSWeb.KeychainStorageError.operationError)")
             }
         }
-        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any(), completion: any())
+        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any())
     }
     
     func testSuccessfullSecondAttemptToStoreSessionTokens() {
@@ -343,12 +339,10 @@ final class ClientTests: XCTestCase {
         let mockSessionStorage = MockSessionStorage()
         
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then {_, _, completion in
+            when(mock.store(any(), accessGroup: any())).then {_ in
                 if isFirst {
                     isFirst = false
-                    completion(.failure(KeychainStorageError.operationError))
-                } else {
-                    completion(.success())
+                    throw KeychainStorageError.operationError
                 }
             }
         }
@@ -367,7 +361,7 @@ final class ClientTests: XCTestCase {
                 XCTFail("Unexprected error \(error.localizedDescription)")
             }
         }
-        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any(), completion: any())
+        verify(mockSessionStorage, times(2)).store(any(), accessGroup: any())
     }
     
     func testGetExternalId() {

@@ -100,9 +100,7 @@ final class UserTests: XCTestCase {
         }
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
-            when(mock.store(any(), accessGroup: any(), completion: anyClosure())).then { _, _, completion in
-                completion(.success())
-            }
+            when(mock.store(any(), accessGroup: any())).then { _ in }
         }
         
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient)
@@ -125,7 +123,7 @@ final class UserTests: XCTestCase {
                     verify(mockSessionStorage).store(ParameterMatcher<UserSession>{
                         $0.userTokens.accessToken == "newAccessToken" &&
                         $0.userTokens.refreshToken == "newRefreshToken"
-                    }, accessGroup: any(), completion: anyClosure())
+                    }, accessGroup: any())
                 default:
                     XCTFail("Unexpected result \(result)")
                 }
