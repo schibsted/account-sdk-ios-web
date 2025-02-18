@@ -31,15 +31,15 @@ extension SimplifiedLoginNamedImageData {
         let orderedIconNames: [String]
         switch env {
         case .proCom:
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"]
+            orderedIconNames = ["Aftonbladet", "SVD", "Omni", "PodMe", "TvNu"]
         case .proNo:
-            orderedIconNames = ["Finn", "VG", "Aftenposten", "E24", "BergensTidene"]
+            orderedIconNames = ["VG", "Aftenposten", "E24", "PodMe", "BergensTidene"]
         case .proFi:
-            orderedIconNames = ["Tori", "Oikotie", "Qasa", "PodMe", "Rakentaja"]
+            orderedIconNames = ["PodMe"]
         case .proDk:
             orderedIconNames = ["dba", "Bilbasen"]
         case .pre:
-            orderedIconNames = ["Blocket", "Aftonbladet", "SVD", "Omni", "TvNu"] // Swedish icons as default
+            orderedIconNames = ["Aftonbladet", "SVD", "Omni", "PodMe", "TvNu"] // Swedish icons as default
         }
         return orderedIconNames
     }
