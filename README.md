@@ -1,4 +1,4 @@
-# Schibsted account iOS SDK
+# Schibsted Account iOS SDK
 
 [![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web)
@@ -21,7 +21,7 @@ This will help you create a client and configure the necessary data.
   
 ### Requirements
 
-* iOS 12.0+
+* iOS 13.0+
 
 ### Installation
 
@@ -32,9 +32,11 @@ Swift Package Manager: `.package(url: "https://github.com/schibsted/account-sdk-
 #### Login user and fetch profile data
 
 ```swift
-let clientConfiguration = ClientConfiguration(environment: .pre,
-                                              clientId: clientId,
-                                              redirectURI: redirectURI)
+let clientConfiguration = ClientConfiguration(
+    environment: .pre,
+    clientId: clientId,
+    redirectURI: redirectURI
+)
 let client = Client(configuration: clientConfiguration) 
 let contextProvider = ASWebAuthSessionContextProvider()
 let asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, withSSO: true, completion: { result in
@@ -106,9 +108,11 @@ It results in the `ASWebAuthenticationSession` view not being closed properly, w
     ```
 2. Handle the response as an incoming URL, e.g. via your app's delegate `application(_:open:options:)`:
     ```swift
-    func application(_ application: UIApplication,
-                     open url: URL,
-                     options: [UIApplicationOpenURLOptionsKey : Any] = [:] ) -> Bool {
+    func application(
+        _ application: UIApplication,
+        open url: URL,
+        options: [UIApplicationOpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
         client.handleAuthenticationResponse(url: url) { result in
             DispatchQueue.main.async {
                 asWebAuthSession.cancel() // manually close the ASWebAuthenticationSession

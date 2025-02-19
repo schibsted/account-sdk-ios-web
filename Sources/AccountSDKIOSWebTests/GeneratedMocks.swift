@@ -1,7 +1,7 @@
 // MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Lib/API/SchibstedAccountAPI.swift at 2025-02-19 11:15:08 +0000
 
 //
-// Copyright © 2022 Schibsted.
+// Copyright © 2025 Schibsted.
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
@@ -267,7 +267,7 @@ import UIKit
 // MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift at 2025-02-19 11:15:08 +0000
 
 //
-// Copyright © 2022 Schibsted.
+// Copyright © 2025 Schibsted.
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
@@ -372,7 +372,7 @@ public class HTTPClientStub: HTTPClient {
 // MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift at 2025-02-19 11:15:08 +0000
 
 //
-// Copyright © 2022 Schibsted.
+// Copyright © 2025 Schibsted.
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
@@ -670,7 +670,7 @@ import Foundation
 // MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift at 2025-02-19 11:15:08 +0000
 
 //
-// Copyright © 2022 Schibsted.
+// Copyright © 2025 Schibsted.
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
@@ -937,7 +937,7 @@ import Security
 // MARK: - Mocks generated from file: Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift at 2025-02-19 11:15:08 +0000
 
 //
-// Copyright © 2022 Schibsted.
+// Copyright © 2025 Schibsted.
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
