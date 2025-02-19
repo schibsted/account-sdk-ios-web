@@ -218,7 +218,7 @@ extension User {
     /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
     final class TokenRefreshRequestHandler {
 
-        // swiftlint:disable nesting
+        // swiftlint:disable:next nesting
         private enum State {
             case isRefreshing
             case notRefreshing

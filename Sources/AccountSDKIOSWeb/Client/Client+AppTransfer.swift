@@ -12,7 +12,7 @@ extension Client {
         case postTransfer(accessGroup: String?, completion: (Result<Void, Error>) -> Void)
         case clear
 
-        // swiftlint:disable nesting
+        // swiftlint:disable:next nesting
         public enum AppTransferError: Error {
             case userSessionNotFound
         }
@@ -57,14 +57,12 @@ extension Client {
         do {
             let decodedTokenData = try JSONDecoder().decode(UserSession.self, from: tokenData)
             let keychain = KeychainSessionStorage(service: Client.keychainServiceName, accessGroup: accessGroup)
-            keychain.store(decodedTokenData) { result in
-                switch result {
-                case .success:
-                    Client.clearStoredUserOnDevice(key: key)
-                    completion(.success())
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            do {
+                try keychain.store(decodedTokenData)
+                Client.clearStoredUserOnDevice(key: key)
+                completion(.success())
+            } catch {
+                completion(.failure(error))
             }
         } catch {
             SchibstedAccountLogger.instance.info("Failed from to storeFromDeviceToKeychain: \(error.localizedDescription)")

@@ -7,7 +7,7 @@ import Foundation
 @testable import AccountSDKIOSWeb
 
 struct Fixtures {
-    static let clientConfig = ClientConfiguration(env: .pre, serverURL: URL(string: "https://issuer.example.com")!, sessionServiceURL: URL(string: "https://another.issuer.example.com")!, clientId: "client1", redirectURI: URL("com.example.client1://login"))
+    static let clientConfig = ClientConfiguration(env: .pre, serverURL: URL(staticString: "https://issuer.example.com"), sessionServiceURL: URL(staticString: "https://another.issuer.example.com"), clientId: "client1", redirectURI: URL(staticString: "com.example.client1://login"))
     static let idTokenClaims = IdTokenClaims(iss: clientConfig.issuer, sub: "userUuid", userId: "12345", aud: ["client1"], exp: Date().timeIntervalSince1970 + 3600, nonce: "testNonce", amr: nil)
     static let userTokens = UserTokens(accessToken: "accessToken", refreshToken: "refreshToken", idToken: "idToken", idTokenClaims: Fixtures.idTokenClaims)
     
@@ -43,9 +43,9 @@ struct TestResponse: Codable, Equatable {
 }
 
 extension URL {
-    init(_ string: StaticString) {
-        guard let url = URL(string: "\(string)") else {
-            preconditionFailure("Invalid static URL string: \(string)")
+    init(staticString: StaticString) {
+        guard let url = URL(string: "\(staticString)") else {
+            preconditionFailure("Invalid static URL string: \(staticString)")
         }
 
         self = url

@@ -16,32 +16,30 @@ internal class KeychainSessionStorage: SessionStorage {
         self.keychain = KeychainStorage(forService: service, accessGroup: accessGroup)
     }
 
-    func store(_ value: UserSession, accessGroup: String? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
+    func store(_ value: UserSession, accessGroup: String? = nil) throws {
         guard let tokenData = try? JSONEncoder().encode(value) else {
             SchibstedAccountLogger.instance.error("\(KeychainStorageError.itemEncodingError.localizedDescription)")
-            completion(.failure(KeychainStorageError.itemEncodingError))
-            return
+            throw KeychainStorageError.itemEncodingError
         }
         do {
             try keychain.setValue(tokenData, forAccount: value.clientId, accessGroup: accessGroup)
-            completion(.success())
         } catch {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
-            completion(.failure(error))
+            throw error
         }
     }
 
-    func get(forClientId: String, completion: @escaping (UserSession?) -> Void) {
+    func get(forClientId: String) -> UserSession? {
         do {
             if let data = try keychain.getValue(forAccount: forClientId) {
                 let tokenData = try JSONDecoder().decode(UserSession.self, from: data)
-                completion(tokenData)
+                return tokenData
             } else {
-                completion(nil)
+                return nil
             }
         } catch {
             SchibstedAccountLogger.instance.error("\(error.localizedDescription)")
-            completion(nil)
+            return nil
         }
     }
 

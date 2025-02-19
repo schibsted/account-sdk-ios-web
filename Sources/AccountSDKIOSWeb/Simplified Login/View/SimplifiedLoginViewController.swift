@@ -76,10 +76,6 @@ class SimplifiedLoginViewController: UIViewController {
         animateShowingOverlay()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-
     private func configureForIphone() {
         guard viewModel.isPhone else {
             return
@@ -152,7 +148,7 @@ class SimplifiedLoginViewController: UIViewController {
         footerStackView.privacyURLButton.addTarget(self, action: privacyPolicySelector, for: .touchUpInside)
     }
 
-    private func setupiPhoneConstraints() { // swiftlint:disable:this function_body_length
+    private func setupiPhoneConstraints() {
         let margin = view.layoutMarginsGuide
         let buttonWidth = continueButton.widthAnchor.constraint(equalToConstant: 343)
         buttonWidth.priority = .defaultLow

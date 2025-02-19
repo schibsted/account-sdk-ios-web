@@ -13,7 +13,7 @@ class APIRetryPolicy: RetryPolicy {
             if code >= 500 && code < 600 {
                 return true
             }
-        case .unexpectedError(underlying: _):
+        case .unexpectedError:
             // retry in case of intermittent connection problem
             return true
         case .noData:
