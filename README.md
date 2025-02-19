@@ -236,8 +236,6 @@ If you want to present Simplified Login UI on a specific UIWindow, you need to p
 The Account SDK does some internal tracking (mostly for the Simplified Login) and allows a `TrackingEventsHandler` to be set during the Client's initialization.
 To fulfill this, you can either implement it yourself or use one which is already implemented.
 
-**Internal**: There is an internal Schibsted Tracking implementation for the identity SDK available [here](https://github.schibsted.io/spt-identity/identity-sdk-ios-tracking) It integrates the latest Account SDK with the latest Pulse Tracking SDK for iOS.
-
 #### Localization
 
 Simplified Login comes with the following localization support:
