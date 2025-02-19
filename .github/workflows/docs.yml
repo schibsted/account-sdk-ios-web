@@ -7,15 +7,25 @@ on:
      
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up bundler
-        run: bundle install
+      
+      - name: Select Xcode Version
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      
       - name: Generate documentation
         run: |
-          bundle exec jazzy
+          bundle exec jazzy \
+            --swift-build-tool xcodebuild \
+            --build-tool-arguments -scheme,AccountSDKIOSWeb,-destination,'platform=iOS Simulator,name=iPhone 16,OS=18.1'
+      
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
