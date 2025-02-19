@@ -2,7 +2,12 @@ theme: apple
 min_acl: public
 skip_undocumented: true
 hide_documentation_coverage: true
+build_tool_arguments:
+  - "-scheme"
+  - "AccountSDKIOSWeb"
+  - "-destination"
+  - "platform=iOS Simulator,name=iPhone 16,OS=18.1"
 exclude:
   - Package.swift
-copyright: © 2025 Schibsted Media
+copyright: © 2025 Schibsted
 output: ./docs

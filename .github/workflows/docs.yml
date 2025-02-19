@@ -21,10 +21,7 @@ jobs:
           bundler-cache: true
       
       - name: Generate documentation
-        run: |
-          bundle exec jazzy \
-            --swift-build-tool xcodebuild \
-            --build-tool-arguments -scheme,AccountSDKIOSWeb,-destination,'platform=iOS Simulator,name=iPhone 16,OS=18.1'
+        run: bundle exec jazzy --swift-build-tool xcodebuild
       
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
