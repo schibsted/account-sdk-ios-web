@@ -11,16 +11,19 @@ struct SimplifiedLoginUIFactory {
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
     // swiftlint:disable:next function_body_length
-    static func buildViewController(client: Client,
-                                    assertionFetcher: SimplifiedLoginFetching,
-                                    userContext: UserContextFromTokenResponse,
-                                    userProfileResponse: UserProfileResponse,
-                                    window: UIWindow? = nil,
-                                    withMFA: MFAType? = nil,
-                                    state: String? = nil,
-                                    loginHint: String? = nil,
-                                    extraScopeValues: Set<String> = [],
-                                    completion: @escaping LoginResultHandler) -> UIViewController {
+    static func buildViewController(
+        client: Client,
+        assertionFetcher: SimplifiedLoginFetching,
+        userContext: UserContextFromTokenResponse,
+        userProfileResponse: UserProfileResponse,
+        window: UIWindow? = nil,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        completion: @escaping LoginResultHandler
+    ) -> UIViewController {
 
         FontManager.registerFonts()
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
@@ -45,11 +48,14 @@ struct SimplifiedLoginUIFactory {
         }
 
         viewModel.onClickedSwitchAccount = {
-            viewModel.asWebAuthenticationSession = client.getLoginSession(withMFA: withMFA,
-                                                                          state: state,
-                                                                          loginHint: loginHint,
-                                                                          extraScopeValues: extraScopeValues,
-                                                                          completion: extendedCompletion)
+            viewModel.asWebAuthenticationSession = client.getLoginSession(
+                withMFA: withMFA,
+                state: state,
+                loginHint: loginHint,
+                xDomainId: xDomainId,
+                extraScopeValues: extraScopeValues,
+                completion: extendedCompletion
+            )
             viewModel.asWebAuthenticationSession?.start()
         }
 
@@ -58,12 +64,15 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        if let session = client.createWebAuthenticationSession(withMFA: nil,
-                                                                               state: nil,
-                                                                               loginHint: nil,
-                                                                               assertion: assertion.assertion,
-                                                                               extraScopeValues: [],
-                                                                               completion: extendedCompletion) {
+                        if let session = client.createWebAuthenticationSession(
+                            withMFA: nil,
+                            state: nil,
+                            loginHint: nil,
+                            xDomainId: xDomainId,
+                            assertion: assertion.assertion,
+                            extraScopeValues: [],
+                            completion: extendedCompletion
+                        ) {
                             session.start()
                         } else {
                             SchibstedAccountLogger.instance.error("Could not start authentication session")
@@ -89,18 +98,21 @@ struct SimplifiedLoginUIFactory {
 
     @available(iOS 13.0, *)
     // swiftlint:disable:next function_parameter_count function_body_length
-    static func buildViewController(client: Client,
-                                    contextProvider: ASWebAuthenticationPresentationContextProviding,
-                                    assertionFetcher: SimplifiedLoginFetching,
-                                    userContext: UserContextFromTokenResponse,
-                                    userProfileResponse: UserProfileResponse,
-                                    window: UIWindow? = nil,
-                                    withMFA: MFAType? = nil,
-                                    state: String? = nil,
-                                    loginHint: String? = nil,
-                                    extraScopeValues: Set<String> = [],
-                                    withSSO: Bool = true,
-                                    completion: @escaping LoginResultHandler) -> UIViewController {
+    static func buildViewController(
+        client: Client,
+        contextProvider: ASWebAuthenticationPresentationContextProviding,
+        assertionFetcher: SimplifiedLoginFetching,
+        userContext: UserContextFromTokenResponse,
+        userProfileResponse: UserProfileResponse,
+        window: UIWindow? = nil,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        withSSO: Bool = true,
+        completion: @escaping LoginResultHandler
+    ) -> UIViewController {
 
         FontManager.registerFonts()
         let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
@@ -127,13 +139,16 @@ struct SimplifiedLoginUIFactory {
 
         viewModel.onClickedSwitchAccount = {
             let context = ASWebAuthSessionContextProvider()
-            viewModel.asWebAuthenticationSession = client.getLoginSession(contextProvider: context,
-                                                                          withMFA: withMFA,
-                                                                          state: state,
-                                                                          loginHint: loginHint,
-                                                                          extraScopeValues: extraScopeValues,
-                                                                          withSSO: withSSO,
-                                                                          completion: extendedCompletion)
+            viewModel.asWebAuthenticationSession = client.getLoginSession(
+                contextProvider: context,
+                withMFA: withMFA,
+                state: state,
+                loginHint: loginHint,
+                xDomainId: xDomainId,
+                extraScopeValues: extraScopeValues,
+                withSSO: withSSO,
+                completion: extendedCompletion
+            )
             viewModel.asWebAuthenticationSession?.start()
         }
 
@@ -142,12 +157,15 @@ struct SimplifiedLoginUIFactory {
                 switch result {
                 case .success(let assertion):
                     DispatchQueue.main.async {
-                        if let session = client.createWebAuthenticationSession(withMFA: nil,
-                                                                               state: nil,
-                                                                               loginHint: nil,
-                                                                               assertion: assertion.assertion,
-                                                                               extraScopeValues: [],
-                                                                               completion: extendedCompletion) {
+                        if let session = client.createWebAuthenticationSession(
+                            withMFA: nil,
+                            state: nil,
+                            loginHint: nil,
+                            xDomainId: nil,
+                            assertion: assertion.assertion,
+                            extraScopeValues: [],
+                            completion: extendedCompletion
+                        ) {
                             viewModel.asWebAuthenticationSession = session
                             session.presentationContextProvider = contextProvider
                             session.prefersEphemeralWebBrowserSession = true

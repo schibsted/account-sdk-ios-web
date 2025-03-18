@@ -105,13 +105,15 @@ public class Client: CustomStringConvertible {
         return authState
     }
 
-    func createWebAuthenticationSession(withMFA: MFAType? = nil,
-                                        state: String? = nil,
-                                        loginHint: String? = nil,
-                                        assertion: String? = nil,
-                                        extraScopeValues: Set<String> = [],
-                                        completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-
+    func createWebAuthenticationSession(
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        assertion: String? = nil,
+        extraScopeValues: Set<String> = [],
+        completion: @escaping LoginResultHandler
+    ) -> ASWebAuthenticationSession? {
         if isSessionInProgress {
             SchibstedAccountLogger.instance.info("Previous login flow still in progress")
             tracker?.error(.loginError(.previousSessionInProgress), in: .webBrowser)
@@ -123,19 +125,28 @@ public class Client: CustomStringConvertible {
         let clientScheme = configuration.redirectURI.scheme
         let authState = storeAuthState(withMFA: withMFA, state: state)
 
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: loginHint,
-                                                          assertion: assertion,
-                                                          extraScopeValues: extraScopeValues)
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: loginHint,
+            assertion: assertion,
+            extraScopeValues: extraScopeValues,
+            xDomainId: xDomainId
+        )
 
         guard let url = self.urlBuilder.loginURL(authRequest: authRequest, authState: authState) else {
             preconditionFailure("Couldn't create loginURL")
         }
 
-        tracker?.interaction(.open, with: .webBrowser,
-                             additionalFields: [.getLoginSession(withMFA),
-                                                .loginHint(loginHint),
-                                                .withAssertion((assertion != nil) ? true : false),
-                                                .extraScopeValues(extraScopeValues)])
+        tracker?.interaction(
+            .open,
+            with: .webBrowser,
+            additionalFields: [
+                .getLoginSession(withMFA),
+                .loginHint(loginHint),
+                .xDomainId(xDomainId),
+                .withAssertion(assertion != nil),
+                .extraScopeValues(extraScopeValues)
+            ]
+        )
 
         let session = ASWebAuthenticationSession(url: url, callbackURLScheme: clientScheme) { callbackURL, error in
             guard let url = callbackURL else {
@@ -295,16 +306,22 @@ extension Client {
      - parameter completion: The callback that receives the login result.
      - returns Web authentication session to start the login flow, or `nil` if the session has already been started.
      */
-    public func getLoginSession(withMFA: MFAType? = nil,
-                                state: String? = nil,
-                                loginHint: String? = nil,
-                                extraScopeValues: Set<String> = [],
-                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-        return createWebAuthenticationSession(withMFA: withMFA,
-                                              state: state,
-                                              loginHint: loginHint,
-                                              extraScopeValues: extraScopeValues,
-                                              completion: completion)
+    public func getLoginSession(
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        completion: @escaping LoginResultHandler
+    ) -> ASWebAuthenticationSession? {
+        createWebAuthenticationSession(
+            withMFA: withMFA,
+            state: state,
+            loginHint: loginHint,
+            xDomainId: xDomainId,
+            extraScopeValues: extraScopeValues,
+            completion: completion
+        )
     }
 
     /**
@@ -321,19 +338,24 @@ extension Client {
      - returns Web authentication session to start the login flow, or `nil` if the session has already been started.
      */
     @available(iOS 13.0, *)
-    public func getLoginSession(contextProvider: ASWebAuthenticationPresentationContextProviding,
-                                withMFA: MFAType? = nil,
-                                state: String? = nil,
-                                loginHint: String? = nil,
-                                extraScopeValues: Set<String> = [],
-                                withSSO: Bool = true,
-                                completion: @escaping LoginResultHandler) -> ASWebAuthenticationSession? {
-
-        let session = createWebAuthenticationSession(withMFA: withMFA,
-                                                     state: state,
-                                                     loginHint: loginHint,
-                                                     extraScopeValues: extraScopeValues,
-                                                     completion: completion)
+    public func getLoginSession(
+        contextProvider: ASWebAuthenticationPresentationContextProviding,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        withSSO: Bool = true,
+        completion: @escaping LoginResultHandler
+    ) -> ASWebAuthenticationSession? {
+        let session = createWebAuthenticationSession(
+            withMFA: withMFA,
+            state: state,
+            loginHint: loginHint,
+            xDomainId: xDomainId,
+            extraScopeValues: extraScopeValues,
+            completion: completion
+        )
         session?.presentationContextProvider = contextProvider
         session?.prefersEphemeralWebBrowserSession = !withSSO
 

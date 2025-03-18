@@ -11,5 +11,6 @@ extension URLBuilder {
         let loginHint: String?
         let assertion: String?
         let extraScopeValues: Set<String>
+        let xDomainId: UUID?
     }
 }
