@@ -27,7 +27,7 @@ struct URLBuilder {
 
         authRequest.loginHint.map { authRequestParams.append(URLQueryItem(name: "login_hint", value: $0)) }
         authRequest.assertion.map { authRequestParams.append(URLQueryItem(name: "assertion", value: $0)) }
-        authRequest.xDomainId.map { authRequestParams.append(URLQueryItem(name: "xDomainId", value: $0.uuidString)) }
+        authRequest.xDomainId.map { authRequestParams.append(URLQueryItem(name: "x_domain_id", value: $0.uuidString)) }
 
         if let mfa = authState.mfa {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
