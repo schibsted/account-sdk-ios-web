@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SimplifiedLoginManager Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/SimplifiedLoginManager" class="dashAnchor"></a>
+    <a title="SimplifiedLoginManager Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Index</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        <a href="../Classes.html">Classes</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        AccountSDKIOSWeb.SimplifiedLoginManager Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ASWebAuthSessionContextProvider.html">ASWebAuthSessionContextProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AuthenticatedURLSession.html">AuthenticatedURLSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client/AppTransfer.html">– AppTransfer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MulticastDelegate.html">MulticastDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SimplifiedLoginManager.html">SimplifiedLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SimplifiedLoginManager/SimplifiedLoginError.html">– SimplifiedLoginError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/User.html">User</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global%20Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global%20Variables.html#/s:16AccountSDKIOSWeb10sdkVersionSSvp">sdkVersion</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/HTTPError.html">HTTPError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/IdTokenValidationError.html">IdTokenValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LoginError.html">LoginError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LoginStateError.html">LoginStateError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MFAType.html">MFAType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PreEidType.html">PreEidType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RefreshTokenError.html">RefreshTokenError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SchibstedAccountLogger.html">SchibstedAccountLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SignatureValidationError.html">SignatureValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent.html">TrackingEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Screen.html">– Screen</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Interaction.html">– Interaction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/UIElement.html">– UIElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Engagement.html">– Engagement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/ErrorType.html">– ErrorType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/AdditionalField.html">– AdditionalField</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/AppKit">AppKit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Bundle.html">Bundle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/KeychainStorageError.html">KeychainStorageError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/UIWindow.html">UIWindow</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/HTTPClient.html">HTTPClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Identifier.html">Identifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RetryPolicy.html">RetryPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TrackingEventsHandler.html">TrackingEventsHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UserDelegate.html">UserDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UserProtocol.html">UserProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Account.html">Account</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Address.html">Address</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Address/AddressType.html">– AddressType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientConfiguration.html">ClientConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientConfiguration/Environment.html">– Environment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Email.html">Email</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/IdTokenClaims.html">IdTokenClaims</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Name.html">Name</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:16AccountSDKIOSWeb10OAuthErrorV">OAuthError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PhoneNumber.html">PhoneNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserProfileResponse.html">UserProfileResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserTokens.html">UserTokens</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:16AccountSDKIOSWeb17HTTPResultHandlera">HTTPResultHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SimplifiedLoginManager</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">SimplifiedLoginManager</span></code></pre>
+
+                </div>
+              </div>
+            
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC0cD5ErrorO"></a>
+                    <a name="//apple_ref/swift/Enum/SimplifiedLoginError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC0cD5ErrorO">SimplifiedLoginError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="../Classes/SimplifiedLoginManager/SimplifiedLoginError.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SimplifiedLoginError</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client7withMFA5state9loginHint16extraScopeValues10completionAcA6ClientC_AA7MFATypeOSgSSSgAOShySSGys6ResultOyAA4UserCAA0D5ErrorOGctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(client:withMFA:state:loginHint:extraScopeValues:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client7withMFA5state9loginHint16extraScopeValues10completionAcA6ClientC_AA7MFATypeOSgSSSgAOShySSGys6ResultOyAA4UserCAA0D5ErrorOGctcfc">init(client:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>extraScopeValues:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/Client.html">Client</a></span><span class="p">,</span>
+                        <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                        <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+                        <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                        <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
+                        <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgARShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(client:contextProvider:withMFA:state:loginHint:extraScopeValues:withSSO:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgARShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc">init(client:<wbr>contextProvider:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>extraScopeValues:<wbr>withSSO:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/Client.html">Client</a></span><span class="p">,</span>
+                        <span class="nv">contextProvider</span><span class="p">:</span> <span class="kt">ASWebAuthenticationPresentationContextProviding</span><span class="p">,</span>
+                        <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                        <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                        <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                        <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
+                        <span class="nv">withSSO</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+                        <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC07requestcD0_10completionySo8UIWindowCSg_ys6ResultOyyts5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/requestSimplifiedLogin(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC07requestcD0_10completionySo8UIWindowCSg_ys6ResultOyyts5Error_pGctF">requestSimplifiedLogin(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Prepares and presents the Simplified Login View Controller modally. If a shared user session is found in the shared keychain this function will present a viewcontroller and then retains that shared user until requestSimplifiedLogin(&hellip;) is called again</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestSimplifiedLogin</span><span class="p">(</span><span class="n">_</span> <span class="nv">window</span><span class="p">:</span> <span class="kt">UIWindow</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                                   <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Void</span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>window</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>window used to present SimplifiedLoginViewController</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>callback that receives the UIViewController for Simplified Login or an error in case of failure</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2025 Schibsted</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

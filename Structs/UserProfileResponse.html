@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>UserProfileResponse Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/UserProfileResponse" class="dashAnchor"></a>
+    <a title="UserProfileResponse Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Index</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        <a href="../Structs.html">Structures</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        AccountSDKIOSWeb.UserProfileResponse Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ASWebAuthSessionContextProvider.html">ASWebAuthSessionContextProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AuthenticatedURLSession.html">AuthenticatedURLSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Client/AppTransfer.html">– AppTransfer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MulticastDelegate.html">MulticastDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SimplifiedLoginManager.html">SimplifiedLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SimplifiedLoginManager/SimplifiedLoginError.html">– SimplifiedLoginError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/User.html">User</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global%20Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global%20Variables.html#/s:16AccountSDKIOSWeb10sdkVersionSSvp">sdkVersion</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/HTTPError.html">HTTPError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/IdTokenValidationError.html">IdTokenValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LoginError.html">LoginError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LoginStateError.html">LoginStateError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MFAType.html">MFAType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PreEidType.html">PreEidType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RefreshTokenError.html">RefreshTokenError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SchibstedAccountLogger.html">SchibstedAccountLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SignatureValidationError.html">SignatureValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent.html">TrackingEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Screen.html">– Screen</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Interaction.html">– Interaction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/UIElement.html">– UIElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/Engagement.html">– Engagement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/ErrorType.html">– ErrorType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TrackingEvent/AdditionalField.html">– AdditionalField</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/AppKit">AppKit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Bundle.html">Bundle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/KeychainStorageError.html">KeychainStorageError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/UIWindow.html">UIWindow</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/HTTPClient.html">HTTPClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Identifier.html">Identifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RetryPolicy.html">RetryPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TrackingEventsHandler.html">TrackingEventsHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UserDelegate.html">UserDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UserProtocol.html">UserProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Account.html">Account</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Address.html">Address</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Address/AddressType.html">– AddressType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientConfiguration.html">ClientConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientConfiguration/Environment.html">– Environment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Email.html">Email</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/IdTokenClaims.html">IdTokenClaims</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Name.html">Name</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:16AccountSDKIOSWeb10OAuthErrorV">OAuthError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PhoneNumber.html">PhoneNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserProfileResponse.html">UserProfileResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserTokens.html">UserTokens</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:16AccountSDKIOSWeb17HTTPResultHandlera">HTTPResultHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>UserProfileResponse</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UserProfileResponse</span> <span class="p">:</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+
+                </div>
+              </div>
+            
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV4uuidSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/uuid" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV4uuidSSSgvp">uuid</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6userIdSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/userId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6userIdSSSgvp">userId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6statusSiSgvp"></a>
+                    <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6statusSiSgvp">status</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV5emailSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/email" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV5emailSSSgvp">email</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6emailsSayAA5EmailVGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/emails" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6emailsSayAA5EmailVGSgvp">emails</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">emails</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Email.html">Email</a></span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV11phoneNumberSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/phoneNumber" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV11phoneNumberSSSgvp">phoneNumber</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">phoneNumber</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV12phoneNumbersSayAA11PhoneNumberVGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/phoneNumbers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV12phoneNumbersSayAA11PhoneNumberVGSgvp">phoneNumbers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">phoneNumbers</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/PhoneNumber.html">PhoneNumber</a></span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV11displayNameSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/displayName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV11displayNameSSSgvp">displayName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">displayName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV4nameAA4NameVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV4nameAA4NameVSgvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt"><a href="../Structs/Name.html">Name</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV9addressesSDySSAA7AddressVGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/addresses" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV9addressesSDySSAA7AddressVGSgvp">addresses</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">addresses</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Address.html">Address</a></span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6genderSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/gender" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6genderSSSgvp">gender</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">gender</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV8accountsSDySSAA0A0VGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/accounts" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV8accountsSDySSAA0A0VGSgvp">accounts</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accounts</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Account.html">Account</a></span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV9merchantsSaySiGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/merchants" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV9merchantsSaySiGSgvp">merchants</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">merchants</span><span class="p">:</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV9publishedSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/published" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV9publishedSSSgvp">published</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">published</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV8verifiedSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/verified" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV8verifiedSSSgvp">verified</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">verified</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV7updatedSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/updated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV7updatedSSSgvp">updated</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">updated</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV15passwordChangedSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/passwordChanged" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV15passwordChangedSSSgvp">passwordChanged</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">passwordChanged</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV17lastAuthenticatedSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/lastAuthenticated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV17lastAuthenticatedSSSgvp">lastAuthenticated</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lastAuthenticated</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV12lastLoggedInSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/lastLoggedIn" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV12lastLoggedInSSSgvp">lastLoggedIn</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lastLoggedIn</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6localeSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/locale" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6localeSSSgvp">locale</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">locale</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV9utcOffsetSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/utcOffset" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV9utcOffsetSSSgvp">utcOffset</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">utcOffset</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV6pairIdSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/pairId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV6pairIdSSSgvp">pairId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pairId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV4sdrnSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/sdrn" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV4sdrnSSSgvp">sdrn</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sdrn</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV17emailVerifiedDateSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/emailVerifiedDate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV17emailVerifiedDateSSSgvp">emailVerifiedDate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">emailVerifiedDate</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV23phoneNumberVerifiedDateSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/phoneNumberVerifiedDate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV23phoneNumberVerifiedDateSSSgvp">phoneNumberVerifiedDate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">phoneNumberVerifiedDate</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16AccountSDKIOSWeb19UserProfileResponseV9birthdateSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/birthdate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb19UserProfileResponseV9birthdateSSSgvp">birthdate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">birthdate</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:Se4fromxs7Decoder_p_tKcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:Se4fromxs7Decoder_p_tKcfc">init(from:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">from</span> <span class="nv">decoder</span><span class="p">:</span> <span class="kt">Decoder</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2025 Schibsted</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>
