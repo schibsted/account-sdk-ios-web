@@ -36,7 +36,7 @@ final class URLBuilderTests: XCTestCase {
             result[item.name] = item.value
         }
 
-        XCTAssertEqual(queryParams!["xDomainId"], xDomainId.uuidString)
+        XCTAssertEqual(queryParams!["x_domain_id"], xDomainId.uuidString)
     }
 
     func testLoginURLWithAssertion() {
