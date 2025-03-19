@@ -304,9 +304,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgARShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(client:contextProvider:withMFA:state:loginHint:extraScopeValues:withSSO:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgARShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc">init(client:<wbr>contextProvider:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>extraScopeValues:<wbr>withSSO:<wbr>completion:<wbr>)</a>
+                    <a name="/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint9xDomainId16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgAS10Foundation4UUIDVSgShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(client:contextProvider:withMFA:state:loginHint:xDomainId:extraScopeValues:withSSO:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb22SimplifiedLoginManagerC6client15contextProvider7withMFA5state9loginHint9xDomainId16extraScopeValues0I3SSO10completionAcA6ClientC_So47ASWebAuthenticationPresentationContextProviding_pAA7MFATypeOSgSSSgAS10Foundation4UUIDVSgShySSGSbys6ResultOyAA4UserCAA0D5ErrorOGctcfc">init(client:<wbr>contextProvider:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>xDomainId:<wbr>extraScopeValues:<wbr>withSSO:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -320,14 +320,17 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/Client.html">Client</a></span><span class="p">,</span>
-                        <span class="nv">contextProvider</span><span class="p">:</span> <span class="kt">ASWebAuthenticationPresentationContextProviding</span><span class="p">,</span>
-                        <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                        <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                        <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                        <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
-                        <span class="nv">withSSO</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-                        <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/Client.html">Client</a></span><span class="p">,</span>
+    <span class="nv">contextProvider</span><span class="p">:</span> <span class="kt">ASWebAuthenticationPresentationContextProviding</span><span class="p">,</span>
+    <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">xDomainId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">withSSO</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>

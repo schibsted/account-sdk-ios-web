@@ -418,9 +418,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16AccountSDKIOSWeb6ClientC15getLoginSession7withMFA5state9loginHint16extraScopeValues10completionSo019ASWebAuthenticationF0CSgAA7MFATypeOSg_SSSgAPShySSGys6ResultOyAA4UserCAA0E5ErrorOGctF"></a>
-                    <a name="//apple_ref/swift/Method/getLoginSession(withMFA:state:loginHint:extraScopeValues:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16AccountSDKIOSWeb6ClientC15getLoginSession7withMFA5state9loginHint16extraScopeValues10completionSo019ASWebAuthenticationF0CSgAA7MFATypeOSg_SSSgAPShySSGys6ResultOyAA4UserCAA0E5ErrorOGctF">getLoginSession(withMFA:<wbr>state:<wbr>loginHint:<wbr>extraScopeValues:<wbr>completion:<wbr>)</a>
+                    <a name="/s:16AccountSDKIOSWeb6ClientC15getLoginSession7withMFA5state9loginHint9xDomainId16extraScopeValues10completionSo019ASWebAuthenticationF0CSgAA7MFATypeOSg_SSSgAQ10Foundation4UUIDVSgShySSGys6ResultOyAA4UserCAA0E5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/getLoginSession(withMFA:state:loginHint:xDomainId:extraScopeValues:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb6ClientC15getLoginSession7withMFA5state9loginHint9xDomainId16extraScopeValues10completionSo019ASWebAuthenticationF0CSgAA7MFATypeOSg_SSSgAQ10Foundation4UUIDVSgShySSGys6ResultOyAA4UserCAA0E5ErrorOGctF">getLoginSession(withMFA:<wbr>state:<wbr>loginHint:<wbr>xDomainId:<wbr>extraScopeValues:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -435,11 +435,14 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getLoginSession</span><span class="p">(</span><span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
-                            <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ASWebAuthenticationSession</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getLoginSession</span><span class="p">(</span>
+    <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">xDomainId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ASWebAuthenticationSession</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -517,9 +520,9 @@ By default <code>openid</code> and <code>offline_access</code> will always be in
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16AccountSDKIOSWeb6ClientC15getLoginSession15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionSo019ASWebAuthenticationF0CSgSo0sT28PresentationContextProviding_p_AA7MFATypeOSgSSSgASShySSGSbys6ResultOyAA4UserCAA0E5ErrorOGctF"></a>
-                    <a name="//apple_ref/swift/Method/getLoginSession(contextProvider:withMFA:state:loginHint:extraScopeValues:withSSO:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16AccountSDKIOSWeb6ClientC15getLoginSession15contextProvider7withMFA5state9loginHint16extraScopeValues0I3SSO10completionSo019ASWebAuthenticationF0CSgSo0sT28PresentationContextProviding_p_AA7MFATypeOSgSSSgASShySSGSbys6ResultOyAA4UserCAA0E5ErrorOGctF">getLoginSession(contextProvider:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>extraScopeValues:<wbr>withSSO:<wbr>completion:<wbr>)</a>
+                    <a name="/s:16AccountSDKIOSWeb6ClientC15getLoginSession15contextProvider7withMFA5state9loginHint9xDomainId16extraScopeValues0I3SSO10completionSo019ASWebAuthenticationF0CSgSo0uV28PresentationContextProviding_p_AA7MFATypeOSgSSSgAT10Foundation4UUIDVSgShySSGSbys6ResultOyAA4UserCAA0E5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/getLoginSession(contextProvider:withMFA:state:loginHint:xDomainId:extraScopeValues:withSSO:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16AccountSDKIOSWeb6ClientC15getLoginSession15contextProvider7withMFA5state9loginHint9xDomainId16extraScopeValues0I3SSO10completionSo019ASWebAuthenticationF0CSgSo0uV28PresentationContextProviding_p_AA7MFATypeOSgSSSgAT10Foundation4UUIDVSgShySSGSbys6ResultOyAA4UserCAA0E5ErrorOGctF">getLoginSession(contextProvider:<wbr>withMFA:<wbr>state:<wbr>loginHint:<wbr>xDomainId:<wbr>extraScopeValues:<wbr>withSSO:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -537,13 +540,16 @@ By default <code>openid</code> and <code>offline_access</code> will always be in
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="n">iOS</span> <span class="mf">13.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
-<span class="kd">public</span> <span class="kd">func</span> <span class="nf">getLoginSession</span><span class="p">(</span><span class="nv">contextProvider</span><span class="p">:</span> <span class="kt">ASWebAuthenticationPresentationContextProviding</span><span class="p">,</span>
-                            <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-                            <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
-                            <span class="nv">withSSO</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ASWebAuthenticationSession</span><span class="p">?</span></code></pre>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">getLoginSession</span><span class="p">(</span>
+    <span class="nv">contextProvider</span><span class="p">:</span> <span class="kt">ASWebAuthenticationPresentationContextProviding</span><span class="p">,</span>
+    <span class="nv">withMFA</span><span class="p">:</span> <span class="kt"><a href="../Enums/MFAType.html">MFAType</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">loginHint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">xDomainId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">extraScopeValues</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">withSSO</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:16AccountSDKIOSWeb18LoginResultHandlera">LoginResultHandler</a></span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ASWebAuthenticationSession</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
