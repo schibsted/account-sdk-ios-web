@@ -19,9 +19,34 @@ final class URLBuilderTests: XCTestCase {
         }
     }
 
+    func testLoginURLWithXDomainId() {
+        let sut = URLBuilder(configuration: Fixtures.clientConfig)
+        let xDomainId = UUID()
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: "",
+            assertion: "",
+            extraScopeValues: [],
+            xDomainId: xDomainId
+        )
+
+        let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: nil))
+
+        let components = URLComponents(url: loginURL!, resolvingAgainstBaseURL: true)
+        let queryParams = components?.queryItems?.reduce(into: [String: String]()) { (result, item) in
+            result[item.name] = item.value
+        }
+
+        XCTAssertEqual(queryParams!["x_domain_id"], xDomainId.uuidString)
+    }
+
     func testLoginURLWithAssertion() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "assertion string", extraScopeValues: [])
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: "",
+            assertion: "assertion string",
+            extraScopeValues: [],
+            xDomainId: nil
+        )
         let state = "extra state"
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: state))
         
@@ -49,7 +74,12 @@ final class URLBuilderTests: XCTestCase {
     
     func testLoginURL() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: "",
+            assertion: "",
+            extraScopeValues: [],
+            xDomainId: nil
+        )
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -75,7 +105,12 @@ final class URLBuilderTests: XCTestCase {
     func testLoginURLWithExtraScopes() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
 
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: ["scope1", "scope2"])
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: "",
+            assertion: "",
+            extraScopeValues: ["scope1", "scope2"],
+            xDomainId: nil
+        )
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: nil, state: nil))
         
         XCTAssertEqual(loginURL?.scheme, "https")
@@ -100,7 +135,12 @@ final class URLBuilderTests: XCTestCase {
     
     func testLoginURLWithMFAIncludesACRValues() {
         let sut = URLBuilder(configuration: Fixtures.clientConfig)
-        let authRequest = URLBuilder.AuthorizationRequest(loginHint: "", assertion: "", extraScopeValues: [])
+        let authRequest = URLBuilder.AuthorizationRequest(
+            loginHint: "",
+            assertion: "",
+            extraScopeValues: [],
+            xDomainId: nil
+        )
         let loginURL = sut.loginURL(authRequest: authRequest, authState: AuthState(mfa: .otp, state: "extra state"))
         
         XCTAssertEqual(loginURL?.scheme, "https")

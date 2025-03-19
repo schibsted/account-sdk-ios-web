@@ -62,6 +62,7 @@ public enum TrackingEvent {
         case getLoginSession(MFAType?)
         case sso(Bool)
         case loginHint(String?)
+        case xDomainId(UUID?)
         case withAssertion(Bool)
         case extraScopeValues(Set<String>)
     }

@@ -20,6 +20,7 @@ public final class SimplifiedLoginManager {
     let withMFA: MFAType?
     let state: String?
     let loginHint: String?
+    let xDomainId: UUID?
     let extraScopeValues: Set<String>
     let completion: LoginResultHandler
     var withSSO: Bool = true
@@ -52,57 +53,71 @@ public final class SimplifiedLoginManager {
     }
 
     @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
-    init(client: Client,
-         withMFA: MFAType? = nil,
-         state: String? = nil,
-         loginHint: String? = nil,
-         extraScopeValues: Set<String> = [],
-         fetcher: SimplifiedLoginFetching,
-         completion: @escaping LoginResultHandler) {
+    init(
+        client: Client,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        fetcher: SimplifiedLoginFetching,
+        completion: @escaping LoginResultHandler
+    ) {
         self.client = client
         self.withMFA = withMFA
         self.state = state
         self.loginHint = loginHint
+        self.xDomainId = xDomainId
         self.extraScopeValues = extraScopeValues
         self.completion = completion
         self.fetcher = SimplifiedLoginFetcher(client: client)
     }
 
     @available(iOS 13.0, *)
-    convenience public init(client: Client,
-                            contextProvider: ASWebAuthenticationPresentationContextProviding,
-                            withMFA: MFAType? = nil,
-                            state: String? = nil,
-                            loginHint: String? = nil,
-                            extraScopeValues: Set<String> = [],
-                            withSSO: Bool = true,
-                            completion: @escaping LoginResultHandler) {
+    convenience public init(
+        client: Client,
+        contextProvider: ASWebAuthenticationPresentationContextProviding,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        withSSO: Bool = true,
+        completion: @escaping LoginResultHandler
+    ) {
         let fetcher = SimplifiedLoginFetcher(client: client)
-        self.init(client: client,
-                  contextProvider: contextProvider,
-                  withMFA: withMFA,
-                  state: state,
-                  loginHint: loginHint,
-                  extraScopeValues: extraScopeValues,
-                  withSSO: withSSO,
-                  fetcher: fetcher,
-                  completion: completion)
+        self.init(
+            client: client,
+            contextProvider: contextProvider,
+            withMFA: withMFA,
+            state: state,
+            loginHint: loginHint,
+            xDomainId: xDomainId,
+            extraScopeValues: extraScopeValues,
+            withSSO: withSSO,
+            fetcher: fetcher,
+            completion: completion
+        )
     }
 
     @available(iOS 13.0, *)
-    init(client: Client,
-         contextProvider: ASWebAuthenticationPresentationContextProviding,
-         withMFA: MFAType? = nil,
-         state: String? = nil,
-         loginHint: String? = nil,
-         extraScopeValues: Set<String> = [],
-         withSSO: Bool = true,
-         fetcher: SimplifiedLoginFetching,
-         completion: @escaping LoginResultHandler) {
+    init(
+        client: Client,
+        contextProvider: ASWebAuthenticationPresentationContextProviding,
+        withMFA: MFAType? = nil,
+        state: String? = nil,
+        loginHint: String? = nil,
+        xDomainId: UUID? = nil,
+        extraScopeValues: Set<String> = [],
+        withSSO: Bool = true,
+        fetcher: SimplifiedLoginFetching,
+        completion: @escaping LoginResultHandler
+    ) {
         self.client = client
         self.withMFA = withMFA
         self.state = state
         self.loginHint = loginHint
+        self.xDomainId = xDomainId
         self.extraScopeValues = extraScopeValues
         self.completion = completion
         self.withSSO = withSSO
@@ -148,30 +163,36 @@ extension SimplifiedLoginManager {
         let viewController: UIViewController
         if #available(iOS 13.0, *) {
             viewController = SimplifiedLoginUIFactory
-                .buildViewController(client: self.client,
-                                     contextProvider: self.context,
-                                     assertionFetcher: self.fetcher,
-                                     userContext: simplifiedLoginData.context,
-                                     userProfileResponse: simplifiedLoginData.profile,
-                                     window: window,
-                                     withMFA: self.withMFA,
-                                     state: self.state,
-                                     loginHint: self.loginHint,
-                                     extraScopeValues: self.extraScopeValues,
-                                     withSSO: self.withSSO,
-                                     completion: self.completion)
+                .buildViewController(
+                    client: self.client,
+                    contextProvider: self.context,
+                    assertionFetcher: self.fetcher,
+                    userContext: simplifiedLoginData.context,
+                    userProfileResponse: simplifiedLoginData.profile,
+                    window: window,
+                    withMFA: self.withMFA,
+                    state: self.state,
+                    loginHint: self.loginHint,
+                    xDomainId: self.xDomainId,
+                    extraScopeValues: self.extraScopeValues,
+                    withSSO: self.withSSO,
+                    completion: self.completion
+                )
         } else {
             viewController = SimplifiedLoginUIFactory
-                .buildViewController(client: self.client,
-                                     assertionFetcher: self.fetcher,
-                                     userContext: simplifiedLoginData.context,
-                                     userProfileResponse: simplifiedLoginData.profile,
-                                     window: window,
-                                     withMFA: self.withMFA,
-                                     state: self.state,
-                                     loginHint: self.loginHint,
-                                     extraScopeValues: self.extraScopeValues,
-                                     completion: self.completion)
+                .buildViewController(
+                    client: self.client,
+                    assertionFetcher: self.fetcher,
+                    userContext: simplifiedLoginData.context,
+                    userProfileResponse: simplifiedLoginData.profile,
+                    window: window,
+                    withMFA: self.withMFA,
+                    state: self.state,
+                    loginHint: self.loginHint,
+                    xDomainId: self.xDomainId,
+                    extraScopeValues: self.extraScopeValues,
+                    completion: self.completion
+                )
         }
 
         return viewController

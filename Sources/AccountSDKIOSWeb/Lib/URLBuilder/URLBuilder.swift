@@ -6,12 +6,10 @@
 import Foundation
 
 struct URLBuilder {
-
     let configuration: ClientConfiguration
     let defaultScopeValues = ["openid", "offline_access"]
 
     func loginURL(authRequest: AuthorizationRequest, authState: AuthState) -> URL? {
-
         let scopes = authRequest.extraScopeValues.union(defaultScopeValues)
         let scopeString = scopes.joined(separator: " ")
 
@@ -29,6 +27,7 @@ struct URLBuilder {
 
         authRequest.loginHint.map { authRequestParams.append(URLQueryItem(name: "login_hint", value: $0)) }
         authRequest.assertion.map { authRequestParams.append(URLQueryItem(name: "assertion", value: $0)) }
+        authRequest.xDomainId.map { authRequestParams.append(URLQueryItem(name: "x_domain_id", value: $0.uuidString)) }
 
         if let mfa = authState.mfa {
             authRequestParams.append(URLQueryItem(name: "acr_values", value: mfa.rawValue))
