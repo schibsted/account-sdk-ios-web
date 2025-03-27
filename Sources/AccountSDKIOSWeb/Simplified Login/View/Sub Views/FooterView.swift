@@ -34,14 +34,13 @@ class FooterView: UIStackView {
 
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: viewModel.schibstedLogoName,
-                                     in: Bundle.accountSDK(for: FooterView.self),
-                                     compatibleWith: nil) ?? UIImage()
-
-        view.image = image
+        view.image = UIImage(
+            named: viewModel.schibstedLogoName,
+            in: Bundle.module,
+            compatibleWith: nil
+        )
         view.contentMode = .center
         view.contentMode = .scaleAspectFill
-
         return view
     }()
 
@@ -131,10 +130,7 @@ class FooterView: UIStackView {
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 18
         view.clipsToBounds = true
-
-        let image  = UIImage(named: name, in: Bundle.accountSDK(for: FooterView.self), compatibleWith: nil) ?? UIImage()
-        view.image = image
-
+        view.image = UIImage(named: name, in: Bundle.module, compatibleWith: nil)
         return view
     }
 }
