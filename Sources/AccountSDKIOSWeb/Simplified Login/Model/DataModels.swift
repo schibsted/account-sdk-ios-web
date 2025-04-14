@@ -31,7 +31,7 @@ extension SimplifiedLoginNamedImageData {
         let orderedIconNames: [String]
         switch env {
         case .proCom:
-            orderedIconNames = ["Aftonbladet", "SVD", "Omni", "PodMe", "TvNu"]
+            orderedIconNames = ["Aftonbladet", "SvD", "Omni", "PodMe", "TvNu"]
         case .proNo:
             orderedIconNames = ["VG", "Aftenposten", "E24", "BT", "PodMe", "StavangerAftenblad", "VGSport"]
         case .proFi:
