@@ -33,13 +33,13 @@ extension SimplifiedLoginNamedImageData {
         case .proCom:
             orderedIconNames = ["Aftonbladet", "SVD", "Omni", "PodMe", "TvNu"]
         case .proNo:
-            orderedIconNames = ["VG", "Aftenposten", "E24", "PodMe", "BergensTidene"]
+            orderedIconNames = ["VG", "Aftenposten", "E24", "BT", "PodMe", "StavangerAftenblad", "VGSport"]
         case .proFi:
             orderedIconNames = ["PodMe"]
         case .proDk:
-            orderedIconNames = ["dba", "Bilbasen"]
+            orderedIconNames = []
         case .pre:
-            orderedIconNames = ["Aftonbladet", "SVD", "Omni", "PodMe", "TvNu"] // Swedish icons as default
+            orderedIconNames = ["Aftonbladet", "SvD", "Omni", "PodMe", "TvNu"] // Swedish icons as default
         }
         return orderedIconNames
     }
