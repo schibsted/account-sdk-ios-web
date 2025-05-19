@@ -19,27 +19,27 @@ struct ConcreteSimplifiedLoginUserData: SimplifiedLoginViewModelUserData {
 protocol SimplifiedLoginNamedImageData {
     var env: ClientConfiguration.Environment { get }
     var icons: [UIImage] { get }
-    var schibstedLogoName: String { get }
+    var schibstedLogo: UIImage { get }
 }
 
 struct ConcreteSimplifiedLoginNamedImageData: SimplifiedLoginNamedImageData {
     var env: ClientConfiguration.Environment
-    var schibstedLogoName: String = "sch-logo"
+    var schibstedLogo: UIImage = .schibstedLogo
 }
 
 extension SimplifiedLoginNamedImageData {
     var icons: [UIImage] {
         switch env {
         case .proCom:
-            [.aftonbladet, .svD, .omni, .podMe, .tvNu]
+            [.logoAb, .logoSvd, .logoOmni, .logoPodme, .logoTvnu]
         case .proNo:
-            [.VG, .aftenposten, .E_24, .BT, .podMe, .stavangerAftenblad, .vgSport]
+            [.logoVg, .logoAp, .logoE24, .logoBt, .logoPodme, .logoSa, .logoVgsport]
         case .proFi:
-            [.podMe]
+            [.logoPodme]
         case .proDk:
             []
         case .pre:
-            [.aftonbladet, .svD, .omni, .podMe, .tvNu] // Swedish icons as default
+            [.logoAb, .logoSvd, .logoOmni, .logoPodme, .logoTvnu] // Swedish icons as default
         }
     }
 }

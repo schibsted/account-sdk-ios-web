@@ -34,11 +34,7 @@ class FooterView: UIStackView {
 
     private lazy var schibstedIconImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(
-            named: viewModel.schibstedLogoName,
-            in: Bundle.module,
-            compatibleWith: nil
-        )
+        view.image = viewModel.schibstedLogo
         view.contentMode = .center
         view.contentMode = .scaleAspectFill
         return view
