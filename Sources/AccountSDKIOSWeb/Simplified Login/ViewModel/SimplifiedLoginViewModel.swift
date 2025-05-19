@@ -40,7 +40,7 @@ class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginVi
     let localizationModel: SimplifiedLoginLocalizationModel
     let imageDataModel: SimplifiedLoginNamedImageData
     var schibstedLogoName: String { return imageDataModel.schibstedLogoName }
-    var iconNames: [String] { return imageDataModel.iconNames }
+    var icons: [UIImage] { return imageDataModel.icons }
 
     let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
 

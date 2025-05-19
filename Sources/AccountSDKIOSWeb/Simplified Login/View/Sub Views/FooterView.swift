@@ -57,8 +57,8 @@ class FooterView: UIStackView {
 
     private lazy var popularBrandsImageViews: [UIImageView] = {
         var views = [UIImageView]()
-        for imageName in viewModel.iconNames {
-            views.append(getRoundedImageView(name: imageName))
+        for image in viewModel.icons {
+            views.append(getRoundedImageView(image: image))
         }
 
         return views
@@ -123,14 +123,14 @@ class FooterView: UIStackView {
 
     required init(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    private func getRoundedImageView(name: String) -> UIImageView {
+    private func getRoundedImageView(image: UIImage) -> UIImageView {
         let view = UIImageView()
         view.layer.masksToBounds = true
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 18
         view.clipsToBounds = true
-        view.image = UIImage(named: name, in: Bundle.module, compatibleWith: nil)
+        view.image = image
         return view
     }
 }
