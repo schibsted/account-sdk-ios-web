@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SimplifiedLoginViewModelUserData {
     var userContext: UserContextFromTokenResponse { get }
@@ -17,30 +18,28 @@ struct ConcreteSimplifiedLoginUserData: SimplifiedLoginViewModelUserData {
 
 protocol SimplifiedLoginNamedImageData {
     var env: ClientConfiguration.Environment { get }
-    var iconNames: [String] { get }
-    var schibstedLogoName: String { get }
+    var icons: [UIImage] { get }
+    var schibstedLogo: UIImage { get }
 }
 
 struct ConcreteSimplifiedLoginNamedImageData: SimplifiedLoginNamedImageData {
     var env: ClientConfiguration.Environment
-    var schibstedLogoName: String = "sch-logo"
+    var schibstedLogo: UIImage = .schibstedLogo
 }
 
 extension SimplifiedLoginNamedImageData {
-    var iconNames: [String] {
-        let orderedIconNames: [String]
+    var icons: [UIImage] {
         switch env {
         case .proCom:
-            orderedIconNames = ["Aftonbladet", "SvD", "Omni", "PodMe", "TvNu"]
+            [.logoAb, .logoSvd, .logoOmni, .logoPodme, .logoTvnu]
         case .proNo:
-            orderedIconNames = ["VG", "Aftenposten", "E24", "BT", "PodMe", "StavangerAftenblad", "VGSport"]
+            [.logoVg, .logoAp, .logoE24, .logoBt, .logoPodme, .logoSa, .logoVgsport]
         case .proFi:
-            orderedIconNames = ["PodMe"]
+            [.logoPodme]
         case .proDk:
-            orderedIconNames = []
+            []
         case .pre:
-            orderedIconNames = ["Aftonbladet", "SvD", "Omni", "PodMe", "TvNu"] // Swedish icons as default
+            [.logoAb, .logoSvd, .logoOmni, .logoPodme, .logoTvnu] // Swedish icons as default
         }
-        return orderedIconNames
     }
 }

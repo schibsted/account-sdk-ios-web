@@ -15,10 +15,7 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
 
         let viewModel = SimplifiedLoginViewModel(imageDataModel: imageData, userDataModel: userData, localizationModel: localizationModel)
         
-        XCTAssertEqual(viewModel.schibstedLogoName, imageData
-                        .schibstedLogoName)
         XCTAssertEqual(viewModel.initials, "JW")
-        XCTAssertEqual(viewModel.iconNames, imageData.iconNames)
         XCTAssertEqual(viewModel.displayName, "John White")
     }
     
@@ -130,7 +127,7 @@ fileprivate func buildUserProfileResponse(givenName: String, familyName: String,
 
 fileprivate struct ImageData: SimplifiedLoginNamedImageData {
     var env: ClientConfiguration.Environment = .pre
-    var schibstedLogoName: String = "logo_name"
+    var schibstedLogo = UIImage()
 }
 
 fileprivate struct UserData: SimplifiedLoginViewModelUserData {
