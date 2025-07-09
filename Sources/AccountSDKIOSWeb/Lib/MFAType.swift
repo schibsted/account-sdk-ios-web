@@ -6,7 +6,7 @@
 import Foundation
 
 /// Multi-factor authentication methods
-public enum MFAType: Codable {
+public enum MFAType: Codable, Sendable {
     /// Ask user to re-authenticate by entering their password
     case password
     /// One-time code generated from TOTP app
@@ -34,7 +34,7 @@ public enum MFAType: Codable {
   }
 }
 
-public enum PreEidType: String, Codable {
+public enum PreEidType: String, Codable, Sendable {
     /// BankId verification - Denmark
     case dk = "eid-dk"  // swiftlint:disable:this identifier_name
     /// BankId verification - Finland

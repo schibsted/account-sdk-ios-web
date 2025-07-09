@@ -10,16 +10,16 @@ public struct UserProfileResponse: Codable, Equatable {
     public var userId: String?
     public var status: Int?
     public var email: String?
-    internal var emailVerified: StringOrIgnore?
+    var emailVerified: StringOrIgnore?
     public var emails: [Email]?
     public var phoneNumber: String?
-    internal var phoneNumberVerified: StringOrIgnore?
+    var phoneNumberVerified: StringOrIgnore?
     public var phoneNumbers: [PhoneNumber]?
     public var displayName: String?
     public var name: Name?
     public var addresses: [String: Address]?
     public var gender: String?
-    internal var birthday: String?
+    var birthday: String?
     public var accounts: [String: Account]?
     public var merchants: [Int]?
     public var published: String?
@@ -157,8 +157,8 @@ public protocol Identifier: Codable, Equatable {
 public struct Email: Identifier {
     public var value: String?
     public var type: String?
-    internal var primary: StringBool?
-    internal var verified: StringBool?
+    var primary: StringBool?
+    var verified: StringBool?
     public var verifiedTime: String?
 
     public var isPrimary: Bool? { return primary?.value }
@@ -168,8 +168,8 @@ public struct Email: Identifier {
 public struct PhoneNumber: Identifier {
     public var value: String?
     public var type: String?
-    internal var primary: StringBool?
-    internal var verified: StringBool?
+    var primary: StringBool?
+    var verified: StringBool?
     public var verifiedTime: String?
 
     public var isPrimary: Bool? { return primary?.value }

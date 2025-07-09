@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal protocol Storage {
+protocol Storage: Sendable {
     func setValue(_ value: Data, forKey key: String)
     func value(forKey key: String) -> Data?
     func removeValue(forKey key: String)

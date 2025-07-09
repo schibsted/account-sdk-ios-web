@@ -6,7 +6,7 @@
 import Foundation
 import JOSESwift
 
-internal struct RSAJWK: Codable {
+struct RSAJWK: Codable {
     // swiftlint:disable identifier_name
     let kid: String
     let kty: String
@@ -17,15 +17,16 @@ internal struct RSAJWK: Codable {
     // swiftlint:enable identifier_name
 }
 
-internal struct JWKSResponse: Codable {
+struct JWKSResponse: Codable {
     let keys: [AccountSDKIOSWeb.RSAJWK]
 }
 
-internal protocol JWKS {
+protocol JWKS {
+    @MainActor
     func getKey(withId: String, completion: @escaping (JWK?) -> Void)
 }
 
-internal class RemoteJWKS: JWKS {
+final class RemoteJWKS: JWKS {
     private let jwksURI: URL
     private let httpClient: HTTPClient
     private let cache: Cache<JWK>
@@ -40,6 +41,7 @@ internal class RemoteJWKS: JWKS {
         self.cache = cache
     }
 
+    @MainActor
     func getKey(withId keyId: String, completion: @escaping (JWK?) -> Void) {
         if let cachedKey = cache.object(forKey: keyId) {
             completion(cachedKey)
@@ -49,6 +51,7 @@ internal class RemoteJWKS: JWKS {
         fetchJWKS(keyId: keyId, completion: completion)
     }
 
+    @MainActor
     private func fetchJWKS(keyId: String, completion: @escaping (JWK?) -> Void) {
         let request = URLRequest(url: jwksURI)
         httpClient.execute(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) { (result: Result<JWKSResponse, HTTPError>) in

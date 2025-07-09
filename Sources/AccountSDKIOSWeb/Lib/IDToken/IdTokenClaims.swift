@@ -5,7 +5,7 @@
 
 import Foundation
 
-public struct IdTokenClaims: Codable, Equatable {
+public struct IdTokenClaims: Codable, Equatable, Sendable {
     let iss: String
     let sub: String
     let userId: String

@@ -9,9 +9,7 @@ import Cuckoo
 @testable import AccountSDKIOSWeb
 
 final class SimplifiedLoginManagerTests: XCTestCase {
- 
-    // MARK: -
-    
+    @MainActor
     func testRequestSimplifiedLogin_noLoggedInSessionInSharedKeychain () {
         let mockHTTPClient = MockHTTPClient()
         let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
@@ -29,7 +27,8 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         
         self.wait(for: [expectation], timeout: 2)
     }
-    
+
+    @MainActor
     func testRequestSimplifiedLogin_failingFetcher() {
         //Mock Client
         let mockHTTPClient = MockHTTPClient()
@@ -67,7 +66,8 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         
         self.wait(for: [expectation], timeout: 2)
     }
-    
+
+    @MainActor
     func testRequestSimplifiedLogin_success() {
         //Mock Client
         let mockHTTPClient = MockHTTPClient()
@@ -111,18 +111,19 @@ final class SimplifiedLoginManagerTests: XCTestCase {
     }
     
     // MARK: Integration tests
-    
+
+    @MainActor
     func testRequestSimplifiedLogin_noWindow() {
         // MockHTTPClient
         let contextResponse = UserContextFromTokenResponse(identifier: "23", displayText: "32", clientName: "32")
         let userProfileResponse = Fixtures.userProfileResponse
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<UserContextFromTokenResponse>) in
                     completion(.success(contextResponse))
                 }
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion) in
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
@@ -153,18 +154,19 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1)
     }
-    
+
+    @MainActor
     func testRequestSimplifiedLogin_failingProfileResponse() {
         // MockHTTPClient
         let userProfileResponse = Fixtures.userProfileResponse
         let mockHTTPClient = MockHTTPClient()
         let expectedError: Result<UserContextFromTokenResponse, HTTPError> = .failure(HTTPError.unexpectedError(underlying: LoginError.unsolicitedResponse))
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<UserContextFromTokenResponse>) in
                     completion(expectedError)
                 }
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion) in
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
@@ -196,17 +198,18 @@ final class SimplifiedLoginManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 2)
     }
 
+    @MainActor
     func testRequestSimplifiedLogin_integrationSuccess() {
         // MockHTTPClient
         let contextResponse = UserContextFromTokenResponse(identifier: "23", displayText: "32", clientName: "32")
         let userProfileResponse = Fixtures.userProfileResponse
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<UserContextFromTokenResponse>) in
                     completion(.success(contextResponse))
                 }
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion) in
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
@@ -246,7 +249,7 @@ final class SimplifiedLoginManagerTests: XCTestCase {
     }
 }
 
-class MockClient: Client {
+class MockClient: Client, @unchecked Sendable {
     var userSessionToReturn: UserSession?
     override func getLatestSharedSession() -> UserSession? {
         return userSessionToReturn

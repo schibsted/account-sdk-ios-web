@@ -35,6 +35,7 @@ final class MulticastDelegateTests: XCTestCase {
     
     // MARK: Invoke Delegate on Adding delegates
  
+    @MainActor
     func testInvokeDelegateSingle() {
         let sut =  MulticastDelegate<MockDelegate>()
         let mock = MockDelegate()
@@ -50,6 +51,7 @@ final class MulticastDelegateTests: XCTestCase {
         self.waitForExpectations(timeout: 0.5, handler: nil)
     }
     
+    @MainActor
     func testInvokeDelegateMultiple() {
         let sut =  MulticastDelegate<MockDelegate>()
         let mocks = [MockDelegate(), MockDelegate(), MockDelegate()]

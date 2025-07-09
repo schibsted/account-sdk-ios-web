@@ -7,7 +7,7 @@ import Foundation
 import JOSESwift
 @testable import AccountSDKIOSWeb
 
-internal class JWSUtil {
+final class JWSUtil: @unchecked Sendable {
     let publicKey: SecKey!
     let privateKey: SecKey!
     let publicJWK: RSAPublicKey
@@ -43,7 +43,7 @@ internal class JWSUtil {
     }
 }
 
-internal class StaticJWKS: JWKS {
+final class StaticJWKS: JWKS {
     private let keys: [String: JWK]
         
     init(keyId: String, rsaPublicKey: SecKey) {

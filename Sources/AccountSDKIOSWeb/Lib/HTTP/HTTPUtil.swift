@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal enum HTTPUtil {
+enum HTTPUtil {
     static let xWWWFormURLEncodedContentType = "application/x-www-form-urlencoded"
 
     private static let formEncodeAllowedCharacters: CharacterSet = {

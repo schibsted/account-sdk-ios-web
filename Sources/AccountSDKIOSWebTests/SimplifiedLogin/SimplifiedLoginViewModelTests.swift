@@ -7,7 +7,7 @@ import XCTest
 @testable import AccountSDKIOSWeb
 
 final class SimplifiedLoginViewModelTests: XCTestCase {
-    
+    @MainActor
     func testSimplifiedLoginModelCreation() {
         let imageData = ImageData()
         let userData = UserData()
@@ -18,7 +18,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.initials, "JW")
         XCTAssertEqual(viewModel.displayName, "John White")
     }
-    
+
+    @MainActor
     func testCallingLoginUserActions() {
         let imageData = ImageData()
         let userData = UserData()
@@ -51,7 +52,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
-    
+
+    @MainActor
     func testInitials () {
         let imageData = ImageData()
         let localizationModel = SimplifiedLoginLocalizationModel()
@@ -67,7 +69,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         
         XCTAssertEqual(viewModel.initials, "AS", "Initials should come from displayname if givenName and FamilyName is empty")
     }
-    
+
+    @MainActor
     func testInitials_emptyName () {
         let imageData = ImageData()
         let localizationModel = SimplifiedLoginLocalizationModel()
@@ -83,7 +86,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         
         XCTAssertEqual(viewModel.initials, "T", "Initials should come from givenName and FamilyName if set")
     }
-    
+
+    @MainActor
     func testInitials_emptyGivenName () {
         let imageData = ImageData()
         let localizationModel = SimplifiedLoginLocalizationModel()
@@ -99,7 +103,8 @@ final class SimplifiedLoginViewModelTests: XCTestCase {
         
         XCTAssertEqual(viewModel.initials, "T", "Initials should come from displayname if givenName is empty")
     }
-    
+
+    @MainActor
     func testInitials_emptyFamilyName () {
         let imageData = ImageData()
         let localizationModel = SimplifiedLoginLocalizationModel()

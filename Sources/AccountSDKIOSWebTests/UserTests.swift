@@ -3,33 +3,31 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import XCTest
+import Foundation
+import Testing
 import Cuckoo
 
 @testable import AccountSDKIOSWeb
 
-final class UserTests: XCTestCase {
+struct UserTests {
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
-    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
-    
+    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = ParameterMatcher()
+
     private static let keyId = "test key"
-    private static var jwsUtil: JWSUtil!
-    
-    override class func setUp() {
-        jwsUtil = JWSUtil()
-    }
-    
+    private static let jwsUtil = JWSUtil()
+
     private func verifyAuthenticatedRequest(for mockHTTPClient: MockHTTPClient, withToken token: String) {
         let argumentCaptor = ArgumentCaptor<URLRequest>()
         verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
-        XCTAssertEqual(argumentCaptor.value!.value(forHTTPHeaderField: "Authorization"), "Bearer \(token)")
+        #expect(argumentCaptor.value?.value(forHTTPHeaderField: "Authorization") == "Bearer \(token)")
     }
 
+    @MainActor
     func testWithAuthenticationForwardsResponseIfSuccessful() {
         let response = TestResponse(data: "test")
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(response))
                 }
@@ -41,10 +39,10 @@ final class UserTests: XCTestCase {
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
                 case .success(let receivedResponse):
-                    XCTAssertEqual(receivedResponse, response)
+                    #expect(receivedResponse == response)
                     self.verifyAuthenticatedRequest(for: mockHTTPClient, withToken: "accessToken")
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
@@ -52,10 +50,11 @@ final class UserTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWithAuthenticationForwardsErrorResponse() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 400, body: "Bad request")))
                 }
@@ -67,24 +66,25 @@ final class UserTests: XCTestCase {
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
                 case .failure(.errorResponse(let code, let body)):
-                    XCTAssertEqual(code, 400)
-                    XCTAssertEqual(body, "Bad request")
+                    #expect(code == 400)
+                    #expect(body == "Bad request")
                     self.verifyAuthenticatedRequest(for: mockHTTPClient, withToken: "accessToken")
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testWithAuthenticationRefreshesTokenUpon401Response() {
         let successResponse = TestResponse(data: "success")
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
@@ -94,7 +94,7 @@ final class UserTests: XCTestCase {
 
             // refresh token request
             let tokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
@@ -110,33 +110,34 @@ final class UserTests: XCTestCase {
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
                 case .success(let receivedResponse):
-                    XCTAssertEqual(receivedResponse, successResponse)
-                    
+                    #expect(receivedResponse == successResponse)
+
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
                     verify(mockHTTPClient, times(2)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
                     let calls = argumentCaptor.allValues
                     // original token used in first request
-                    XCTAssertEqual(calls[0].value(forHTTPHeaderField: "Authorization"), "Bearer accessToken")
+                    #expect(calls[0].value(forHTTPHeaderField: "Authorization") == "Bearer accessToken")
                     // refreshed token used in second request
-                    XCTAssertEqual(calls[1].value(forHTTPHeaderField: "Authorization"), "Bearer newAccessToken")
-                    
+                    #expect(calls[1].value(forHTTPHeaderField: "Authorization") == "Bearer newAccessToken")
+
                     // refreshed tokens are persisted in session storage
                     verify(mockSessionStorage).store(ParameterMatcher<UserSession>{
                         $0.userTokens.accessToken == "newAccessToken" &&
                         $0.userTokens.refreshToken == "newRefreshToken"
                     }, accessGroup: any())
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
                 done()
             }
         }
     }
 
+    @MainActor
     func testWithAuthenticationForwards401ResponseWhenNoRefreshToken() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
@@ -149,28 +150,29 @@ final class UserTests: XCTestCase {
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
                 case .failure(.errorResponse(let code, let body)):
-                    XCTAssertEqual(code, 401)
-                    XCTAssertEqual(body, "Unauthorized")
+                    #expect(code == 401)
+                    #expect(body == "Unauthorized")
                     self.verifyAuthenticatedRequest(for: mockHTTPClient, withToken: "accessToken")
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testWithAuthenticationForwardsOriginalResponseWhenTokenRefreshFails() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
             
             // refresh token request
-            let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = anyClosure()
+            let closureMatcher: ParameterMatcher<HTTPResultHandler<TokenResponse>> = ParameterMatcher()
             when(mock.execute(request: any(), withRetryPolicy: any(), completion: closureMatcher))
                 .then { _, _, completion in
                     completion(.failure(.errorResponse(code: 500, body: "Something went wrong")))
@@ -183,27 +185,28 @@ final class UserTests: XCTestCase {
             user.withAuthentication(request: self.request) { (result: Result<TestResponse, HTTPError>) in
                 switch result {
                 case .failure(.errorResponse(let code, let body)):
-                    XCTAssertEqual(code, 401)
-                    XCTAssertEqual(body, "Unauthorized")
+                    #expect(code == 401)
+                    #expect(body == "Unauthorized")
                     self.verifyAuthenticatedRequest(for: mockHTTPClient, withToken: "accessToken")
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testWithAuthenticationLogsUserOutOnInvalidGrantRefreshResponse() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TestResponse>) in
                     // 1. service response
                     completion(.failure(.errorResponse(code: 401, body: "Unauthorized")))
                 }
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { (_, _, completion: HTTPResultHandler<TokenResponse>) in
                     // 2. failed refresh response
                     completion(.failure(.errorResponse(code: 400, body: """
@@ -228,18 +231,19 @@ final class UserTests: XCTestCase {
                     // expected error, do nothing
                     break
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testSessionExchangeReturnsCorrectURL() {
         let sessionCode = "testSessionCode"
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: SessionExchangeResponse(code: sessionCode))))
                 }
@@ -251,21 +255,22 @@ final class UserTests: XCTestCase {
             user.webSessionURL(clientId: "webClientId", redirectURI: "https://example.com/protected") { result in
                 switch result {
                 case .success(let url):
-                    XCTAssertEqual(url.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/session/\(sessionCode)")
+                    #expect(url.absoluteString == "\(Fixtures.clientConfig.serverURL.absoluteString)/session/\(sessionCode)")
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testCodeExchangeReturnsCorrectOneTimeCode() {
         let oneTimeCode = "testCode"
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: CodeExchangeResponse(code: oneTimeCode))))
                 }
@@ -277,16 +282,17 @@ final class UserTests: XCTestCase {
             user.oneTimeCode(clientId: "webClientId") { result in
                 switch result {
                 case .success(let code):
-                    XCTAssertEqual(code, oneTimeCode)
+                    #expect(code == oneTimeCode)
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testLogoutDestroysTokensAndSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
@@ -297,18 +303,19 @@ final class UserTests: XCTestCase {
         let user = User(client: client, tokens: Fixtures.userTokens)
         
         user.logout()
-        XCTAssertNil(user.tokens)
-        XCTAssertNil(user.uuid)
-        XCTAssertFalse(user.isLoggedIn())
-        
+        #expect(user.tokens == nil)
+        #expect(user.uuid == nil)
+        #expect(user.isLoggedIn() == false)
+
         verify(mockSessionStorage).remove(forClientId: Fixtures.clientConfig.clientId)
     }
-    
+
+    @MainActor
     func testAssertionReturnsCorrectValue() {
         let mockHTTPClient = MockHTTPClient()
         let expectedResponse = SimplifiedLoginAssertionResponse(assertion: "for-whom-the-bell-tolls")
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: expectedResponse)))
                 }
@@ -320,20 +327,21 @@ final class UserTests: XCTestCase {
             user.assertionForSimplifiedLogin { result in
                 switch result {
                 case .success(let assertion):
-                    XCTAssertEqual(assertion, expectedResponse)
+                    #expect(assertion == expectedResponse)
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testUserContextReturnsCorrectValue() {
         let mockHTTPClient = MockHTTPClient()
         let expectedResponse = UserContextFromTokenResponse(identifier: "identifier", displayText: "master-of-puppets", clientName: "metallica")
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(expectedResponse))
                 }
@@ -344,9 +352,9 @@ final class UserTests: XCTestCase {
             user.userContextFromToken { result in
                 switch result {
                 case .success(let context):
-                    XCTAssertEqual(context, expectedResponse)
+                    #expect(context == expectedResponse)
                 default:
-                    XCTFail("Unexpected result \(result)")
+                    Issue.record("Unexpected result \(result)")
                 }
                 done()
             }

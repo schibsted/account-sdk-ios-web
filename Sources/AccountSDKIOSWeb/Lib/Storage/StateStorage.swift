@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal class StateStorage {
+final class StateStorage: Sendable {
     private let storage: Storage
 
     init(storage: Storage = UserDefaultsStorage(UserDefaults.standard)) {

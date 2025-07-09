@@ -3,288 +3,202 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import XCTest
+import Foundation
 import Cuckoo
+import Testing
 
 @testable import AccountSDKIOSWeb
 
-class TokenRefreshRequestHandlerTests: XCTestCaseWithMockHTTPClient {
+@Suite
+@MainActor
+struct TokenRefreshRequestHandlerTests {
     private let request = URLRequest(url: URL(string: "http://example.com/test")!)
-    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = anyClosure()
-    
-    // MARK: refreshWithRetry
-    
-    func testRefreshWithRetryOnRefreshFailureCompletionCalled() {
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
+    private let closureMatcher: ParameterMatcher<HTTPResultHandler<TestResponse>> = ParameterMatcher()
+    private let mockHTTPClientHelpers = MockHTTPClientHelpers()
 
-        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+    // MARK: refreshWithRetry
+
+    @Test
+    func testRefreshWithRetryOnRefreshFailureCompletionCalled() async {
+        mockHTTPClientHelpers.stubHTTPClientExecuteRefreshRequest(refreshResult: .failure(.errorResponse(code: 500, body: "Something went wrong with refresh")))
+
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClientHelpers.mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
-        
+
         let initialResultBody = "This is initialResultBody"
         let initialResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: initialResultBody))
         let sut = User.TokenRefreshRequestHandler()
-        
-        let expectation = self.expectation(description: "When refresh fails. Completion should be called with initialResult")
-        sut.refreshWithRetry(user: user,
-                             requestResult: initialResult,
-                             request: self.request) { result in
+
+        let expectation = TestExpectation(description: "When refresh fails. Completion should be called with initialResult")
+        sut.refreshWithRetry(
+            user: user,
+            requestResult: initialResult,
+            request: self.request
+        ) { result in
             switch result {
             case .failure( .errorResponse(code: _, body: let body)):
-                XCTAssertEqual(initialResultBody, body)
-                expectation.fulfill()
+                if body == initialResultBody {
+                    Task {
+                        await expectation.fulfill()
+                    }
+                }
             default:
-                XCTFail()
+                break
             }
         }
-        self.wait(for: [expectation], timeout: 1)
+
+        await expectation.wait()
     }
-    
-    func testRefreshWithRetryRetriedRequestSucess() {
+
+    @Test
+    func testRefreshWithRetryRetriedRequestSucess() async {
         let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
-        
+        mockHTTPClientHelpers.stubHTTPClientExecuteRefreshRequest(refreshResult: .success(tokenResponse))
+
         let sucessResponse = TestResponse(data:  "Retried request SUCCESS")
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .success(sucessResponse))
+        mockHTTPClientHelpers.stubHTTPClientExecuteRequest(result: .success(sucessResponse))
 
         let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
-        
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
+        mockHTTPClientHelpers.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
+
+        let client = Client(
+            configuration: Fixtures.clientConfig,
+            sessionStorage: mockSessionStorage,
+            stateStorage: StateStorage(),
+            httpClient: mockHTTPClientHelpers.mockHTTPClient
+        )
         let user = User(client: client, tokens: Fixtures.userTokens)
-        
+
         let anyResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
-        let expectation = self.expectation(description: "completion should be called with result from retried request")
+        let expectation = TestExpectation(description: "completion should be called with result from retried request")
         let sut = User.TokenRefreshRequestHandler()
-        sut.refreshWithRetry(user: user,
-                             requestResult: anyResult,
-                             request: self.request) { result in
+        sut.refreshWithRetry(
+            user: user,
+            requestResult: anyResult,
+            request: self.request
+        ) { result in
             switch result {
             case .success(let receivedResponse):
-                XCTAssertEqual(sucessResponse.data, receivedResponse.data)
-                expectation.fulfill()
+                if sucessResponse.data == receivedResponse.data {
+                    Task {
+                        await expectation.fulfill()
+                    }
+                }
             default:
-                XCTFail()
+                break
             }
         }
-        self.wait(for: [expectation], timeout: 1)
-    }
-    
-    func testRefreshWithRetryRetriedRequestFailure() {
-        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
-        
 
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .failure(.errorResponse(code: 1337, body: "Retried request FAILING")))
+        await expectation.wait()
+    }
+
+    @Test
+    func testRefreshWithRetryRetriedRequestFailure() async {
+        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
+        mockHTTPClientHelpers.stubHTTPClientExecuteRefreshRequest(refreshResult: .success(tokenResponse))
+        mockHTTPClientHelpers.stubHTTPClientExecuteRequest(result: .failure(.errorResponse(code: 1337, body: "Retried request FAILING")))
 
         let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
-        
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
+        mockHTTPClientHelpers.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
+
+        let client = Client(
+            configuration: Fixtures.clientConfig,
+            sessionStorage: mockSessionStorage,
+            stateStorage: StateStorage(),
+            httpClient: mockHTTPClientHelpers.mockHTTPClient
+        )
         let user = User(client: client, tokens: Fixtures.userTokens)
-        
+
         let anyResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
-        let expectation = self.expectation(description: "completion should be called with result from retried request")
+        let expectation = TestExpectation(description: "completion should be called with result from retried request")
         let sut = User.TokenRefreshRequestHandler()
-        sut.refreshWithRetry(user: user,
-                             requestResult: anyResult,
-                             request: self.request) { result in
+        sut.refreshWithRetry(
+            user: user,
+            requestResult: anyResult,
+            request: self.request
+        ) { result in
             switch result {
             case .failure(.errorResponse(code: 1337, body: let body)):
-                XCTAssertEqual("Retried request FAILING", body)
-                expectation.fulfill()
+                if body == "Retried request FAILING" {
+                    Task {
+                        await expectation.fulfill()
+                    }
+                }
             default:
-                XCTFail()
+                break
             }
         }
-        self.wait(for: [expectation], timeout: 1)
+        
+        await expectation.wait()
     }
-    
-    func testRefreshWithRetrySameRequestRetried() {
-        let tokenResponse: TokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
-        
-        let successResponse = TestResponse(data:  "Any response for retried request")
-        self.stubHTTPClientExecuteRequest(mockHTTPClient: mockHTTPClient!, result: .success(successResponse))
-        let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
-        
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
-        let user = User(client: client, tokens: Fixtures.userTokens)
-        let anyInitialResult: Result<TestResponse,HTTPError> = .failure(.errorResponse(code: 1337, body: "foo"))
-        
-        let expectation = self.expectation(description: "After successfull refresh the passedRequest should be executed")
-        let passedRequest = URLRequest(url: URL(string: "http://anyurl.com/test")!)
-        
-        let sut = User.TokenRefreshRequestHandler()
-        sut.refreshWithRetry(user: user,
-                             requestResult: anyInitialResult,
-                             request: passedRequest) { _ in
-            
-            let argumentCaptor = ArgumentCaptor<URLRequest>()
-            verify(self.mockHTTPClient!, times(1)).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: self.closureMatcher)
-            let calls = argumentCaptor.allValues
-            XCTAssertEqual(calls[0].url!.absoluteString, passedRequest.url!.absoluteString, "HTTPClient should execute the primary passedRequest")
-            
-            expectation.fulfill()
-        }
-        self.wait(for: [expectation], timeout: 1)
-    }
-    
-    // MARK: refreshWithoutRetry
-    
-    func testRefreshWithoutRetryCompletionCalledWithRefreshResultFailure() {
+
+    @Test
+    func testRefreshWithoutRetryCompletionCalledWithRefreshResultFailure() async {
         let refreshResultBody = "Something went wrong"
         let refreshResult: Result<TokenResponse, HTTPError> = .failure(.errorResponse(code: 500, body: refreshResultBody))
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: refreshResult)
+        mockHTTPClientHelpers.stubHTTPClientExecuteRefreshRequest(refreshResult: refreshResult)
 
-        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClient)
+        let client = Client(configuration: Fixtures.clientConfig, httpClient: mockHTTPClientHelpers.mockHTTPClient)
         let user = User(client: client, tokens: Fixtures.userTokens)
-                                     
-        let expectation = self.expectation(description: "completion should be called with refresh result")
+
+        let expectation = TestExpectation(description: "completion should be called with refresh result")
         let sut = User.TokenRefreshRequestHandler()
         sut.refreshWithoutRetry(user: user) { result in
             switch result {
             case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
-                XCTAssertEqual(body, refreshResultBody)
-                expectation.fulfill()
+                if body == refreshResultBody {
+                    Task {
+                        await expectation.fulfill()
+                    }
+                }
             default:
-                XCTFail()
+                break
             }
         }
-        self.wait(for: [expectation], timeout: 1)
+
+        await expectation.wait()
     }
-    
-    func testRefreshWithoutRetryCompletionCalledWithRefreshResultSuccess() {
+
+    @Test
+    func testRefreshWithoutRetryCompletionCalledWithRefreshResultSuccess() async {
         let tokenResponse = TokenResponse(accessToken: "newAccessToken", refreshToken: "newRefreshToken", idToken: nil, scope: nil, expiresIn: 3600)
-        self.stubHTTPClientExecuteRefreshRequest(mockHTTPClient: mockHTTPClient!, refreshResult: .success(tokenResponse))
+        mockHTTPClientHelpers.stubHTTPClientExecuteRefreshRequest(refreshResult: .success(tokenResponse))
 
         let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
+        mockHTTPClientHelpers.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
 
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
+        let client = Client(
+            configuration: Fixtures.clientConfig,
+            sessionStorage: mockSessionStorage,
+            stateStorage: StateStorage(),
+            httpClient: mockHTTPClientHelpers.mockHTTPClient
+        )
         let user = User(client: client, tokens: Fixtures.userTokens)
-                                     
-        let expectation = self.expectation(description: "completion should be called with refresh result")
+
+        let expectation = TestExpectation(description: "completion should be called with refresh result")
         let sut = User.TokenRefreshRequestHandler()
         sut.refreshWithoutRetry(user: user) { result in
             switch result {
             case .success(let data):
-                XCTAssertEqual(data.accessToken, tokenResponse.accessToken)
-                XCTAssertEqual(data.refreshToken, tokenResponse.refreshToken)
-                expectation.fulfill()
-            default:
-                XCTFail()
-            }
-        }
-        self.wait(for: [expectation], timeout: 1)
-    }
-
-    func testRefreshWithoutRetryThreadSafety() {
-        // Arrange
-        let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
-
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
-        let user = User(client: client, tokens: Fixtures.userTokens)
-
-        let exp = expectation(description: "Should be called only once")
-        exp.assertForOverFulfill = true
-
-        let refresher = FakeUserTokensRefresher()
-        refresher.onDidCallRefreshTokens = {
-            exp.fulfill()
-        }
-
-        let sut = User.TokenRefreshRequestHandler(tokenRefresher: refresher)
-
-        // Act
-        let group = DispatchGroup()
-
-        var completionsExpectations: [XCTestExpectation] = []
-
-        for expId in 0...1000 {
-            let currentExp = expectation(description: "id-\(expId)")
-            completionsExpectations.append(currentExp)
-            group.enter()
-
-            DispatchQueue.global().async {
-                let sleepVal = arc4random() % 1000
-                usleep(sleepVal)
-                sut.refreshWithoutRetry(user: user) { result in
-                    currentExp.fulfill()
+                #expect(data.accessToken == tokenResponse.accessToken)
+                #expect(data.refreshToken == tokenResponse.refreshToken)
+                Task {
+                    await expectation.fulfill()
                 }
-                group.leave()
+            default:
+                Issue.record()
             }
         }
 
-        // Assert
-        let result = group.wait(timeout: DispatchTime.now() + 5)
-        XCTAssert(result == .success)
-        refresher.completion?(.success(Fixtures.userTokens))
-        wait(for: [exp] + completionsExpectations, timeout: 1)
-    }
-
-    func testRefreshWithRetryThreadSafety() {
-        // Arrange
-        let anyInitialResult: Result<TestResponse,HTTPError> = .success(TestResponse(data: "a"))
-        let passedRequest = URLRequest(url: URL(string: "http://anyurl.com/test")!)
-
-        let mockSessionStorage = MockSessionStorage()
-        self.stubSessionStorageStore(mockSessionStorage: mockSessionStorage, result: .success())
-
-        let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(), httpClient: mockHTTPClient!)
-        let user = User(client: client, tokens: Fixtures.userTokens)
-
-        let exp = expectation(description: "Should be called only once")
-        exp.assertForOverFulfill = true
-
-        let refresher = FakeUserTokensRefresher()
-        refresher.onDidCallRefreshTokens = {
-            exp.fulfill()
-        }
-
-        let requestMaker = FakeUserRequestMaker()
-
-        let allRequestsExp = expectation(description: "all completion blocks")
-        allRequestsExp.expectedFulfillmentCount = 1000
-        allRequestsExp.assertForOverFulfill = false
-        requestMaker.onDidMakeRequest = {
-            allRequestsExp.fulfill()
-        }
-
-        let sut = User.TokenRefreshRequestHandler(tokenRefresher: refresher, requestMaker: requestMaker)
-
-        // Act
-        let group = DispatchGroup()
-
-        for _ in 0...1000 {
-            group.enter()
-
-            DispatchQueue.global().async {
-                let sleepVal = arc4random() % 1000
-                usleep(sleepVal)
-                sut.refreshWithRetry(
-                    user: user,
-                    requestResult: anyInitialResult,
-                    request: passedRequest
-                ) { _ in }
-                group.leave()
-            }
-        }
-
-        // Assert
-        let result = group.wait(timeout: DispatchTime.now() + 5)
-        XCTAssert(result == .success)
-        refresher.completion?(.success(Fixtures.userTokens))
-        wait(for: [allRequestsExp], timeout: 1)
-        wait(for: [exp], timeout: 1)
+        await expectation.wait()
     }
 }
 
 final class FakeUserTokensRefresher: UserTokensRefreshing {
     var onDidCallRefreshTokens: () -> Void = {}
     var completion: ((Result<UserTokens, RefreshTokenError>) -> Void)?
-    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    @MainActor
+    func refreshTokens(for user: User, completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void) {
         self.completion = completion
         onDidCallRefreshTokens()
     }

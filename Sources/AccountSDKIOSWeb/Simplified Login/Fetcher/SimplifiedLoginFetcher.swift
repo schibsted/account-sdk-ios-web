@@ -9,17 +9,21 @@ typealias SimplifiedLoginFetchedData = (context: UserContextFromTokenResponse, p
 typealias SimplifiedLoginAssertionResult = Result<SimplifiedLoginAssertionResponse, Error>
 
 protocol SimplifiedLoginFetching {
+    @MainActor
     func fetchData(completion: @escaping (Result<SimplifiedLoginFetchedData, Error>) -> Void)
+    @MainActor
     func fetchAssertion(completion: @escaping (Result<SimplifiedLoginAssertionResponse, Error>) -> Void)
 }
 
-class SimplifiedLoginFetcher: SimplifiedLoginFetching {
+@MainActor
+final class SimplifiedLoginFetcher: SimplifiedLoginFetching {
     let client: Client
     init(client: Client) {
         self.client = client
     }
 
     var retainedSharedUser: User?
+
     func getLatestSharedUser() throws -> User {
         guard let latestUserSession = client.getLatestSharedSession() else {
             throw SimplifiedLoginManager.SimplifiedLoginError.noLoggedInSessionInSharedKeychain

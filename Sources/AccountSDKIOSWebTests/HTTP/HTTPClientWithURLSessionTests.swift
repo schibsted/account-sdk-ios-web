@@ -7,7 +7,7 @@ import XCTest
 
 @testable import AccountSDKIOSWeb
 
-private class TestRetryPolicy: RetryPolicy {
+private final class TestRetryPolicy: RetryPolicy {
     private init() {}
     
     public static let policy: TestRetryPolicy = TestRetryPolicy()
@@ -22,7 +22,7 @@ private class TestRetryPolicy: RetryPolicy {
 }
 
 final class HTTPClientWithURLSessionTests: XCTestCase {
-    
+    @MainActor
     func testDoesntRetrySuccessfulRequest() throws {
         let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
@@ -42,7 +42,8 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
         // only 1 request, no retry
         XCTAssertTrue(sessionMock.counter == 1)
     }
-    
+
+    @MainActor
     func testRetriesFailedRequest() throws {
         let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
@@ -50,21 +51,25 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
         let failedRequestResult: (Data?, HTTPURLResponse?, Error?) = (nil, nil, URLError(.cannotConnectToHost))
         let urlResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: nil)
         let successRequestResult: (Data?, HTTPURLResponse?, Error?) = (try JSONEncoder().encode(expectedResponse), urlResponse, nil)
-        
+
+        let expectation = self.expectation(description: "requests")
         let sessionMock = MockURLSessionProtocol(request: request, results: [failedRequestResult, successRequestResult])
         HTTPClientWithURLSession(session: sessionMock).execute(request: request, withRetryPolicy: TestRetryPolicy.policy) { (result: Result<TestResponse, HTTPError>) in
             switch result {
             case .success(let receviedResponse):
                 XCTAssertEqual(receviedResponse, expectedResponse)
+                expectation.fulfill()
             case .failure(_):
                 XCTFail("Unexpected request failure")
             }
         }
         
         // 2 requests: initial + 1 retry
-        XCTAssertTrue(sessionMock.counter == 2)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(sessionMock.counter, 2)
     }
-    
+
+    @MainActor
     func testRetries5xxRequest() throws {
         let request = URLRequest(url: URL(staticString: "https://example.com"))
         let expectedResponse = TestResponse(data: "Hello world!")
@@ -73,21 +78,25 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
         let failedRequestResult: (Data?, HTTPURLResponse?, Error?) = ("Something went wrong".data(using: .utf8), failedUrlResponse, nil)
         let successUrlResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: nil)
         let successRequestResult: (Data?, HTTPURLResponse?, Error?) = (try JSONEncoder().encode(expectedResponse), successUrlResponse, nil)
-        
+
+        let expectation = self.expectation(description: "requests")
         let sessionMock = MockURLSessionProtocol(request: request, results: [failedRequestResult, successRequestResult])
         HTTPClientWithURLSession(session: sessionMock).execute(request: request, withRetryPolicy: TestRetryPolicy.policy) { (result: Result<TestResponse, HTTPError>) in
             switch result {
             case .success(let receviedResponse):
                 XCTAssertEqual(receviedResponse, expectedResponse)
+                expectation.fulfill()
             case .failure(_):
                 XCTFail("Unexpected request failure")
             }
         }
         
         // 2 requests: initial + 1 retry
-        XCTAssertTrue(sessionMock.counter == 2)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(sessionMock.counter, 2)
     }
-    
+
+    @MainActor
     func testDontRetryFailedRequestIfNoRetriesPolicy() throws {
         let request = URLRequest(url: URL(staticString: "https://example.com"))
         
@@ -105,7 +114,7 @@ final class HTTPClientWithURLSessionTests: XCTestCase {
             }
             
             // only 1 request, no retry
-            XCTAssertTrue(sessionMock.counter == 1)
+            XCTAssertEqual(sessionMock.counter, 1)
         }
     }
 }

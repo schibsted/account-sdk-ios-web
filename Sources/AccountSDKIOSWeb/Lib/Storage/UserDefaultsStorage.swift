@@ -5,9 +5,9 @@
 
 import Foundation
 
-internal struct UserDefaultsStorage: Storage {
+struct UserDefaultsStorage: Storage {
     static let keyPrefix = "com.schibsted.account"
-    private let storage: UserDefaults
+    private nonisolated(unsafe) let storage: UserDefaults
 
     init(_ storage: UserDefaults) {
         self.storage = storage

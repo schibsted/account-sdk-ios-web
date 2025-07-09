@@ -9,8 +9,8 @@ import JOSESwift
 
 final class IdTokenValidatorTests: XCTestCase {
     private static let keyId = "test key"
-    private static var jwks: JWKS!
-    
+    private static nonisolated(unsafe) var jwks: JWKS!
+
     override class func setUp() {
         jwks = StaticJWKS(keyId: IdTokenValidatorTests.keyId, rsaPublicKey: Fixtures.jwsUtil.publicKey)
     }
@@ -18,7 +18,8 @@ final class IdTokenValidatorTests: XCTestCase {
     static func createSignedIdToken(claims: IdTokenClaims) -> String {
         return Fixtures.jwsUtil.createIdToken(claims: claims, keyId: IdTokenValidatorTests.keyId)
     }
-    
+
+    @MainActor
     func testAcceptsValidWithoutAMR() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims)
 
@@ -31,6 +32,7 @@ final class IdTokenValidatorTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testAcceptsValidWithExpectedAMRValue() {
         let expectedAMRValue = "test_value"
         let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue([expectedAMRValue, "other_value"]))
@@ -45,6 +47,7 @@ final class IdTokenValidatorTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testRejectMissingExpectedAMRInIdTokenWithoutAMR() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims).copy(expectedAMR: OptionalValue("someValue"))
 
@@ -59,7 +62,8 @@ final class IdTokenValidatorTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testAcceptsDefaultAmrResponseForEidValues() {
         let expectedAMRValue = "eid-se"
         let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue([expectedAMRValue, "other_value"]))
@@ -76,6 +80,7 @@ final class IdTokenValidatorTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testRejectsMismatchingNonce() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims)
 
@@ -91,6 +96,7 @@ final class IdTokenValidatorTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testRejectsIncorrectIssuer() {
         let claims = Fixtures.idTokenClaims.copy(iss: "https://issuer.example.com")
         let context = IdTokenValidationContext.from(expectedClaims: claims).copy(issuer: "https://other.example.com")
@@ -103,7 +109,8 @@ final class IdTokenValidatorTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testAcceptsIssuerWithTrailingSlash() {
         let issuer = "https://issuer.example.com"
         let issuerWithTrailingSlash = issuer + "/"
@@ -125,7 +132,8 @@ final class IdTokenValidatorTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testRejectsAudienceClaimWithoutExpectedClientId() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims).copy(clientId: "other_client")
         
@@ -137,7 +145,8 @@ final class IdTokenValidatorTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testRejectsExpiredIdToken() {
         let context = IdTokenValidationContext.from(expectedClaims: Fixtures.idTokenClaims)
 
@@ -154,16 +163,26 @@ final class IdTokenValidatorTests: XCTestCase {
 
 extension IdTokenValidationContext {
     static func from(expectedClaims claims: IdTokenClaims) -> IdTokenValidationContext {
-        return IdTokenValidationContext(issuer: claims.iss,
-                                        clientId: claims.aud[0],
-                                        nonce: claims.nonce,
-                                        expectedAMR: claims.amr.map { $0[0] } ?? nil)
+        IdTokenValidationContext(
+            issuer: claims.iss,
+            clientId: claims.aud[0],
+            nonce: claims.nonce,
+            expectedAMR: claims.amr.map { $0[0]
+            } ?? nil)
     }
 
-    func copy(issuer: String? = nil, clientId: String? = nil, nonce: OptionalValue<String>? = nil, expectedAMR: OptionalValue<String>? = nil) -> IdTokenValidationContext {
-        return IdTokenValidationContext(issuer: issuer ?? self.issuer,
-                                        clientId: clientId ?? self.clientId,
-                                        nonce: nonce.map { $0.value } ?? self.nonce,
-                                        expectedAMR: expectedAMR.map { $0.value } ?? self.expectedAMR)
+    func copy(
+        issuer: String? = nil,
+        clientId: String? = nil,
+        nonce: OptionalValue<String>? = nil,
+        expectedAMR: OptionalValue<String>? = nil
+    ) -> IdTokenValidationContext {
+        IdTokenValidationContext(
+            issuer: issuer ?? self.issuer,
+            clientId: clientId ?? self.clientId,
+            nonce: nonce.map { $0.value
+            } ?? self.nonce,
+            expectedAMR: expectedAMR.map { $0.value } ?? self.expectedAMR
+        )
     }
 }

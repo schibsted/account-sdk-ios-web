@@ -5,7 +5,7 @@
 
 import Foundation
 
-protocol URLSessionProtocol {
+protocol URLSessionProtocol: Sendable {
     typealias DataTaskResult = @Sendable (Data?, URLResponse?, Error?) -> Void
 
     func dataTask(with: URLRequest, completionHandler: @escaping DataTaskResult) -> URLSessionDataTask

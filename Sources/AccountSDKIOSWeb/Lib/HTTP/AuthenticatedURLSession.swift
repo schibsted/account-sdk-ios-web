@@ -6,6 +6,7 @@
 import Foundation
 
 /// AuthenticatedURLSession wraps a User to allow Bearer authenticated requests and the use of URLSessionDataTask
+@MainActor
 public final class AuthenticatedURLSession {
     private let user: User
     private let urlSession: URLSession
@@ -40,8 +41,10 @@ public final class AuthenticatedURLSession {
      - parameter completionHandler: The completion handler to call when the load request is complete.
      - returns Configured URLSessionDataTask.
      */
-    public func dataTask(with request: URLRequest,
-                         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    public func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
+    ) -> URLSessionDataTask {
         let user = self.user
         let request = authenticatedRequest(request, tokens: user.tokens)
         return urlSession.dataTask(with: request) { [weak self] data, response, error in
@@ -56,17 +59,19 @@ public final class AuthenticatedURLSession {
                 return
             }
 
-            user.refreshTokens { result in
-                switch result {
-                case .success(let tokens):
-                    let requestWithRefreshedTokens = authenticatedRequest(request, tokens: tokens)
-                    self?.refreshTokenDataTask = self?.urlSession.dataTask(
-                        with: requestWithRefreshedTokens,
-                        completionHandler: completionHandler
-                    )
-                    self?.refreshTokenDataTask?.resume()
-                case .failure:
-                    completionHandler(data, response, error)
+            DispatchQueue.main.async {
+                user.refreshTokens { result in
+                    switch result {
+                    case .success(let tokens):
+                        let requestWithRefreshedTokens = authenticatedRequest(request, tokens: tokens)
+                        self?.refreshTokenDataTask = self?.urlSession.dataTask(
+                            with: requestWithRefreshedTokens,
+                            completionHandler: completionHandler
+                        )
+                        self?.refreshTokenDataTask?.resume()
+                    case .failure:
+                        completionHandler(data, response, error)
+                    }
                 }
             }
         }

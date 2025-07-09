@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "3.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.6.2"),
-        .package(url: "https://github.com/Brightify/Cuckoo.git", from: "2.0.14")
+        .package(url: "https://github.com/Brightify/Cuckoo.git", exact: "2.0.18")
     ],
     targets: [
         .target(

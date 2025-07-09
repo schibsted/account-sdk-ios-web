@@ -7,9 +7,11 @@ import Foundation
 import AuthenticationServices
 
 protocol SimplifiedLoginViewModelAuthenticator {
+    @MainActor
     var asWebAuthenticationSession: ASWebAuthenticationSession? { get set }
 }
 
+@MainActor
 protocol SimplifiedLoginUserActionable {
     var onClickedContinueWithoutLogin: (() -> Void)? { get set}
     var onClickedSwitchAccount: (() -> Void)? { get set}
@@ -19,6 +21,7 @@ protocol SimplifiedLoginUserActionable {
 }
 
 extension SimplifiedLoginUserActionable {
+    @MainActor
     func send(action: SimplifiedLoginViewController.UserAction) {
         switch action {
         case .clickedContinueAsUser:
@@ -33,15 +36,13 @@ extension SimplifiedLoginUserActionable {
     }
 }
 
-class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelAuthenticator {
-
+@MainActor
+final class SimplifiedLoginViewModel: SimplifiedLoginUserActionable, SimplifiedLoginViewModelAuthenticator {
     let tracker: TrackingEventsHandler?
-
     let localizationModel: SimplifiedLoginLocalizationModel
     let imageDataModel: SimplifiedLoginNamedImageData
     var schibstedLogo: UIImage { imageDataModel.schibstedLogo }
     var icons: [UIImage] { imageDataModel.icons }
-
     let isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone
 
     let userData: SimplifiedLoginViewModelUserData

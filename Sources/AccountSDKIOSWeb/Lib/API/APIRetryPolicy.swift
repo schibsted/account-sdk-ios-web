@@ -5,7 +5,7 @@
 
 import Foundation
 
-class APIRetryPolicy: RetryPolicy {
+final class APIRetryPolicy: RetryPolicy {
     func shouldRetry(for error: HTTPError) -> Bool {
         switch error {
         case .errorResponse(code: let code, body: _):

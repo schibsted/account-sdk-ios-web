@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal class KeychainSessionStorage: SessionStorage {
+class KeychainSessionStorage: SessionStorage, @unchecked Sendable {
     var accessGroup: String? {
         return keychain.accessGroup
     }

@@ -5,11 +5,13 @@
 
 import Foundation
 
+@MainActor
 public protocol UserDelegate: AnyObject {
     func userDidLogout()
 }
 
-public protocol UserProtocol {
+@MainActor
+public protocol UserProtocol: Sendable {
     var delegates: MulticastDelegate<UserDelegate> { get }
     var uuid: String? { get }
     var userId: String? { get }
@@ -17,16 +19,23 @@ public protocol UserProtocol {
     func logout()
     func isLoggedIn() -> Bool
 
-    func webSessionURL(clientId: String,
-                       redirectURI: String,
-                       state: String?,
-                       completion: @escaping HTTPResultHandler<URL>)
-    func oneTimeCode(clientId: String,
-                     completion: @escaping HTTPResultHandler<String>)
+    func webSessionURL(
+        clientId: String,
+        redirectURI: String,
+        state: String?,
+        completion: @escaping HTTPResultHandler<URL>
+    )
+
+    func oneTimeCode(
+        clientId: String,
+        completion: @escaping HTTPResultHandler<String>
+    )
+
     func fetchProfileData(completion: @escaping HTTPResultHandler<UserProfileResponse>)
 }
 
 /// Representation of logged-in user.
+@MainActor
 public class User: UserProtocol {
     let client: Client
     var tokens: UserTokens?
@@ -96,14 +105,18 @@ public class User: UserProtocol {
      - parameter state: An opaque value used by the client to maintain state between
      - parameter completion: The callback that receives the URL or an error in case of failure
      */
-    public func webSessionURL(clientId: String,
-                              redirectURI: String,
-                              state: String? = nil,
-                              completion: @escaping HTTPResultHandler<URL>) {
-        client.schibstedAccountAPI.sessionExchange(for: self,
-                                                      clientId: clientId,
-                                                      redirectURI: redirectURI,
-                                                      state: state) { result in
+    public func webSessionURL(
+        clientId: String,
+        redirectURI: String,
+        state: String? = nil,
+        completion: @escaping HTTPResultHandler<URL>
+    ) {
+        client.schibstedAccountAPI.sessionExchange(
+            for: self,
+            clientId: clientId,
+            redirectURI: redirectURI,
+            state: state
+        ) { result in
             switch result {
             case .success(let response):
                 let url = self.client.configuration.serverURL.appendingPathComponent("/session/\(response.code)")
@@ -140,7 +153,6 @@ public class User: UserProtocol {
 }
 
 extension User {
-
     func userContextFromToken(completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
         client.schibstedAccountAPI.userContextFromToken(for: self, completion: completion)
     }
@@ -159,7 +171,7 @@ extension User {
         return false
     }
 
-    func refreshTokens(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    func refreshTokens(completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void) {
         self.refreshHandler.refreshWithoutRetry(user: self, completion: completion)
     }
 
@@ -203,19 +215,11 @@ extension User {
     }
 }
 
-extension User: Equatable {
-    public static func == (lhs: User, rhs: User) -> Bool {
-        return lhs.uuid == rhs.uuid
-            && lhs.client.configuration.clientId == rhs.client.configuration.clientId
-            && lhs.tokens == rhs.tokens
-    }
-}
-
 // MARK: NetworkRefreshRequestHandler
 
 extension User {
-
     /// TokenRefreshRequestHandler is responsible for calling refresh once,  and queuing subsequent requests to wait for the One refresh.
+    @MainActor
     final class TokenRefreshRequestHandler {
 
         // swiftlint:disable:next nesting
@@ -225,9 +229,9 @@ extension User {
         }
 
         private let isTokenRefreshing: Synchronized<State> = .init(.notRefreshing)
-        private let requestsOnRefreshFailure: Synchronized<[(Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
+        private let requestsOnRefreshFailure: Synchronized<[@MainActor (Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
         private let requestsOnRefreshSuccess: Synchronized<[DispatchWorkItem]> = .init([])
-        private let completionsOnRefreshWithoutRetry: Synchronized<[(Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
+        private let completionsOnRefreshWithoutRetry: Synchronized<[@MainActor (Result<UserTokens, RefreshTokenError>) -> Void]> = .init([])
         private let tokenRefresher: UserTokensRefreshing
         private let requestMaker: UserRequestMaking
 
@@ -263,7 +267,7 @@ extension User {
             }
         }
 
-        func refreshWithoutRetry(user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        func refreshWithoutRetry(user: User, completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void) {
             saveRefreshWithoutRetryCompletion(completion: completion) // Save work to be executed after refresh
 
             switch isTokenRefreshing.value {
@@ -300,7 +304,7 @@ extension User {
 
         // MARK: Read and write request lists
 
-        private func saveRefreshWithoutRetryCompletion(completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+        private func saveRefreshWithoutRetryCompletion(completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void) {
             completionsOnRefreshWithoutRetry.modify { currentValue in
                 var newValue = currentValue
                 newValue.append(completion)
@@ -308,7 +312,7 @@ extension User {
             }
         }
 
-        private func saveRequestOnRefreshSuccess(_ block: @escaping () -> Void) {
+        private func saveRequestOnRefreshSuccess(_ block: @escaping @MainActor () -> Void) {
             requestsOnRefreshSuccess.modify { currentValue in
                 var newValue = currentValue
                 let item = DispatchWorkItem {
@@ -323,9 +327,9 @@ extension User {
 
         private func saveRequestOnRefreshFailure<T: Decodable>(
             initialRequestResult: Result<T, HTTPError>,
-            completion: @escaping HTTPResultHandler<T>) {
-
-            let failure: (Result<UserTokens, RefreshTokenError>) -> Void = { result in
+            completion: @escaping HTTPResultHandler<T>
+        ) {
+            let failure: @MainActor (Result<UserTokens, RefreshTokenError>) -> Void = { result in
                 switch result {
                 case .failure(.refreshRequestFailed(.errorResponse(_, let body))):
                     guard User.shouldLogout(tokenResponseBody: body) else {
@@ -357,7 +361,7 @@ extension User {
 
         private func executeRequestOnRefreshSuccess() {
             requestsOnRefreshSuccess.value.forEach({
-                DispatchQueue.global().async(execute: $0)
+                DispatchQueue.main.async(execute: $0)
             }) // Execute in FIFO order.
             removeAll()
         }
@@ -375,23 +379,29 @@ extension User {
 }
 
 protocol UserTokensRefreshing: AnyObject {
-    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void)
+    @MainActor
+    func refreshTokens(for user: User, completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void)
 }
 
 final class DefaultUserTokensRefresher: UserTokensRefreshing {
-    func refreshTokens(for user: User, completion: @escaping (Result<UserTokens, RefreshTokenError>) -> Void) {
+    @MainActor
+    func refreshTokens(for user: User, completion: @escaping @MainActor (Result<UserTokens, RefreshTokenError>) -> Void) {
         user.client.refreshTokens(for: user, completion: completion)
     }
 }
 
 protocol UserRequestMaking: AnyObject {
+    @MainActor
     func makeRequest<T: Decodable>(user: User, request: URLRequest, completion: @escaping HTTPResultHandler<T>)
 }
 
 final class DefaultUserRequestMaker: UserRequestMaking {
-    func makeRequest<T>(user: User,
-                        request: URLRequest,
-                        completion: @escaping HTTPResultHandler<T>) where T: Decodable {
+    @MainActor
+    func makeRequest<T>(
+        user: User,
+        request: URLRequest,
+        completion: @escaping HTTPResultHandler<T>
+    ) where T: Decodable {
         user.makeRequest(request: request, completion: completion)
     }
 }

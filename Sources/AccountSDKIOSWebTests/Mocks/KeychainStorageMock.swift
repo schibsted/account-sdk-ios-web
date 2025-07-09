@@ -6,8 +6,7 @@
 import Foundation
 @testable import AccountSDKIOSWeb
 
-class KeychainStorageMock: KeychainStoring {
-    
+final class KeychainStorageMock: KeychainStoring, @unchecked Sendable {
     private var storedData: [String:Data] = [:]
     private var testKey = "test_key"
     

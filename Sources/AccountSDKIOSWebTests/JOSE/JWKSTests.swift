@@ -25,6 +25,7 @@ final class RemoteJWKSTests: XCTestCase {
     private let jwksURI = URL(staticString: "https://example.com/jwks")
     private let testJWK = RSAPublicKey(modulus: "aaa", exponent: "bbb")
 
+    @MainActor
     func testGetKeyReturnsAlreadyCachedKey() {
         let keyId = "test key"
         let cache = DictionaryCache<JWK>()
@@ -38,21 +39,22 @@ final class RemoteJWKSTests: XCTestCase {
                 XCTAssertEqual(cachedJwk!.keyType, self.testJWK.keyType)
                 XCTAssertEqual(cachedJwk!.parameters, self.testJWK.parameters)
                 
-                let closureMatcher: ParameterMatcher<HTTPResultHandler<JWKSResponse>> = anyClosure()
+                let closureMatcher: ParameterMatcher<HTTPResultHandler<JWKSResponse>> = ParameterMatcher()
                 verify(mockHTTPClient, times(0)).execute(request: any(), withRetryPolicy: any(), completion: closureMatcher)
                 
                 done()
             }
         }
     }
-    
+
+    @MainActor
     func testGetKeyFetchesJWKSForUnknownKeyId() {
         let keyId = "test key"
        
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: keyId, kty: "RSA", e: testJWK.exponent, n: testJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
@@ -67,11 +69,12 @@ final class RemoteJWKSTests: XCTestCase {
             }
         }
     }
-    
-    func testGetKeyHandlesMissingKeyId() {       
+
+    @MainActor
+    func testGetKeyHandlesMissingKeyId() {
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(JWKSResponse(keys: [])))
                 }

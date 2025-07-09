@@ -5,8 +5,7 @@
 
 import Foundation
 
-public final class MulticastDelegate<T> {
-
+public final class MulticastDelegate<T>: @unchecked Sendable {
     lazy var delegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
 
     public func addDelegate(_ delegate: T) {

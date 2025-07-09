@@ -5,7 +5,7 @@
 
 import Foundation
 
-class NoRetries: RetryPolicy {
+final class NoRetries: RetryPolicy {
     private init() {}
 
     public static let policy = NoRetries()

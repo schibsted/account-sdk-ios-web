@@ -8,17 +8,16 @@ import Cuckoo
 
 @testable import AccountSDKIOSWeb
 
-final class SchibstedAccountAPITests: XCTestCase {
-    
+final class SchibstedAccountAPITests: XCTestCase {    
     // MARK: AssertionForSimplifiedLoginRequest
-    
+
+    @MainActor
     func testAssertionForSimplifiedLoginURL() {
         let response = SimplifiedLoginAssertionResponse(assertion: "My assertion string")
-
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: response)))
                 }
@@ -32,7 +31,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 switch result {
                 case .success:
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
-                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<SimplifiedLoginAssertionResponse>>> = anyClosure()
+                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<SimplifiedLoginAssertionResponse>>> = ParameterMatcher()
                     verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
                     let requestUrl = argumentCaptor.value!.url
                     
@@ -45,13 +44,14 @@ final class SchibstedAccountAPITests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testAssertionForSimplifiedLoginSuccessResponse() {
         let response = SimplifiedLoginAssertionResponse(assertion: "My assertion string")
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: response)))
                 }
@@ -75,6 +75,7 @@ final class SchibstedAccountAPITests: XCTestCase {
     
     // MARK: SessionService endpoints
 
+    @MainActor
     func testUserContextFromTokenUsesSessionServiceURL() {
         let response = UserContextFromTokenResponse(identifier: "An identifier",
                                                     displayText: "A display name",
@@ -83,7 +84,7 @@ final class SchibstedAccountAPITests: XCTestCase {
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(response))
                 }
@@ -97,7 +98,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                 switch result {
                 case .success:
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
-                    let closureMatcher: ParameterMatcher<HTTPResultHandler<UserContextFromTokenResponse>> = anyClosure()
+                    let closureMatcher: ParameterMatcher<HTTPResultHandler<UserContextFromTokenResponse>> = ParameterMatcher()
                     verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
                     let requestUrl = argumentCaptor.value!.url
                     
@@ -110,16 +111,18 @@ final class SchibstedAccountAPITests: XCTestCase {
             }
         }
     }
-    
-    func testUserContextFromTokenSuccessResponse() {
-        let response = UserContextFromTokenResponse(identifier: "An identifier",
-                                                    displayText: "A display name",
-                                                    clientName: "Schibsted Client Name")
 
+    @MainActor
+    func testUserContextFromTokenSuccessResponse() {
+        let response = UserContextFromTokenResponse(
+            identifier: "An identifier",
+            displayText: "A display name",
+            clientName: "Schibsted Client Name"
+        )
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(response))
                 }
@@ -142,13 +145,14 @@ final class SchibstedAccountAPITests: XCTestCase {
     }
     
     // MARK: OldSDK Api endpoints
-   
+
+    @MainActor
     func testUserProfile() {
         let userProfileResponse = UserProfileResponse(userId: "12345", email: "test@example.com")
         
         let mockHTTPClient = MockHTTPClient()
         stub(mockHTTPClient) {mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(SchibstedAccountAPIResponse(data: userProfileResponse)))
                 }
@@ -165,7 +169,7 @@ final class SchibstedAccountAPITests: XCTestCase {
                     XCTAssertEqual(receivedResponse, userProfileResponse)
                     
                     let argumentCaptor = ArgumentCaptor<URLRequest>()
-                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<UserProfileResponse>>> = anyClosure()
+                    let closureMatcher: ParameterMatcher<HTTPResultHandler<SchibstedAccountAPIResponse<UserProfileResponse>>> = ParameterMatcher()
                     verify(mockHTTPClient).execute(request: argumentCaptor.capture(), withRetryPolicy: any(), completion: closureMatcher)
                     let requestUrl = argumentCaptor.value!.url
                     XCTAssertEqual(requestUrl, Fixtures.clientConfig.serverURL.appendingPathComponent("/api/2/user/\(Fixtures.userTokens.idTokenClaims.sub)"))

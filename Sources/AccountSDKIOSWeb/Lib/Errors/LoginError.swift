@@ -5,7 +5,7 @@
 
 import Foundation
 
-public struct OAuthError: Codable, Equatable {
+public struct OAuthError: Codable, Equatable, Sendable {
     let error: String
     let errorDescription: String?
 
@@ -20,7 +20,7 @@ public struct OAuthError: Codable, Equatable {
     }
 }
 
-public enum LoginError: Error, Equatable {
+public enum LoginError: Error, Equatable, Sendable {
     /// Authentication response not related to any outstanding authentication request was received
     case unsolicitedResponse
     /// The authentication failed

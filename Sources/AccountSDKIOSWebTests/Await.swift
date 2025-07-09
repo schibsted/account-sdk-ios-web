@@ -22,7 +22,8 @@ extension XCTWaiter.Result: @retroactive CustomStringConvertible {
 }
 
 struct Await {
-    static func until(timeout: Double = 1, call: @escaping (@escaping () -> Void) -> Void) {
+    @MainActor
+    static func until(timeout: Double = 1, call: @escaping @MainActor (@escaping @MainActor () -> Void) -> Void) {
         let expectation = XCTestExpectation()
         
         call { expectation.fulfill() }

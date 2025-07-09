@@ -9,14 +9,15 @@ import JOSESwift
 
 final class JOSEUtilTests: XCTestCase {
     private static let keyId = "test key"
-    private static var jwsUtil: JWSUtil!
-    private static var jwks: JWKS!
-    
+    private nonisolated(unsafe) static var jwsUtil: JWSUtil!
+    private nonisolated(unsafe) static var jwks: JWKS!
+
     override class func setUp() {
         jwsUtil = JWSUtil()
         jwks = StaticJWKS(keyId: keyId, rsaPublicKey: jwsUtil.publicKey)
     }
-    
+
+    @MainActor
     func testVerifySignatureValidJWS() {
         let payload = "test data".data(using: .utf8)!
         let jws = JOSEUtilTests.jwsUtil.createJWS(payload: payload, keyId: JOSEUtilTests.keyId)
@@ -28,7 +29,8 @@ final class JOSEUtilTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testVerifySignatureHandlesMalformedJWS() {
         Await.until { done in
             JOSEUtil.verifySignature(of: "not a jws", withKeys: JOSEUtilTests.jwks!) { result in
@@ -37,7 +39,8 @@ final class JOSEUtilTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testVerifySignatureHandlesInvalidSignature() {
         let jws = JOSEUtilTests.jwsUtil.createJWS(payload: Data(), keyId: JOSEUtilTests.keyId)
         let jwsComponents = jws.components(separatedBy: ".")
@@ -51,7 +54,8 @@ final class JOSEUtilTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testVerifySignatureHandlesJWSWithoutKeyId() {
         let jws = JOSEUtilTests.jwsUtil.createJWS(payload: Data(), keyId: nil)
 
@@ -63,6 +67,7 @@ final class JOSEUtilTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testVerifySignatureHandlesUnknownKeyId() {
         let jws = JOSEUtilTests.jwsUtil.createJWS(payload: Data(), keyId: "unknown")
 
@@ -73,7 +78,8 @@ final class JOSEUtilTests: XCTestCase {
             }
         }
     }
-    
+
+    @MainActor
     func testVerifySignatureHandlesUnsupportedKeyType() {
         let jws = JOSEUtilTests.jwsUtil.createJWS(payload: Data(), keyId: JOSEUtilTests.keyId)
        

@@ -10,12 +10,13 @@ import Cuckoo
 
 final class ClientTests: XCTestCase {
     private static let keyId = "test key"
-    private static var jwsUtil: JWSUtil!
+    private static nonisolated(unsafe) var jwsUtil: JWSUtil!
     
     override class func setUp() {
         jwsUtil = JWSUtil()
     }
 
+    @MainActor
     func testHandleAuthenticationResponseRejectsUnsolicitedResponse() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
@@ -25,12 +26,13 @@ final class ClientTests: XCTestCase {
         
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(staticString: "com.example://login?state=no-exist&code=123456")) { result in
-                XCTAssertEqual(result, .failure(.unsolicitedResponse))
-                done()
+                XCTAssertEqual(result.error, .unsolicitedResponse)
+                DispatchQueue.main.async { done() }
             }
         }
     }
-    
+
+    @MainActor
     func testHandleAuthenticationResponseHandlesErrorResponse() {
         let state = "testState"
         let mockStorage = MockStorage()
@@ -43,12 +45,13 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)&error=invalid_request&error_description=test%20error")!) { result in
-                XCTAssertEqual(result, .failure(.authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error"))))
-                done()
+                XCTAssertEqual(result.error, .authenticationErrorResponse(error: OAuthError(error: "invalid_request", errorDescription: "test error")))
+                DispatchQueue.main.async { done() }
             }
         }
     }
-    
+
+    @MainActor
     func testHandleAuthenticationResponseHandlesMissingAuthCode() {
         let state = "testState"
         let mockStorage = MockStorage()
@@ -61,25 +64,26 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage))
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?state=\(state)")!) { result in
-                XCTAssertEqual(result, .failure(.unexpectedError(message: "Missing authorization code from authentication response")))
-                done()
+                XCTAssertEqual(result.error, .unexpectedError(message: "Missing authorization code from authentication response"))
+                DispatchQueue.main.async { done() }
             }
         }
     }
 
+    @MainActor
     func testHandleAuthenticationResponseHandlesSuccessResponse() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: ParameterMatcher(), withRetryPolicy: ParameterMatcher(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
 
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: ParameterMatcher(), withRetryPolicy: ParameterMatcher(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
@@ -101,13 +105,17 @@ final class ClientTests: XCTestCase {
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
                 let expectedTokens = UserTokens(accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken, idToken: tokenResponse.idToken!, idTokenClaims: Fixtures.idTokenClaims)
-                XCTAssertEqual(result, .success(User(client: client, tokens: expectedTokens)))
-                XCTAssertEqual(client.state, state)
-                done()
+                DispatchQueue.main.async {
+                    XCTAssertEqual(result.successValue?.client.configuration.clientId, client.configuration.clientId)
+                    XCTAssertEqual(result.successValue?.tokens, expectedTokens)
+                    XCTAssertEqual(client.state, state)
+                    done()
+                }
             }
         }
     }
-    
+
+    @MainActor
     func testHandleAuthenticationResponseHandlesTokenErrorResponse() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
@@ -134,7 +142,7 @@ final class ClientTests: XCTestCase {
         for (returnedResponse, expectedResult) in testData {
             let mockHTTPClient = MockHTTPClient()
             stub(mockHTTPClient) { mock in
-                when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+                when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                     .then { (_, _, completion: HTTPResultHandler<TokenResponse>) in
                         completion(.failure(returnedResponse))
                     }
@@ -143,13 +151,14 @@ final class ClientTests: XCTestCase {
             let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
             Await.until { done in
                 client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                    XCTAssertEqual(result, .failure(expectedResult))
-                    done()
+                    XCTAssertEqual(result.error, expectedResult)
+                    DispatchQueue.main.async { done() }
                 }
             }
         }
     }
 
+    @MainActor
     func testHandleAuthenticationResponseRejectsExpectedAMRValueInIdToken() {
         let nonce = "testNonce"
         let claims = Fixtures.idTokenClaims.copy(amr: OptionalValue(nil)) // no AMR in ID Token
@@ -158,13 +167,13 @@ final class ClientTests: XCTestCase {
         let mockHTTPClient = MockHTTPClient()
         
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
             
             let jwksResponse = JWKSResponse(keys: [RSAJWK(kid: ClientTests.keyId, kty: "RSA", e: ClientTests.jwsUtil.publicJWK.exponent, n: ClientTests.jwsUtil.publicJWK.modulus, alg: "RS256", use: "sig")])
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: any(), withRetryPolicy: any(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(jwksResponse))
                 }
@@ -181,12 +190,13 @@ final class ClientTests: XCTestCase {
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: MockSessionStorage(), stateStorage: StateStorage(storage: mockStorage), httpClient: mockHTTPClient)
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(string: "com.example://login?code=12345&state=\(state)")!) { result in
-                XCTAssertEqual(result, .failure(.missingExpectedMFA))
-                done()
+                XCTAssertEqual(result.error, .missingExpectedMFA)
+                DispatchQueue.main.async { done() }
             }
         }
     }
-    
+
+    @MainActor
     func testHandleAuthenticationResponseCancelResponse() {
         let mockStorage = MockStorage()
         stub(mockStorage) { mock in
@@ -196,12 +206,13 @@ final class ClientTests: XCTestCase {
         
         Await.until { done in
             client.handleAuthenticationResponse(url: URL(staticString: "com.example:/cancel")) { result in
-                XCTAssertEqual(result, .failure(.canceled))
-                done()
+                XCTAssertEqual(result.error, .canceled)
+                DispatchQueue.main.async { done() }
             }
         }
     }
 
+    @MainActor
     func testResumeLastLoggedInUserWithExistingSession() {
         let session = UserSession(clientId: Fixtures.clientConfig.clientId, userTokens: Fixtures.userTokens, updatedAt: Date())
         let mockSessionStorage = MockSessionStorage()
@@ -211,9 +222,11 @@ final class ClientTests: XCTestCase {
 
         let client = Client(configuration: Fixtures.clientConfig, sessionStorage: mockSessionStorage, stateStorage: StateStorage(storage: MockStorage()))
         let user = client.resumeLastLoggedInUser()
-        XCTAssertEqual(user, User(client: client, tokens: Fixtures.userTokens))
+        XCTAssertEqual(user?.client.configuration.clientId, client.configuration.clientId)
+        XCTAssertEqual(user?.tokens, Fixtures.userTokens)
     }
 
+    @MainActor
     func testResumeLastLoggedInUserWithoutSession() {
         let mockSessionStorage = MockSessionStorage()
         stub(mockSessionStorage) { mock in
@@ -229,37 +242,40 @@ final class ClientTests: XCTestCase {
         let data = try! JSONEncoder().encode(claims)
         return ClientTests.jwsUtil.createJWS(payload: data, keyId: ClientTests.keyId)
     }
-    
+
+    @MainActor
     func testAccountPagesURL() {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
         XCTAssertEqual(client.configuration.accountPagesURL.absoluteString, "\(Fixtures.clientConfig.serverURL.absoluteString)/profile-pages")
     }
-    
+
+    @MainActor
     func testDidNotStartNewSessionBeforeFinishingOldOne() {
         let client = Client(configuration: Fixtures.clientConfig, httpClient: MockHTTPClient())
         let firstSession = client.getLoginSession { result in
-            if result == .failure(.previousSessionInProgress) {
+            if result.error == .previousSessionInProgress {
                 XCTFail("Failed to create first session. This should never happened")
             }
         }
         let secondSession = client.getLoginSession { result in
-            XCTAssertEqual(result, .failure(LoginError.previousSessionInProgress))
+            XCTAssertEqual(result.error, LoginError.previousSessionInProgress)
         }
         let thirdSession = client.getLoginSession { result in
-            XCTAssertEqual(result, .failure(LoginError.previousSessionInProgress))
+            XCTAssertEqual(result.error, LoginError.previousSessionInProgress)
         }
         XCTAssertNotNil(firstSession)
         XCTAssertNil(secondSession)
         XCTAssertNil(thirdSession)
     }
-    
+
+    @MainActor
     func testDoNotRetryStoringToKeychainInCaseOfSuccess() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: ParameterMatcher(), withRetryPolicy: ParameterMatcher(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
@@ -287,14 +303,15 @@ final class ClientTests: XCTestCase {
         }
         verify(mockSessionStorage, times(1)).store(any(), accessGroup: any())
     }
-    
+
+    @MainActor
     func testRetryStoringToKeychainInCaseOfFailure() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
         let mockHTTPClient = MockHTTPClient()
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: ParameterMatcher(), withRetryPolicy: ParameterMatcher(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
@@ -323,7 +340,8 @@ final class ClientTests: XCTestCase {
         }
         verify(mockSessionStorage, times(2)).store(any(), accessGroup: any())
     }
-    
+
+    @MainActor
     func testSuccessfullSecondAttemptToStoreSessionTokens() {
         let idToken = createIdToken(claims: Fixtures.idTokenClaims)
         let tokenResponse = TokenResponse(accessToken: "accessToken", refreshToken: "refreshToken", idToken: idToken, scope: "openid", expiresIn: 3600)
@@ -331,7 +349,7 @@ final class ClientTests: XCTestCase {
         var isFirst = true
 
         stub(mockHTTPClient) { mock in
-            when(mock.execute(request: any(), withRetryPolicy: any(), completion: anyClosure()))
+            when(mock.execute(request: ParameterMatcher(), withRetryPolicy: ParameterMatcher(), completion: ParameterMatcher()))
                 .then { _, _, completion in
                     completion(.success(tokenResponse))
                 }
@@ -364,7 +382,8 @@ final class ClientTests: XCTestCase {
         }
         verify(mockSessionStorage, times(2)).store(any(), accessGroup: any())
     }
-    
+
+    @MainActor
     func testGetExternalId() {
         let client = Client(configuration: Fixtures.clientConfig,
                             sessionStorage: MockSessionStorage(),
@@ -390,5 +409,17 @@ fileprivate extension Client {
                   stateStorage: stateStorage,
                   httpClient: httpClient,
                   jwks:jwks, tokenHandler: tokenHandler)
+    }
+}
+
+extension Result {
+    var successValue: Success? {
+        guard case let .success(value) = self else { return nil }
+        return value
+    }
+
+    var error: Failure? {
+        guard case let .failure(error) = self else { return nil }
+        return error
     }
 }

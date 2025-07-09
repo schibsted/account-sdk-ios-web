@@ -6,12 +6,12 @@
 import Foundation
 import JOSESwift
 
-internal enum TokenError: Error {
+enum TokenError: Error {
     case tokenRequestError(HTTPError)
     case idTokenError(IdTokenValidationError)
 }
 
-internal struct TokenResult: CustomStringConvertible {
+struct TokenResult: CustomStringConvertible {
     let userTokens: UserTokens
     let scope: String?
     let expiresIn: Int
@@ -25,7 +25,7 @@ internal struct TokenResult: CustomStringConvertible {
     }
 }
 
-internal struct TokenResponse: Codable, Equatable, CustomStringConvertible {
+struct TokenResponse: Codable, Equatable, CustomStringConvertible {
     let accessToken: String
     let refreshToken: String?
     let idToken: String?
@@ -58,7 +58,8 @@ func removeSignature(fromToken token: String?) -> String {
     return "\(split[0]).\(split[1])"
 }
 
-internal class TokenHandler {
+@MainActor
+final class TokenHandler {
     private let configuration: ClientConfiguration
     private let httpClient: HTTPClient
     private let schibstedAccountAPI: SchibstedAccountAPI
@@ -72,9 +73,11 @@ internal class TokenHandler {
         self.jwks = jwks
     }
 
-    func makeTokenRequest(authCode: String,
-                          authState: AuthState?,
-                          completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(
+        authCode: String,
+        authState: AuthState?,
+        completion: @escaping @MainActor (Result<TokenResult, TokenError>) -> Void
+    ) {
         var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "authorization_code",
@@ -91,14 +94,18 @@ internal class TokenHandler {
                     return
                 }
 
-                let idTokenValidationContext = IdTokenValidationContext(issuer: self.configuration.issuer,
-                                                                        clientId: self.configuration.clientId,
-                                                                        nonce: authState?.nonce,
-                                                                        expectedAMR: authState?.mfa?.rawValue)
+                let idTokenValidationContext = IdTokenValidationContext(
+                    issuer: self.configuration.issuer,
+                    clientId: self.configuration.clientId,
+                    nonce: authState?.nonce,
+                    expectedAMR: authState?.mfa?.rawValue
+                )
 
-                IdTokenValidator.validate(idToken: idToken,
-                                          jwks: self.jwks,
-                                          context: idTokenValidationContext) { result in
+                IdTokenValidator.validate(
+                    idToken: idToken,
+                    jwks: self.jwks,
+                    context: idTokenValidationContext
+                ) { result in
                     switch result {
                     case .success(let claims):
                         let userTokens = UserTokens(accessToken: tokenResponse.accessToken,
@@ -122,9 +129,11 @@ internal class TokenHandler {
         }
     }
 
-    func makeTokenRequest(refreshToken: String,
-                          scope: String? = nil,
-                          completion: @escaping HTTPResultHandler<TokenResponse>) {
+    func makeTokenRequest(
+        refreshToken: String,
+        scope: String? = nil,
+        completion: @escaping HTTPResultHandler<TokenResponse>
+    ) {
         var parameters = [
             "client_id": configuration.clientId,
             "grant_type": "refresh_token",

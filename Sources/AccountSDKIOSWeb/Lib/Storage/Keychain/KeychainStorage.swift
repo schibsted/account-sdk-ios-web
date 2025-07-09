@@ -6,14 +6,14 @@
 import Foundation
 import Security
 
-protocol KeychainStoring {
+protocol KeychainStoring: Sendable {
     func setValue(_ value: Data, forAccount: String?, accessGroup: String?) throws
     func getValue(forAccount: String?) throws -> Data?
     func getAll() -> [Data]
     func removeValue(forAccount: String?) throws
 }
 
-class KeychainStorage: KeychainStoring {
+final class KeychainStorage: KeychainStoring {
     private let service: String
     let accessGroup: String?
 

@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal struct StringOrIgnore: Codable, Equatable {
+struct StringOrIgnore: Codable, Equatable {
     let value: String?
 }
 
@@ -26,7 +26,7 @@ extension StringOrIgnore {
     }
 }
 
-internal struct StringBool: Codable, Equatable {
+struct StringBool: Codable, Equatable {
     let value: Bool?
     let asString: Bool
 }
@@ -59,7 +59,7 @@ extension StringBool {
     }
 }
 
-internal struct SchibstedAccountAPIResponse<T: Codable>: Codable {
+struct SchibstedAccountAPIResponse<T: Codable>: Codable {
     let data: T
 }
 

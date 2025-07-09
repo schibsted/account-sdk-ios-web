@@ -5,18 +5,21 @@
 
 import Foundation
 
-internal struct IdTokenValidationContext {
+struct IdTokenValidationContext {
     let issuer: String
     let clientId: String
     var nonce: String?
     var expectedAMR: String?
 }
 
-internal enum IdTokenValidator {
-    static func validate(idToken: String,
-                         jwks: JWKS,
-                         context: IdTokenValidationContext,
-                         completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void) {
+enum IdTokenValidator {
+    @MainActor
+    static func validate(
+        idToken: String,
+        jwks: JWKS,
+        context: IdTokenValidationContext,
+        completion: @escaping (Result<IdTokenClaims, IdTokenValidationError>) -> Void
+    ) {
         JOSEUtil.verifySignature(of: idToken, withKeys: jwks) { result in
             switch result {
             case .success(let payload):

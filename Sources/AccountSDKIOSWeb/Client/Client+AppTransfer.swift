@@ -17,6 +17,7 @@ extension Client {
             case userSessionNotFound
         }
 
+        @MainActor
         public func setup(for key: String) throws {
             switch self {
             case .preTransfer(let clientId, let accessGroup):

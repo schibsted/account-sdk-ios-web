@@ -5,13 +5,15 @@
 
 import Foundation
 
-public typealias HTTPResultHandler<T> = (Result<T, HTTPError>) -> Void
+public typealias HTTPResultHandler<T> = @MainActor (Result<T, HTTPError>) -> Void
 
-public protocol HTTPClient {
+public protocol HTTPClient: Sendable {
+    @MainActor
     func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy, completion: @escaping HTTPResultHandler<T>)
 }
 
 extension HTTPClient {
+    @MainActor
     func execute<T: Decodable>(request: URLRequest, withRetryPolicy: RetryPolicy = NoRetries.policy, completion: @escaping HTTPResultHandler<T>) {
         execute(request: request, withRetryPolicy: withRetryPolicy, completion: completion)
     }

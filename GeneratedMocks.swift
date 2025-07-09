@@ -1,17 +1,17 @@
-// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/API/SchibstedAccountAPI.swift' at 2025-07-09 17:53:54 +0000
+// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/API/SchibstedAccountAPI.swift' at 2025-07-09 17:51:44 +0000
 
 import Cuckoo
 import Foundation
 import UIKit
-@testable import AccountSDKIOSWeb
+import AccountSDKIOSWeb
 
 
 
-// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift' at 2025-07-09 17:53:54 +0000
+// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/HTTP/HTTPClient.swift' at 2025-07-09 17:51:44 +0000
 
 import Cuckoo
 import Foundation
-@testable import AccountSDKIOSWeb
+import AccountSDKIOSWeb
 
 public class MockHTTPClient: HTTPClient, Cuckoo.ProtocolMock, @unchecked Sendable {
     public typealias MocksType = HTTPClient
@@ -30,7 +30,6 @@ public class MockHTTPClient: HTTPClient, Cuckoo.ProtocolMock, @unchecked Sendabl
     }
 
     
-    @MainActor
     public func execute<T: Decodable> (request p0: URLRequest, withRetryPolicy p1: RetryPolicy, completion p2: @escaping HTTPResultHandler<T>) {
         return cuckoo_manager.call(
             "execute<T: Decodable> (request p0: URLRequest, withRetryPolicy p1: RetryPolicy, completion p2: @escaping HTTPResultHandler<T>)",
@@ -94,11 +93,11 @@ public class HTTPClientStub:HTTPClient, @unchecked Sendable {
 
 
 
-// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift' at 2025-07-09 17:53:54 +0000
+// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/Keychain/KeychainSessionStorage.swift' at 2025-07-09 17:51:44 +0000
 
 import Cuckoo
 import Foundation
-@testable import AccountSDKIOSWeb
+import AccountSDKIOSWeb
 
 class MockKeychainSessionStorage: KeychainSessionStorage, Cuckoo.ClassMock, @unchecked Sendable {
     typealias MocksType = KeychainSessionStorage
@@ -374,12 +373,12 @@ class KeychainSessionStorageStub:KeychainSessionStorage, @unchecked Sendable {
 
 
 
-// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift' at 2025-07-09 17:53:54 +0000
+// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/SessionStorage.swift' at 2025-07-09 17:51:44 +0000
 
 import Cuckoo
 import Foundation
 import Security
-@testable import AccountSDKIOSWeb
+import AccountSDKIOSWeb
 
 class MockSessionStorage: SessionStorage, Cuckoo.ProtocolMock, @unchecked Sendable {
     typealias MocksType = SessionStorage
@@ -621,11 +620,11 @@ class SessionStorageStub:SessionStorage, @unchecked Sendable {
 
 
 
-// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift' at 2025-07-09 17:53:54 +0000
+// MARK: - Mocks generated from file: 'Sources/AccountSDKIOSWeb/Lib/Storage/Storage.swift' at 2025-07-09 17:51:44 +0000
 
 import Cuckoo
 import Foundation
-@testable import AccountSDKIOSWeb
+import AccountSDKIOSWeb
 
 class MockStorage: Storage, Cuckoo.ProtocolMock, @unchecked Sendable {
     typealias MocksType = Storage

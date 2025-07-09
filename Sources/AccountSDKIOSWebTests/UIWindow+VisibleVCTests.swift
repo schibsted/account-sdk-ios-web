@@ -7,18 +7,17 @@ import XCTest
 @testable import AccountSDKIOSWeb
 
 final class UIWindowVisibleVCTests: XCTestCase {
-    
-    
+    @MainActor
     func testReturnsVisibleViewController() {
         let vc = UIViewController()
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        
-        XCTAssertEqual(window.visibleViewController, vc)
-        
-    }
     
+        XCTAssertEqual(window.visibleViewController, vc)
+    }
+
+    @MainActor
     func testReturnsVisibleViewControllerFromNavigation() {
         let vc = UIViewController()
         let navigationController = UINavigationController()
@@ -30,7 +29,8 @@ final class UIWindowVisibleVCTests: XCTestCase {
         XCTAssertEqual(window.visibleViewController, vc)
         
     }
-    
+
+    @MainActor
     func testReturnsVisibleViewControllerFromTabBar() {
         let vc = UIViewController()
         let tabBarController = UITabBarController()
@@ -39,7 +39,6 @@ final class UIWindowVisibleVCTests: XCTestCase {
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
         
-        XCTAssertEqual(window.visibleViewController, vc)
-        
+        XCTAssertEqual(window.visibleViewController, vc)        
     }
 }

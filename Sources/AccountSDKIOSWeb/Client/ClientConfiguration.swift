@@ -5,7 +5,7 @@
 
 import Foundation
 
-public struct ClientConfiguration {
+public struct ClientConfiguration: Sendable {
     /// Issuer identifier for identifier provider
     public let issuer: String
     /// URL of identity provider
@@ -19,7 +19,7 @@ public struct ClientConfiguration {
 
     public var env: Environment
 
-    public enum Environment: String {
+    public enum Environment: String, Sendable {
         case proCom = "https://login.schibsted.com"
         case proFi = "https://login.schibsted.fi"
         case proNo = "https://payment.schibsted.no"

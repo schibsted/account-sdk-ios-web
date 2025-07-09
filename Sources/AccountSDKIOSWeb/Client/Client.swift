@@ -6,7 +6,7 @@
 import AuthenticationServices
 import Foundation
 
-public typealias LoginResultHandler = (Result<User, LoginError>) -> Void
+public typealias LoginResultHandler = @Sendable (Result<User, LoginError>) -> Void
 
 /// Default implementation of `ASWebAuthenticationPresentationContextProviding` for the ASWebAuthenticationSession.
 public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
@@ -16,7 +16,8 @@ public class ASWebAuthSessionContextProvider: NSObject, ASWebAuthenticationPrese
 }
 
 /// Represents a client registered with Schibsted account.
-public class Client: CustomStringConvertible {
+@MainActor
+public class Client: @unchecked Sendable, CustomStringConvertible {
     let configuration: ClientConfiguration
 
     static let authStateKey = "AuthState"
@@ -41,55 +42,68 @@ public class Client: CustomStringConvertible {
      - parameter tracker: The tracking event implementation that will be called at various spots
      - parameter httpClient: Optional custom HTTPClient
      */
-    public convenience init(configuration: ClientConfiguration,
-                            appIdentifierPrefix: String? = nil,
-                            tracker: TrackingEventsHandler? = nil,
-                            httpClient: HTTPClient? = nil) {
+    public convenience init(
+        configuration: ClientConfiguration,
+        appIdentifierPrefix: String? = nil,
+        tracker: TrackingEventsHandler? = nil,
+        httpClient: HTTPClient? = nil
+    ) {
 
         let chttpClient = httpClient ?? HTTPClientWithURLSession()
-        let jwks = RemoteJWKS(jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
-                              httpClient: chttpClient)
-        let tokenHandler = TokenHandler(configuration: configuration,
-                                        httpClient: chttpClient,
-                                        jwks: jwks)
+        let jwks = RemoteJWKS(
+            jwksURI: configuration.serverURL.appendingPathComponent("/oauth/jwks"),
+            httpClient: chttpClient
+        )
+        let tokenHandler = TokenHandler(
+            configuration: configuration,
+            httpClient: chttpClient,
+            jwks: jwks
+        )
         let sessionKeychainStorage = SharedKeychainSessionStorageFactory()
             .makeKeychain(clientId: configuration.clientId,
                           service: Client.keychainServiceName,
                           accessGroup: nil,
                           appIdentifierPrefix: appIdentifierPrefix)
 
-        self.init(configuration: configuration,
-                  sessionStorage: sessionKeychainStorage,
-                  stateStorage: StateStorage(),
-                  httpClient: chttpClient,
-                  jwks: jwks,
-                  tokenHandler: tokenHandler,
-                  tracker: tracker)
+        self.init(
+            configuration: configuration,
+            sessionStorage: sessionKeychainStorage,
+            stateStorage: StateStorage(),
+            httpClient: chttpClient,
+            jwks: jwks,
+            tokenHandler: tokenHandler,
+            tracker: tracker
+        )
     }
 
-    init(configuration: ClientConfiguration,
-         sessionStorage: SessionStorage,
-         stateStorage: StateStorage,
-         httpClient: HTTPClient,
-         jwks: JWKS,
-         tokenHandler: TokenHandler,
-         tracker: TrackingEventsHandler? = nil) {
-
+    init(
+        configuration: ClientConfiguration,
+        sessionStorage: SessionStorage,
+        stateStorage: StateStorage,
+        httpClient: HTTPClient,
+        jwks: JWKS,
+        tokenHandler: TokenHandler,
+        tracker: TrackingEventsHandler? = nil
+    ) {
         self.configuration = configuration
         self.sessionStorage = sessionStorage
         self.stateStorage = stateStorage
         self.httpClient = httpClient
         self.tokenHandler = tokenHandler
-        self.schibstedAccountAPI = SchibstedAccountAPI(baseURL: configuration.serverURL,
-                                                       sessionServiceURL: configuration.sessionServiceURL)
+        self.schibstedAccountAPI = SchibstedAccountAPI(
+            baseURL: configuration.serverURL,
+            sessionServiceURL: configuration.sessionServiceURL
+        )
         self.urlBuilder = URLBuilder(configuration: configuration)
         self.tracker = tracker
         self.tracker?.clientConfiguration = self.configuration
     }
 
-    func makeTokenRequest(authCode: String,
-                          authState: AuthState?,
-                          completion: @escaping (Result<TokenResult, TokenError>) -> Void) {
+    func makeTokenRequest(
+        authCode: String,
+        authState: AuthState?,
+        completion: @escaping @Sendable (Result<TokenResult, TokenError>) -> Void
+    ) {
         self.tokenHandler.makeTokenRequest(authCode: authCode, authState: authState, completion: completion)
     }
 
@@ -163,7 +177,9 @@ public class Client: CustomStringConvertible {
                 self.isSessionInProgress = false
                 return
             }
-            self.handleAuthenticationResponse(url: url, completion: completion)
+            DispatchQueue.main.async {
+                self.handleAuthenticationResponse(url: url, completion: completion)
+            }
         }
         return session
     }
@@ -189,10 +205,12 @@ public class Client: CustomStringConvertible {
                     return
                 }
                 let refreshToken = tokenResponse.refreshToken ?? tokens.refreshToken
-                let userTokens = UserTokens(accessToken: tokenResponse.accessToken,
-                                            refreshToken: refreshToken,
-                                            idToken: tokens.idToken,
-                                            idTokenClaims: tokens.idTokenClaims)
+                let userTokens = UserTokens(
+                    accessToken: tokenResponse.accessToken,
+                    refreshToken: refreshToken,
+                    idToken: tokens.idToken,
+                    idTokenClaims: tokens.idTokenClaims
+                )
                 user.tokens = userTokens
 
                 let userSession = UserSession(clientId: self.configuration.clientId,
@@ -228,8 +246,10 @@ public class Client: CustomStringConvertible {
         retry(attempts)
     }
 
-    private func handleTokenRequestResult(_ result: Result<TokenResult, TokenError>,
-                                          completion: @escaping LoginResultHandler) {
+    private func handleTokenRequestResult(
+        _ result: Result<TokenResult, TokenError>,
+        completion: @escaping LoginResultHandler
+    ) {
         switch result {
         case .success(let tokenResult):
             let userSession = UserSession(clientId: self.configuration.clientId,
@@ -424,7 +444,7 @@ extension Client {
     }
 
     /// Client description containing clientId value.
-    public var description: String {
+    public nonisolated var description: String {
         return "Client(\(configuration.clientId))"
     }
 

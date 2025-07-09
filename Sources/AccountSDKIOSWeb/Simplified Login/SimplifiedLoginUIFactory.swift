@@ -8,96 +8,7 @@ import AuthenticationServices
 import SafariServices
 
 struct SimplifiedLoginUIFactory {
-
-    @available(iOS, deprecated: 13, message: "This function should not be used in iOS version 13 and above")
-    // swiftlint:disable:next function_body_length
-    static func buildViewController(
-        client: Client,
-        assertionFetcher: SimplifiedLoginFetching,
-        userContext: UserContextFromTokenResponse,
-        userProfileResponse: UserProfileResponse,
-        window: UIWindow? = nil,
-        withMFA: MFAType? = nil,
-        state: String? = nil,
-        loginHint: String? = nil,
-        xDomainId: UUID? = nil,
-        extraScopeValues: Set<String> = [],
-        completion: @escaping LoginResultHandler
-    ) -> UIViewController {
-
-        FontManager.registerFonts()
-        let imageDataModel = ConcreteSimplifiedLoginNamedImageData(env: client.configuration.env)
-        let userDataModel = ConcreteSimplifiedLoginUserData(userContext: userContext,
-                                                            userProfileResponse: userProfileResponse)
-        let localizationModel = SimplifiedLoginLocalizationModel()
-
-        let viewModel = SimplifiedLoginViewModel(imageDataModel: imageDataModel,
-                                                 userDataModel: userDataModel,
-                                                 localizationModel: localizationModel,
-                                                 tracker: client.tracker)
-
-        let viewController = window?.visibleViewController
-        let extendedCompletion: LoginResultHandler = { result in
-            // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
-            if Result.failure(LoginError.canceled) != result {
-                DispatchQueue.main.async {
-                    viewController?.dismiss(animated: true, completion: nil)
-                }
-            }
-            completion(result)
-        }
-
-        viewModel.onClickedSwitchAccount = {
-            viewModel.asWebAuthenticationSession = client.getLoginSession(
-                withMFA: withMFA,
-                state: state,
-                loginHint: loginHint,
-                xDomainId: xDomainId,
-                extraScopeValues: extraScopeValues,
-                completion: extendedCompletion
-            )
-            viewModel.asWebAuthenticationSession?.start()
-        }
-
-        viewModel.onClickedContinueAsUser = {
-            assertionFetcher.fetchAssertion { result in
-                switch result {
-                case .success(let assertion):
-                    DispatchQueue.main.async {
-                        if let session = client.createWebAuthenticationSession(
-                            withMFA: nil,
-                            state: nil,
-                            loginHint: nil,
-                            xDomainId: xDomainId,
-                            assertion: assertion.assertion,
-                            extraScopeValues: [],
-                            completion: extendedCompletion
-                        ) {
-                            session.start()
-                        } else {
-                            SchibstedAccountLogger.instance.error("Could not start authentication session")
-                            client.tracker?.error(.loginError(.previousSessionInProgress), in: .simplifiedLogin)
-                            completion(.failure(LoginError.previousSessionInProgress))
-                        }
-                    }
-                case .failure(let error):
-                    SchibstedAccountLogger.instance
-                        .error("Failed to fetch assertion on Simplified login flow: \(error)")
-                    let error = LoginError.unexpectedError(message: "Failed to obtain Assertion")
-                    client.tracker?.error(.loginError(error), in: .simplifiedLogin)
-                    completion(.failure(error))
-                }
-            }
-        }
-
-        return commonSetup(client: client,
-                           viewModel: viewModel,
-                           assertionFetcher: assertionFetcher,
-                           completion: completion)
-    }
-
-    @available(iOS 13.0, *)
-    // swiftlint:disable:next function_parameter_count function_body_length
+    @MainActor // swiftlint:disable:next function_parameter_count function_body_length
     static func buildViewController(
         client: Client,
         contextProvider: ASWebAuthenticationPresentationContextProviding,
@@ -129,10 +40,13 @@ struct SimplifiedLoginUIFactory {
         let viewController = window?.visibleViewController
         let extendedCompletion: LoginResultHandler = { result in
             // Do not dismiss SimplifiedLoginViewController when user cancels web login flow.
-            if Result.failure(LoginError.canceled) != result {
+            switch result {
+            case .failure(.canceled):
                 DispatchQueue.main.async {
                     viewController?.dismiss(animated: true, completion: nil)
                 }
+            default:
+                break
             }
             completion(result)
         }
@@ -192,10 +106,13 @@ struct SimplifiedLoginUIFactory {
                            completion: completion)
     }
 
-    private static func commonSetup(client: Client,
-                                    viewModel: SimplifiedLoginViewModel,
-                                    assertionFetcher: SimplifiedLoginFetching,
-                                    completion: @escaping LoginResultHandler) -> UIViewController {
+    @MainActor
+    private static func commonSetup(
+        client: Client,
+        viewModel: SimplifiedLoginViewModel,
+        assertionFetcher: SimplifiedLoginFetching,
+        completion: @escaping LoginResultHandler
+    ) -> UIViewController {
         let viewController = SimplifiedLoginViewController(viewModel: viewModel)
         let url = URL(string: viewModel.localizationModel.privacyPolicyURL)!
 

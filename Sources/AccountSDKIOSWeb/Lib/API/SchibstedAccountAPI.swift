@@ -77,10 +77,11 @@ enum RequestBuilder {
     }
 }
 
-class SchibstedAccountAPI {
-
+final class SchibstedAccountAPI: Sendable {
     private enum UserAgent {
+        @MainActor
         private static let deviceInfo = UIDevice.current
+        @MainActor
         static let value = "AccountSDKIOSWeb/\(sdkVersion) (\(deviceInfo.model); \(deviceInfo.systemName) \(deviceInfo.systemVersion))"
     }
 
@@ -93,17 +94,21 @@ class SchibstedAccountAPI {
         self.sessionServiceURL = sessionServiceURL
     }
 
+    @MainActor
     static func addingSDKHeaders(to request: URLRequest) -> URLRequest {
         var requestWithHeaders = request
         requestWithHeaders.addValue(UserAgent.value, forHTTPHeaderField: "User-Agent")
         return requestWithHeaders
     }
 
-    func sessionExchange(for user: User,
-                         clientId: String,
-                         redirectURI: String,
-                         state: String? = nil,
-                         completion: @escaping HTTPResultHandler<SessionExchangeResponse>) {
+    @MainActor
+    func sessionExchange(
+        for user: User,
+        clientId: String,
+        redirectURI: String,
+        state: String? = nil,
+        completion: @escaping HTTPResultHandler<SessionExchangeResponse>
+    ) {
         let url = baseURL.appendingPathComponent("/api/2/oauth/exchange")
         var parameters = [
             "type": "session",
@@ -128,6 +133,7 @@ class SchibstedAccountAPI {
         }
     }
 
+    @MainActor
     func codeExchange(for user: User, clientId: String, completion: @escaping HTTPResultHandler<CodeExchangeResponse>) {
         let request = RequestBuilder.codeExchange(clientId: clientId).asRequest(baseURL: baseURL)
 
@@ -136,6 +142,7 @@ class SchibstedAccountAPI {
         }
     }
 
+    @MainActor
     func userContextFromToken(for user: User, completion: @escaping HTTPResultHandler<UserContextFromTokenResponse>) {
         let request = RequestBuilder.userContextFromToken.asRequest(baseURL: sessionServiceURL)
 
@@ -144,8 +151,11 @@ class SchibstedAccountAPI {
         }
     }
 
-    func assertionForSimplifiedLogin(for user: User,
-                                     completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>) {
+    @MainActor
+    func assertionForSimplifiedLogin(
+        for user: User,
+        completion: @escaping HTTPResultHandler<SimplifiedLoginAssertionResponse>
+    ) {
         let request = RequestBuilder.assertionForSimplifiedLogin.asRequest(baseURL: baseURL)
 
         user.withAuthentication(request: SchibstedAccountAPI.addingSDKHeaders(to: request)) {
@@ -153,9 +163,12 @@ class SchibstedAccountAPI {
         }
     }
 
-    func tokenRequest(with httpClient: HTTPClient,
-                      parameters: [String: String],
-                      completion: @escaping HTTPResultHandler<TokenResponse>) {
+    @MainActor
+    func tokenRequest(
+        with httpClient: HTTPClient,
+        parameters: [String: String],
+        completion: @escaping HTTPResultHandler<TokenResponse>
+    ) {
         let url = baseURL.appendingPathComponent("/oauth/token")
         guard let requestBody = HTTPUtil.formURLEncode(parameters: parameters) else {
             preconditionFailure("Failed to create token request")
@@ -172,6 +185,7 @@ class SchibstedAccountAPI {
                            completion: completion)
     }
 
+    @MainActor
     func userProfile(for user: User, completion: @escaping HTTPResultHandler<UserProfileResponse>) {
         guard let userUuid = user.uuid else {
             completion(.failure(.unexpectedError(underlying: LoginStateError.notLoggedIn)))

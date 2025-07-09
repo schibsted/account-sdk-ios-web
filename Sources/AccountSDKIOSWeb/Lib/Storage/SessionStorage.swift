@@ -6,13 +6,13 @@
 import Foundation
 import Security
 
-internal struct UserSession: Codable, Equatable {
+struct UserSession: Codable, Equatable, Sendable {
     let clientId: String
     let userTokens: UserTokens
     let updatedAt: Date
 }
 
-public struct UserTokens: Codable, Equatable, CustomStringConvertible {
+public struct UserTokens: Codable, Equatable, Sendable, CustomStringConvertible {
     let accessToken: String
     let refreshToken: String?
     let idToken: String
@@ -34,7 +34,7 @@ public struct UserTokens: Codable, Equatable, CustomStringConvertible {
     }
 }
 
-internal protocol SessionStorage {
+protocol SessionStorage: Sendable {
     var accessGroup: String? { get }
     func store(_ value: UserSession, accessGroup: String?) throws
     func get(forClientId: String) -> UserSession?

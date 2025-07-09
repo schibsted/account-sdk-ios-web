@@ -19,7 +19,7 @@ private class FakeDataTask: URLSessionDataTask, @unchecked Sendable {
     }
 }
 
-class MockURLSessionProtocol: URLSessionProtocol {
+final class MockURLSessionProtocol: URLSessionProtocol, @unchecked Sendable {
     var request: URLRequest
     var results: [(Data?, HTTPURLResponse?, Error?)]
     var counter: Int = 0

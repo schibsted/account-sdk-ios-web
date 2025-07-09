@@ -6,7 +6,7 @@
 import Foundation
 import CommonCrypto
 
-internal struct AuthState: Codable {
+struct AuthState: Codable, Sendable {
     let state: String
     let nonce: String
     let codeVerifier: String
@@ -23,7 +23,6 @@ internal struct AuthState: Codable {
 }
 
 extension AuthState {
-
     /// `AuthState` is initialised with `MFAType` and we also allow users to provide a custom `state`.
     /// If `state` is `nil` it will be populated with a random string, since it is a required field.
     init(mfa: MFAType?, state: String?) {

@@ -5,7 +5,7 @@
 
 import Foundation
 
-public protocol RetryPolicy {
+public protocol RetryPolicy: Sendable {
     func shouldRetry(for: HTTPError) -> Bool
     func numRetries(for: URLRequest) -> Int
 }
