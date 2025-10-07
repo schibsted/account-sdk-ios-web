@@ -1,0 +1,26 @@
+// 
+// Copyright © 2025 Schibsted.
+// Licensed under the terms of the MIT license. See LICENSE in the project root.
+//
+
+import Foundation
+
+@testable import SchibstedAccount
+
+extension UserTokens {
+    static func fake(userUUID: String = UUID().uuidString) -> UserTokens {
+        UserTokens(
+            accessToken: UUID().uuidString,
+            refreshToken: UUID().uuidString,
+            idTokenClaims: IdTokenClaims(
+                iss: "iss",
+                sub: "\(userUUID)",
+                userId: "userId",
+                aud: [],
+                exp: 0,
+                nonce: nil,
+                amr: nil
+            )
+        )
+    }
+}

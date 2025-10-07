@@ -1,247 +1,157 @@
-# Schibsted Account iOS SDK
+# Schibsted Account SDK for iOS
 
 [![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web)
-![Platform](https://img.shields.io/badge/Platform-iOS%2013.0%2B-orange.svg?style=flat)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/schibsted/account-sdk-ios-web/blob/master/LICENSE)
-
-
-New implementation of the Schibsted account iOS SDK using the web flows via 
-[`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
-
-API documentation can be found [here](https://schibsted.github.io/account-sdk-ios-web/).
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web?label=Release)
+![Platform](https://img.shields.io/badge/Platforms-iOS%2016.0+,_tvOS%2016.0+-orange.svg?style=flat)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://schibsted.ghe.com/app-foundation/schibsted-account-sdk-ios/blob/main/LICENSE)
 
 ## Getting started
 
 To implement login with Schibsted account in your app, please first have a look at our
-[documentation](https://docs.schibsted.io/schibsted-account/#best-practices).
+[documentation](https://docs.schibsted.io/schibsted-account/#best-practices). 
 This will help you create a client and configure the necessary data.
 
-**Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see the [mobile sdk's](https://docs.schibsted.io/schibsted-account/#schibsted-account-mobile-sdk-s) dedicated section for more help).
+**Note:** This SDK requires your client to be registered as a `public_mobile_client` in Self Service (see the [mobile sdk's](https://docs.schibsted.io/schibsted-account/#schibsted-account-mobile-sdk-s) dedicated section for more help)
   
 ### Requirements
 
-* iOS 13.0+
+* iOS 16.0+
+* tvOS 16.0+
 
 ### Installation
 
-Swift Package Manager: `.package(url: "https://github.com/schibsted/account-sdk-ios-web")`
-
-### Usage
-
-#### Login user and fetch profile data
+Swift Package Manager
 
 ```swift
-let clientConfiguration = ClientConfiguration(
-    environment: .pre,
+.package(url: "https://github.com/schibsted/account-sdk-ios-web", from: "6.0.0")
+```
+
+## Usage
+
+### Initialize the authenticator
+
+```swift
+let authenticator = SchibstedAuthenticator(
+    environment: .sweden,
     clientId: clientId,
     redirectURI: redirectURI
 )
-let client = Client(configuration: clientConfiguration) 
-let contextProvider = ASWebAuthSessionContextProvider()
-let asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, withSSO: true, completion: { result in
-    switch result {
-    case .success(let user):
-        print("Success - logged in as \(String(describing: user.uuid))")
-        self.user = user
-    case .failure(let error):
-        print(error)
-    }
-
-    user.fetchProfileData { result in
-        switch result {
-        case .success(let userData):
-            print(userData)
-        case .failure(let error):
-            print(error)
-        }
-    }
-})
-
-asWebAuthSession.start()
 ```
 
-#### Get notified on logout
+### Login
 
 ```swift
-let userDelegate: UserDelegate = MyUserDelegate()
-user?.delegates.addDelegate(userDelegate)
-self.userDelegate = userDelegate // Needs to be retained
+let presentationContextProvider = WebAuthenticationPresentationContext()
 
-class MyUserDelegate: UserDelegate {
-    func userDidLogout() {
-        print("Callback will be invoked when user is logged out")
+let user = try await authenticator.login(
+    presentationContextProvider: presentationContextProvider
+)
+```
+
+### Logout
+
+```swift
+try authenticator.logout()
+```
+
+### Get the User Profile
+
+```
+let userProfile = try await authenticator.userProfile()
+```
+
+### Observing state changes
+
+```swift
+authenticator.state
+    .sink { state in
+        switch state {
+        case .loggingIn:
+            print("Logging in...")
+        case .loggedIn(let user):
+            print("User \(user.profile?.displayName) logged in")
+        case .loggedOut:
+            print("User logged out")
+        }
     }
+    .store(in: &cancellables)
+```
+
+## Logging
+
+This SDK uses [`SwiftLog`](https://github.com/apple/swift-log), allowing you to easily customise the logging.
+
+Use `LoggingSystem.bootstrap` to configure the log level as necessary.
+
+```swift
+LoggingSystem.bootstrap { label in
+    var handler = StreamLogHandler.standardError(label: label)
+    handler.logLevel = Logger.Level.debug
+    return handler
 }
 ```
-
-#### ExternalId for TCF
-To support TCF consents exchange between native and WebView, we have added a new method to the SDK, which allows you to obtain an `externalId` for the consent sharing support.
-To get the `externalId`, you need to call the following method:
-
-```swift
-let externalId = client.getExternalId(pairId: String, externalParty: String, optionalSuffix: String = "")
-```
-
-`pairId` can be found under `UserProfileResponse.pairId` property.
-
-### Notes on using custom URI schemes
-
-When using custom URI as redirect URI, the OS handles opening the app associated with the link instead of triggering the `ASWebAuthenticationSession` callback.
-It results in the `ASWebAuthenticationSession` view not being closed properly, which instead needs to be done manually:
-
-1. Get a reference to `ASWebAuthenticationSession` and start it:
-    ```swift
-    func handleLoginResult(_ result: Result<User, LoginError>) {
-        switch result {
-        case .success(let user):
-            print("Success - logged-in as \(user.uuid)!")
-            self.user = user
-        case .failure(let error):
-            print(error)
-        }
-    }
-
-    let contextProvider = ASWebAuthSessionContextProvider()
-    asWebAuthSession = client.getLoginSession(contextProvider: contextProvider, withSSO: true, completion: handleLoginResult)
-    asWebAuthSession.start() // this will trigger the web context asking the user to login
-    ```
-2. Handle the response as an incoming URL, e.g. via your app's delegate `application(_:open:options:)`:
-    ```swift
-    func application(
-        _ application: UIApplication,
-        open url: URL,
-        options: [UIApplicationOpenURLOptionsKey : Any] = [:]
-    ) -> Bool {
-        client.handleAuthenticationResponse(url: url) { result in
-            DispatchQueue.main.async {
-                asWebAuthSession.cancel() // manually close the ASWebAuthenticationSession
-            }
-            handleLoginResult(result)
-        }
-    }
-    ```
-    
-3. When implementing **Swedish BankID** authentication the parent app must catch the redirect URI and return with no action. Please make sure that `handleAuthenticationResponse` is not called for the BankID redirect. The URI scheme that is used to redirect back to the parent app from BankID will have the following format: `{app_uri_scheme}:/bankId`. Find below a code example:
-    ```swift
-    func handleOnOpenUrl(url: URL) {
-        if url.pathComponents.contains("bankId") {
-            return
-        }
-        
-        client.handleAuthenticationResponse(url: url) { result in
-            DispatchQueue.main.async {
-                asWebAuthSession.cancel() // manually close the ASWebAuthenticationSession
-            }
-            handleLoginResult(result)
-        }
-    }
-    ```
-    
-### Obtaining tokens externally
-
-Tokens can be obtained externally and injected into SDK for the already created users. This can be useful in the case of a test scenario.
-To do this, first you need to start the web login flow with the request as follow:
-
-```sh
-GET "${BASE_URL}/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid%20offline_access&state=${state}&nonce=${nonce}&code_challenge=${CODE_CHALLENGE}&code_challenge_method=S256&prompt=select_account"
-```
-where: 
-`BASE_URL` - base URL of Schibsted Account environment
-`client_id` - public mobile client id
-`redirect_uri` - redirect URI for given client
-`state` -  A string value sent by the client that protects end user from CSRF attacks. It's a randomly generated string of 10 characters (both letters and numbers)
-`nonce` - A string value sent by the client that is included in the resulting ID token as a claim. The client must then verify this value to mitigate token replay attacks. It's a randomly generated string of 10 characters (both letters and numbers)
-`code_challenge` - [`PKCE`](https://www.oauth.com/oauth2-servers/pkce/) calculated from `code_verifier`
-
-On the finish, web flow returns URL with query parameters `state` and `code`. 
-Tokens can be obtained with the following request:
-
-```sh
-curl {BASE_URL}/oauth/token \
-   -X POST \
-   -H "X-OIDC: v1" \
-   -d "client_id={client_id}" \
-   -d "grant_type=authorization_code" \
-   -d "code={code_from_login_flow}" \
-   -d "code_verifier={code_verifier}" \
-   -d "redirect_uri={redirect_uri}"
-```
-   where `code_verifier` is the same which was used for calculating `code_challenge`. It can be a randomly generated string of 60 characters (both letters and numbers)
-
-
-### Configuring logging
-This SDK uses [`SwiftLog`](https://github.com/apple/swift-log), allowing you to easily customise the logging.
-The logger can be modified, for example to change the log level, via the following code:
-```swift
-SchibstedAccountLogger.instance.logLevel = .debug
-```
-
-## How it works
-
-This SDK implements the [best practices for user authentication via an OpenID Connect identity provider](https://tools.ietf.org/html/rfc8252):
-
-* It uses [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
-  This allows for single-sign on between apps, with the user being recognized as a returning user to Schibsted account via cookies.
-  On iOS 13 and above this behavior can be disabled, which also removes the extra user prompt about allowing to use Schibsted account for login, using
-  `withSSO: false` in `Client.getLoginSession(withMFA:loginHint:extraScopeValues:withSSO:completion:)`.
-* After the completed user authentication, user tokens are obtained and stored securely in the keychain storage.
-    * The ID Token is validated according to the [specification](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation).
-      The signature of the ID Token (which is a [JWS](https://datatracker.ietf.org/doc/html/rfc7515)) is verified by the library [`JOSESwift`](https://github.com/airsidemobile/JOSESwift).
-    * Authenticated requests to backend services can be done via
-      `AuthenticatedURLSession.dataTask(with: URLRequest, completionHandler: ...` 
-      The SDK will automatically inject the user access token as a Bearer token in the HTTP
-      Authorization request header.
-      If the access token is rejected with a `401 Unauthorized` response (e.g. due to having
-      expired), the SDK will try to use the refresh token to obtain a new access token and then
-      retry the request once more.
-
-      **Note:** If the refresh token request fails, due to the refresh token itself having expired
-      or been invalidated by the user, the SDK will log the user out.
-* Upon opening the app, the last logged-in user can be resumed by the SDK by trying to read previously stored tokens from the keychain storage. This will be handled by once invoking `Client.resumeLastLoggedInUser()` upon app start.
 
 ## Simplified Login
 
 ### Configuring Simplified Login
+
 Prerequisite: Applications need to be on the same Apple Development account in order to have access to the shared keychain. 
 
-1. In your application target, add Keychain Sharing capability with keychain group set to `com.schibsted.simplifiedLogin`.
-2. Creating client, pass additional parameter `appIdentifierPrefix`. It is usually the same as team identifier prefix - 10 characters combination of both numbers and letters assigned by Apple.
+1\. In your application target, add Keychain Sharing capability with keychain group set to `com.schibsted.simplifiedLogin`.
+
+2\. Initialize the `SchibstedAuthenticator`, passing the additional parameter `appIdentifierPrefix` - it is usually the same as team identifier prefix, a 10 characters combination of both numbers and letters assigned by Apple.
 
 ```swift
-let client = Client(configuration: clientConfiguration, appIdentifierPrefix: "xxxxxxxxxx") 
+let authenticator = SchibstedAuthenticator(
+    environment: .sweden,
+    clientId: clientId,
+    appIdentifierPrefix: "xxxxxxxxxx",
+    redirectURI: redirectURI
+)
 ```
 
-3. Create `SimplifiedLoginManager` and call `getSimplifiedLogin` method anytime you want to present SL to user.
+3\. Request the simplified login
 
 ```swift
-    let context = ASWebAuthSessionContextProvider()
-    let manager = SimplifiedLoginManager(client: client, contextProvider: context, env: clientConfiguration.env) { result in
-            print("Catch login result \(result)")
-    }
-    manager.requestSimplifiedLogin() { result in
-        switch (result) {
-        case .success():
-            print("success")
-        case .failure(let error):
-            print("Catch error from presenting SL \(error)")
+let simplifiedLoginView = try await authenticator.requestSimplifiedLogin()
+```
+
+4\. Present the View
+
+**SwiftUI:**
+
+```swift
+struct ContentView: View {
+    let authenticator: SchibstedAuthenticator
+    
+    @State var simplifiedLoginView: SimplifiedLoginView?
+
+    var body: some View {
+        VStack {
+            Text("Hello")
+        }
+        .sheet(item: $simplifiedLoginView) { simplifiedLoginView in
+            simplifiedLoginView
+                .presentationDetents([.medium, .large])
+        }
+        .task {
+            simplifiedLoginView = try await authenticator.requestSimplifiedLogin()
         }
     }
+}
 ```
 
-If you want to present Simplified Login UI on a specific UIWindow, you need to pass the optional parameter `window` calling `requestSimplifiedLogin` method.
+**UIKit:**
 
-### Tracking
+```swift
+guard let simplifiedLoginView = try await authenticator.requestSimplifiedLogin() else {
+    return
+}
 
-The Account SDK does some internal tracking (mostly for the Simplified Login) and allows a `TrackingEventsHandler` to be set during the Client's initialization.
-To fulfill this, you can either implement it yourself or use one which is already implemented.
+let hostingController = UIHostingController(rootView: simplifiedLoginView)
+hostingController.modalPresentationStyle = .pageSheet
+hostingController.isModalInPresentation = false
+hostingController.sheetPresentationController?.detents = [.medium(), .large()]
 
-#### Localization
-
-Simplified Login comes with the following localization support:
-
-1. 🇳🇴 Norwegian Bokmål
-1. 🇸🇪 Swedish
-1. 🇫🇮 Finnish
-1. 🇩🇰 Danish
-1. 🇬🇧 English (Default)
+present(hostingController, animated: true)
+```
