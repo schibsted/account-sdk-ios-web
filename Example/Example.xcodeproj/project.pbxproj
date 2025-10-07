@@ -10,6 +10,7 @@
 		BCAC104F2E21228400510BAD /* SchibstedAccount in Frameworks */ = {isa = PBXBuildFile; productRef = BCAC104E2E21228400510BAD /* SchibstedAccount */; };
 		BCC6FE9B2E21273900AA50B3 /* SchibstedAccount in Frameworks */ = {isa = PBXBuildFile; productRef = BCC6FE9A2E21273900AA50B3 /* SchibstedAccount */; };
 		BCC842DB2E212FF200097962 /* SchibstedAccount in Frameworks */ = {isa = PBXBuildFile; productRef = BCC842DA2E212FF200097962 /* SchibstedAccount */; };
+		BCEA1FBE2E9529C6005DD8B1 /* SchibstedAccount in Frameworks */ = {isa = PBXBuildFile; productRef = BCEA1FBD2E9529C6005DD8B1 /* SchibstedAccount */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			files = (
 				BCC842DB2E212FF200097962 /* SchibstedAccount in Frameworks */,
 				BCC6FE9B2E21273900AA50B3 /* SchibstedAccount in Frameworks */,
+				BCEA1FBE2E9529C6005DD8B1 /* SchibstedAccount in Frameworks */,
 				BCAC104F2E21228400510BAD /* SchibstedAccount in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +79,7 @@
 				BCAC104E2E21228400510BAD /* SchibstedAccount */,
 				BCC6FE9A2E21273900AA50B3 /* SchibstedAccount */,
 				BCC842DA2E212FF200097962 /* SchibstedAccount */,
+				BCEA1FBD2E9529C6005DD8B1 /* SchibstedAccount */,
 			);
 			productName = SchibstedAccountSDKDemo;
 			productReference = BCAC0FEB2E20F63600510BAD /* Example.app */;
@@ -107,7 +110,7 @@
 			mainGroup = BCAC0FE22E20F63600510BAD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				BCC842D92E212FF200097962 /* XCLocalSwiftPackageReference "../../schibsted-account-sdk-ios" */,
+				BCEA1FBC2E9529C6005DD8B1 /* XCLocalSwiftPackageReference "../../account-sdk-ios-web" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BCAC0FEC2E20F63600510BAD /* Products */;
@@ -349,9 +352,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		BCC842D92E212FF200097962 /* XCLocalSwiftPackageReference "../../schibsted-account-sdk-ios" */ = {
+		BCEA1FBC2E9529C6005DD8B1 /* XCLocalSwiftPackageReference "../../account-sdk-ios-web" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../schibsted-account-sdk-ios";
+			relativePath = "../../account-sdk-ios-web";
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -365,6 +368,10 @@
 			productName = SchibstedAccount;
 		};
 		BCC842DA2E212FF200097962 /* SchibstedAccount */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SchibstedAccount;
+		};
+		BCEA1FBD2E9529C6005DD8B1 /* SchibstedAccount */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SchibstedAccount;
 		};
