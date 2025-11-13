@@ -8,7 +8,10 @@ import Foundation
 @testable import SchibstedAccount
 
 extension UserTokens {
-    static func fake(userUUID: String = UUID().uuidString) -> UserTokens {
+    static func fake(
+        userUUID: String = UUID().uuidString,
+        expiration: Date = Date(timeIntervalSinceNow: 600)
+    ) -> UserTokens {
         UserTokens(
             accessToken: UUID().uuidString,
             refreshToken: UUID().uuidString,
@@ -20,7 +23,8 @@ extension UserTokens {
                 exp: 0,
                 nonce: nil,
                 amr: nil
-            )
+            ),
+            expiration: expiration
         )
     }
 }

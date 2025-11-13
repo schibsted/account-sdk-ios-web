@@ -27,7 +27,8 @@ struct SchibstedAuthenticatorTests {
             exp: expiration,
             nonce: nil,
             amr: nil
-        )
+        ),
+        expiration: Date(timeIntervalSinceNow: 600)
     )
 
     private let keychainStorage = FakeKeychainStorage()

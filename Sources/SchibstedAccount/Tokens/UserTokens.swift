@@ -3,6 +3,8 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
+import Foundation
+
 /// User Tokens.
 public struct UserTokens: Codable, Equatable, Sendable {
     /// The access token.
@@ -14,18 +16,24 @@ public struct UserTokens: Codable, Equatable, Sendable {
     /// The id token claims.
     internal let idTokenClaims: IdTokenClaims
 
+    internal let expiration: Date?
+
     /// Creates an UserTokens instance.
     ///
-    /// - parameter accessToken: The access token.
-    /// - parameter refreshToken: Refresh token.
-    /// - parameter idTokenClaims: ID token claims.
+    /// - parameters:
+    ///     - accessToken: The access token.
+    ///     - refreshToken: Refresh token.
+    ///     - idTokenClaims: ID token claims.
+    ///     - expiration: Optional access token expiration.
     public init(
         accessToken: String,
         refreshToken: String,
-        idTokenClaims: IdTokenClaims
+        idTokenClaims: IdTokenClaims,
+        expiration: Date?
     ) {
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.idTokenClaims = idTokenClaims
+        self.expiration = expiration
     }
 }

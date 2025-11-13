@@ -33,7 +33,13 @@ public final class AuthenticatedURLSession: URLSessionType {
         for request: URLRequest,
         delegate: URLSessionTaskDelegate? = nil
     ) async throws -> (Data, URLResponse) {
-        // 1. Authenticate the request (sets a Authorization header)
+        // 1. Perform a preemptive check whether the access token has expired, and refresh the tokens if necessary.
+
+        if let expiration = authenticator?.state.value.user?.tokens.expiration, expiration < .now {
+            try await refreshTokens()
+        }
+
+        // 2. Authenticate the request (sets a Authorization header)
 
         var request = request
         switch authenticator?.state.value {
@@ -49,7 +55,7 @@ public final class AuthenticatedURLSession: URLSessionType {
             return (data, response)
         }
 
-        // 2. Refresh the tokens if we hit a HTTP 401
+        // 3. Refresh the tokens if we hit a HTTP 401
 
         guard httpResponse.statusCode == 401 else {
             return (data, response)
@@ -57,13 +63,13 @@ public final class AuthenticatedURLSession: URLSessionType {
 
         try await refreshTokens()
 
-        // 3. Update the Authorization header with the fresh tokens
+        // 4. Update the Authorization header with the fresh tokens
 
         if case .loggedIn(let user) = authenticator?.state.value {
             request.setAuthorization(.bearer(token: user.tokens.accessToken))
         }
 
-        // 4. Retry the request
+        // 5. Retry the request
 
         return try await urlSession.data(for: request, delegate: delegate)
     }

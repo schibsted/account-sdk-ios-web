@@ -444,7 +444,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                 tokens: UserTokens(
                     accessToken: tokens.accessToken,
                     refreshToken: tokens.refreshToken,
-                    idTokenClaims: user.tokens.idTokenClaims
+                    idTokenClaims: user.tokens.idTokenClaims,
+                    expiration: Date(timeIntervalSinceNow: TimeInterval(tokens.expiresIn))
                 ),
                 sdrn: user.sdrn
             )
@@ -650,7 +651,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         return UserTokens(
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
-            idTokenClaims: claims
+            idTokenClaims: claims,
+            expiration: Date(timeIntervalSinceNow: TimeInterval(tokens.expiresIn))
         )
     }
 }
@@ -752,11 +754,14 @@ private struct TokenResponse: Codable, Equatable, Sendable {
     let refreshToken: String
     // ID token.
     let idToken: String?
+    // Access token expiration
+    let expiresIn: Int
 
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
         case refreshToken = "refresh_token"
         case idToken = "id_token"
+        case expiresIn = "expires_in"
     }
 }
 

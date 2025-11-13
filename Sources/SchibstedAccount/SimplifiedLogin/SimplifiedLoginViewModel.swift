@@ -64,13 +64,10 @@ public final class SimplifiedLoginViewModel: ObservableObject, Identifiable {
 
     func load() {
         authenticator.state
-            .dropFirst()
             .sink { [weak self] state in
                 self?.state = state
             }
             .store(in: &cancellables)
-
-        state = authenticator.state.value
     }
 
     func trackOnAppear() async {
