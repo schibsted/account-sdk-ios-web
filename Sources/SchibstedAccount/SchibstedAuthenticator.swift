@@ -460,6 +460,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
 
                 if let oAuthError = try? decoder.decode(OAuthError.self, from: data),
                    oAuthError.error == "invalid_grant" {
+                    logger.warning("Failed to refresh tokens, invalid grant.")
                     try logout()
                 }
             }
@@ -537,7 +538,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         let idTokenClaims = userSession.userTokens.idTokenClaims
 
         guard idTokenClaims.iss.removeTrailingSlash() == environment.issuer.removeTrailingSlash() else {
-            logger.error("Invalid issuer in the ID Token Claims. Found \(environment.issuer.removeTrailingSlash()), expected \(idTokenClaims.iss.removeTrailingSlash())")
+            logger.error("Invalid issuer in the ID Token Claims. Found \(idTokenClaims.iss.removeTrailingSlash()), expected \(environment.issuer.removeTrailingSlash())")
             throw IdTokenValidationError.invalidIssuer
         }
 
