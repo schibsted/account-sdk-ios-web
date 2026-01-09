@@ -8,6 +8,8 @@ import AuthenticationServices
 @testable import SchibstedAccount
 
 final class FakeWebAuthenticationSessionProvider: WebAuthenticationSessionProviding, @unchecked Sendable {
+    var session: FakeWebAuthenticationSession?
+
     var createSession: (URL, String, @escaping (URL?, (any Error)?) -> Void) -> FakeWebAuthenticationSession = {
         FakeWebAuthenticationSession(
             url: $0,
@@ -21,7 +23,9 @@ final class FakeWebAuthenticationSessionProvider: WebAuthenticationSessionProvid
         callbackURLScheme: String,
         completionHandler: @escaping (URL?, (any Error)?) -> Void
     ) -> any WebAuthenticationSessionType {
-        createSession(url, callbackURLScheme, completionHandler)
+        let session = createSession(url, callbackURLScheme, completionHandler)
+        self.session = session
+        return session
     }
 }
 
@@ -49,5 +53,11 @@ final class FakeWebAuthenticationSession: WebAuthenticationSessionType {
 
     func start() -> Bool {
         didStart()
+    }
+
+    var didCancel = false
+
+    func cancel() {
+        didCancel = true
     }
 }

@@ -29,13 +29,13 @@ struct WebAuthenticationSessionProvider: WebAuthenticationSessionProviding {
         completionHandler: @escaping (URL?, (any Error)?) -> Void
     ) -> WebAuthenticationSessionType {
         if #available(iOS 17.4, *) {
-            ASWebAuthenticationSession(
+            WebAuthenticationSession(
                 url: url,
                 callback: .customScheme(callbackURLScheme),
                 completionHandler: completionHandler
             )
         } else {
-            ASWebAuthenticationSession(
+            WebAuthenticationSession(
                 url: url,
                 callbackURLScheme: callbackURLScheme,
                 completionHandler: completionHandler

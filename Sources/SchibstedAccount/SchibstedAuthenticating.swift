@@ -38,6 +38,12 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
         assertion: String?,
         xDomainId: UUID?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser
+
+    /// Completes the login with a deep link URL.
+    ///
+    /// - parameter url: Full URL from received from the deep link.
+    /// - throws: If there was no login to complete, throws an error.
+    func completeLoginFromURL(_ url: URL) async throws(SchibstedAuthenticatorError)
 #elseif os(tvOS)
     /// Login using a one-time code.
     ///

@@ -16,9 +16,9 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
     private let webAuthenticationSessionProvider: WebAuthenticationSessionProviding
     private let idTokenValidator: IdTokenValidating
     private let keychainStorage: KeychainStoring
-    private var session: WebAuthenticationSessionType?
 
 #if os(iOS)
+    private var session: WebAuthenticationSessionType?
     private var presentationContextProvider: ASWebAuthenticationPresentationContextProviding?
 #endif
 
@@ -187,8 +187,9 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             logger.info("Started login session")
         }
 
-        // we have the url and/or error, so we can discard the presentationContextProvider and session
+        // Once we have the url and/or error, we can discard the presentationContextProvider and cancel the session
         self.presentationContextProvider = nil
+        self.session?.cancel() // explicitly cancel as the session can linger when completing the login via. deep links (see `completeLoginFromURL(:)`)
         self.session = nil
 
         if case ASWebAuthenticationSessionError.canceledLogin? = error {
@@ -230,6 +231,15 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             throw .loginFailed(error)
         }
     }
+    
+    public func completeLoginFromURL(_ url: URL) async throws(SchibstedAuthenticatorError) {
+        guard let session else {
+            logger.error("No login session to complete from URL \(url).")
+            throw .noLoginSessionToComplete
+        }
+
+        session.completionHandler(url, nil)
+    }
 #endif
 
     @discardableResult
@@ -248,6 +258,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                 code: code,
                 codeVerifier: codeVerifier
             )
+
             let user = SchibstedAuthenticatorUser(
                 tokens: tokens,
                 sdrn: environment.sdrn(userId: tokens.idTokenClaims.userId)

@@ -34,7 +34,7 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     var didLogin: @MainActor (
         _ presentationContextProvider: any ASWebAuthenticationPresentationContextProviding,
         _ prefersEphemeralWebBrowserSession: Bool,
-        _ multifactorAuthentication: SchibstedAccount.MultifactorAuthentication?,
+        _ multifactorAuthentication: MultifactorAuthentication?,
         _ assertion: String?,
         _ xDomainId: UUID?
     ) async throws -> SchibstedAuthenticatorUser = { _, _, _, _, _ in
@@ -44,10 +44,10 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     func login(
         presentationContextProvider: any ASWebAuthenticationPresentationContextProviding,
         prefersEphemeralWebBrowserSession: Bool,
-        multifactorAuthentication: SchibstedAccount.MultifactorAuthentication?,
+        multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
         xDomainId: UUID?
-    ) async throws(SchibstedAuthenticatorError) -> SchibstedAccount.SchibstedAuthenticatorUser {
+    ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         do {
             return try await didLogin(
                 presentationContextProvider,
@@ -60,13 +60,17 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
             throw .loginFailed(error)
         }
     }
+
+    func completeLoginFromURL(_ url: URL) async throws(SchibstedAuthenticatorError) {
+        throw SchibstedAuthenticatorError.loginFailed(FakeError.notMocked)
+    }
 #endif
 
     func login(
         code: String,
         codeVerifier: String,
         xDomainId: UUID?
-    ) async throws(SchibstedAuthenticatorError) -> SchibstedAccount.SchibstedAuthenticatorUser {
+    ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         throw SchibstedAuthenticatorError.loginFailed(FakeError.notMocked)
     }
 

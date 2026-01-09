@@ -25,10 +25,11 @@ public protocol KeychainStoring: Sendable {
 }
 
 /// Keychain Storage.
-public final class KeychainStorage: KeychainStoring {
+public struct KeychainStorage: KeychainStoring {
     private let logger = Logger(label: "KeychainStorage")
     private let service: String
     private let accessGroup: String?
+    private let operations: KeychainOperations
 
     /// Creates a new Keychain Storage instance.
     ///
@@ -36,8 +37,13 @@ public final class KeychainStorage: KeychainStoring {
     ///   - service: The service used for looking up items.
     ///   - accessGroup: The access group used for looking up items.
     public init(forService service: String, accessGroup: String? = nil) {
+        self.init(forService: service, accessGroup: accessGroup, operations: KeychainOperations())
+    }
+
+    init(forService service: String, accessGroup: String? = nil, operations: KeychainOperations) {
         self.service = service
         self.accessGroup = accessGroup
+        self.operations = operations
     }
 
     public func getValue(forAccount account: String?) throws(KeychainStorageError) -> Data? {
@@ -94,11 +100,11 @@ public final class KeychainStorage: KeychainStoring {
         if try get(query: itemQuery(account: account, accessGroup: accessGroup)) == nil {
             var query = itemQuery(account: account, accessGroup: accessGroup)
             query[kSecValueData as String] = value
-            status = SecItemAdd(query as CFDictionary, nil)
+            status = operations.add(query as CFDictionary, nil)
         } else {
             let searchQuery = itemQuery(account: account, accessGroup: accessGroup, returnData: false)
             let updateQuery: [String: Any] = [kSecValueData as String: value]
-            status = SecItemUpdate(searchQuery as CFDictionary, updateQuery as CFDictionary)
+            status = operations.update(searchQuery as CFDictionary, updateQuery as CFDictionary)
         }
 
         guard status == errSecSuccess else {
@@ -108,7 +114,7 @@ public final class KeychainStorage: KeychainStoring {
     }
 
     public func removeValue(forAccount account: String?) throws(KeychainStorageError) {
-        let status = SecItemDelete(
+        let status = operations.delete(
             itemQuery(
                 account: account,
                 accessGroup: accessGroup,
@@ -142,7 +148,7 @@ public final class KeychainStorage: KeychainStoring {
 
     private func get(query: [String: Any]) throws(KeychainStorageError) -> AnyObject? {
         var extractedData: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &extractedData)
+        let status = operations.copyMatching(query as CFDictionary, &extractedData)
 
         if status == errSecItemNotFound {
             return nil
@@ -168,18 +174,24 @@ public enum KeychainStorageError: Error {
 
     /// A message describing the error.
     public var errorDescription: String {
-        switch self {
+        let components = switch self {
         case .storeError(let status):
-            return "Unable to store the secret. \(status.errorMessage ?? "") (\(status))"
+            ["Unable to store the secret.", status.errorMessage, status.codeMessage]
         case .operationError(let status):
-            return "Unable to fulfill the keychain query. \(status.errorMessage ?? "") (\(status))"
+            ["Unable to fulfill the keychain query.", status.errorMessage, status.codeMessage]
         case .deleteError(let status):
-            return "Unable to delete the secret. \(status.errorMessage ?? "") (\(status))"
+            ["Unable to delete the secret.", status.errorMessage, status.codeMessage]
         }
+        return components.compactMap { $0 }.joined(separator: " ")
     }
 }
 
 private extension OSStatus {
+    var codeMessage: String? {
+        guard self != errSecSuccess else { return nil }
+        return "(\(self))"
+    }
+
     var errorMessage: String? {
         guard self != errSecSuccess else { return nil }
         return SecCopyErrorMessageString(self, nil) as String?

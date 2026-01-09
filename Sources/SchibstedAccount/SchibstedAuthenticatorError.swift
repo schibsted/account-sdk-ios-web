@@ -9,6 +9,8 @@ public enum SchibstedAuthenticatorError: Error, Sendable {
     case cancelled
     /// Previous session in progress.
     case previousSessionInProgress
+    /// No login session to complete
+    case noLoginSessionToComplete
     /// Authentication response not related to any outstanding authentication request was received.
     case unsolicitedResponse
     /// Invalid redirectURI scheme

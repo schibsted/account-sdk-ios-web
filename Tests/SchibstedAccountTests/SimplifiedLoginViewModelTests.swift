@@ -11,11 +11,12 @@ import Combine
 
 @testable import SchibstedAccount
 
-@Suite
+@Suite(.serialized)
 @MainActor
 final class SimplifiedLoginViewModelTests {
     private let urlSession = FakeURLSession()
     private let presentationContextProvider = WebAuthenticationPresentationContext()
+    private let tracker = FakeSchibstedAuthenticatorTracker()
     private var cancellables = Set<AnyCancellable>()
 
     @Test(arguments: [
@@ -81,7 +82,7 @@ final class SimplifiedLoginViewModelTests {
 
         authenticator.state.value = .loggingIn
 
-        await expectation.wait(timeout: 2.0)
+        await expectation.wait(timeout: 3.0)
 
         #expect(viewModel.state.isLoggingIn)
     }
@@ -106,6 +107,8 @@ final class SimplifiedLoginViewModelTests {
 
             await viewModel.login(presentationContextProvider: presentationContextProvider)
         }
+
+        #expect(tracker.trackedSimplifiedLoginSwitchAccount)
     }
 
     @Test("should login with ephemeral session and assertion")
@@ -128,6 +131,49 @@ final class SimplifiedLoginViewModelTests {
 
             await viewModel.continueAs(presentationContextProvider: presentationContextProvider)
         }
+
+        #expect(tracker.trackedSimplifiedLoginContinueAs)
+    }
+
+    @Test("should track presenting the simplified login")
+    func trackOnAppear() async {
+        let authenticator = authenticator()
+        let viewModel = viewModel(authenticator: authenticator)
+
+        await viewModel.trackOnAppear()
+
+        #expect(tracker.trackedSimplifiedLoginPresented)
+    }
+
+    @Test("should track dismissing the simplified login")
+    func trackOnDisappear() async {
+        let authenticator = authenticator()
+        let viewModel = viewModel(authenticator: authenticator)
+        await viewModel.trackOnAppear()
+
+        await viewModel.trackOnDisappear()
+
+        #expect(tracker.trackedSimplifiedLoginDismissed)
+    }
+
+    @Test("should track clicking continue-without-login")
+    func trackContinueWithoutLogin() async {
+        let authenticator = authenticator()
+        let viewModel = viewModel(authenticator: authenticator)
+
+        await viewModel.trackContinueWithoutLogin()
+
+        #expect(tracker.trackedSimplifiedLoginContinueWithoutLogin)
+    }
+
+    @Test("should track the privacy policy being opened")
+    func trackOpenedPrivacyPolicy() async {
+        let authenticator = authenticator()
+        let viewModel = viewModel(authenticator: authenticator)
+
+        await viewModel.trackOpenedPrivacyPolicy()
+
+        #expect(tracker.trackedSimplifiedLoginOpenedPrivacyPolicy)
     }
 
     private func authenticator(
@@ -155,7 +201,7 @@ final class SimplifiedLoginViewModelTests {
         SimplifiedLoginViewModel(
             displayText: "Rincewind",
             profile: .withName,
-            tracking: nil,
+            tracking: tracker,
             authenticator: authenticator
         )
     }

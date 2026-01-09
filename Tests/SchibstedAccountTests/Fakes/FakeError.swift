@@ -5,4 +5,5 @@
 
 enum FakeError: Error {
     case notMocked
+    case failure
 }

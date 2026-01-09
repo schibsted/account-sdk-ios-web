@@ -12,7 +12,7 @@ struct FakeIdTokenValidator: IdTokenValidating {
 
     func validate(
         idToken: String?,
-        jwks: any SchibstedAccount.JWKS,
+        jwks: any JWKS,
         issuer: String,
         clientId: String,
         nonce: String?,

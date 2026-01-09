@@ -5,18 +5,19 @@
 
 import Testing
 import Foundation
+import Combine
 
 @testable import SchibstedAccount
 
-@Suite
+@Suite(.serialized)
 @MainActor
 struct SchibstedAuthenticatorTests {
-    private static let issuer = "https://login.schibsted.com"
-    private static let userId = "12345689"
-    private static let clientId = "a70ed9c041334b712c599a526"
-    private static let userUUID = UUID().uuidString
-    private static let expiration = Date().timeIntervalSince1970 + 3600
-    private static let userTokens = UserTokens(
+    private nonisolated static let issuer = "https://login.schibsted.com"
+    private nonisolated static let userId = "12345689"
+    private nonisolated static let clientId = "a70ed9c041334b712c599a526"
+    private nonisolated static let userUUID = UUID().uuidString
+    private nonisolated static let expiration = Date().timeIntervalSince1970 + 3600
+    private nonisolated static let userTokens = UserTokens(
         accessToken: UUID().uuidString,
         refreshToken: UUID().uuidString,
         idTokenClaims: IdTokenClaims(
@@ -35,6 +36,7 @@ struct SchibstedAuthenticatorTests {
     private let idTokenValidator = FakeIdTokenValidator(userUUID: Self.userUUID)
     private let urlSession = FakeURLSession()
     private let encoder = JSONEncoder()
+    private let tracker = FakeSchibstedAuthenticatorTracker()
 
     @Test("should load user from keychain")
     func loadUserFromKeychain() async throws {
@@ -76,6 +78,71 @@ struct SchibstedAuthenticatorTests {
         )
 
         #expect(authenticator.state.value.isLoggedIn)
+        #expect(tracker.trackedLoginStarted)
+    }
+
+    @Test("Login with presentation context failed")
+    func loginWithPresentationContextProviderFailed() async throws {
+        let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
+
+        webAuthenticationSessionProvider.createSession = {
+            let session = FakeWebAuthenticationSession(
+                url: $0,
+                callbackURLScheme: $1,
+                completionHandler: $2
+            )
+            session.didStart = {
+                session.completionHandler(nil, FakeError.failure)
+                return true
+            }
+            return session
+        }
+
+        let authenticator = try authenticator(
+            webAuthenticationSessionProvider: webAuthenticationSessionProvider
+        )
+
+        await #expect(throws: SchibstedAuthenticatorError.self) {
+            try await authenticator.login(
+                presentationContextProvider: WebAuthenticationPresentationContext()
+            )
+        }
+
+        #expect(!authenticator.state.value.isLoggedIn)
+        #expect(tracker.trackedLoginStarted)
+        #expect(tracker.trackedLoginFailed)
+    }
+
+    @Test("Complete login from URL")
+    func completeLoginFromURL() async throws {
+        let code = UUID().uuidString
+        var authenticator: SchibstedAuthenticator?
+
+        let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
+        webAuthenticationSessionProvider.createSession = { url, callbackURLScheme, completionHandler in
+            Task {
+                let state = url.queryItems?.first { $0.name == "state" }
+                try await authenticator?.completeLoginFromURL(
+                    URL(string: "\(Self.clientId):/login?code=\(code)&state=\(state?.value ?? "")")!
+                )
+            }
+            return FakeWebAuthenticationSession(
+                url: url,
+                callbackURLScheme: callbackURLScheme,
+                completionHandler: completionHandler
+            )
+        }
+
+        authenticator = try self.authenticator(
+            webAuthenticationSessionProvider: webAuthenticationSessionProvider
+        )
+
+        try await authenticator?.login(
+            presentationContextProvider: WebAuthenticationPresentationContext()
+        )
+
+        #expect(authenticator?.state.value.isLoggedIn == true)
+        #expect(webAuthenticationSessionProvider.session?.didCancel == true)
     }
 #endif
 
@@ -92,6 +159,30 @@ struct SchibstedAuthenticatorTests {
         )
 
         #expect(authenticator.state.value.isLoggedIn)
+        #expect(tracker.trackedLoginStarted)
+    }
+
+    @Test("Login with code failed")
+    func loginWithCodeFailed() async throws {
+        let code = UUID().uuidString
+        let codeVerifier = try #require(String.secureRandom(length: 60))
+        let authenticator = try authenticator()
+
+        urlSession.data = { _ in
+            throw FakeError.failure
+        }
+
+        await #expect(throws: SchibstedAuthenticatorError.self) {
+            try await authenticator.login(
+                code: code,
+                codeVerifier: codeVerifier,
+                xDomainId: nil
+            )
+        }
+
+        #expect(!authenticator.state.value.isLoggedIn)
+        #expect(tracker.trackedLoginStarted)
+        #expect(tracker.trackedLoginFailed)
     }
 
     @Test("Request a web-session URL")
@@ -138,6 +229,28 @@ struct SchibstedAuthenticatorTests {
         let frontendJWT = try await authenticator.frontendJWT()
 
         #expect(frontendJWT == "id_jwt_value")
+    }
+
+    @Test("Logout")
+    func logout() async throws {
+        try addUserToKeychain()
+
+        let authenticator = try authenticator()
+        try authenticator.logout()
+
+        #expect(authenticator.state.value.isLoggedIn == false)
+    }
+
+    @Test("User Profile")
+    func userProfile() async throws {
+        try addUserToKeychain()
+
+        let authenticator = try authenticator()
+        let userProfile = try await authenticator.userProfile()
+
+        #expect(userProfile.uuid.uuidString == Self.userUUID)
+        #expect(userProfile.userId == Self.userId)
+        #expect(userProfile.displayName == "Rincewind")
     }
 
 #if os(iOS)
@@ -250,7 +363,7 @@ struct SchibstedAuthenticatorTests {
             return (data, HTTPURLResponse())
         }
 
-        return SchibstedAuthenticator(
+        let authenticator = SchibstedAuthenticator(
             environment: .sweden,
             clientId: Self.clientId,
             redirectURI: URL(string: "\(Self.clientId):/login")!,
@@ -260,5 +373,9 @@ struct SchibstedAuthenticatorTests {
             jwks: try FakeJWKS(),
             urlSession: urlSession
         )
+
+        authenticator.tracking = tracker
+
+        return authenticator
     }
 }
