@@ -35,5 +35,5 @@ jobs:
             -disableAutomaticPackageResolution \
             -disablePackageRepositoryCache \
             -scheme SchibstedAccount \
-            -destination "platform=iOS Simulator,name=iPhone 17,OS=26.0" \
+            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" \
           | xcbeautify --renderer github-actions
