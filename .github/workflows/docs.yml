@@ -45,8 +45,6 @@ jobs:
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphonesimulator/SchibstedAccount.doccarchive \
             --output-path docc
 
-          echo "<script>window.location.href += \"documentation/schibstedaccount/\"</script>" > docc/index.html;
-
       - name: Install gtar # Used by actions/upload-pages-artifact
         run: brew install gnu-tar
 
