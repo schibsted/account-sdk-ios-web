@@ -43,7 +43,7 @@ jobs:
           
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphonesimulator/SchibstedAccount.doccarchive \
-            --output-path docc
+            --output-path docc \
             --hosting-base-path account-sdk-ios-web
 
           echo "<script>window.location.href += \"documentation/schibstedaccount/\"</script>" > docc/index.html;
