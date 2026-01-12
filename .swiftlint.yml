@@ -1,42 +1,33 @@
+disabled_rules:
+  - line_length
+  - function_body_length
+  - function_parameter_count
+  - identifier_name
+  - todo
+  - file_length
+  - nesting
+  - comma_inheritance
+  - type_body_length
+  - trailing_whitespace
+  - static_over_final_class
 opt_in_rules:
+  - discouraged_assert
   - empty_count
-
-included:
-  - Sources
-
-analyzer_rules:
-  - explicit_self
-
-force_cast: warning
-force_try:
-  severity: warning
-
-line_length:
-  warning: 160
-  error: 240
-  ignores_comments: true
-  ignores_urls: true
-
-type_body_length:
-  warning: 300
-  error: 400
-
-file_length:
-  warning: 500
-  error: 1200
-
-type_name:
-  min_length: 4
-  max_length:
-    warning: 40
-    error: 50
-  excluded: iPhone
-identifier_name:
-  min_length:
-    error: 3
-  excluded:
-    - se
-    - no
-    - fi
-    - id
-    - URL
+  - first_where
+  - empty_string
+  - toggle_bool
+  - convenience_type
+  - overridden_super_call
+  - shorthand_optional_binding
+  - unneeded_parentheses_in_closure_argument
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
+  - array_init
+  - attributes
+  - closure_end_indentation
+  - collection_alignment
+  - yoda_condition
+  - direct_return
+attributes:
+  attributes_with_arguments_always_on_line_above: false
+  always_on_line_above: ["@MainActor", "@WidgetBundleBuilder", "@available", "@AppStorage"]

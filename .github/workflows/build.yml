@@ -17,16 +17,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_ios:
-    name: "Build & Test"
+  build_and_test:
+    name: Build & Test
     runs-on: macos-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Select Xcode Version
-        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+        run: sudo xcode-select -switch /Applications/Xcode_26.0.app
 
       - name: Build & Test
         run: |
@@ -34,6 +34,6 @@ jobs:
             -scmProvider system \
             -disableAutomaticPackageResolution \
             -disablePackageRepositoryCache \
-            -scheme AccountSDKIOSWeb \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
-          | xcbeautify
+            -scheme SchibstedAccount \
+            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" \
+          | xcbeautify --renderer github-actions
