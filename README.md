@@ -1,3 +1,5 @@
+# Schibsted Account SDK for iOS
+
 [![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web?label=Release)
 ![Platform](https://img.shields.io/badge/Platforms-iOS%2016.0+,_tvOS%2016.0+-orange.svg?style=flat)
