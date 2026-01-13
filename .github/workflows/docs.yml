@@ -39,7 +39,7 @@ jobs:
           xcodebuild docbuild \
             -scheme SchibstedAccount \
             -derivedDataPath /tmp/docbuild \
-            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest"
+            -destination "generic/platform=iOS Simulator"
           
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphonesimulator/SchibstedAccount.doccarchive \
