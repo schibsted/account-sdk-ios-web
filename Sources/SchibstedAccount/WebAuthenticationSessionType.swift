@@ -34,7 +34,7 @@ protocol WebAuthenticationSessionType {
 final class WebAuthenticationSession: ASWebAuthenticationSession, WebAuthenticationSessionType {
     let completionHandler: (URL?, (any Error)?) -> Void
 
-    @available(iOS 17.4, tvOS 17.4, *)
+    @available(iOS 17.4, tvOS 17.4, watchOS 10.4, *)
     override init(
         url URL: URL,
         callback: ASWebAuthenticationSession.Callback,

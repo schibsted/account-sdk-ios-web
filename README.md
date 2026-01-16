@@ -7,8 +7,9 @@
 
 ## Requirements
 
-* iOS 16.0+
-* tvOS 16.0+
+* iOS 16+
+* tvOS 16+
+* watchOS 9+
 
 ## Installation
 
