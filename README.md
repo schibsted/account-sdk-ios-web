@@ -16,7 +16,7 @@
 Swift Package Manager
 
 ```swift
-.package(url: "https://github.com/schibsted/account-sdk-ios-web", from: "6.0.0")
+.package(url: "https://github.com/schibsted/account-sdk-ios-web", from: "6.1.0")
 ```
 
 ## Documentation
