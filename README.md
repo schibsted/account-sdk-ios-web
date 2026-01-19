@@ -2,13 +2,14 @@
 
 [![Build Status](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/schibsted/account-sdk-ios-web/actions/workflows/build.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/schibsted/account-sdk-ios-web?label=Release)
-![Platform](https://img.shields.io/badge/Platforms-iOS%2016.0+,_tvOS%2016.0+-orange.svg?style=flat)
+![Platform](https://img.shields.io/badge/Platforms-iOS%2016+,_tvOS%2016+,_watchOS%209+-orange.svg?style=flat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://schibsted.ghe.com/app-foundation/schibsted-account-sdk-ios/blob/main/LICENSE)
 
 ## Requirements
 
-* iOS 16.0+
-* tvOS 16.0+
+* iOS 16+
+* tvOS 16+
+* watchOS 9+
 
 ## Installation
 

@@ -34,5 +34,15 @@ extension URLSessionType {
 
 private extension SchibstedAuthenticator {
     @MainActor
-    static let userAgent = "SchibstedAccountSDKiOS/\(SchibstedAuthenticator.version) (\(UIDevice.current.model); \(UIDevice.current.systemName) \(UIDevice.current.systemVersion))"
+    static let userAgent: String = {
+#if os(iOS) || os(tvOS)
+        let device = UIDevice.current
+        return "SchibstedAccountSDKiOS/\(SchibstedAuthenticator.version) " +
+            "(\(device.model); \(device.systemName) \(device.systemVersion))"
+#elseif os(watchOS)
+        let device = WKInterfaceDevice.current()
+        return "SchibstedAccountSDKiOS/\(SchibstedAuthenticator.version) " +
+            "(\(device.model); \(device.systemName) \(device.systemVersion))"
+#endif
+    }()
 }
