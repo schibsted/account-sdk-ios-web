@@ -9,6 +9,7 @@ import JOSESwift
 import Logging
 
 /// Schibsted Authenticator.
+@MainActor
 public final class SchibstedAuthenticator: SchibstedAuthenticating {
     private let logger = Logger(label: "SchibstedAuthenticator")
     private let urlSession: URLSessionType
@@ -21,6 +22,15 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
     private var session: WebAuthenticationSessionType?
     private var presentationContextProvider: ASWebAuthenticationPresentationContextProviding?
 #endif
+
+    // Keep a single instance to avoid multiple concurrent `refreshTokens` calls.
+    private lazy var _authenticatedURLSession = AuthenticatedURLSession(
+        authenticator: self,
+        urlSession: urlSession,
+        refreshTokens: { [weak self] in
+            try await self?.refreshTokens()
+        }
+    )
 
     public let environment: SchibstedAuthenticatorEnvironment
     public let clientId: String
@@ -346,19 +356,12 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             let data: Response
         }
 
-        let authenticatedURLSession = authenticatedURLSession()
-        let container: Container = try await authenticatedURLSession.data(for: request)
+        let container: Container = try await _authenticatedURLSession.data(for: request)
         return container.data.code
     }
 
     public func authenticatedURLSession() -> AuthenticatedURLSession {
-        AuthenticatedURLSession(
-            authenticator: self,
-            urlSession: urlSession,
-            refreshTokens: { [weak self] in
-                try await self?.refreshTokens()
-            }
-        )
+        _authenticatedURLSession
     }
 
     public func frontendJWT() async throws(NetworkingError) -> String {
@@ -373,8 +376,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             let jwt: String
         }
 
-        let authenticatedURLSession = authenticatedURLSession()
-        let response: Response = try await authenticatedURLSession.data(for: request)
+        let response: Response = try await _authenticatedURLSession.data(for: request)
         return response.jwt
     }
 
@@ -444,6 +446,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             throw SchibstedAuthenticatorError.refreshTokenFailed(.userIsLoggedOut)
         }
 
+        logger.trace("Refreshing tokens for user '\(user)'.")
+
         do {
             let tokens = try await getTokens(parameters: [
                 "client_id": clientId,
@@ -465,13 +469,15 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
 
             state.value = .loggedIn(updatedUser)
         } catch {
+            logger.error("Failed to refresh tokens for user '\(user)'. Error: \(error)")
+
             if case URLRequestError.httpStatus(_, let data, _) = error, let data {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
 
                 if let oAuthError = try? decoder.decode(OAuthError.self, from: data),
                    oAuthError.error == "invalid_grant" {
-                    logger.warning("Failed to refresh tokens, invalid grant.")
+                    logger.warning("Failed to refresh tokens for user '\(user)', invalid grant.")
                     try logout()
                 }
             }
@@ -509,7 +515,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         case .withTokens:
             urlSession
         case .withAuthenticatedURLSession:
-            authenticatedURLSession()
+            _authenticatedURLSession
         }
 
         let decoder = JSONDecoder(dateDecodingStrategy: .formatted(DateFormatter(dateFormat: "yyyy-MM-dd HH:mm:ss")))

@@ -4,7 +4,7 @@
 //
 
 /// Schibsted Account User.
-public struct SchibstedAuthenticatorUser: Codable, Equatable, Sendable, CustomStringConvertible {
+public struct SchibstedAuthenticatorUser: Codable, Hashable, Sendable, CustomStringConvertible {
     /// The user tokens.
     internal let tokens: UserTokens
 
@@ -31,5 +31,15 @@ public struct SchibstedAuthenticatorUser: Codable, Equatable, Sendable, CustomSt
 
     public var description: String {
         sdrn
+    }
+
+    public static func == (lhs: SchibstedAuthenticatorUser, rhs: SchibstedAuthenticatorUser) -> Bool {
+        lhs.sdrn == rhs.sdrn &&
+        lhs.userId == rhs.userId
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(sdrn)
+        hasher.combine(userId)
     }
 }
