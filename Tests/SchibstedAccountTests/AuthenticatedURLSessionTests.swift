@@ -178,4 +178,76 @@ struct AuthenticatedURLSessionTests {
 
         #expect(oldUser.tokens.accessToken != updatedUser.tokens.accessToken)
     }
+
+    @Test("retry should fail if the user logs out during token refresh")
+    func retryDuringLogout() async throws {
+        let urlSession = FakeURLSession()
+        let keychainStorage = FakeKeychainStorage()
+        let clientId = "a70ed9c041334b712c599a526"
+
+        let userUUID = UUID().uuidString
+        let userTokens = UserTokens.fake(
+            userUUID: userUUID,
+            expiration: Date(timeIntervalSinceNow: -10)
+        )
+        let userSession = UserSession(
+            userTokens: userTokens,
+            updatedAt: Date()
+        )
+
+        let encoder = JSONEncoder()
+        keychainStorage.values[clientId] = try encoder.encode(userSession)
+
+        let authenticator = SchibstedAuthenticator(
+            environment: .sweden,
+            clientId: clientId,
+            redirectURI: URL(string: "\(clientId):/login")!,
+            webAuthenticationSessionProvider: FakeWebAuthenticationSessionProvider(),
+            idTokenValidator: FakeIdTokenValidator(userUUID: userUUID),
+            keychainStorage: keychainStorage,
+            jwks: try FakeJWKS(),
+            urlSession: urlSession
+        )
+
+        let authenticatedURLSession = authenticator.authenticatedURLSession()
+        let requestURL = URL(string: "https://login.schibsted.com")!
+
+        do {
+            try await confirmation(expectedCount: 0) { confirmation in
+                urlSession.data = { request in
+                    guard let url = request.url else {
+                        return (Data(), HTTPURLResponse())
+                    }
+
+                    if url == requestURL {
+                        confirmation()
+                    }
+
+                    if url == authenticator.environment.tokenURL {
+                        try authenticator.logout()
+
+                        let data = Data("""
+                        {
+                            "access_token": "\(UUID().uuidString)",
+                            "refresh_token": "\(UUID().uuidString)",
+                            "expires_in": 600
+                        }
+                        """.utf8)
+
+                        return (data, HTTPURLResponse())
+                    }
+
+                    return (Data(), HTTPURLResponse())
+                }
+
+                _ = try await authenticatedURLSession.data(
+                    for: URLRequest(url: requestURL)
+                )
+            }
+        } catch (SchibstedAuthenticatorError.refreshTokenFailed(.userIsLoggedOut)) {
+            #expect(authenticator.state.value.user == nil)
+        } catch {
+            Issue.record(error)
+        }
+    }
 }
