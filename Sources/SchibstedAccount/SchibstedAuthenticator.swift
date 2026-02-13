@@ -457,7 +457,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
 
             guard case .loggedIn = state.value else {
                 logger.warning("User logged out between the refresh starting and finishing.")
-                return
+                throw SchibstedAuthenticatorError.refreshTokenFailed(.userIsLoggedOut)
             }
 
             let updatedUser = SchibstedAuthenticatorUser(
