@@ -455,6 +455,11 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                 "refresh_token": user.tokens.refreshToken
             ])
 
+            guard case .loggedIn = state.value else {
+                logger.warning("User logged out between the refresh starting and finishing.")
+                return
+            }
+
             let updatedUser = SchibstedAuthenticatorUser(
                 tokens: UserTokens(
                     accessToken: tokens.accessToken,
