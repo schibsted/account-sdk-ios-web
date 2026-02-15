@@ -16,6 +16,14 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     let redirectURI: URL
     let urlSession: URLSessionType
 
+    private lazy var _authenticatedURLSession = AuthenticatedURLSession(
+        authenticator: self,
+        urlSession: urlSession,
+        refreshTokens: { [weak self] in
+            try self?.refreshTokens()
+        }
+    )
+
     nonisolated(unsafe) weak var tracking: SchibstedAuthenticatorTracking?
 
     init(
@@ -96,13 +104,7 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     }
     
     func authenticatedURLSession() -> AuthenticatedURLSession {
-        AuthenticatedURLSession(
-            authenticator: self,
-            urlSession: urlSession,
-            refreshTokens: { [weak self] in
-                try self?.refreshTokens()
-            }
-        )
+        _authenticatedURLSession
     }
 
     private func refreshTokens() throws {
