@@ -312,6 +312,7 @@ struct AuthenticatedURLSessionTests {
             }
         } catch (NetworkingError.requestFailed(URLRequestError.httpStatus)) {
             #expect(authenticator.state.value.user == nil)
+            #expect(authenticator.state.value == .loggedOut)
         } catch {
             Issue.record(error)
         }
