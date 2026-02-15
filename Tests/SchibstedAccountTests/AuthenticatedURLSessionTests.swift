@@ -250,4 +250,69 @@ struct AuthenticatedURLSessionTests {
             Issue.record(error)
         }
     }
+
+    @Test("user should be logged out if the refreshing the tokens returns a invalid_grant")
+    func logoutOnInvalidGrant() async throws {
+        let urlSession = FakeURLSession()
+        let keychainStorage = FakeKeychainStorage()
+        let clientId = "a70ed9c041334b712c599a526"
+
+        let userUUID = UUID().uuidString
+        let userTokens = UserTokens.fake(
+            userUUID: userUUID,
+            expiration: Date(timeIntervalSinceNow: -10)
+        )
+        let userSession = UserSession(
+            userTokens: userTokens,
+            updatedAt: Date()
+        )
+
+        let encoder = JSONEncoder()
+        keychainStorage.values[clientId] = try encoder.encode(userSession)
+
+        let authenticator = SchibstedAuthenticator(
+            environment: .sweden,
+            clientId: clientId,
+            redirectURI: URL(string: "\(clientId):/login")!,
+            webAuthenticationSessionProvider: FakeWebAuthenticationSessionProvider(),
+            idTokenValidator: FakeIdTokenValidator(userUUID: userUUID),
+            keychainStorage: keychainStorage,
+            jwks: try FakeJWKS(),
+            urlSession: urlSession
+        )
+
+        let authenticatedURLSession = authenticator.authenticatedURLSession()
+        let requestURL = URL(string: "https://login.schibsted.com")!
+
+        await #expect(throws: NetworkingError.self) {
+            try await confirmation(expectedCount: 0) { confirmation in
+                urlSession.data = { request in
+                    guard let url = request.url else {
+                        return (Data(), HTTPURLResponse())
+                    }
+
+                    if url == requestURL {
+                        confirmation()
+                    }
+
+                    if url == authenticator.environment.tokenURL {
+                        throw URLRequestError.httpStatus(
+                            400,
+                            try JSONEncoder().encode(OAuthError(error: "invalid_grant", description: nil)),
+                            nil
+                        )
+                    }
+
+                    return (Data(), HTTPURLResponse())
+                }
+
+                _ = try await authenticatedURLSession.data(
+                    for: URLRequest(url: requestURL)
+                )
+            }
+        }
+
+        #expect(authenticator.state.value.user == nil)
+        #expect(authenticator.state.value == .loggedOut)
+    }
 }

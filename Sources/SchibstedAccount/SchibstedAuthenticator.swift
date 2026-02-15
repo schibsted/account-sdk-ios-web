@@ -476,7 +476,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         } catch {
             logger.error("Failed to refresh tokens for user '\(user)'. Error: \(error)")
 
-            if case URLRequestError.httpStatus(_, let data, _) = error, let data {
+            if case NetworkingError.requestFailed(let underlyingError) = error,
+               case URLRequestError.httpStatus(_, let data, _) = underlyingError, let data {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
 
