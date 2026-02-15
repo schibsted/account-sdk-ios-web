@@ -284,7 +284,7 @@ struct AuthenticatedURLSessionTests {
         let authenticatedURLSession = authenticator.authenticatedURLSession()
         let requestURL = URL(string: "https://login.schibsted.com")!
 
-        do {
+        await #expect(throws: NetworkingError.self) {
             try await confirmation(expectedCount: 0) { confirmation in
                 urlSession.data = { request in
                     guard let url = request.url else {
@@ -310,11 +310,9 @@ struct AuthenticatedURLSessionTests {
                     for: URLRequest(url: requestURL)
                 )
             }
-        } catch (NetworkingError.requestFailed(URLRequestError.httpStatus)) {
-            #expect(authenticator.state.value.user == nil)
-            #expect(authenticator.state.value == .loggedOut)
-        } catch {
-            Issue.record(error)
         }
+
+        #expect(authenticator.state.value.user == nil)
+        #expect(authenticator.state.value == .loggedOut)
     }
 }
