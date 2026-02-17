@@ -315,6 +315,16 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
     }
 
     public func webSessionURL() async throws(NetworkingError) -> URL {
+        try await webSessionURL(
+            clientId: clientId,
+            redirectURI: redirectURI
+        )
+    }
+
+    public func webSessionURL(
+        clientId: String,
+        redirectURI: URL
+    ) async throws(NetworkingError) -> URL {
         let url = environment.exchangeURL
 
         let parameters = [
