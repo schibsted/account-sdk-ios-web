@@ -72,7 +72,20 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     func userProfile() async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUserProfile
 
     /// Gets a web session URL.
+    ///
+    /// - returns: Web session URL for the default `clientId` and `redirectURI`.
     func webSessionURL() async throws(NetworkingError) -> URL
+
+    /// Gets a web session URL for a given `clientId` and `redirectURI`.
+    ///
+    /// - parameters:
+    ///   - clientId: The client id
+    ///   - redirectURI: The redirect URI.
+    /// - returns: Web session URL for the provided `clientId` and `redirectURI`.
+    func webSessionURL(
+        clientId: String,
+        redirectURI: URL
+    ) async throws(NetworkingError) -> URL
 
     /// Gets a one-time code.
     func oneTimeCode() async throws(NetworkingError) -> String

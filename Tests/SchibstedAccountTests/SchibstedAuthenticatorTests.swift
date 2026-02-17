@@ -187,9 +187,33 @@ struct SchibstedAuthenticatorTests {
 
     @Test("Request a web-session URL")
     func webSessionURL() async throws {
-        let authenticator = try authenticator()
+        let authenticator = try authenticator(validateRequest: { request in
+            let data = try #require(request.httpBody)
+            let formData = try #require(String(data: data, encoding: .utf8))
+            let parameters = formData.split(separator: "&")
+            #expect(parameters.contains("clientId=\(Self.clientId)"))
+            #expect(parameters.contains("redirectUri=\(Self.clientId)%3A%2Flogin"))
+        })
 
         let url = try await authenticator.webSessionURL()
+
+        #expect(url.absoluteString == "https://login.schibsted.com/session/abcd1234")
+    }
+
+    @Test("Request a web-session URL with custom clientId and redirectURI")
+    func webSessionURLWithClientIdAndRedirectURI() async throws {
+        let authenticator = try authenticator(validateRequest: { request in
+            let data = try #require(request.httpBody)
+            let formData = try #require(String(data: data, encoding: .utf8))
+            let parameters = formData.split(separator: "&")
+            #expect(parameters.contains("clientId=zygw9876"))
+            #expect(parameters.contains("redirectUri=https%3A%2F%2Flogin.aftonbladet.se"))
+        })
+
+        let url = try await authenticator.webSessionURL(
+            clientId: "zygw9876",
+            redirectURI: URL(string: "https://login.aftonbladet.se")!
+        )
 
         #expect(url.absoluteString == "https://login.schibsted.com/session/abcd1234")
     }
@@ -285,7 +309,8 @@ struct SchibstedAuthenticatorTests {
     }
 
     private func authenticator(
-        webAuthenticationSessionProvider: WebAuthenticationSessionProviding = FakeWebAuthenticationSessionProvider()
+        webAuthenticationSessionProvider: WebAuthenticationSessionProviding = FakeWebAuthenticationSessionProvider(),
+        validateRequest: ((URLRequest) throws -> Void)? = nil
     ) throws -> SchibstedAuthenticator {
         let jws = try SecKey.jws(claims: """
         {
@@ -305,6 +330,8 @@ struct SchibstedAuthenticatorTests {
             guard let url = request.url else {
                 throw FakeError.notMocked
             }
+
+            try validateRequest?(request)
 
             let data = if url == environment.userProfileURL(userUUID: Self.userUUID) {
                 Data("""
