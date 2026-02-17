@@ -5,5 +5,5 @@
 
 extension SchibstedAuthenticator {
     /// The SDK version
-    public nonisolated static let version = "6.2.0"
+    public nonisolated static let version = "6.3.0"
 }
