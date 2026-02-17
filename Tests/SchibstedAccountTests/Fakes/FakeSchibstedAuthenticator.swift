@@ -94,7 +94,11 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     func webSessionURL() async throws(NetworkingError) -> URL {
         throw NetworkingError.requestFailed(FakeError.notMocked)
     }
-    
+
+    func webSessionURL(clientId: String, redirectURI: URL) async throws(NetworkingError) -> URL {
+        throw NetworkingError.requestFailed(FakeError.notMocked)
+    }
+
     func oneTimeCode() async throws(NetworkingError) -> String {
         throw NetworkingError.requestFailed(FakeError.notMocked)
     }
