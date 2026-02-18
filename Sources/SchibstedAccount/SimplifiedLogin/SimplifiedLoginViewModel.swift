@@ -8,7 +8,7 @@
 import SwiftUI
 import AuthenticationServices
 import Logging
-import Combine
+public import Combine
 
 /// View Model for the Simplified Login View.
 @MainActor

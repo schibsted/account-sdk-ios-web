@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+public import Foundation
 
 /// The User Session which is saved to the keychain.
 public struct UserSession: Codable, Equatable, Sendable {

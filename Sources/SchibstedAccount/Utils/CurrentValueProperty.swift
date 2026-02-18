@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Combine
+public import Combine
 
 /// A read-only version of the Combine `CurrentValueSubject<Output, Failure>`
 /// that wraps a single value and publishes a new element whenever the value changes.

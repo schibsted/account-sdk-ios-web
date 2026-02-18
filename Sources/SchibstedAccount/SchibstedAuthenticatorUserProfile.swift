@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+public import Foundation
 
 /// Schibsted Account User Profile.
 public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {

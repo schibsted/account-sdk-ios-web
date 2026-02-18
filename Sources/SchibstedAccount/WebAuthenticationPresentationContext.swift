@@ -5,8 +5,8 @@
 
 #if os(iOS)
 
-import Foundation
-import AuthenticationServices
+public import Foundation
+public import AuthenticationServices
 
 /// Provides context to target where in an application's UI the authorization view should be shown.
 @MainActor

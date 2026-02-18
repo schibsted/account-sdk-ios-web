@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import AuthenticationServices
+public import AuthenticationServices
 import CryptoKit
 import JOSESwift
 import Logging
