@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+internal import Foundation
 
 extension URL {
     /// An array of query items for the URL in the order in which they appear in the original query string.

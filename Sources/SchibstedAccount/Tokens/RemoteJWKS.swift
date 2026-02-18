@@ -3,9 +3,9 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+internal import Foundation
 
-@preconcurrency import JOSESwift
+@preconcurrency internal import JOSESwift
 
 /// Fetches and caches a public JWKS key pair that can be used used for [local token introspection](https://docs.schibsted.io/schibsted-account/guides/token-introspection/#local-token-introspection).
 actor RemoteJWKS: JWKS {

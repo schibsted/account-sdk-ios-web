@@ -4,8 +4,8 @@
 //
 
 public import Foundation
-import Security
-import Logging
+internal import Security
+internal import Logging
 
 /// Keychain Storage.
 public protocol KeychainStoring: Sendable {

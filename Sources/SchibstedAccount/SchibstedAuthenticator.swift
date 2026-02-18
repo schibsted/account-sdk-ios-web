@@ -3,10 +3,11 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
+internal import CryptoKit
+internal import JOSESwift
+internal import Logging
+
 public import AuthenticationServices
-import CryptoKit
-import JOSESwift
-import Logging
 
 /// Schibsted Authenticator.
 @MainActor
