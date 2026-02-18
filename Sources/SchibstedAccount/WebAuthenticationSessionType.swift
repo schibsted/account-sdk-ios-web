@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import AuthenticationServices
+internal import AuthenticationServices
 
 /// A session that an app uses to authenticate a user through a web service.
 protocol WebAuthenticationSessionType {

@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import AuthenticationServices
+internal import AuthenticationServices
 
 /// Provides a ``WebAuthenticationSession`` that is used to authenticate a user through a web service.
 protocol WebAuthenticationSessionProviding: Sendable {
