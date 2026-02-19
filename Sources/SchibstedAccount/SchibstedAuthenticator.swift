@@ -456,7 +456,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             throw SchibstedAuthenticatorError.refreshTokenFailed(.userIsLoggedOut)
         }
 
-        logger.trace("Refreshing tokens for user '\(user)'.")
+        logger.debug("Refreshing tokens for user '\(user)'.")
 
         do {
             let tokens = try await getTokens(parameters: [
