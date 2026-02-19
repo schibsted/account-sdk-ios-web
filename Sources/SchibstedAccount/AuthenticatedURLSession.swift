@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+public import Foundation
 
 /// A specialized URLSession that will refresh the stored access token
 /// when encoutering a HTTP 401, and then replay the request with the updated token.

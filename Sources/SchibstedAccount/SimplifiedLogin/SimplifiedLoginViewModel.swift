@@ -5,10 +5,11 @@
 
 #if os(iOS)
 
-import SwiftUI
-import AuthenticationServices
-import Logging
-import Combine
+internal import SwiftUI
+internal import AuthenticationServices
+internal import Logging
+
+public import Combine
 
 /// View Model for the Simplified Login View.
 @MainActor

@@ -3,9 +3,9 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
-import Logging
-@preconcurrency import JOSESwift
+internal import Foundation
+internal import Logging
+@preconcurrency internal import JOSESwift
 
 protocol IdTokenValidating: Sendable {
     /// ID Token Validation.

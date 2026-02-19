@@ -3,8 +3,8 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
-import Security
+internal import Foundation
+internal import Security
 
 extension String {
     /// Generates a cryptographically secure random a-zA-Z0-9 string of a given length

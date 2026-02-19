@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+public import Foundation
 
 /// An object that coordinates a group of related, network data-transfer tasks.
 public protocol URLSessionType: AnyObject, Sendable {

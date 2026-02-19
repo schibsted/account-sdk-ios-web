@@ -3,9 +3,9 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
-import Security
-import Logging
+public import Foundation
+internal import Security
+internal import Logging
 
 /// Keychain Storage.
 public protocol KeychainStoring: Sendable {

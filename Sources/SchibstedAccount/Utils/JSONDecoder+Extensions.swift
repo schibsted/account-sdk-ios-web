@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+internal import Foundation
 
 extension JSONDecoder {
     /// Creates a new, reusable JSON decoder with the default formatting settings and decoding strategies.

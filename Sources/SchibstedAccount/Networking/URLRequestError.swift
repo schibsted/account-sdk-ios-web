@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+internal import Foundation
 
 enum URLRequestError: Error, CustomStringConvertible, Equatable {
     /// HTTP response status error (100...199 and 400...599)

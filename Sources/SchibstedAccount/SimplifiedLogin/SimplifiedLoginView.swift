@@ -5,7 +5,7 @@
 
 #if os(iOS)
 
-import SwiftUI
+public import SwiftUI
 
 /// Simplified Login View.
 public struct SimplifiedLoginView: View, Identifiable {

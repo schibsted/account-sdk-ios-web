@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-@preconcurrency import JOSESwift
+@preconcurrency internal import JOSESwift
 
 /// JSON Web Key Set
 protocol JWKS: Sendable {

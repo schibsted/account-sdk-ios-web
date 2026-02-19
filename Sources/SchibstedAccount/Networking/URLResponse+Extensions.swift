@@ -3,7 +3,7 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
+internal import Foundation
 
 extension URLResponse {
     /// Validates a HTTP response and throws an error if the response status code is not in the `200..<400` range

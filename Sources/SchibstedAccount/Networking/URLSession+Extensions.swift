@@ -3,8 +3,8 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Foundation
-import UIKit
+internal import Foundation
+internal import UIKit
 
 extension URLSessionType {
     /// Downloads the contents of a URL based on the specified URL request, validates the response,
