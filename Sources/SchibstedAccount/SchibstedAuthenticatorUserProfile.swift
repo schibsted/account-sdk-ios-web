@@ -23,18 +23,6 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
     public let gender: String?
     /// Schibsted Account Merchant IDs associated with the user.
     public let merchants: [Int]?
-    /// Published date.
-    public let published: Date?
-    /// Verified dated.
-    public let verified: Date?
-    /// Last updated date.
-    public let updated: Date?
-    /// Last password change date.
-    public let passwordChanged: Date?
-    /// Last authenticated date.
-    public let lastAuthenticated: Date?
-    /// Last logged in date.
-    public let lastLoggedIn: Date?
     /// User SDRN.
     public let sdrn: String?
 
@@ -48,12 +36,6 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
         addresses: Addresses? = nil,
         gender: String? = nil,
         merchants: [Int]? = nil,
-        published: Date? = nil,
-        verified: Date? = nil,
-        updated: Date? = nil,
-        passwordChanged: Date? = nil,
-        lastAuthenticated: Date? = nil,
-        lastLoggedIn: Date? = nil,
         sdrn: String? = nil
     ) {
         self.uuid = uuid
@@ -64,12 +46,6 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
         self.addresses = addresses
         self.gender = gender
         self.merchants = merchants
-        self.published = published
-        self.verified = verified
-        self.updated = updated
-        self.passwordChanged = passwordChanged
-        self.lastAuthenticated = lastAuthenticated
-        self.lastLoggedIn = lastLoggedIn
         self.sdrn = sdrn
     }
 
