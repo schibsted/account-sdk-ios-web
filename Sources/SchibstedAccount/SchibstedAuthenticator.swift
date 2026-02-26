@@ -535,8 +535,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             _authenticatedURLSession
         }
 
-        let decoder = JSONDecoder(dateDecodingStrategy: .formatted(DateFormatter(dateFormat: "yyyy-MM-dd HH:mm:ss")))
-        let container: Container = try await urlSessionForRequest.data(for: urlRequest, decoder: decoder)
+        let container: Container = try await urlSessionForRequest.data(for: urlRequest)
         return container.data
     }
 
