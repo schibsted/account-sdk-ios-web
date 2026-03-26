@@ -91,6 +91,10 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
         throw SchibstedAuthenticatorError.userProfileFailure(FakeError.notMocked)
     }
 
+    func externalId(pairId: String, externalParty: String, suffix: String?) -> String {
+        return "e0b2b31df36848059b44ac0ee6784607b003a3688ac6bbdb196d8465bbc8b281"
+    }
+
     func webSessionURL() async throws(NetworkingError) -> URL {
         throw NetworkingError.requestFailed(FakeError.notMocked)
     }

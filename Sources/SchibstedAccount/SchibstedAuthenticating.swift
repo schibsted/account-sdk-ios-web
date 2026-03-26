@@ -71,6 +71,21 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     @discardableResult
     func userProfile() async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUserProfile
 
+    /// Gets the external identifier (`externalId`) for the authenticated user.
+    ///
+    /// - parameters:
+    ///   - pairId: Merchant-scoped using a pairwise identifier (See `SchibstedAuthenticatorUserProfile.pairId`)
+    ///   - externalParty: The external party for which the identifier will be used.
+    ///   - suffix: A optional suffix.
+    /// - returns: The external identifier.
+    @discardableResult
+    func externalId(
+        pairId: String,
+        externalParty: String,
+        suffix: String?
+    ) -> String
+
+
     /// Gets a web session URL.
     ///
     /// - returns: Web session URL for the default `clientId` and `redirectURI`.

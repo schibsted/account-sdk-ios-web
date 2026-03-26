@@ -315,6 +315,22 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         }
     }
 
+    public func externalId(
+        pairId: String,
+        externalParty: String,
+        suffix: String?
+    ) -> String {
+        Data(
+            [pairId, externalParty, suffix]
+                .compactMap { $0 }
+                .joined(separator: ":")
+                .utf8
+        )
+        .sha256Digest()
+        .map { String(format: "%02x", $0) }
+        .joined()
+    }
+
     public func webSessionURL() async throws(NetworkingError) -> URL {
         try await webSessionURL(
             clientId: clientId,

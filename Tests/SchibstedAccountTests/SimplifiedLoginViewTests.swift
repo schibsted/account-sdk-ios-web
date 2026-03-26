@@ -35,7 +35,8 @@ struct SimplifiedLoginViewTests {
                     uuid: UUID(),
                     userId: "12345789",
                     email: "claus.joergensen@schibsted.com",
-                    displayName: "Claus Jørgensen"
+                    displayName: "Claus Jørgensen",
+                    pairId: "12345"
                 ),
                 tracking: nil,
                 authenticator: FakeSchibstedAuthenticator(
