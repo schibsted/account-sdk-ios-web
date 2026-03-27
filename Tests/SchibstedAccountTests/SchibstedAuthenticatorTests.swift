@@ -301,7 +301,7 @@ struct SchibstedAuthenticatorTests {
 
     @Test(arguments: [
         ("sourcepoint", nil, "403bfebc8ef54946c8f4f4ca0e5074d13ce7faf4ac2861e55fee2873f22b01b8"),
-        ("schibsted", "suffix", "3f6338e1a9dbf1ef060077872eecbedce211002f66b757051ac1ab403b6bf1ff")
+        ("schibsted", "suffix", "55e732d1ea6a6885cb6ca85ad82b5aca867b4615d7fcb5111c9524c67e9e9f89")
     ])
     func externalId(externalParty: String, suffix: String?, expectedExternalId: String) async throws {
         try addUserToKeychain()
