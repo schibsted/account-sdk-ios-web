@@ -25,6 +25,8 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
     public let merchants: [Int]?
     /// User SDRN.
     public let sdrn: String?
+    /// Pairwise identifier
+    public let pairId: String?
 
     /// Creates an SchibstedAuthenticatorUserProfile instance.
     public init(
@@ -36,7 +38,8 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
         addresses: Addresses? = nil,
         gender: String? = nil,
         merchants: [Int]? = nil,
-        sdrn: String? = nil
+        sdrn: String? = nil,
+        pairId: String? = nil
     ) {
         self.uuid = uuid
         self.userId = userId
@@ -47,6 +50,7 @@ public struct SchibstedAuthenticatorUserProfile: Codable, Equatable, Sendable {
         self.gender = gender
         self.merchants = merchants
         self.sdrn = sdrn
+        self.pairId = pairId
     }
 
     /// User Profile Name.

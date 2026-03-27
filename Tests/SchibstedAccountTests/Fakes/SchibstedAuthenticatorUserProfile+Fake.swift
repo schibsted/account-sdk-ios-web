@@ -16,13 +16,15 @@ extension SchibstedAuthenticatorUserProfile {
         name: .init(
             givenName: "Rincewind",
             familyName: "Wizzard"
-        )
+        ),
+        pairId: "12345"
     )
 
     static let withoutName = SchibstedAuthenticatorUserProfile(
         uuid: UUID(),
         userId: "12345789",
         email: "rincewind@unseen-university.am",
-        displayName: "Rincewind the Wizzard"
+        displayName: "Rincewind the Wizzard",
+        pairId: "12345"
     )
 }

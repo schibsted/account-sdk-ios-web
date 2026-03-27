@@ -299,6 +299,26 @@ struct SchibstedAuthenticatorTests {
     }
 #endif
 
+    @Test(arguments: [
+        ("sourcepoint", nil, "403bfebc8ef54946c8f4f4ca0e5074d13ce7faf4ac2861e55fee2873f22b01b8"),
+        ("schibsted", "suffix", "55e732d1ea6a6885cb6ca85ad82b5aca867b4615d7fcb5111c9524c67e9e9f89")
+    ])
+    func externalId(externalParty: String, suffix: String?, expectedExternalId: String) async throws {
+        try addUserToKeychain()
+
+        let authenticator = try authenticator()
+        let profile = try await authenticator.userProfile()
+        let pairId = try #require(profile.pairId)
+
+        let externalId = authenticator.externalId(
+            pairId: pairId,
+            externalParty: externalParty,
+            suffix: suffix
+        )
+
+        #expect(externalId == expectedExternalId)
+    }
+
     private func addUserToKeychain() throws {
         let userSession = UserSession(
             userTokens: Self.userTokens,
@@ -340,6 +360,7 @@ struct SchibstedAuthenticatorTests {
                         "uuid": "\(Self.userUUID)",
                         "userId": "\(Self.userId)",
                         "displayName": "Rincewind",
+                        "pairId": "12345"
                     }
                 }
                 """.utf8)
