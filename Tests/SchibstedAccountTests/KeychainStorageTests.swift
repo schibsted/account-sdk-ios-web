@@ -301,57 +301,86 @@ struct KeychainStorageTests {
         #expect(item == expectedItem)
     }
 
-    @Test
-    func removeValue() async throws {
-        nonisolated(unsafe) var query: [String: Any]?
+    @Test("should delete with and without access group when access group is configured")
+    func removeValueDeletesBothWhenAccessGroupConfigured() async throws {
+        nonisolated(unsafe) var deleteQueries: [[String: Any]] = []
 
-        try await confirmation { confirmation in
-            let keychainStorage = KeychainStorage(
-                forService: service,
-                accessGroup: accessGroup,
-                operations: .mock(
-                    delete: { q in
-                        query = q as? [String: Any]
-                        confirmation()
-                        return errSecSuccess
+        let keychainStorage = KeychainStorage(
+            forService: service,
+            accessGroup: accessGroup,
+            operations: .mock(
+                delete: { q in
+                    if let query = q as? [String: Any] {
+                        deleteQueries.append(query)
                     }
-                )
+                    return errSecSuccess
+                }
             )
+        )
 
-            _ = try keychainStorage.removeValue(forAccount: clientId)
-        }
+        try keychainStorage.removeValue(forAccount: clientId)
 
-        #expect(query?[kSecMatchLimit as String] == nil)
-        #expect(query?[kSecClass as String] as? String == String(kSecClassGenericPassword))
-        #expect(query?[kSecAttrService as String] as? String == service)
-        #expect(query?[kSecAttrAccessGroup as String] as? String == accessGroup)
-        #expect(query?[kSecAttrAccount as String] as? String == clientId)
-        #expect(query?[kSecReturnData as String] == nil)
+        #expect(deleteQueries.count == 2)
+
+        let primaryQuery = deleteQueries[0]
+        #expect(primaryQuery[kSecMatchLimit as String] == nil)
+        #expect(primaryQuery[kSecClass as String] as? String == String(kSecClassGenericPassword))
+        #expect(primaryQuery[kSecAttrService as String] as? String == service)
+        #expect(primaryQuery[kSecAttrAccessGroup as String] as? String == accessGroup)
+        #expect(primaryQuery[kSecAttrAccount as String] as? String == clientId)
+        #expect(primaryQuery[kSecReturnData as String] == nil)
+
+        let orphanQuery = deleteQueries[1]
+        #expect(orphanQuery[kSecAttrAccessGroup as String] == nil)
+        #expect(orphanQuery[kSecAttrAccount as String] as? String == clientId)
+        #expect(orphanQuery[kSecReturnData as String] == nil)
     }
 
-    @Test
+    @Test("should delete without access group only when no access group is configured")
+    func removeValueDeletesOnlyWithoutAccessGroupWhenNotConfigured() async throws {
+        nonisolated(unsafe) var deleteQueries: [[String: Any]] = []
+
+        let keychainStorage = KeychainStorage(
+            forService: service,
+            accessGroup: nil,
+            operations: .mock(
+                delete: { q in
+                    if let query = q as? [String: Any] {
+                        deleteQueries.append(query)
+                    }
+                    return errSecSuccess
+                }
+            )
+        )
+
+        try keychainStorage.removeValue(forAccount: clientId)
+
+        #expect(deleteQueries.count == 1)
+        #expect(deleteQueries[0][kSecAttrAccessGroup as String] == nil)
+    }
+
+    @Test("should treat errSecItemNotFound as success")
     func removeValueShouldHandleItemNotFound() async throws {
         let keychainStorage = KeychainStorage(
             forService: service,
             accessGroup: accessGroup,
             operations: .mock(
-                delete: { _ in
-                    return errSecItemNotFound
-                }
+                delete: { _ in errSecItemNotFound }
             )
         )
 
         try keychainStorage.removeValue(forAccount: clientId)
     }
 
-    @Test
-    func removeValueShouldThrowOnError() async throws {
+    @Test("should throw when the first delete fails")
+    func removeValueThrowsWhenFirstDeleteFails() async throws {
         let keychainStorage = KeychainStorage(
             forService: service,
             accessGroup: accessGroup,
             operations: .mock(
-                delete: { _ in
-                    return errSecInvalidKeychain
+                delete: { q in
+                    let query = q as? [String: Any]
+                    return query?[kSecAttrAccessGroup as String] != nil ? errSecInvalidKeychain : errSecSuccess
                 }
             )
         )
@@ -359,6 +388,49 @@ struct KeychainStorageTests {
         #expect(throws: KeychainStorageError.self) {
             try keychainStorage.removeValue(forAccount: clientId)
         }
+    }
+
+    @Test("should throw when the second delete fails")
+    func removeValueThrowsWhenSecondDeleteFails() async throws {
+        let keychainStorage = KeychainStorage(
+            forService: service,
+            accessGroup: accessGroup,
+            operations: .mock(
+                delete: { q in
+                    let query = q as? [String: Any]
+                    return query?[kSecAttrAccessGroup as String] == nil ? errSecInvalidKeychain : errSecItemNotFound
+                }
+            )
+        )
+
+        #expect(throws: KeychainStorageError.self) {
+            try keychainStorage.removeValue(forAccount: clientId)
+        }
+    }
+
+    @Test("should run both deletes even when the first one fails")
+    func removeValueRunsBothDeletesEvenWhenFirstFails() async throws {
+        nonisolated(unsafe) var deleteQueries: [[String: Any]] = []
+
+        let keychainStorage = KeychainStorage(
+            forService: service,
+            accessGroup: accessGroup,
+            operations: .mock(
+                delete: { q in
+                    if let query = q as? [String: Any] {
+                        deleteQueries.append(query)
+                    }
+                    let query = q as? [String: Any]
+                    return query?[kSecAttrAccessGroup as String] != nil ? errSecNoSuchKeychain : errSecSuccess
+                }
+            )
+        )
+
+        try? keychainStorage.removeValue(forAccount: clientId)
+
+        #expect(deleteQueries.count == 2)
+        #expect(deleteQueries[0][kSecAttrAccessGroup as String] as? String == accessGroup)
+        #expect(deleteQueries[1][kSecAttrAccessGroup as String] == nil)
     }
 }
 
