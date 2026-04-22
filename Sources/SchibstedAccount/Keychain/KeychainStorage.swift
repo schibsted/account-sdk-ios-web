@@ -114,16 +114,28 @@ public struct KeychainStorage: KeychainStoring {
     }
 
     public func removeValue(forAccount account: String?) throws(KeychainStorageError) {
-        let status = operations.delete(
-            itemQuery(
-                account: account,
-                accessGroup: accessGroup,
-                returnData: false
-            ) as CFDictionary
-        )
-        guard status == errSecSuccess || status == errSecItemNotFound else {
-            logger.error("Failed delete value from the keychain. Error: \(status.errorMessage ?? "") (\(status)).")
-            throw KeychainStorageError.deleteError(status)
+        let accessGroupsToDelete: [String?]
+        if let accessGroup {
+            accessGroupsToDelete = [accessGroup, nil]
+        } else {
+            accessGroupsToDelete = [nil]
+        }
+
+        let statuses = accessGroupsToDelete.map { group in
+            operations.delete(
+                itemQuery(
+                    account: account,
+                    accessGroup: group,
+                    returnData: false
+                ) as CFDictionary
+            )
+        }
+
+        for status in statuses {
+            guard status == errSecSuccess || status == errSecItemNotFound else {
+                logger.error("Failed delete value from the keychain. Error: \(status.errorMessage ?? "") (\(status)).")
+                throw KeychainStorageError.deleteError(status)
+            }
         }
     }
 
