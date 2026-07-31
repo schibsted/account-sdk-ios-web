@@ -99,7 +99,7 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
         throw NetworkingError.requestFailed(FakeError.notMocked)
     }
 
-    func oneTimeCode() async throws(NetworkingError) -> String {
+    func oneTimeCode(clientId: String?) async throws(NetworkingError) -> String {
         throw NetworkingError.requestFailed(FakeError.notMocked)
     }
     

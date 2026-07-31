@@ -218,11 +218,30 @@ struct SchibstedAuthenticatorTests {
         #expect(url.absoluteString == "https://login.schibsted.com/session/abcd1234")
     }
 
-    @Test("Request a one time code")
+    @Test("Request a one time code with the default clientId")
     func oneTimeCode() async throws {
-        let authenticator = try authenticator()
+        let authenticator = try authenticator(validateRequest: { request in
+            let data = try #require(request.httpBody)
+            let formData = try #require(String(data: data, encoding: .utf8))
+            let parameters = formData.split(separator: "&")
+            #expect(parameters.contains("clientId=\(Self.clientId)"))
+        })
 
         let code = try await authenticator.oneTimeCode()
+
+        #expect(code == "abcd1234")
+    }
+
+    @Test("Request a one time code for a specific clientId")
+    func oneTimeCodeWithClientId() async throws {
+        let authenticator = try authenticator(validateRequest: { request in
+            let data = try #require(request.httpBody)
+            let formData = try #require(String(data: data, encoding: .utf8))
+            let parameters = formData.split(separator: "&")
+            #expect(parameters.contains("clientId=625a995c217b433140c9de07a"))
+        })
+
+        let code = try await authenticator.oneTimeCode(clientId: "625a995c217b433140c9de07a")
 
         #expect(code == "abcd1234")
     }

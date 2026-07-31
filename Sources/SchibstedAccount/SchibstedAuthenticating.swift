@@ -88,7 +88,10 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     ) async throws(NetworkingError) -> URL
 
     /// Gets a one-time code.
-    func oneTimeCode() async throws(NetworkingError) -> String
+    /// - parameters:
+    ///   - clientId: The client id
+    /// - returns: A one time code.
+    func oneTimeCode(clientId: String?) async throws(NetworkingError) -> String
 
     /// Gets a `frontend-jwt` token.
     func frontendJWT() async throws(NetworkingError) -> String
@@ -111,6 +114,12 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
 
 #if os(iOS)
 public extension SchibstedAuthenticating {
+    /// Gets a one-time code.
+    /// - returns: A one time code.
+    func oneTimeCode() async throws(NetworkingError) -> String {
+        try await oneTimeCode(clientId: clientId)
+    }
+
     /// Login using a `ASWebAuthenticationSession`.
     ///
     /// - parameters:
