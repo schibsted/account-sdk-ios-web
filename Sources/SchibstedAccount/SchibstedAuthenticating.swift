@@ -87,9 +87,9 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
         redirectURI: URL
     ) async throws(NetworkingError) -> URL
 
-    /// Gets a one-time code.
+    /// Gets a one-time code for the provided `clientId`.
     /// - parameters:
-    ///   - clientId: The client id
+    ///   - clientId: The clientId to request a one-time code for. If `nil`, the authenticator's default `clientId` is used.
     /// - returns: A one time code.
     func oneTimeCode(clientId: String?) async throws(NetworkingError) -> String
 
@@ -114,7 +114,7 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
 
 #if os(iOS)
 public extension SchibstedAuthenticating {
-    /// Gets a one-time code.
+    /// Gets a one-time code for the authenticator's configured `clientId`.
     /// - returns: A one time code.
     func oneTimeCode() async throws(NetworkingError) -> String {
         try await oneTimeCode(clientId: clientId)
