@@ -350,11 +350,11 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         return environment.webSessionURL(code: container.data.code)
     }
 
-    public func oneTimeCode() async throws(NetworkingError) -> String {
+    public func oneTimeCode(clientId: String? = nil) async throws(NetworkingError) -> String {
         let url = environment.exchangeURL
         let parameters = [
             "type": "code",
-            "clientId": clientId
+            "clientId": clientId ?? self.clientId
         ]
 
         let request = URLRequest(url: url, parameters: parameters)
