@@ -108,7 +108,8 @@ public final class SimplifiedLoginViewModel: ObservableObject, Identifiable {
     }
 
     func continueAs(
-        presentationContextProvider: ASWebAuthenticationPresentationContextProviding
+        presentationContextProvider: ASWebAuthenticationPresentationContextProviding,
+        consents: SchibstedConsents? = nil
     ) async {
         let xDomainId = UUID()
 
@@ -122,7 +123,8 @@ public final class SimplifiedLoginViewModel: ObservableObject, Identifiable {
                 prefersEphemeralWebBrowserSession: true,
                 multifactorAuthentication: nil,
                 assertion: assertion,
-                xDomainId: xDomainId
+                xDomainId: xDomainId,
+                consents: consents
             )
         } catch {
             logger.error("Failed to continue-as user. Error: \(error)")

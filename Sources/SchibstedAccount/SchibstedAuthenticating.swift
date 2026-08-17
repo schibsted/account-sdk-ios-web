@@ -36,7 +36,8 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
         prefersEphemeralWebBrowserSession: Bool,
         multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser
 
     /// Completes the login with a deep link URL.
@@ -133,14 +134,16 @@ public extension SchibstedAuthenticating {
         presentationContextProvider: ASWebAuthenticationPresentationContextProviding,
         multifactorAuthentication: MultifactorAuthentication? = nil,
         assertion: String? = nil,
-        xDomainId: UUID? = nil
+        xDomainId: UUID? = nil,
+        consents: SchibstedConsents? = nil
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         try await login(
             presentationContextProvider: presentationContextProvider,
             prefersEphemeralWebBrowserSession: false,
             multifactorAuthentication: multifactorAuthentication,
             assertion: assertion,
-            xDomainId: xDomainId
+            xDomainId: xDomainId,
+            consents: consents
         )
     }
 }

@@ -44,8 +44,9 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
         _ prefersEphemeralWebBrowserSession: Bool,
         _ multifactorAuthentication: MultifactorAuthentication?,
         _ assertion: String?,
-        _ xDomainId: UUID?
-    ) async throws -> SchibstedAuthenticatorUser = { _, _, _, _, _ in
+        _ xDomainId: UUID?,
+        _ consents: SchibstedConsents?
+    ) async throws -> SchibstedAuthenticatorUser = { _, _, _, _, _, _ in
         throw FakeError.notMocked
     }
 
@@ -54,7 +55,8 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
         prefersEphemeralWebBrowserSession: Bool,
         multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         do {
             return try await didLogin(
@@ -62,7 +64,8 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
                 prefersEphemeralWebBrowserSession,
                 multifactorAuthentication,
                 assertion,
-                xDomainId
+                xDomainId,
+                consents
             )
         } catch {
             throw .loginFailed(error)

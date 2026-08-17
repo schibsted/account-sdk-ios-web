@@ -113,6 +113,48 @@ struct SchibstedAuthenticatorTests {
         #expect(tracker.trackedLoginFailed)
     }
 
+    @Test("Login with consents")
+    func loginWithConsents() async throws {
+        let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
+        nonisolated(unsafe) var sessionURL: URL?
+
+        webAuthenticationSessionProvider.createSession = {
+            let session = FakeWebAuthenticationSession(
+                url: $0,
+                callbackURLScheme: $1,
+                completionHandler: $2
+            )
+            sessionURL = session.url
+            session.didStart = {
+                session.completionHandler(
+                    session.url.appending(queryItems: [URLQueryItem(name: "code", value: UUID().uuidString)]),
+                    nil
+                )
+                return true
+            }
+            return session
+        }
+
+        let authenticator = try authenticator(
+            webAuthenticationSessionProvider: webAuthenticationSessionProvider
+        )
+
+        try await authenticator.login(
+            presentationContextProvider: WebAuthenticationPresentationContext(),
+            consents: SchibstedConsents(
+                advertising: .accepted,
+                analytics: .accepted,
+                marketing: .accepted,
+                personalization: .accepted
+            )
+        )
+
+        let queryItems = sessionURL?.queryItems ?? []
+
+        #expect(queryItems.contains(URLQueryItem(name: "consents", value: "advertising,analytics,marketing,personalization")))
+        #expect(queryItems.contains(URLQueryItem(name: "consent_version", value: "v1")))
+    }
+
     @Test("Complete login from URL")
     func completeLoginFromURL() async throws {
         let code = UUID().uuidString

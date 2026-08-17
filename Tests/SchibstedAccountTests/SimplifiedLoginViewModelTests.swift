@@ -93,7 +93,7 @@ final class SimplifiedLoginViewModelTests {
         let viewModel = viewModel(authenticator: authenticator)
 
         await confirmation { confirmation in
-            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _ in
+            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _, _ in
                 #expect(prefersEphemeralWebBrowserSession == false)
                 #expect(assertion == nil)
 
@@ -117,7 +117,7 @@ final class SimplifiedLoginViewModelTests {
         let viewModel = viewModel(authenticator: authenticator)
 
         await confirmation { confirmation in
-            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _ in
+            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _, _ in
                 #expect(prefersEphemeralWebBrowserSession == true)
                 #expect(assertion == authenticator.simplifiedLoginAssertion)
 

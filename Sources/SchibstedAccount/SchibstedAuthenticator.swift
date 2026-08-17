@@ -144,7 +144,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         prefersEphemeralWebBrowserSession: Bool,
         multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         guard !state.value.isLoggingIn else {
             logger.warning("Unable to login. User is already in the process of logging in.")
@@ -177,7 +178,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                     redirectURI: redirectURI,
                     authState: authState,
                     assertion: assertion,
-                    xDomainId: xDomainId
+                    xDomainId: xDomainId,
+                    consents: consents
                 ),
                 callbackURLScheme: callbackURLScheme,
                 completionHandler: {
@@ -708,7 +710,8 @@ private extension URL {
         redirectURI: URL,
         authState: AuthState,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) -> URL {
         let codeChallenge = Data(SHA256.hash(data: Data(authState.codeVerifier.utf8)))
 
@@ -722,6 +725,10 @@ private extension URL {
             URLQueryItem(name: "code_challenge", value: codeChallenge.base64URLEncodedString()),
             URLQueryItem(name: "code_challenge_method", value: "S256")
         ]
+
+        if let consents {
+            queryItems += consents.queryItems()
+        }
 
         if let assertion {
             queryItems.append(URLQueryItem(name: "assertion", value: assertion))
