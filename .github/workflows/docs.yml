@@ -2,7 +2,7 @@ name: DocC
 
 on:
   push:
-    branches: 
+    branches:
       - master
 
 permissions:
@@ -13,15 +13,15 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: true
-  
+
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
+
     runs-on: macos-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Select Xcode Version
-        run: sudo xcode-select -switch /Applications/Xcode_26.0.app
+        run: sudo xcode-select -switch /Applications/Xcode_26.5.app
 
       - name: Build DocC
         run: |
@@ -40,7 +40,7 @@ jobs:
             -scheme SchibstedAccount \
             -derivedDataPath /tmp/docbuild \
             -destination "generic/platform=iOS Simulator"
-          
+
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphonesimulator/SchibstedAccount.doccarchive \
             --output-path docc \
@@ -54,7 +54,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: 'docc'
+          path: "docc"
 
       - id: deployment
         name: Deploy to GitHub Pages
