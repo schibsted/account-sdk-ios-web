@@ -105,7 +105,15 @@ final class SimplifiedLoginViewModelTests {
                 )
             }
 
-            await viewModel.login(presentationContextProvider: presentationContextProvider)
+            await viewModel.login(
+                presentationContextProvider: presentationContextProvider,
+                consents: SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .accepted,
+                    marketing: .accepted,
+                    personalization: .accepted
+                )
+            )
         }
 
         #expect(tracker.trackedSimplifiedLoginSwitchAccount)
@@ -129,7 +137,15 @@ final class SimplifiedLoginViewModelTests {
                 )
             }
 
-            await viewModel.continueAs(presentationContextProvider: presentationContextProvider)
+            await viewModel.continueAs(
+                presentationContextProvider: presentationContextProvider,
+                consents: SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .accepted,
+                    marketing: .accepted,
+                    personalization: .accepted
+                )
+            )
         }
 
         #expect(tracker.trackedSimplifiedLoginContinueAs)

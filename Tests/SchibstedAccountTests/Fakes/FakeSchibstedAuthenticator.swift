@@ -119,7 +119,9 @@ final class FakeSchibstedAuthenticator: SchibstedAuthenticating {
     }
 
 #if os(iOS)
-    func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
+    func requestSimplifiedLogin(
+        consents: SchibstedConsents?
+    ) async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
         throw .simplifiedLoginFailed(FakeError.notMocked)
     }
 

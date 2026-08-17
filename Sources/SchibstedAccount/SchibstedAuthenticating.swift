@@ -106,7 +106,7 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     /// Requests simplified login
     ///
     /// - returns: A ``SimplifiedLoginView`` view that can be presented directly in SwiftUI or using a `UIHostingController`.
-    func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView?
+    func requestSimplifiedLogin(consents: SchibstedConsents?) async throws(SimplifiedLoginError) -> SimplifiedLoginView?
 
     /// Gets a assertion (string) used to share identity and security details for simplified login.
     func assertionForSimplifiedLogin() async throws(SimplifiedLoginError) -> String?
@@ -119,6 +119,10 @@ public extension SchibstedAuthenticating {
     /// - returns: A one time code.
     func oneTimeCode() async throws(NetworkingError) -> String {
         try await oneTimeCode(clientId: clientId)
+    }
+
+    func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
+        try await requestSimplifiedLogin(consents: nil)
     }
 
     /// Login using a `ASWebAuthenticationSession`.

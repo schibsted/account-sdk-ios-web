@@ -394,7 +394,9 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
     }
 
 #if os(iOS)
-    public func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
+    public func requestSimplifiedLogin(
+        consents: SchibstedConsents?
+    ) async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
         do {
             guard let user = try getSharedUser(),
                   let context = try await getSharedUserContext(tokens: user.tokens) else {
@@ -410,7 +412,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                 authenticator: self
             )
 
-            return SimplifiedLoginView(viewModel: viewModel)
+            return SimplifiedLoginView(viewModel: viewModel, consents: consents)
         } catch let error as KeychainStorageError {
             throw .keychainStorageError(error)
         } catch let error as DecodingError {

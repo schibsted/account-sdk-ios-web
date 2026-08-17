@@ -46,10 +46,14 @@ final class LoginViewModel {
     }
 
     func login(
-        presentationContextProvider: ASWebAuthenticationPresentationContextProviding
+        presentationContextProvider: ASWebAuthenticationPresentationContextProviding,
+        consents: SchibstedConsents? = nil
     ) async {
         do {
-            try await authenticator.login(presentationContextProvider: presentationContextProvider)
+            try await authenticator.login(
+                presentationContextProvider: presentationContextProvider,
+                consents: consents
+            )
             profile = try await authenticator.userProfile()
         } catch {
             logger.error("Failed to login. Error: \(error)")

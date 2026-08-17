@@ -45,6 +45,12 @@ struct SimplifiedLoginViewTests {
                     redirectURI: URL(string: "clientId:/login")!,
                     urlSession: FakeURLSession()
                 )
+            ),
+            consents: SchibstedConsents(
+                advertising: .accepted,
+                analytics: .accepted,
+                marketing: .accepted,
+                personalization: .accepted
             )
         )
 

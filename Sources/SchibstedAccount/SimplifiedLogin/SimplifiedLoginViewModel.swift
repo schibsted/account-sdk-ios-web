@@ -91,7 +91,8 @@ public final class SimplifiedLoginViewModel: ObservableObject, Identifiable {
     }
 
     func login(
-        presentationContextProvider: ASWebAuthenticationPresentationContextProviding
+        presentationContextProvider: ASWebAuthenticationPresentationContextProviding,
+        consents: SchibstedConsents? = nil
     ) async {
         let xDomainId = UUID()
 
@@ -100,7 +101,8 @@ public final class SimplifiedLoginViewModel: ObservableObject, Identifiable {
         do {
             try await authenticator.login(
                 presentationContextProvider: presentationContextProvider,
-                xDomainId: xDomainId
+                xDomainId: xDomainId,
+                consents: consents
             )
         } catch {
             logger.error("Failed to login. Error: \(error)")
