@@ -144,7 +144,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         prefersEphemeralWebBrowserSession: Bool,
         multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         guard !state.value.isLoggingIn else {
             logger.warning("Unable to login. User is already in the process of logging in.")
@@ -177,7 +178,8 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                     redirectURI: redirectURI,
                     authState: authState,
                     assertion: assertion,
-                    xDomainId: xDomainId
+                    xDomainId: xDomainId,
+                    consents: consents
                 ),
                 callbackURLScheme: callbackURLScheme,
                 completionHandler: {
@@ -392,7 +394,9 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
     }
 
 #if os(iOS)
-    public func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
+    public func requestSimplifiedLogin(
+        consents: SchibstedConsents?
+    ) async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
         do {
             guard let user = try getSharedUser(),
                   let context = try await getSharedUserContext(tokens: user.tokens) else {
@@ -408,7 +412,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
                 authenticator: self
             )
 
-            return SimplifiedLoginView(viewModel: viewModel)
+            return SimplifiedLoginView(viewModel: viewModel, consents: consents)
         } catch let error as KeychainStorageError {
             throw .keychainStorageError(error)
         } catch let error as DecodingError {
@@ -702,13 +706,15 @@ private extension URL {
     ///   - assertion: Optional assertion.
     ///   - assertion: A string value used to share identity and security details across different security domains.
     ///   - xDomainId: The session ID used for origin tracking of the login session.
+    ///   - consents: Schibsted Consents (TCF)
     static func login(
         environment: SchibstedAuthenticatorEnvironment,
         clientId: String,
         redirectURI: URL,
         authState: AuthState,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) -> URL {
         let codeChallenge = Data(SHA256.hash(data: Data(authState.codeVerifier.utf8)))
 
@@ -722,6 +728,10 @@ private extension URL {
             URLQueryItem(name: "code_challenge", value: codeChallenge.base64URLEncodedString()),
             URLQueryItem(name: "code_challenge_method", value: "S256")
         ]
+
+        if let consents {
+            queryItems += consents.queryItems()
+        }
 
         if let assertion {
             queryItems.append(URLQueryItem(name: "assertion", value: assertion))
