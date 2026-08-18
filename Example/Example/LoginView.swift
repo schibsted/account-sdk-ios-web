@@ -70,7 +70,15 @@ struct LoginView: View {
             case .loggedOut:
                 Button {
                     Task {
-                        await viewModel.login(presentationContextProvider: presentationContextProvider)
+                        await viewModel.login(
+                            presentationContextProvider: presentationContextProvider,
+                            consents: SchibstedConsents(
+                                advertising: .accepted,
+                                analytics: .accepted,
+                                marketing: .accepted,
+                                personalization: .accepted
+                            )
+                        )
                     }
                 } label: {
                     Label {

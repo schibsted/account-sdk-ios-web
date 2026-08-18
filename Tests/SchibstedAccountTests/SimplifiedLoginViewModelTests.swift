@@ -93,7 +93,7 @@ final class SimplifiedLoginViewModelTests {
         let viewModel = viewModel(authenticator: authenticator)
 
         await confirmation { confirmation in
-            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _ in
+            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _, _ in
                 #expect(prefersEphemeralWebBrowserSession == false)
                 #expect(assertion == nil)
 
@@ -105,7 +105,15 @@ final class SimplifiedLoginViewModelTests {
                 )
             }
 
-            await viewModel.login(presentationContextProvider: presentationContextProvider)
+            await viewModel.login(
+                presentationContextProvider: presentationContextProvider,
+                consents: SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .accepted,
+                    marketing: .accepted,
+                    personalization: .accepted
+                )
+            )
         }
 
         #expect(tracker.trackedSimplifiedLoginSwitchAccount)
@@ -117,7 +125,7 @@ final class SimplifiedLoginViewModelTests {
         let viewModel = viewModel(authenticator: authenticator)
 
         await confirmation { confirmation in
-            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _ in
+            authenticator.didLogin = { _, prefersEphemeralWebBrowserSession, _, assertion, _, _ in
                 #expect(prefersEphemeralWebBrowserSession == true)
                 #expect(assertion == authenticator.simplifiedLoginAssertion)
 
@@ -129,7 +137,15 @@ final class SimplifiedLoginViewModelTests {
                 )
             }
 
-            await viewModel.continueAs(presentationContextProvider: presentationContextProvider)
+            await viewModel.continueAs(
+                presentationContextProvider: presentationContextProvider,
+                consents: SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .accepted,
+                    marketing: .accepted,
+                    personalization: .accepted
+                )
+            )
         }
 
         #expect(tracker.trackedSimplifiedLoginContinueAs)

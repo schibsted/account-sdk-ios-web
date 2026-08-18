@@ -29,6 +29,7 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     ///   - multifactorAuthentication: Optional multi-factor authentication.
     ///   - assertion: A string value used to share identity and security details across different security domains.
     ///   - xDomainId: The session ID used for origin tracking of the login session.
+    ///   - consents: Schibsted Consents (TCF)
     /// - returns: The logged in user if the login was success; otherwise throws an error.
     @discardableResult
     func login(
@@ -36,7 +37,8 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
         prefersEphemeralWebBrowserSession: Bool,
         multifactorAuthentication: MultifactorAuthentication?,
         assertion: String?,
-        xDomainId: UUID?
+        xDomainId: UUID?,
+        consents: SchibstedConsents?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser
 
     /// Completes the login with a deep link URL.
@@ -103,9 +105,10 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
 
 #if os(iOS)
     /// Requests simplified login
-    ///
+    /// - parameters:
+    ///   - consents: Schibsted Consents (TCF)
     /// - returns: A ``SimplifiedLoginView`` view that can be presented directly in SwiftUI or using a `UIHostingController`.
-    func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView?
+    func requestSimplifiedLogin(consents: SchibstedConsents?) async throws(SimplifiedLoginError) -> SimplifiedLoginView?
 
     /// Gets a assertion (string) used to share identity and security details for simplified login.
     func assertionForSimplifiedLogin() async throws(SimplifiedLoginError) -> String?
@@ -118,6 +121,10 @@ public extension SchibstedAuthenticating {
     /// - returns: A one time code.
     func oneTimeCode() async throws(NetworkingError) -> String {
         try await oneTimeCode(clientId: clientId)
+    }
+
+    func requestSimplifiedLogin() async throws(SimplifiedLoginError) -> SimplifiedLoginView? {
+        try await requestSimplifiedLogin(consents: nil)
     }
 
     /// Login using a `ASWebAuthenticationSession`.
@@ -133,14 +140,16 @@ public extension SchibstedAuthenticating {
         presentationContextProvider: ASWebAuthenticationPresentationContextProviding,
         multifactorAuthentication: MultifactorAuthentication? = nil,
         assertion: String? = nil,
-        xDomainId: UUID? = nil
+        xDomainId: UUID? = nil,
+        consents: SchibstedConsents? = nil
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         try await login(
             presentationContextProvider: presentationContextProvider,
             prefersEphemeralWebBrowserSession: false,
             multifactorAuthentication: multifactorAuthentication,
             assertion: assertion,
-            xDomainId: xDomainId
+            xDomainId: xDomainId,
+            consents: consents
         )
     }
 }

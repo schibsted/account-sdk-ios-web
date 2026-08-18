@@ -16,9 +16,14 @@ public struct SimplifiedLoginView: View, Identifiable {
 
     private let presentationContextProvider = WebAuthenticationPresentationContext()
     private let viewModel: SimplifiedLoginViewModel
+    private let consents: SchibstedConsents?
 
-    public init(viewModel: SimplifiedLoginViewModel) {
+    public init(
+        viewModel: SimplifiedLoginViewModel,
+        consents: SchibstedConsents? = nil
+    ) {
         self.viewModel = viewModel
+        self.consents = consents
     }
 
     public var body: some View {
@@ -62,7 +67,8 @@ public struct SimplifiedLoginView: View, Identifiable {
                     Button {
                         Task {
                             await viewModel.continueAs(
-                                presentationContextProvider: presentationContextProvider
+                                presentationContextProvider: presentationContextProvider,
+                                consents: consents
                             )
                             dismiss()
                         }
@@ -96,7 +102,8 @@ public struct SimplifiedLoginView: View, Identifiable {
                     Button {
                         Task {
                             await viewModel.login(
-                                presentationContextProvider: presentationContextProvider
+                                presentationContextProvider: presentationContextProvider,
+                                consents: consents
                             )
                             dismiss()
                         }
