@@ -706,6 +706,7 @@ private extension URL {
     ///   - assertion: Optional assertion.
     ///   - assertion: A string value used to share identity and security details across different security domains.
     ///   - xDomainId: The session ID used for origin tracking of the login session.
+    ///   - consents: Schibsted Consents (TCF)
     static func login(
         environment: SchibstedAuthenticatorEnvironment,
         clientId: String,

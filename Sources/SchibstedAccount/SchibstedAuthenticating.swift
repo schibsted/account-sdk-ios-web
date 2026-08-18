@@ -29,6 +29,7 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
     ///   - multifactorAuthentication: Optional multi-factor authentication.
     ///   - assertion: A string value used to share identity and security details across different security domains.
     ///   - xDomainId: The session ID used for origin tracking of the login session.
+    ///   - consents: Schibsted Consents (TCF)
     /// - returns: The logged in user if the login was success; otherwise throws an error.
     @discardableResult
     func login(
@@ -104,7 +105,8 @@ public protocol SchibstedAuthenticating: AnyObject, Sendable {
 
 #if os(iOS)
     /// Requests simplified login
-    ///
+    /// - parameters:
+    ///   - consents: Schibsted Consents (TCF)
     /// - returns: A ``SimplifiedLoginView`` view that can be presented directly in SwiftUI or using a `UIHostingController`.
     func requestSimplifiedLogin(consents: SchibstedConsents?) async throws(SimplifiedLoginError) -> SimplifiedLoginView?
 
