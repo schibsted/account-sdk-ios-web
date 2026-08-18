@@ -113,8 +113,42 @@ struct SchibstedAuthenticatorTests {
         #expect(tracker.trackedLoginFailed)
     }
 
-    @Test("Login with consents")
-    func loginWithConsents() async throws {
+    @Test(
+        "Login with consents",
+        arguments: [
+            (
+                SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .accepted,
+                    marketing: .accepted,
+                    personalization: .accepted
+                ),
+                "advertising,analytics,marketing,personalization"
+            ),
+            (
+                SchibstedConsents(
+                    advertising: .accepted,
+                    analytics: .rejected,
+                    marketing: .accepted,
+                    personalization: .rejected
+                ),
+                "advertising,marketing"
+            ),
+            (
+                SchibstedConsents(
+                    advertising: .rejected,
+                    analytics: .rejected,
+                    marketing: .rejected,
+                    personalization: .rejected
+                ),
+                "rejected"
+            )
+        ]
+    )
+    func loginWithConsents(
+        consents: SchibstedConsents,
+        expectedConsentsQueryParameterValue: String
+    ) async throws {
         let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
         nonisolated(unsafe) var sessionURL: URL?
 
@@ -141,17 +175,12 @@ struct SchibstedAuthenticatorTests {
 
         try await authenticator.login(
             presentationContextProvider: WebAuthenticationPresentationContext(),
-            consents: SchibstedConsents(
-                advertising: .accepted,
-                analytics: .accepted,
-                marketing: .accepted,
-                personalization: .accepted
-            )
+            consents: consents
         )
 
         let queryItems = sessionURL?.queryItems ?? []
 
-        #expect(queryItems.contains(URLQueryItem(name: "consents", value: "advertising,analytics,marketing,personalization")))
+        #expect(queryItems.contains(URLQueryItem(name: "consents", value: expectedConsentsQueryParameterValue)))
         #expect(queryItems.contains(URLQueryItem(name: "consent_version", value: "v1")))
     }
 
