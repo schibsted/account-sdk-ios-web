@@ -46,6 +46,14 @@ final class FakeURLSession: URLSessionType, @unchecked Sendable {
                 completionHandler(nil, nil, error)
             }
         }
-        return URLSession.shared.dataTask(with: request) { _, _, _ in }
+        return FakeURLSessionDataTask()
     }
+}
+
+private final class FakeURLSessionDataTask: URLSessionDataTask, @unchecked Sendable {
+    // Enable this in Xcode 27
+    // @diagnose(DeprecatedDeclaration, as: ignored)
+    override init() {}
+    override func resume() {}
+    override func cancel() {}
 }
