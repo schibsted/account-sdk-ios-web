@@ -27,6 +27,16 @@ public protocol URLSessionType: AnyObject, Sendable {
 
     /// Creates a task that retrieves the contents of a URL based on the specified URL request object, and calls a handler upon completion.
     ///
+    /// - parameter url: The URL to be retrieved.
+    /// - parameter completionHandler: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    /// - returns: The new session data task.
+    func dataTask(
+        with url: URL,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask
+
+    /// Creates a task that retrieves the contents of a URL based on the specified URL request object, and calls a handler upon completion.
+    ///
     /// - parameter request: A URL request object that provides the URL, cache policy, request type, body data or body stream, and so on.
     /// - parameter completionHandler: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
     /// - returns: The new session data task.

@@ -28,6 +28,13 @@ final class FakeURLSession: URLSessionType, @unchecked Sendable {
     }
 
     func dataTask(
+        with url: URL,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        dataTask(with: URLRequest(url: url), completionHandler: completionHandler)
+    }
+
+    func dataTask(
         with request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionDataTask {

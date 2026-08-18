@@ -75,6 +75,16 @@ public final class AuthenticatedURLSession: URLSessionType {
     }
 
     public func dataTask(
+        with url: URL,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        dataTask(
+            with: URLRequest(url: url),
+            completionHandler: completionHandler
+        )
+    }
+
+    public func dataTask(
         with request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionDataTask {
