@@ -73,4 +73,53 @@ public final class AuthenticatedURLSession: URLSessionType {
 
         return try await urlSession.data(for: request, delegate: delegate)
     }
+
+    public func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        var request = request
+        switch authenticator?.state.value {
+        case .loggedIn(let user):
+            request.setAuthorization(.bearer(token: user.tokens.accessToken))
+        default:
+            return urlSession.dataTask(with: request, completionHandler: completionHandler)
+        }
+
+        return urlSession.dataTask(with: request) { [weak self, request] data, response, error in
+            guard let self else {
+                completionHandler(nil, nil, nil)
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completionHandler(data, response, error)
+                return
+            }
+
+            // 3. Refresh the tokens if we hit a HTTP 401
+            guard httpResponse.statusCode == 401 else {
+                completionHandler(data, response, nil)
+                return
+            }
+
+            Task {
+                do {
+                    try await refreshTokens()
+
+                    // 4. Update the Authorization header with the fresh tokens
+                    var request = request
+                    if case .loggedIn(let user) = authenticator?.state.value {
+                        request.setAuthorization(.bearer(token: user.tokens.accessToken))
+                    }
+
+                    // 5. Retry the request
+                    let (data, response) = try await self.data(for: request, delegate: nil)
+                    completionHandler(data, response, nil)
+                } catch {
+                    completionHandler(nil, nil, error)
+                }
+            }
+        }
+    }
 }

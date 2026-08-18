@@ -24,6 +24,16 @@ public protocol URLSessionType: AnyObject, Sendable {
     /// - parameter delegate: A delegate that receives life cycle and authentication challenge callbacks as the transfer progresses.
     /// - returns: An asynchronously-delivered tuple that contains the URL contents as a Data instance, and a URLResponse.
     func data(from url: URL, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
+
+    /// Creates a task that retrieves the contents of a URL based on the specified URL request object, and calls a handler upon completion.
+    ///
+    /// - parameter request: A URL request object that provides the URL, cache policy, request type, body data or body stream, and so on.
+    /// - parameter completionHandler: The completion handler to call when the load request is complete. This handler is executed on the delegate queue.
+    /// - returns: The new session data task.
+    func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask
 }
 
 extension URLSession: URLSessionType {}

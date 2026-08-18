@@ -26,4 +26,19 @@ final class FakeURLSession: URLSessionType, @unchecked Sendable {
     ) async throws -> (Data, URLResponse) {
         try await data(request)
     }
+
+    func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        Task {
+            do {
+                let (data, response) = try await self.data(request)
+                completionHandler(data, response, nil)
+            } catch {
+                completionHandler(nil, nil, error)
+            }
+        }
+        return URLSession.shared.dataTask(with: request) { _, _, _ in }
+    }
 }
