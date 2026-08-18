@@ -280,52 +280,56 @@ struct AuthenticatedURLSessionTests {
         let requestURL = URL(string: "https://login.schibsted.com")!
         let oldUser = try #require(authenticator.state.value.user)
 
-        let expectation = TestExpectation(expectedFulfillmentCount: 2)
         var count = 0
 
-        urlSession.data = { request in
-            guard let url = request.url else {
-                return (Data(), HTTPURLResponse())
-            }
-
-            if url == requestURL {
-                await expectation.fulfill()
-            }
-
-            if url == authenticator.environment.tokenURL {
-                let httpBodyData = try #require(request.httpBody)
-                let httpBodyParameters = try #require(String(data: httpBodyData, encoding: .utf8))
-                let parameters = httpBodyParameters.components(separatedBy: "&")
-
-                #expect(parameters.contains("grant_type=refresh_token"))
-                #expect(parameters.contains("refresh_token=\(refreshToken)"))
-                #expect(parameters.contains("client_id=\(clientId)"))
-
-                let data = Data("""
-                {
-                    "access_token": "\(UUID().uuidString)",
-                    "refresh_token": "\(UUID().uuidString)",
-                    "expires_in": 600
+        await confirmation(expectedCount: 2) { confirmation in
+            urlSession.data = { request in
+                guard let url = request.url else {
+                    return (Data(), HTTPURLResponse())
                 }
-                """.utf8)
 
-                return (data, HTTPURLResponse())
+                if url == requestURL {
+                    confirmation()
+                }
+
+                if url == authenticator.environment.tokenURL {
+                    let httpBodyData = try #require(request.httpBody)
+                    let httpBodyParameters = try #require(String(data: httpBodyData, encoding: .utf8))
+                    let parameters = httpBodyParameters.components(separatedBy: "&")
+
+                    #expect(parameters.contains("grant_type=refresh_token"))
+                    #expect(parameters.contains("refresh_token=\(refreshToken)"))
+                    #expect(parameters.contains("client_id=\(clientId)"))
+
+                    let data = Data("""
+                    {
+                        "access_token": "\(UUID().uuidString)",
+                        "refresh_token": "\(UUID().uuidString)",
+                        "expires_in": 600
+                    }
+                    """.utf8)
+
+                    return (data, HTTPURLResponse())
+                }
+
+                // swiftlint:disable:next empty_count
+                if count == 0 {
+                    count += 1
+                    return (
+                        Data(),
+                        HTTPURLResponse(url: url, statusCode: 401, httpVersion: "HTTP/1.0", headerFields: nil)!
+                    )
+                } else {
+                    return (Data(), HTTPURLResponse())
+                }
             }
 
-            // swiftlint:disable:next empty_count
-            if count == 0 {
-                count += 1
-                return (
-                    Data(),
-                    HTTPURLResponse(url: url, statusCode: 401, httpVersion: "HTTP/1.0", headerFields: nil)!
-                )
-            } else {
-                return (Data(), HTTPURLResponse())
+            await withCheckedContinuation { continuation in
+                _ = authenticatedURLSession.dataTask(with: URLRequest(url: requestURL)) { _, _, _ in
+                    continuation.resume()
+                }
             }
         }
-
-        _ = authenticatedURLSession.dataTask(with: URLRequest(url: requestURL)) { _, _, _ in }
-        await expectation.wait()
 
         let updatedUser = try #require(authenticator.state.value.user)
         #expect(oldUser.tokens.accessToken != updatedUser.tokens.accessToken)
