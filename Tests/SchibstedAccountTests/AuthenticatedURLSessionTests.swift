@@ -325,9 +325,12 @@ struct AuthenticatedURLSessionTests {
             }
 
             await withCheckedContinuation { continuation in
-                _ = authenticatedURLSession.dataTask(with: URLRequest(url: requestURL)) { _, _, _ in
+await withCheckedContinuation { continuation in
+                let dataTask = authenticatedURLSession.dataTask(with: URLRequest(url: requestURL)) { _, _, _ in
                     continuation.resume()
                 }
+                dataTask.resume()
+            }
             }
         }
 
