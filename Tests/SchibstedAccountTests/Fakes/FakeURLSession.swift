@@ -26,4 +26,43 @@ final class FakeURLSession: URLSessionType, @unchecked Sendable {
     ) async throws -> (Data, URLResponse) {
         try await data(request)
     }
+
+    func dataTask(
+        with url: URL,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        dataTask(with: URLRequest(url: url), completionHandler: completionHandler)
+    }
+
+    func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionDataTask {
+        FakeURLSessionDataTask {
+            do {
+                let (data, response) = try await self.data(request)
+                completionHandler(data, response, nil)
+            } catch {
+                completionHandler(nil, nil, error)
+            }
+        }
+    }
+}
+
+private final class FakeURLSessionDataTask: URLSessionDataTask, @unchecked Sendable {
+    private let operation: @Sendable () async -> Void
+    
+    // Enable this in Xcode 27
+    // @diagnose(DeprecatedDeclaration, as: ignored)
+    init(operation: @escaping @Sendable () async -> Void) {
+        self.operation = operation
+    }
+
+    override func resume() {
+        Task {
+            await operation()
+        }
+    }
+
+    override func cancel() {}
 }
