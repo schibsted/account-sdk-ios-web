@@ -89,7 +89,7 @@ public final class AuthenticatedURLSession: URLSessionType {
         completionHandler: @escaping @Sendable (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionDataTask {
         // This legacy overload does not support checking for initial token expiration
-        // to avoid a extra round-tip. The tokens are still refreshed on a HTTP 401.
+        // to avoid a extra round-trip. The tokens are still refreshed on a HTTP 401.
 
         // 1. Authenticate the request (sets a Authorization header)
         var request = request
@@ -102,7 +102,7 @@ public final class AuthenticatedURLSession: URLSessionType {
 
         return urlSession.dataTask(with: request) { [weak self, request] data, response, error in
             guard let self else {
-                completionHandler(nil, nil, nil)
+                completionHandler(nil, nil, URLError(.cancelled))
                 return
             }
 
@@ -113,7 +113,7 @@ public final class AuthenticatedURLSession: URLSessionType {
 
             // 2. Refresh the tokens if we hit a HTTP 401
             guard httpResponse.statusCode == 401 else {
-                completionHandler(data, response, nil)
+                completionHandler(data, response, error)
                 return
             }
 
@@ -128,7 +128,7 @@ public final class AuthenticatedURLSession: URLSessionType {
                     }
 
                     // 4. Retry the request
-                    let (data, response) = try await self.data(for: request, delegate: nil)
+                    let (data, response) = try await urlSession.data(for: request, delegate: nil)
                     completionHandler(data, response, nil)
                 } catch {
                     completionHandler(nil, nil, error)
