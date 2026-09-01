@@ -3,9 +3,10 @@
 // Licensed under the terms of the MIT license. See LICENSE in the project root.
 //
 
-import Testing
-import Foundation
+import AuthenticationServices
 import Combine
+import Foundation
+import Testing
 
 @testable import SchibstedAccount
 
@@ -182,6 +183,45 @@ struct SchibstedAuthenticatorTests {
 
         #expect(queryItems.contains(URLQueryItem(name: "consents", value: expectedConsentsQueryParameterValue)))
         #expect(queryItems.contains(URLQueryItem(name: "consent_version", value: "v1")))
+    }
+
+    @Test("Cancel login")
+    func cancelLogin() async throws {
+        try addUserToKeychain()
+
+        let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
+
+        webAuthenticationSessionProvider.createSession = {
+            let session = FakeWebAuthenticationSession(
+                url: $0,
+                callbackURLScheme: $1,
+                completionHandler: $2
+            )
+            session.didStart = {
+                session.completionHandler(nil, NSError(
+                    domain: ASWebAuthenticationSessionErrorDomain,
+                    code: ASWebAuthenticationSessionError.canceledLogin.rawValue
+                ))
+                return true
+            }
+            return session
+        }
+
+        let authenticator = try authenticator(
+            webAuthenticationSessionProvider: webAuthenticationSessionProvider
+        )
+
+        let previousState = authenticator.state.value
+
+        await #expect(throws: SchibstedAuthenticatorError.self) {
+            try await authenticator.login(
+                presentationContextProvider: WebAuthenticationPresentationContext()
+            )
+        }
+
+        #expect(authenticator.state.value == previousState)
+        #expect(authenticator.state.value.isLoggedIn)
+        #expect(tracker.trackedLoginFailed)
     }
 
     @Test("Complete login from URL")
