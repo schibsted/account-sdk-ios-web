@@ -157,6 +157,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             throw .invalidRedirectURIScheme
         }
 
+        let previousState = state.value
         state.value = .loggingIn
 
         guard let authState = AuthState(
@@ -207,7 +208,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
 
         if case ASWebAuthenticationSessionError.canceledLogin? = error {
             logger.warning("User cancelled login.")
-            state.value = .loggedOut
+            state.value = previousState
             await tracking?.trackLoginFailed(xDomainId: xDomainId, error: .cancelled)
             throw .cancelled
         }
