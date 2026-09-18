@@ -171,7 +171,7 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             multifactorAuthentication: multifactorAuthentication
         )
 
-        let (url, error) = await withCheckedContinuation { continuation in
+        let (url, error) = await withSafeCheckedContinuation { continuation in
             var session = webAuthenticationSessionProvider.session(
                 url: .login(
                     environment: environment,

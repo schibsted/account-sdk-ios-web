@@ -232,10 +232,14 @@ struct SchibstedAuthenticatorTests {
         let webAuthenticationSessionProvider = FakeWebAuthenticationSessionProvider()
         webAuthenticationSessionProvider.createSession = { url, callbackURLScheme, completionHandler in
             Task {
-                let state = url.queryItems?.first { $0.name == "state" }
-                try await authenticator?.completeLoginFromURL(
-                    URL(string: "\(Self.clientId):/login?code=\(code)&state=\(state?.value ?? "")")!
-                )
+                do {
+                    let state = url.queryItems?.first { $0.name == "state" }
+                    try await authenticator?.completeLoginFromURL(
+                        URL(string: "\(Self.clientId):/login?code=\(code)&state=\(state?.value ?? "")")!
+                    )
+                } catch {
+                    Issue.record(error)
+                }
             }
             return FakeWebAuthenticationSession(
                 url: url,
