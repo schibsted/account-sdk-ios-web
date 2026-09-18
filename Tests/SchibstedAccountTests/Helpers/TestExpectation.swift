@@ -6,6 +6,8 @@
 import Foundation
 import Testing
 
+@testable import SchibstedAccount
+
 actor TestExpectation {
     let description: Comment?
     let expectedFulfillmentCount: UInt
@@ -74,44 +76,5 @@ actor TestExpectation {
         } else {
             #expect(actualFulfillmentCount >= expectedFulfillmentCount, description, sourceLocation: sourceLocation)
         }
-    }
-}
-
-private func withSafeCheckedContinuation<T>(
-    isolation: isolated (any Actor)? = #isolation,
-    function: String = #function,
-    _ body: (SafeCheckedContinuation<T, Never>) -> Void
-) async -> sending T {
-    await withCheckedContinuation { (continuation: CheckedContinuation<T, Never>) in
-        body(SafeCheckedContinuation(continuation))
-    }
-}
-
-private final class SafeCheckedContinuation<T: Sendable, E>: @unchecked Sendable where E: Error {
-    private let continuation: CheckedContinuation<T, E>
-    private var didResume = false
-
-    init(_ continuation: CheckedContinuation<T, E>) {
-        self.continuation = continuation
-    }
-
-    func resume(with result: Result<T, E>) {
-        guard !didResume else { return }
-        didResume = true
-        continuation.resume(with: result)
-    }
-
-    func resume(returning value: T) {
-        resume(with: .success(value))
-    }
-
-    func resume(throwing error: E) {
-        resume(with: .failure(error))
-    }
-}
-
-private extension SafeCheckedContinuation where T == Void {
-    func resume() {
-        resume(returning: ())
     }
 }
