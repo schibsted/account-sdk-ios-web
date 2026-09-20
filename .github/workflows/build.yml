@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build_and_test:
     name: Build & Test
-    runs-on: macos-latest, xcode-27
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
