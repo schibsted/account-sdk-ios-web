@@ -7,24 +7,6 @@ public import Foundation
 
 /// Tracking delegate for the Schibsted Authenticator.
 public protocol SchibstedAuthenticatorTracking: AnyObject, Sendable {
-    /// Called when a login session is started.
-    ///
-    /// - parameter xDomainId: The session ID used for origin tracking of the login session.
-    /// - parameter multifactorAuthentication: Optional multi-factor authentication.
-    func trackLoginStarted(
-        xDomainId: UUID?,
-        multifactorAuthentication: MultifactorAuthentication?
-    ) async
-
-    /// Called when a login session failed.
-    ///
-    /// - parameter xDomainId: The session ID used for origin tracking of the login session.
-    /// - parameter error: The reason the login failed.
-    func trackLoginFailed(
-        xDomainId: UUID?,
-        error: SchibstedAuthenticatorError
-    ) async
-
 #if os(iOS)
     /// Called when the simplified login view is presented.
     func trackSimplifiedLoginPresented() async
