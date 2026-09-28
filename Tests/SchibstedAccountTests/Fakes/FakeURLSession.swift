@@ -52,8 +52,7 @@ final class FakeURLSession: URLSessionType, @unchecked Sendable {
 private final class FakeURLSessionDataTask: URLSessionDataTask, @unchecked Sendable {
     private let operation: @Sendable () async -> Void
     
-    // Enable this in Xcode 27
-    // @diagnose(DeprecatedDeclaration, as: ignored)
+    @diagnose(DeprecatedDeclaration, as: ignored)
     init(operation: @escaping @Sendable () async -> Void) {
         self.operation = operation
     }
