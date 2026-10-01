@@ -7,16 +7,6 @@ import Foundation
 import SchibstedAccount
 
 final class FakeSchibstedAuthenticatorTracker: SchibstedAuthenticatorTracking, @unchecked Sendable {
-    var trackedLoginStarted = false
-    func trackLoginStarted(xDomainId: UUID?, multifactorAuthentication: MultifactorAuthentication?) async {
-        trackedLoginStarted = true
-    }
-
-    var trackedLoginFailed = false
-    func trackLoginFailed(xDomainId: UUID?, error: SchibstedAuthenticatorError) async {
-        trackedLoginFailed = true
-    }
-
     var trackedSimplifiedLoginPresented = false
     func trackSimplifiedLoginPresented() async {
         trackedSimplifiedLoginPresented = true

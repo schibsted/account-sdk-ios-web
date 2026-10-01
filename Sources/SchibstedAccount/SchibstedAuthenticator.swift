@@ -166,11 +166,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             throw .invalidAuthState
         }
 
-        await tracking?.trackLoginStarted(
-            xDomainId: xDomainId,
-            multifactorAuthentication: multifactorAuthentication
-        )
-
         let (url, error) = await withSafeCheckedContinuation { continuation in
             var session = webAuthenticationSessionProvider.session(
                 url: .login(
@@ -209,7 +204,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         if case ASWebAuthenticationSessionError.canceledLogin? = error {
             logger.warning("User cancelled login.")
             state.value = previousState
-            await tracking?.trackLoginFailed(xDomainId: xDomainId, error: .cancelled)
             throw .cancelled
         }
 
@@ -217,7 +211,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
             logger.error("Failed to login. Error: \(error.map { "\($0)" } ?? "<nil>")")
             state.value = .loggedOut
             if let error {
-                await tracking?.trackLoginFailed(xDomainId: xDomainId, error: .loginFailed(error))
                 throw .loginFailed(error)
             } else {
                 throw .missingURL
@@ -241,7 +234,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         } catch {
             logger.error("Failed to login. Error: \(error)")
             state.value = .loggedOut
-            await tracking?.trackLoginFailed(xDomainId: xDomainId, error: .loginFailed(error))
             throw .loginFailed(error)
         }
     }
@@ -263,11 +255,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         xDomainId: UUID?
     ) async throws(SchibstedAuthenticatorError) -> SchibstedAuthenticatorUser {
         do {
-            await tracking?.trackLoginStarted(
-                xDomainId: xDomainId,
-                multifactorAuthentication: nil
-            )
-
             let tokens = try await getTokens(
                 code: code,
                 codeVerifier: codeVerifier
@@ -288,12 +275,6 @@ public final class SchibstedAuthenticator: SchibstedAuthenticating {
         } catch {
             logger.error("Failed to login. Error: \(error)")
             state.value = .loggedOut
-
-            await tracking?.trackLoginFailed(
-                xDomainId: xDomainId,
-                error: .cancelled
-            )
-
             throw .loginFailed(error)
         }
     }

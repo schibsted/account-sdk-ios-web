@@ -79,7 +79,6 @@ struct SchibstedAuthenticatorTests {
         )
 
         #expect(authenticator.state.value.isLoggedIn)
-        #expect(tracker.trackedLoginStarted)
     }
 
     @Test("Login with presentation context failed")
@@ -110,8 +109,6 @@ struct SchibstedAuthenticatorTests {
         }
 
         #expect(!authenticator.state.value.isLoggedIn)
-        #expect(tracker.trackedLoginStarted)
-        #expect(tracker.trackedLoginFailed)
     }
 
     @Test(
@@ -221,7 +218,6 @@ struct SchibstedAuthenticatorTests {
 
         #expect(authenticator.state.value == previousState)
         #expect(authenticator.state.value.isLoggedIn)
-        #expect(tracker.trackedLoginFailed)
     }
 
     @Test("Complete login from URL")
@@ -274,7 +270,6 @@ struct SchibstedAuthenticatorTests {
         )
 
         #expect(authenticator.state.value.isLoggedIn)
-        #expect(tracker.trackedLoginStarted)
     }
 
     @Test("Login with code failed")
@@ -296,8 +291,6 @@ struct SchibstedAuthenticatorTests {
         }
 
         #expect(!authenticator.state.value.isLoggedIn)
-        #expect(tracker.trackedLoginStarted)
-        #expect(tracker.trackedLoginFailed)
     }
 
     @Test("Request a web-session URL")
